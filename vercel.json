@@ -23,11 +23,11 @@
   "crons": [
     {
       "path": "/api/parse-rss",
-      "schedule": "*/10 * * * *"
+      "schedule": "0 5 * * *"
     },
     {
       "path": "/api/daily-purge",
-      "schedule": "0 * * * *"
+      "schedule": "0 6 * * *"
     }
   ]
 }
