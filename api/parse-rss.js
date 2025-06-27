@@ -1,10 +1,10 @@
 // Fichier : /api/parse-rss.js
+// Version finale avec nettoyage des caractères amélioré
 
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
 
-// Le client Supabase est initialisé avec les variables d'environnement
-// que nous configurerons sur Vercel. Il utilise la clé secrète.
+// Le client Supabase est initialisé avec les variables d'environnement serveur
 const supabase = createClient(
     process.env.SUPABASE_URL,
     process.env.SUPABASE_SERVICE_KEY
@@ -48,12 +48,21 @@ const RSS_FEEDS = [
     { name: 'NC La 1ère', url: 'https://la1ere.francetvinfo.fr/nouvelle-caledonie/rss' }
 ];
 
-// Fonction pour créer un résumé court et propre
+// Fonction améliorée pour créer un résumé court et propre
 function createSummary(text) {
     if (!text) return '';
-    // Nettoyer les balises HTML et les entités HTML
-    let cleanText = text.replace(/<[^>]*>/g, ' ').replace(/&[a-z]+;/g, ' ');
-    cleanText = cleanText.replace(/\s\s+/g, ' ').trim(); // Remplacer les espaces multiples
+
+    // Dictionnaire de remplacement pour les entités HTML les plus courantes
+    const replacements = {
+        '’': "'", '–': '-', '…': '...', '"': '"',
+        '&': '&', '<': '<', '>': '>', ''': "'", ''': "'", ''': "'"
+    };
+    
+    // Remplacer les entités connues
+    let cleanText = text.replace(/(&#?[a-z0-9]+;)/gi, (match) => replacements[match] || '');
+    
+    // Nettoyer les balises HTML restantes et les espaces multiples
+    cleanText = cleanText.replace(/<[^>]*>/g, ' ').replace(/\s\s+/g, ' ').trim();
     
     if (cleanText.length > 180) {
         cleanText = cleanText.substring(0, 177) + '...';
@@ -61,14 +70,14 @@ function createSummary(text) {
     return cleanText;
 }
 
-// C'est la fonction principale qui sera appelée par Vercel
+// C'est la fonction principale qui sera appelée par le cron
 export default async function handler(req, res) {
     // Sécurité : on vérifie que la requête vient bien d'un cron sécurisé
     if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    console.log('🚀 Démarrage du parsing RSS INFODROP');
+    console.log('🚀 Démarrage du parsing RSS INFODROP (v3 avec nettoyage avancé)');
     let articlesToInsert = [];
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -79,7 +88,7 @@ export default async function handler(req, res) {
             const feedData = await parser.parseURL(feed.url);
             for (const item of feedData.items) {
                 const pubDate = item.isoDate ? new Date(item.isoDate) : new Date();
-                // On ne garde que les articles du jour
+                // On ne garde que les articles du jour pour ne pas surcharger
                 if (pubDate >= today && item.link) {
                     articlesToInsert.push({
                         resume: createSummary(item.title || item.contentSnippet),

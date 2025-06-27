@@ -14,25 +14,25 @@
         .loading-pulse { animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1a202c; }
-        ::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #718096; }
+        ::-webkit-scrollbar-track { background: #111827; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
     </style>
     <script>
-        tailwind.config = {
-          darkMode: 'class',
-          theme: { extend: {} }
-        }
+        tailwind.config = { darkMode: 'class', theme: { extend: {} } }
     </script>
 </head>
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
     
     <script>
-        // --- ⚠️ ACTION REQUISE : CONFIGURATION ---
+        // --- CONFIGURATION REQUISE ---
+
         const SUPABASE_URL = 'https://gxpezjcjynbkvtvtzyfo.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4cGV6amNqeW5ia3Z0dnR6eWZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwMzA1MTgsImV4cCI6MjA2NjYwNjUxOH0.D90LXh1aGB2OibrpNXPhKZg8oG-mf510v7vKxoJmAog';
+
+        // Personnalise avec ton email admin et ton lien Stripe
         const ADMIN_EMAILS = ['l0r4.py@gmail.com'];
-        const STRIPE_LINK = 'YOUR_STRIPE_LINK'; // Peut être configuré plus tard
+        const STRIPE_LINK = 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801';
         // --- FIN DE LA CONFIGURATION ---
 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -91,22 +91,23 @@
             <main class="max-w-3xl mx-auto px-4 py-6">
                 <!-- Stats pour Admin -->
                 <div x-show="isAdmin" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6 text-center">
-                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700"><div class="text-2xl font-bold text-white" x-text="stats.total_articles">0</div><div class="text-sm text-gray-400">Articles aujourd'hui</div></div>
-                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700"><div class="text-2xl font-bold text-white" x-text="stats.total_sources">0</div><div class="text-sm text-gray-400">Sources actives</div></div>
-                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700 col-span-2 md:col-span-1"><div class="text-2xl font-bold text-white flex items-center justify-center gap-2"> <div class="w-2 h-2 bg-green-400 rounded-full loading-pulse"></div> En ligne</div><div class="text-sm text-gray-400">Mise à jour auto</div></div>
+                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700"><div class="text-2xl font-bold text-white" x-text="stats.total_articles">0</div><div class="text-sm text-gray-400">Articles</div></div>
+                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700"><div class="text-2xl font-bold text-white" x-text="stats.total_sources">0</div><div class="text-sm text-gray-400">Sources</div></div>
+                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700 col-span-2 md:col-span-1"><div class="text-2xl font-bold text-white flex items-center justify-center gap-2" x-text="connectedUsers">1</div><div class="text-sm text-gray-400">Lecteurs connectés</div></div>
                 </div>
 
                 <!-- Fil d'actualités -->
                 <div class="space-y-3">
                     <template x-for="news in newsList" :key="news.id">
-                        <a :href="news.url" target="_blank" class="news-card block bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
-                            <p class="text-base text-white mb-2" x-text="news.resume"></p>
-                            <div class="flex items-center gap-4 text-xs text-gray-400">
-                                <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
-                                <span x-show="!news.added_by" x-text="news.source"></span>
-                                <span x-text="formatTime(news.heure)"></span>
-                            </div>
-                        </a>
+                        <div class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
+                            <a :href="news.url" target="_blank" class="flex-grow">
+                                <p class="text-base text-white mb-2" x-text="news.resume"></p>
+                                <div class="flex items-center gap-4 text-xs text-gray-400"><span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span><span x-show="!news.added_by" x-text="news.source"></span><span x-text="formatTime(news.heure)"></span></div>
+                            </a>
+                            <button x-show="isAdmin" @click.prevent="deleteNews(news.id)" class="flex-shrink-0 p-2 rounded-full hover:bg-red-900/50 transition" title="Supprimer l'actualité">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
+                            </button>
+                        </div>
                     </template>
                     <div x-show="loadingNews && newsList.length === 0" class="text-center py-12"><div class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div></div>
                     <div x-show="!loadingNews && newsList.length === 0" class="text-center py-12 text-gray-500">Aucune actualité pour le moment. Le flux est en cours de chargement...</div>
@@ -122,11 +123,13 @@
                 newsList: [], loadingNews: true, updateInterval: null,
                 isAdmin: false, showAdminPanel: false, addingNews: false, newNews: { resume: '', source: '', url: '' },
                 stats: { total_articles: 0, total_sources: 0 },
+                connectedUsers: 0,
+                realtimeChannel: null,
 
                 async init() {
+                    supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
                     const { data: { session } } = await supabase.auth.getSession();
                     this.handleSession(session);
-                    supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
                 },
 
                 handleSession(session) {
@@ -136,36 +139,59 @@
                             this.isAdmin = ADMIN_EMAILS.includes(session.user.email);
                             this.loadData();
                             this.startAutoUpdate();
+                            this.setupRealtime(session);
                         }
                     } else {
                         this.user = null;
                         this.stopAutoUpdate();
+                        if (this.realtimeChannel) {
+                            supabase.removeChannel(this.realtimeChannel);
+                            this.realtimeChannel = null;
+                        }
                     }
                 },
                 
-                async login() {
-                    if (this.loading) return;
-                    this.loading = true; this.message = '';
+                setupRealtime(session) {
+                    this.realtimeChannel = supabase.channel('infodrop-online-users', {
+                        config: { presence: { key: session.user.id } },
+                    });
+                    
+                    this.realtimeChannel
+                        .on('presence', { event: 'sync' }, () => {
+                            const presenceState = this.realtimeChannel.presenceState();
+                            this.connectedUsers = Object.keys(presenceState).length;
+                        })
+                        .subscribe(async (status) => {
+                            if (status === 'SUBSCRIBED') {
+                                await this.realtimeChannel.track({ online_at: new Date().toISOString() });
+                            }
+                        });
+                },
+                
+                async deleteNews(newsId) {
+                    if (!confirm("Voulez-vous vraiment supprimer cette actualité ?")) return;
+                    this.newsList = this.newsList.filter(n => n.id !== newsId); // Optimistic UI
                     try {
-                        const { error } = await supabase.auth.signInWithOtp({ email: this.email, options: { emailRedirectTo: window.location.origin }});
-                        if (error) throw error;
-                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.'; this.messageType = 'success';
-                    } catch (error) { this.message = error.message || 'Erreur lors de l\'envoi du lien.'; this.messageType = 'error'; } 
-                    finally { this.loading = false; }
+                        const { error } = await supabase.from('actu').delete().eq('id', newsId);
+                        if (error) { throw error; }
+                        if (this.isAdmin) { this.loadStats(); }
+                    } catch (error) {
+                        console.error("Erreur de suppression:", error);
+                        alert("La suppression a échoué. L'actualité va réapparaître.");
+                        this.loadNews();
+                    }
                 },
                 
-                async logout() { await supabase.auth.signOut(); },
+                async login() { if (this.loading) return; this.loading = true; this.message = ''; try { const { error } = await supabase.auth.signInWithOtp({ email: this.email, options: { emailRedirectTo: window.location.origin }}); if (error) throw error; this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.'; this.messageType = 'success'; } catch (error) { this.message = error.message || 'Erreur lors de l\'envoi du lien.'; this.messageType = 'error'; } finally { this.loading = false; } },
                 
-                async loadData() {
-                    this.loadingNews = true;
-                    await Promise.all([this.loadNews(), this.isAdmin ? this.loadStats() : Promise.resolve()]);
-                    this.loadingNews = false;
-                },
+                async logout() { if(this.realtimeChannel) { await this.realtimeChannel.untrack(); } await supabase.auth.signOut(); },
+                
+                async loadData() { this.loadingNews = true; await Promise.all([this.loadNews(), this.isAdmin ? this.loadStats() : Promise.resolve()]); this.loadingNews = false; },
 
                 async loadNews() {
                     try {
-                        const today = new Date(); today.setHours(0, 0, 0, 0);
-                        const { data, error } = await supabase.from('actu').select('*').gte('heure', today.toISOString()).order('heure', { ascending: false });
+                        const twentyFourHoursAgo = new Date(); twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+                        const { data, error } = await supabase.from('actu').select('*').gte('heure', twentyFourHoursAgo.toISOString()).order('heure', { ascending: false });
                         if (error) throw error;
                         this.newsList = data || [];
                     } catch (error) { console.error('Erreur chargement actus:', error); }
@@ -179,31 +205,13 @@
                     } catch (error) { console.error('Erreur chargement stats:', error); }
                 },
 
-                async addManualNews() {
-                    this.addingNews = true;
-                    try {
-                        const { error } = await supabase.from('actu').insert({
-                            resume: this.newNews.resume, source: this.newNews.source, url: this.newNews.url,
-                            heure: new Date().toISOString(), added_by: this.user.email
-                        });
-                        if (error) throw error;
-                        this.newNews = { resume: '', source: '', url: '' };
-                        this.showAdminPanel = false;
-                        this.loadData();
-                    } catch (error) { console.error('Erreur ajout:', error); alert('Erreur lors de l\'ajout.'); }
-                    finally { this.addingNews = false; }
-                },
+                async addManualNews() { this.addingNews = true; try { const { error } = await supabase.from('actu').insert({ resume: this.newNews.resume, source: this.newNews.source, url: this.newNews.url, heure: new Date().toISOString(), added_by: this.user.email }); if (error) throw error; this.newNews = { resume: '', source: '', url: '' }; this.showAdminPanel = false; this.loadData(); } catch (error) { console.error('Erreur ajout:', error); alert('Erreur lors de l\'ajout.'); } finally { this.addingNews = false; } },
                 
-                startAutoUpdate() {
-                    if (this.updateInterval) clearInterval(this.updateInterval);
-                    this.updateInterval = setInterval(() => this.loadData(), 30000);
-                },
+                startAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); this.updateInterval = setInterval(() => this.loadData(), 30000); },
                 
                 stopAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); },
                 
-                formatTime(timestamp) {
-                    return new Date(timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-                }
+                formatTime(timestamp) { return new Date(timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); }
             }
         }
     </script>
