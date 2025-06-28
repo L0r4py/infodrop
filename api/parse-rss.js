@@ -1,5 +1,5 @@
 // Fichier : /api/parse-rss.js
-// Version 11 - La version finale avec une liste de sources 100% stable
+// Version 12 - Ajout de la source "Le Parisien"
 
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
@@ -14,13 +14,14 @@ const parser = new Parser({
     headers: { 'User-Agent': 'INFODROP RSS Parser/1.0' }
 });
 
-// La liste des flux RSS finale, nettoyée et 100% stable
+// La liste des flux RSS finale, avec Le Parisien
 const RSS_FEEDS = [
     // --- GENERALISTES ---
     { name: 'France Info', url: 'https://www.francetvinfo.fr/titres.rss' },
     { name: 'Le Monde', url: 'https://www.lemonde.fr/rss/une.xml' },
     { name: 'Libération', url: 'https://www.liberation.fr/arc/outboundfeeds/rss-all/?outputType=xml' },
     { name: 'Le Figaro', url: 'https://www.lefigaro.fr/rss/figaro_actualites.xml' },
+    { name: 'Le Parisien', url: 'https://feeds.leparisien.fr/leparisien/rss' }, // <--- AJOUTÉ ICI
     { name: '20 Minutes', url: 'https://partner-feeds.20min.ch/rss/20minutes' },
     { name: 'Ouest France', url: 'https://www.ouest-france.fr/rss-en-continu.xml' },
     { name: 'Courrier International', url: 'https://www.courrierinternational.com/feed/all/rss.xml' },
@@ -55,7 +56,7 @@ function createSummary(text) {
 
 export default async function handler(req, res) {
     if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) { return res.status(401).json({ error: 'Unauthorized' }); }
-    console.log('🚀 Démarrage du parsing RSS INFODROP (v11 - Stable Feeds)');
+    console.log('🚀 Démarrage du parsing RSS INFODROP (v12 - Le Parisien Added)');
     let articlesToInsert = [];
     const twentyFourHoursAgo = new Date();
     twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
@@ -66,7 +67,12 @@ export default async function handler(req, res) {
             for (const item of feedData.items) {
                 const pubDate = item.isoDate ? new Date(item.isoDate) : new Date();
                 if (pubDate >= twentyFourHoursAgo && item.link) {
-                    articlesToInsert.push({ resume: createSummary(item.title || item.contentSnippet), source: feed.name, url: item.link, heure: pubDate.toISOString() });
+                    articlesToInsert.push({
+                        resume: createSummary(item.title || item.contentSnippet),
+                        source: feed.name,
+                        url: item.link,
+                        heure: pubDate.toISOString()
+                    });
                 }
             }
         } catch (error) {
