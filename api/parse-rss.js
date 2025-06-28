@@ -1,23 +1,10 @@
-// Fichier : /api/parse-rss.js
-// Version finale avec nettoyage des caractères amélioré
-
+// Fichier : /api/parse-rss.js (Version finale avec correction de la virgule)
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
 
-// Le client Supabase est initialisé avec les variables d'environnement serveur
-const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_KEY
-);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+const parser = new Parser({ timeout: 10000, headers: { 'User-Agent': 'INFODROP RSS Parser/1.0' }});
 
-const parser = new Parser({
-    timeout: 10000, // 10 secondes de timeout par flux
-    headers: {
-        'User-Agent': 'INFODROP RSS Parser/1.0' // Certains sites requièrent un User-Agent
-    }
-});
-
-// La liste complète de tes flux RSS
 const RSS_FEEDS = [
     { name: 'France Info', url: 'https://www.francetvinfo.fr/titres.rss' },
     { name: 'Le Monde', url: 'https://www.lemonde.fr/rss/une.xml' },
@@ -45,75 +32,39 @@ const RSS_FEEDS = [
     { name: 'Réunion 1ère', url: 'https://la1ere.francetvinfo.fr/reunion/rss' },
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/' },
     { name: 'TNTV', url: 'https://www.tntv.pf/feed/' },
-    { name: 'NC La 1ère', url: 'https://la1ere.francetvinfo.fr/nouvelle-caledonie/rss' }
+    { name: 'NC La 1ère', url: 'https://la1ere.francetvinfo.fr/nouvelle-caledonie/rss' }, // <-- VIRGULE AJOUTÉE ICI
+    { name: 'L\'Info Kwezi', url: 'https://www.linfokwezi.fr/feed/' }
 ];
 
-// Fonction améliorée pour créer un résumé court et propre
 function createSummary(text) {
     if (!text) return '';
-
-    // Dictionnaire de remplacement pour les entités HTML les plus courantes
-    const replacements = {
-        '’': "'", '–': '-', '…': '...', '"': '"',
-        '&': '&', '<': '<', '>': '>', ''': "'", ''': "'", ''': "'"
-    };
-    
-    // Remplacer les entités connues
+    const replacements = { '’': "'", '–': '-', '…': '...', '"': '"', '&': '&', '<': '<', '>': '>', ''': "'", ''': "'", ''': "'" };
     let cleanText = text.replace(/(&#?[a-z0-9]+;)/gi, (match) => replacements[match] || '');
-    
-    // Nettoyer les balises HTML restantes et les espaces multiples
     cleanText = cleanText.replace(/<[^>]*>/g, ' ').replace(/\s\s+/g, ' ').trim();
-    
-    if (cleanText.length > 180) {
-        cleanText = cleanText.substring(0, 177) + '...';
-    }
+    if (cleanText.length > 180) { cleanText = cleanText.substring(0, 177) + '...'; }
     return cleanText;
 }
 
-// C'est la fonction principale qui sera appelée par le cron
 export default async function handler(req, res) {
-    // Sécurité : on vérifie que la requête vient bien d'un cron sécurisé
-    if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
-        return res.status(401).json({ error: 'Unauthorized' });
-    }
-    
-    console.log('🚀 Démarrage du parsing RSS INFODROP (v3 avec nettoyage avancé)');
+    if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) { return res.status(401).json({ error: 'Unauthorized' }); }
+    console.log('🚀 Démarrage du parsing RSS INFODROP (v5 - code final corrigé)');
     let articlesToInsert = [];
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    // On parcourt tous les flux
+    const today = new Date(); today.setHours(0, 0, 0, 0);
     for (const feed of RSS_FEEDS) {
         try {
             const feedData = await parser.parseURL(feed.url);
             for (const item of feedData.items) {
                 const pubDate = item.isoDate ? new Date(item.isoDate) : new Date();
-                // On ne garde que les articles du jour pour ne pas surcharger
                 if (pubDate >= today && item.link) {
-                    articlesToInsert.push({
-                        resume: createSummary(item.title || item.contentSnippet),
-                        source: feed.name,
-                        url: item.link,
-                        heure: pubDate.toISOString()
-                    });
+                    articlesToInsert.push({ resume: createSummary(item.title || item.contentSnippet), source: feed.name, url: item.link, heure: pubDate.toISOString() });
                 }
             }
-        } catch (error) {
-            console.error(`❌ Erreur pour ${feed.name}:`, error.message);
-        }
+        } catch (error) { console.error(`❌ Erreur pour ${feed.name}:`, error.message); }
     }
-    
     if (articlesToInsert.length > 0) {
-        // On insère tous les nouveaux articles en une seule fois.
-        // Le trigger dans la BDD s'occupera d'ignorer les doublons.
         const { error } = await supabase.from('actu').insert(articlesToInsert);
-        
-        if (error) {
-            console.error('Erreur lors de l\'insertion Supabase:', error);
-            return res.status(500).json({ success: false, error: error.message });
-        }
+        if (error) { console.error('Erreur insertion Supabase:', error); return res.status(500).json({ success: false, error: error.message }); }
     }
-
     console.log(`✅ Parsing terminé. ${articlesToInsert.length} articles potentiellement nouveaux.`);
     res.status(200).json({ success: true, new_articles_found: articlesToInsert.length });
 }
