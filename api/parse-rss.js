@@ -1,5 +1,5 @@
 // Fichier : /api/parse-rss.js
-// Version 12 - Ajout de la source "Le Parisien"
+// Version 13 - Suppression de la source "20 Minutes" (timeout)
 
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
@@ -14,15 +14,14 @@ const parser = new Parser({
     headers: { 'User-Agent': 'INFODROP RSS Parser/1.0' }
 });
 
-// La liste des flux RSS finale, avec Le Parisien
+// La liste des flux RSS finale, nettoyée et stable
 const RSS_FEEDS = [
     // --- GENERALISTES ---
     { name: 'France Info', url: 'https://www.francetvinfo.fr/titres.rss' },
     { name: 'Le Monde', url: 'https://www.lemonde.fr/rss/une.xml' },
     { name: 'Libération', url: 'https://www.liberation.fr/arc/outboundfeeds/rss-all/?outputType=xml' },
     { name: 'Le Figaro', url: 'https://www.lefigaro.fr/rss/figaro_actualites.xml' },
-    { name: 'Le Parisien', url: 'https://feeds.leparisien.fr/leparisien/rss' }, // <--- AJOUTÉ ICI
-    { name: '20 Minutes', url: 'https://partner-feeds.20min.ch/rss/20minutes' },
+    { name: 'Le Parisien', url: 'https://feeds.leparisien.fr/leparisien/rss' },
     { name: 'Ouest France', url: 'https://www.ouest-france.fr/rss-en-continu.xml' },
     { name: 'Courrier International', url: 'https://www.courrierinternational.com/feed/all/rss.xml' },
     { name: 'France Inter', url: 'https://www.radiofrance.fr/franceinter/rss' },
@@ -56,7 +55,7 @@ function createSummary(text) {
 
 export default async function handler(req, res) {
     if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) { return res.status(401).json({ error: 'Unauthorized' }); }
-    console.log('🚀 Démarrage du parsing RSS INFODROP (v12 - Le Parisien Added)');
+    console.log('🚀 Démarrage du parsing RSS INFODROP (v13 - Final Stable)');
     let articlesToInsert = [];
     const twentyFourHoursAgo = new Date();
     twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
