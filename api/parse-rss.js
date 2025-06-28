@@ -1,9 +1,17 @@
-// Fichier : /api/parse-rss.js (Version finale avec correction de la virgule)
+// Fichier : /api/parse-rss.js (Version finale, propre et complète)
+
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
-const parser = new Parser({ timeout: 10000, headers: { 'User-Agent': 'INFODROP RSS Parser/1.0' }});
+const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_KEY
+);
+
+const parser = new Parser({
+    timeout: 10000,
+    headers: { 'User-Agent': 'INFODROP RSS Parser/1.0' }
+});
 
 const RSS_FEEDS = [
     { name: 'France Info', url: 'https://www.francetvinfo.fr/titres.rss' },
@@ -32,13 +40,13 @@ const RSS_FEEDS = [
     { name: 'Réunion 1ère', url: 'https://la1ere.francetvinfo.fr/reunion/rss' },
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/' },
     { name: 'TNTV', url: 'https://www.tntv.pf/feed/' },
-    { name: 'NC La 1ère', url: 'https://la1ere.francetvinfo.fr/nouvelle-caledonie/rss' }, // <-- VIRGULE AJOUTÉE ICI
-    { name: 'L\'Info Kwezi', url: 'https://www.linfokwezi.fr/feed/' }
+    { name: 'NC La 1ère', url: 'https://la1ere.francetvinfo.fr/nouvelle-caledonie/rss' },
+    { name: 'Kwezi', url: 'https://www.linfokwezi.fr/feed/' }
 ];
 
 function createSummary(text) {
     if (!text) return '';
-    const replacements = { '’': "'", '–': '-', '…': '...', '"': '"', '&': '&', '<': '<', '>': '>', ''': "'", ''': "'", ''': "'" };
+    const replacements = { '’': "'", '–': '-', '…': '...', '"': '"', '&': '&', '<': '<', '>': '>' };
     let cleanText = text.replace(/(&#?[a-z0-9]+;)/gi, (match) => replacements[match] || '');
     cleanText = cleanText.replace(/<[^>]*>/g, ' ').replace(/\s\s+/g, ' ').trim();
     if (cleanText.length > 180) { cleanText = cleanText.substring(0, 177) + '...'; }
@@ -47,7 +55,7 @@ function createSummary(text) {
 
 export default async function handler(req, res) {
     if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) { return res.status(401).json({ error: 'Unauthorized' }); }
-    console.log('🚀 Démarrage du parsing RSS INFODROP (v5 - code final corrigé)');
+    console.log('🚀 Démarrage du parsing RSS INFODROP (v6 - Clean Code)');
     let articlesToInsert = [];
     const today = new Date(); today.setHours(0, 0, 0, 0);
     for (const feed of RSS_FEEDS) {
