@@ -1,5 +1,5 @@
 // Fichier : /api/parse-rss.js
-// Version 10 - La Grande Mise à Jour avec les liens de la communauté !
+// Version 11 - La version finale avec une liste de sources 100% stable
 
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
@@ -14,7 +14,7 @@ const parser = new Parser({
     headers: { 'User-Agent': 'INFODROP RSS Parser/1.0' }
 });
 
-// La liste des flux RSS la plus complète et à jour, grâce à tes recherches !
+// La liste des flux RSS finale, nettoyée et 100% stable
 const RSS_FEEDS = [
     // --- GENERALISTES ---
     { name: 'France Info', url: 'https://www.francetvinfo.fr/titres.rss' },
@@ -34,26 +34,18 @@ const RSS_FEEDS = [
     { name: 'Numerama', url: 'https://www.numerama.com/feed/' },
     { name: "L'Obs", url: 'https://www.nouvelobs.com/rss.xml' },
     
-    // --- ÉCONOMIE ---
-    { name: 'Les Échos (Tech)', url: 'https://services.lesechos.fr/rss/les-echos-tech-medias.xml' },
-    { name: 'Les Échos (Monde)', url: 'https://services.lesechos.fr/rss/les-echos-monde.xml' },
-    { name: 'La Tribune Républicaine', url: 'https://latribunerepublicaine.lemessager.fr/rss/606167/cible_principale' },
-    
     // --- INDÉPENDANTS ---
     { name: 'Reporterre', url: 'https://reporterre.net/spip.php?page=backend' },
     { name: 'Blast', url: 'https://api.blast-info.fr/rss.xml' },
     { name: 'Arrêt sur Images', url: 'https://api.arretsurimages.net/api/public/rss/all-content' },
     
     // --- OUTRE-MER ---
-    { name: 'Réunion 1ère', url: 'https://la1ere.francetvinfo.fr/reunion/rss' },
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/' },
-    { name: 'NC La 1ère', url: 'https://la1ere.francetvinfo.fr/nouvelle-caledonie/rss' },
     { name: 'L\'Info Kwezi', url: 'https://www.linfokwezi.fr/feed/' }
 ];
 
 function createSummary(text) {
     if (!text) return '';
-    // Version complète pour gérer tous les cas de caractères spéciaux
     const replacements = { '’': "'", '–': '-', '…': '...', '"': '"', '&': '&', '<': '<', '>': '>' };
     let cleanText = text.replace(/(&#?[a-z0-9]+;)/gi, (match) => replacements[match] || '');
     cleanText = cleanText.replace(/<[^>]*>/g, ' ').replace(/\s\s+/g, ' ').trim();
@@ -63,7 +55,7 @@ function createSummary(text) {
 
 export default async function handler(req, res) {
     if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) { return res.status(401).json({ error: 'Unauthorized' }); }
-    console.log('🚀 Démarrage du parsing RSS INFODROP (v10 - Community Update)');
+    console.log('🚀 Démarrage du parsing RSS INFODROP (v11 - Stable Feeds)');
     let articlesToInsert = [];
     const twentyFourHoursAgo = new Date();
     twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
@@ -74,12 +66,7 @@ export default async function handler(req, res) {
             for (const item of feedData.items) {
                 const pubDate = item.isoDate ? new Date(item.isoDate) : new Date();
                 if (pubDate >= twentyFourHoursAgo && item.link) {
-                    articlesToInsert.push({
-                        resume: createSummary(item.title || item.contentSnippet),
-                        source: feed.name,
-                        url: item.link,
-                        heure: pubDate.toISOString()
-                    });
+                    articlesToInsert.push({ resume: createSummary(item.title || item.contentSnippet), source: feed.name, url: item.link, heure: pubDate.toISOString() });
                 }
             }
         } catch (error) {
