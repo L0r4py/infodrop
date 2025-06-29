@@ -8,7 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <style>
-        .news-card { transition: background-color 0.2s ease-in-out; }
+        .news-card { transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out; }
+        .news-card:hover { transform: translateY(-2px); }
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .loading-pulse { animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
@@ -26,11 +27,8 @@
     
     <script>
         // --- CONFIGURATION REQUISE ---
-
         const SUPABASE_URL = 'https://gxpezjcjynbkvtvtzyfo.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4cGV6amNqeW5ia3Z0dnR6eWZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwMzA1MTgsImV4cCI6MjA2NjYwNjUxOH0.D90LXh1aGB2OibrpNXPhKZg8oG-mf510v7vKxoJmAog';
-
-        // Personnalise avec ton email admin et ton lien Stripe
         const ADMIN_EMAILS = ['l0r4.py@gmail.com'];
         const STRIPE_LINK = 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801';
         // --- FIN DE LA CONFIGURATION ---
@@ -58,15 +56,14 @@
         </div>
 
         <!-- Application principale -->
-        <div x-show="user" x-transition.opacity class="min-h-screen">
+        <div x-show="user" x-transition.opacity class="min-h-screen flex flex-col">
             <!-- Header -->
             <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-800">
-                <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-                    <h1 class="text-xl font-bold text-white flex items-center gap-3">
-                        📰 INFODROP
-                        <span class="text-sm text-gray-400 font-normal hidden sm:block" x-text="new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })"></span>
-                    </h1>
+                <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+                    <h1 class="text-xl font-bold text-white flex items-center gap-3">📰 INFODROP</h1>
+                    <a href="/infodrop360.html" class="px-3 py-1 text-sm font-semibold text-blue-300 bg-blue-900/50 rounded-full hover:bg-blue-900 transition">Voir la vue 360°</a>
                     <div class="flex items-center gap-4">
+                        <button @click="showAboutPanel = true" class="text-gray-400 hover:text-white transition" title="À propos">ℹ️</button>
                         <button x-show="isAdmin" @click="showAdminPanel = !showAdminPanel" class="text-gray-400 hover:text-white transition" title="Panel Admin">⚙️</button>
                         <a :href="STRIPE_LINK" target="_blank" class="text-red-400 hover:text-red-300 transition" title="Soutenir INFODROP">❤️</a>
                         <button @click="logout()" class="text-gray-400 hover:text-white transition" title="Déconnexion">🚪</button>
@@ -76,20 +73,33 @@
 
             <!-- Panel Admin -->
             <div x-show="showAdminPanel && isAdmin" x-transition class="bg-gray-950/50 border-b border-gray-800">
-                <div class="max-w-3xl mx-auto p-4">
+                <div class="max-w-4xl mx-auto p-4">
                     <h2 class="text-lg font-bold text-white mb-3">🧨 Ajouter une actualité</h2>
-                    <form @submit.prevent="addManualNews()" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div class="md:col-span-2"><input x-model="newNews.resume" type="text" placeholder="Résumé (max 180 caractères)" maxlength="180" required class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500"></div>
+                    <form @submit.prevent="addManualNews()" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="md:col-span-3"><input x-model="newNews.resume" type="text" placeholder="Résumé" maxlength="180" required class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500"></div>
                         <div><input x-model="newNews.source" type="text" placeholder="Source" required class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500"></div>
                         <div><input x-model="newNews.url" type="url" placeholder="URL de l'article" required class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500"></div>
-                        <div class="md:col-span-2"><button type="submit" :disabled="addingNews" class="bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 transition disabled:opacity-50">Publier</button></div>
+                        <div>
+                            <select x-model="newNews.orientation" class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white h-full">
+                                <option value="">Orientation...</option>
+                                <option value="extreme-gauche">Extrême gauche</option>
+                                <option value="gauche">Gauche</option>
+                                <option value="centre-gauche">Centre gauche</option>
+                                <option value="centre">Centre</option>
+                                <option value="centre-droit">Centre droit</option>
+                                <option value="droite">Droite</option>
+                                <option value="extreme-droite">Extrême droite</option>
+                                <option value="neutre">Neutre</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-3"><button type="submit" :disabled="addingNews" class="bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 transition disabled:opacity-50">Publier</button></div>
                     </form>
                 </div>
             </div>
 
             <!-- Main Content -->
-            <main class="max-w-3xl mx-auto px-4 py-6">
-                <!-- Stats pour Admin -->
+            <main class="max-w-4xl mx-auto px-4 py-6 flex-grow">
+                <!-- Stats -->
                 <div x-show="isAdmin" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6 text-center">
                     <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700"><div class="text-2xl font-bold text-white" x-text="stats.total_articles">0</div><div class="text-sm text-gray-400">Articles</div></div>
                     <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700"><div class="text-2xl font-bold text-white" x-text="stats.total_sources">0</div><div class="text-sm text-gray-400">Sources</div></div>
@@ -102,29 +112,87 @@
                         <div class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
                             <a :href="news.url" target="_blank" class="flex-grow">
                                 <p class="text-base text-white mb-2" x-text="news.resume"></p>
-                                <div class="flex items-center gap-4 text-xs text-gray-400"><span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span><span x-show="!news.added_by" x-text="news.source"></span><span x-text="formatTime(news.heure)"></span></div>
+                                <div class="flex items-center flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400">
+                                    <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
+                                    <span x-show="!news.added_by" x-text="news.source"></span>
+                                    <span x-text="formatTime(news.heure)"></span>
+                                    <span x-show="news.orientation" x-text="news.orientation" :class="getOrientationClass(news.orientation)" class="px-2 py-0.5 rounded-full font-semibold text-xs capitalize"></span>
+                                </div>
                             </a>
-                            <button x-show="isAdmin" @click.prevent="deleteNews(news.id)" class="flex-shrink-0 p-2 rounded-full hover:bg-red-900/50 transition" title="Supprimer l'actualité">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
-                            </button>
+                            <button x-show="isAdmin" @click.prevent="openEditPanel(news)" class="flex-shrink-0 p-2 rounded-full hover:bg-blue-900/50 transition" title="Éditer">✏️</button>
+                            <button x-show="isAdmin" @click.prevent="deleteNews(news.id)" class="flex-shrink-0 p-2 rounded-full hover:bg-red-900/50 transition" title="Supprimer">🗑️</button>
                         </div>
                     </template>
                     <div x-show="loadingNews && newsList.length === 0" class="text-center py-12"><div class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div></div>
                     <div x-show="!loadingNews && newsList.length === 0" class="text-center py-12 text-gray-500">Aucune actualité pour le moment. Le flux est en cours de chargement...</div>
                 </div>
             </main>
+
+            <!-- Footer -->
+            <footer class="text-center py-8 text-xs text-gray-500">
+                <p>© 2025 INFODROP. Tous droits réservés.</p>
+                <p class="mt-1">Un projet 3C - EM&LPy</p>
+            </footer>
+        </div>
+
+        <!-- FENÊTRE D'ÉDITION (MODAL) -->
+        <div x-show="showEditPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+            <div @click.away="showEditPanel = false" class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
+                <h3 class="text-xl font-bold mb-4">Éditer l'actualité</h3>
+                <form @submit.prevent="updateNews()" class="space-y-4">
+                    <div><label class="text-sm text-gray-400 block mb-1">Résumé</label><input x-model="editingNews.resume" type="text" class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
+                    <div><label class="text-sm text-gray-400 block mb-1">Source</label><input x-model="editingNews.source" type="text" class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
+                    <div><label class="text-sm text-gray-400 block mb-1">URL</label><input x-model="editingNews.url" type="url" class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
+                    <div>
+                        <label class="text-sm text-gray-400 block mb-1">Orientation</label>
+                        <select x-model="editingNews.orientation" class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600">
+                            <option value="">Non définie</option>
+                            <option value="extreme-gauche">Extrême gauche</option><option value="gauche">Gauche</option><option value="centre-gauche">Centre gauche</option><option value="centre">Centre</option><option value="centre-droit">Centre droit</option><option value="droite">Droite</option><option value="extreme-droite">Extrême droite</option><option value="neutre">Neutre</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end gap-4 pt-4">
+                        <button type="button" @click="showEditPanel = false" class="px-4 py-2 bg-gray-600 rounded-lg hover:bg-gray-500 transition">Annuler</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- FENÊTRE À PROPOS (MODAL) -->
+        <div x-show="showAboutPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+            <div @click.away="showAboutPanel = false" class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
+                <h3 class="text-xl font-bold mb-4">À propos d'INFODROP</h3>
+                <div class="space-y-4 text-gray-300">
+                    <div>
+                        <h4 class="font-semibold text-white">📰 INFODROP (Le Flux)</h4>
+                        <p class="text-sm">L'objectif initial est simple : fournir un flux d'actualités minimaliste, rapide et sans fioritures. Il agrège en temps réel les dernières informations des sources françaises les plus pertinentes pour un aperçu immédiat de ce qui se passe.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-blue-400">🌍 INFODROP 360° (L'Analyse)</h4>
+                        <p class="text-sm">La mission de 360° est plus profonde : lutter contre les bulles de filtres en contextualisant l'information. Pour un même sujet, il expose les perspectives de médias d'orientations différentes, analyse les faits, les divergences et les biais. L'objectif n'est plus seulement de savoir ce qui se passe, mais de comprendre pourquoi on en parle de différentes manières.</p>
+                    </div>
+                </div>
+                <div class="flex justify-end pt-6">
+                    <button type="button" @click="showAboutPanel = false" class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Fermer</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         function infodropApp() {
+            const ORIENTATION_STYLES = { 'extreme-gauche': 'bg-red-900 text-red-300', 'gauche': 'bg-red-800 text-red-300', 'centre-gauche': 'bg-blue-800 text-blue-300', 'centre': 'bg-gray-600 text-gray-200', 'centre-droit': 'bg-indigo-800 text-indigo-300', 'droite': 'bg-purple-800 text-purple-300', 'extreme-droite': 'bg-purple-900 text-purple-300', 'neutre': 'bg-green-800 text-green-300' };
+
             return {
                 user: null, email: '', loading: false, message: '', messageType: '',
                 newsList: [], loadingNews: true, updateInterval: null,
-                isAdmin: false, showAdminPanel: false, addingNews: false, newNews: { resume: '', source: '', url: '' },
+                isAdmin: false, showAdminPanel: false, addingNews: false, 
+                newNews: { resume: '', source: '', url: '', orientation: '' },
                 stats: { total_articles: 0, total_sources: 0 },
-                connectedUsers: 0,
-                realtimeChannel: null,
+                connectedUsers: 0, realtimeChannel: null,
+                showEditPanel: false,
+                editingNews: { id: null, resume: '', source: '', url: '', orientation: '' },
+                showAboutPanel: false,
 
                 async init() {
                     supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
@@ -134,50 +202,53 @@
 
                 handleSession(session) {
                     if (session?.user) {
-                        if (!this.user) { // Only run full setup on first sign-in
-                            this.user = session.user;
-                            this.isAdmin = ADMIN_EMAILS.includes(session.user.email);
-                            this.loadData();
-                            this.startAutoUpdate();
-                            this.setupRealtime(session);
+                        if (!this.user) {
+                            this.user = session.user; this.isAdmin = ADMIN_EMAILS.includes(session.user.email);
+                            this.loadData(); this.startAutoUpdate(); this.setupRealtime(session);
                         }
                     } else {
-                        this.user = null;
-                        this.stopAutoUpdate();
-                        if (this.realtimeChannel) {
-                            supabase.removeChannel(this.realtimeChannel);
-                            this.realtimeChannel = null;
-                        }
+                        this.user = null; this.stopAutoUpdate();
+                        if (this.realtimeChannel) { supabase.removeChannel(this.realtimeChannel); this.realtimeChannel = null; }
                     }
                 },
                 
                 setupRealtime(session) {
-                    this.realtimeChannel = supabase.channel('infodrop-online-users', {
-                        config: { presence: { key: session.user.id } },
-                    });
-                    
-                    this.realtimeChannel
-                        .on('presence', { event: 'sync' }, () => {
-                            const presenceState = this.realtimeChannel.presenceState();
-                            this.connectedUsers = Object.keys(presenceState).length;
-                        })
-                        .subscribe(async (status) => {
-                            if (status === 'SUBSCRIBED') {
-                                await this.realtimeChannel.track({ online_at: new Date().toISOString() });
-                            }
-                        });
+                    this.realtimeChannel = supabase.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } });
+                    this.realtimeChannel.on('presence', { event: 'sync' }, () => {
+                        this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
+                    }).subscribe(async (status) => { if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); } });
+                },
+
+                getOrientationClass(orientation) { return ORIENTATION_STYLES[orientation] || 'bg-gray-700'; },
+                
+                openEditPanel(news) {
+                    this.editingNews = JSON.parse(JSON.stringify(news));
+                    this.showEditPanel = true;
+                },
+
+                async updateNews() {
+                    const { id, resume, source, url, orientation } = this.editingNews;
+                    try {
+                        const { error } = await supabase.from('actu').update({ resume, source, url, orientation }).eq('id', id);
+                        if (error) throw error;
+                        this.showEditPanel = false;
+                        this.loadNews();
+                    } catch (error) {
+                        console.error("Erreur de mise à jour:", error);
+                        alert("La mise à jour a échoué.");
+                    }
                 },
                 
                 async deleteNews(newsId) {
                     if (!confirm("Voulez-vous vraiment supprimer cette actualité ?")) return;
-                    this.newsList = this.newsList.filter(n => n.id !== newsId); // Optimistic UI
+                    this.newsList = this.newsList.filter(n => n.id !== newsId);
                     try {
                         const { error } = await supabase.from('actu').delete().eq('id', newsId);
                         if (error) { throw error; }
                         if (this.isAdmin) { this.loadStats(); }
                     } catch (error) {
                         console.error("Erreur de suppression:", error);
-                        alert("La suppression a échoué. L'actualité va réapparaître.");
+                        alert("La suppression a échoué.");
                         this.loadNews();
                     }
                 },
@@ -199,13 +270,14 @@
 
                 async loadStats() {
                     try {
+                        // Mise à jour de la vue pour qu'elle compte sur 24h glissantes
                         const { data, error } = await supabase.from('stats_today').select('*').single();
                         if (error) throw error;
                         this.stats = data || { total_articles: 0, total_sources: 0 };
                     } catch (error) { console.error('Erreur chargement stats:', error); }
                 },
 
-                async addManualNews() { this.addingNews = true; try { const { error } = await supabase.from('actu').insert({ resume: this.newNews.resume, source: this.newNews.source, url: this.newNews.url, heure: new Date().toISOString(), added_by: this.user.email }); if (error) throw error; this.newNews = { resume: '', source: '', url: '' }; this.showAdminPanel = false; this.loadData(); } catch (error) { console.error('Erreur ajout:', error); alert('Erreur lors de l\'ajout.'); } finally { this.addingNews = false; } },
+                async addManualNews() { this.addingNews = true; try { const { error } = await supabase.from('actu').insert({ resume: this.newNews.resume, source: this.newNews.source, url: this.newNews.url, orientation: this.newNews.orientation, heure: new Date().toISOString(), added_by: this.user.email }); if (error) throw error; this.newNews = { resume: '', source: '', url: '', orientation: '' }; this.showAdminPanel = false; this.loadData(); } catch (error) { console.error('Erreur ajout:', error); alert('Erreur lors de l\'ajout.'); } finally { this.addingNews = false; } },
                 
                 startAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); this.updateInterval = setInterval(() => this.loadData(), 30000); },
                 
