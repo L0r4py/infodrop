@@ -1,5 +1,5 @@
 // Fichier : /api/parse-rss.js
-// Version 17 - Version finale stable après suppression de Télérama
+// Version 18 - Ajout de nouvelles sources (Humanité, Politis, Regards, La Croix, L’Opinion, Les Échos, Valeurs Actuelles)
 
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
@@ -33,12 +33,26 @@ const RSS_FEEDS = [
     { name: 'Konbini', url: 'https://www.konbini.com/fr/feed/', orientation: 'centre' },
     { name: 'Numerama', url: 'https://www.numerama.com/feed/', orientation: 'centre' },
     { name: "L'Obs", url: 'https://www.nouvelobs.com/rss.xml', orientation: 'centre-gauche' },
-    
+
     // --- INDÉPENDANTS ---
     { name: 'Reporterre', url: 'https://reporterre.net/spip.php?page=backend', orientation: 'gauche' },
     { name: 'Blast', url: 'https://api.blast-info.fr/rss.xml', orientation: 'gauche' },
     { name: 'Arrêt sur Images', url: 'https://api.arretsurimages.net/api/public/rss/all-content', orientation: 'centre-gauche' },
-    
+
+    // --- PRESSE D’OPINION & IDÉOLOGIQUE ---
+    { name: "L'Humanité - Politique", url: 'https://www.humanite.fr/sections/politique/feed', orientation: 'gauche' },
+    { name: "L'Humanité - Social et Économie", url: 'https://www.humanite.fr/sections/social-et-economie/feed', orientation: 'gauche' },
+    { name: "L'Humanité - Extrême droite", url: 'https://www.humanite.fr/mot-cle/extreme-droite/feed', orientation: 'gauche' },
+    { name: 'Politis', url: 'https://www.politis.fr/flux-rss-apps/', orientation: 'gauche' },
+    { name: 'Regards', url: 'https://regards.fr/category/l-actu/feed/', orientation: 'gauche' },
+    { name: 'La Croix - Société', url: 'https://www.la-croix.com/feeds/rss/societe.xml', orientation: 'centre-droit' },
+    { name: 'La Croix - Politique', url: 'https://www.la-croix.com/feeds/rss/politique.xml', orientation: 'centre-droit' },
+    { name: 'La Croix - Culture', url: 'https://www.la-croix.com/feeds/rss/culture.xml', orientation: 'centre-droit' },
+    { name: "L'Opinion", url: 'https://www.lopinion.fr/index.rss', orientation: 'droite' },
+    { name: 'Les Échos - Politique', url: 'https://services.lesechos.fr/rss/les-echos-politique.xml', orientation: 'centre-droit' },
+    { name: 'Les Échos - Weekend', url: 'https://services.lesechos.fr/rss/les-echos-weekend.xml', orientation: 'centre-droit' },
+    { name: 'Valeurs Actuelles', url: 'https://www.valeursactuelles.com/feed?post_type=post', orientation: 'extrême-droite' },
+
     // --- OUTRE-MER ---
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre' },
     { name: 'L\'Info Kwezi', url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre' }
@@ -50,14 +64,18 @@ const FILTER_RULES = {
 };
 
 // RÈGLES DE FILTRAGE GLOBALES
-const GLOBAL_FILTER_KEYWORDS = [ 'horoscope', 'astrologie', 'loterie', 'programme tv', 'recette', 'mots croisés', 'sudoku' ];
+const GLOBAL_FILTER_KEYWORDS = [
+    'horoscope', 'astrologie', 'loterie', 'programme tv', 'recette', 'mots croisés', 'sudoku'
+];
 
 function createSummary(text) {
     if (!text) return '';
     const replacements = { '’': "'", '–': '-', '…': '...', '"': '"', '&': '&', '<': '<', '>': '>' };
     let cleanText = text.replace(/(&#?[a-z0-9]+;)/gi, (match) => replacements[match] || '');
     cleanText = cleanText.replace(/<[^>]*>/g, ' ').replace(/\s\s+/g, ' ').trim();
-    if (cleanText.length > 180) { cleanText = cleanText.substring(0, 177) + '...'; }
+    if (cleanText.length > 180) {
+        cleanText = cleanText.substring(0, 177) + '...';
+    }
     return cleanText;
 }
 
@@ -70,27 +88,53 @@ function shouldFilterArticle(title, source) {
 }
 
 export default async function handler(req, res) {
-    if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) { return res.status(401).json({ error: 'Unauthorized' }); }
-    console.log('🚀 Démarrage du parsing RSS INFODROP (v17 - Final Production)');
-    let articlesToInsert = []; let filteredCount = 0; const twentyFourHoursAgo = new Date(); twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+    if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    console.log('🚀 Démarrage du parsing RSS INFODROP (v18 - Nouvelles sources intégrées)');
+
+    let articlesToInsert = [];
+    let filteredCount = 0;
+    const twentyFourHoursAgo = new Date();
+    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+
     for (const feed of RSS_FEEDS) {
         try {
             const feedData = await parser.parseURL(feed.url);
             for (const item of feedData.items) {
                 if (shouldFilterArticle(item.title, feed.name)) {
-                    filteredCount++; continue;
+                    filteredCount++;
+                    continue;
                 }
                 const pubDate = item.isoDate ? new Date(item.isoDate) : new Date();
                 if (pubDate >= twentyFourHoursAgo && item.link) {
-                    articlesToInsert.push({ resume: createSummary(item.title || item.contentSnippet), source: feed.name, url: item.link, heure: pubDate.toISOString(), orientation: feed.orientation });
+                    articlesToInsert.push({
+                        resume: createSummary(item.title || item.contentSnippet),
+                        source: feed.name,
+                        url: item.link,
+                        heure: pubDate.toISOString(),
+                        orientation: feed.orientation
+                    });
                 }
             }
-        } catch (error) { console.error(`❌ Erreur (gérée) pour ${feed.name}:`, error.message); }
+        } catch (error) {
+            console.error(`❌ Erreur (gérée) pour ${feed.name}:`, error.message);
+        }
     }
+
     if (articlesToInsert.length > 0) {
         const { error } = await supabase.from('actu').insert(articlesToInsert);
-        if (error) { console.error('Erreur insertion Supabase:', error); return res.status(500).json({ success: false, error: error.message }); }
+        if (error) {
+            console.error('Erreur insertion Supabase:', error);
+            return res.status(500).json({ success: false, error: error.message });
+        }
     }
+
     console.log(`✅ Parsing terminé. ${articlesToInsert.length} articles trouvés, ${filteredCount} filtrés.`);
-    res.status(200).json({ success: true, new_articles_found: articlesToInsert.length, articles_filtered: filteredCount });
+    res.status(200).json({
+        success: true,
+        new_articles_found: articlesToInsert.length,
+        articles_filtered: filteredCount
+    });
 }
