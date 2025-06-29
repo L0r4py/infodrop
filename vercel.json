@@ -2,12 +2,38 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/*.js",
+      "src": "/api/parse-rss.js",
       "use": "@vercel/node"
     },
     {
-      "src": "*.html",
+      "src": "/api/daily-purge.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "/index.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "/infodrop360.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/parse-rss",
+      "dest": "/api/parse-rss"
+    },
+    {
+      "src": "/api/daily-purge",
+      "dest": "/api/daily-purge"
+    },
+    {
+      "src": "/infodrop360.html",
+      "dest": "/infodrop360.html"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
     }
   ],
   "crons": [
