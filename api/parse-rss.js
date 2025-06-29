@@ -49,8 +49,6 @@ const RSS_FEEDS = [
     { name: 'La Croix - Politique', url: 'https://www.la-croix.com/feeds/rss/politique.xml', orientation: 'centre-droit' },
     { name: 'La Croix - Culture', url: 'https://www.la-croix.com/feeds/rss/culture.xml', orientation: 'centre-droit' },
     { name: "L'Opinion", url: 'https://www.lopinion.fr/index.rss', orientation: 'droite' },
-    { name: 'Les Échos - Politique', url: 'https://services.lesechos.fr/rss/les-echos-politique.xml', orientation: 'centre-droit' },
-    { name: 'Les Échos - Weekend', url: 'https://services.lesechos.fr/rss/les-echos-weekend.xml', orientation: 'centre-droit' },
     { name: 'Valeurs Actuelles', url: 'https://www.valeursactuelles.com/feed?post_type=post', orientation: 'extrême-droite' },
 
     // --- OUTRE-MER ---
