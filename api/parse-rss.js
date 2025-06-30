@@ -1,5 +1,5 @@
 // Fichier : /api/parse-rss.js
-// Version 21 - La version finale et définitive avec toutes les corrections
+// Version 22 - Correction finale de la syntaxe
 
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
@@ -59,7 +59,7 @@ const RSS_FEEDS = [
 
     // --- OUTRE-MER ---
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre' },
-    { name: 'L\'Info Kwezi', url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre' }
+    { name: "L'Info Kwezi", url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre' }
 ];
 
 // RÈGLES DE FILTRAGE PAR MOTS-CLÉS
@@ -72,25 +72,11 @@ const GLOBAL_FILTER_KEYWORDS = [
     'horoscope', 'astrologie', 'loterie', 'programme tv', 'recette', 'mots croisés', 'sudoku'
 ];
 
-// --- VERSION CORRIGÉE DE createSummary ---
 function createSummary(text) {
     if (!text) return '';
-    // Dictionnaire complet pour gérer les entités HTML
-    const replacements = { 
-        '&apos;': "'", 
-        '&quot;': '"', 
-        '&amp;': '&', 
-        '&lt;': '<', 
-        '&gt;': '>', 
-        '’': "'", 
-        '–': '-', 
-        '…': '...' 
-    };
-    
-    let cleanText = text.replace(/(&#?[a-z0-9]+;)/gi, (match) => replacements[match] || '');
-    cleanText = cleanText.replace(/<[^>]*>/g, ' ').replace(/\s\s+/g, ' ').trim();
+    const cleanText = text.replace(/<[^>]*>/g, ' ').replace(/\s\s+/g, ' ').trim();
     if (cleanText.length > 180) {
-        cleanText = cleanText.substring(0, 177) + '...';
+        return cleanText.substring(0, 177) + '...';
     }
     return cleanText;
 }
@@ -108,11 +94,11 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    console.log('🚀 Démarrage du parsing RSS INFODROP (v21 - Final Version)');
+    console.log('🚀 Démarrage du parsing RSS INFODROP (v22 - Syntax Fix)');
 
     let articlesToInsert = [];
     let filteredCount = 0;
-    const now = new Date(); // On définit l'heure actuelle une seule fois pour la comparaison
+    const now = new Date();
 
     for (const feed of RSS_FEEDS) {
         try {
@@ -122,16 +108,15 @@ export default async function handler(req, res) {
                     filteredCount++;
                     continue;
                 }
-                
+
                 let pubDate = item.isoDate ? new Date(item.isoDate) : new Date(now);
 
-                // --- GARDE-FOU TEMPOREL CORRIGÉ ---
                 if (pubDate > now) {
-                    pubDate = new Date(now); 
+                    pubDate = new Date(now);
                 }
 
-                const twentyFourHoursAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
-                
+                const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
                 if (pubDate >= twentyFourHoursAgo && item.link) {
                     articlesToInsert.push({
                         resume: createSummary(item.title || item.contentSnippet),
