@@ -21,12 +21,12 @@
     <script> tailwind.config = { darkMode: 'class', theme: { extend: {} } } </script>
 </head>
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
-    
+
     <script>
-        const SUPABASE_URL = 'https://gxpezjcjynbkvtvtzyfo.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4cGV6amNqeW5ia3Z0dnR6eWZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwMzA1MTgsImV4cCI6MjA2NjYwNjUxOH0.D90LXh1aGB2OibrpNXPhKZg8oG-mf510v7vKxoJmAog';
-        const ADMIN_EMAILS = ['l0r4.py@gmail.com'];
-        const STRIPE_LINK = 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801';
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const ADMIN_EMAILS = ['YOUR_ADMIN_EMAIL'];
+        const STRIPE_LINK = 'YOUR_STRIPE_LINK';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </script>
 
@@ -368,7 +368,6 @@
                     return ORIENTATION_DATA[orientation]?.class || 'bg-gray-700 text-gray-200';
                 },
 
-                // --- LE RESTE DES MÉTHODES RESTE INCHANGÉ ---
                 async init() {
                     supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
                     const { data: { session } } = await supabase.auth.getSession();
@@ -471,34 +470,27 @@
                     }
                 },
 
-                async addCustomSource() {
-                    this.addingCustomSource = true;
+                // LA FONCTION ADD MANUAL NEWS CORRIGÉE
+                async addManualNews() {
+                    this.addingNews = true;
                     try {
-                        const sourceData = {
-                            name: this.newCustomSource.name,
-                            url: this.newCustomSource.url,
-                            type: this.newCustomSource.type,
-                            orientation: this.newCustomSource.orientation || null,
-                            created_by: this.user.email,
-                            selector_config: this.newCustomSource.selectorsJson ? JSON.parse(this.newCustomSource.selectorsJson) : null
-                        };
-                        const { error } = await supabase
-                            .from('custom_sources')
-                            .insert(sourceData);
+                        const { error } = await supabase.from('actu').insert({ 
+                            resume: this.newNews.resume, 
+                            source: this.newNews.source, 
+                            url: this.newNews.url, 
+                            orientation: this.newNews.orientation, 
+                            heure: new Date().toISOString(), 
+                            added_by: this.user.email 
+                        });
                         if (error) throw error;
-                        this.newCustomSource = {
-                            name: '', url: '', type: 'website', orientation: '',
-                            selectors: { articles: '', title: '', link: '', date: '' },
-                            selectorsJson: ''
-                        };
-                        this.showAddCustomSource = false;
-                        await this.loadCustomSources();
-                        alert('Source ajoutée avec succès !');
+                        this.newNews = { resume: '', source: '', url: '', orientation: '' };
+                        this.showAdminPanel = false;
+                        this.loadData();
                     } catch (error) {
-                        console.error('Erreur ajout source:', error);
-                        alert('Erreur lors de l\'ajout de la source');
+                        console.error('Erreur ajout:', error);
+                        alert('Erreur lors de l\'ajout.');
                     } finally {
-                        this.addingCustomSource = false;
+                        this.addingNews = false;
                     }
                 },
 
@@ -530,13 +522,43 @@
                     }
                 },
 
+                async addCustomSource() {
+                    this.addingCustomSource = true;
+                    try {
+                        const sourceData = {
+                            name: this.newCustomSource.name,
+                            url: this.newCustomSource.url,
+                            type: this.newCustomSource.type,
+                            orientation: this.newCustomSource.orientation || null,
+                            created_by: this.user.email,
+                            selector_config: this.newCustomSource.selectorsJson ? JSON.parse(this.newCustomSource.selectorsJson) : null
+                        };
+                        const { error } = await supabase
+                            .from('custom_sources')
+                            .insert(sourceData);
+                        if (error) throw error;
+                        this.newCustomSource = {
+                            name: '', url: '', type: 'website', orientation: '',
+                            selectors: { articles: '', title: '', link: '', date: '' },
+                            selectorsJson: ''
+                        };
+                        this.showAddCustomSource = false;
+                        await this.loadCustomSources();
+                        alert('Source ajoutée avec succès !');
+                    } catch (error) {
+                        console.error('Erreur ajout source:', error);
+                        alert('Erreur lors de l\'ajout de la source');
+                    } finally {
+                        this.addingCustomSource = false;
+                    }
+                },
+
                 async toggleSourceActive(source) {
                     try {
                         const { error } = await supabase
                             .from('custom_sources')
                             .update({ is_active: !source.is_active })
                             .eq('id', source.id);
-                        
                         if (error) throw error;
                         source.is_active = !source.is_active;
                     } catch (error) {
