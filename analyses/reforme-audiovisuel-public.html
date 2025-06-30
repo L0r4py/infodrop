@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title><!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -11,11 +7,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';}
-        .perspective-card { background: linear-gradient(145deg, #1e293b, #334155); border-radius: 16px; transition: all 0.3s ease; position: relative; overflow: hidden; cursor: pointer; }
-        .perspective-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--gradient); opacity: 0.8; }
-        .perspective-card:hover { transform: translateY(-4px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
+        .perspective-card { background: linear-gradient(145deg, #1e293b, #334155); border-radius: 16px; transition: all 0.3s ease; position: relative; overflow: hidden; cursor: pointer; border: 1px solid #334155; }
+        .perspective-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--badge-color, #808080); }
+        .perspective-card:hover { transform: translateY(-4px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); border-color: #4f46e5; }
         .consensus-meter { height: 8px; background: #334155; border-radius: 4px; overflow: hidden; position: relative; }
-        .consensus-fill { height: 100%; background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981); transition: width 0.5s ease; }
+        .consensus-fill { height: 100%; background: linear-gradient(90deg, #D42A2A, #808080, #2A2AD4); transition: width 0.5s ease; }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
         .slide-in { animation: slideIn 0.5s ease-out forwards; }
         .fact-badge, .warning-badge, .tag-item { backdrop-filter: blur(10px); }
@@ -23,13 +19,15 @@
         .warning-badge { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); }
         .info-card { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); backdrop-filter: blur(10px); }
         .metric-card { background: linear-gradient(145deg, #1e293b, #2d3748); border: 1px solid #334155; }
+        
+        /* User-defined orientation styles from the user's template */
         .badge-gauche { background-color: rgba(212, 42, 42, 0.5); color: #fca5a5; }
-        .badge-centre-droit { background-color: rgba(42, 42, 212, 0.5); color: #c7d2fe; }
-        .badge-local, .badge-terrain { background-color: rgba(5, 150, 105, 0.5); color: #a7f3d0; }
-        .badge-public, .badge-international { background-color: rgba(59, 130, 246, 0.5); color: #bfdbfe; }
+        .badge-extreme-droite { background-color: rgba(42, 42, 212, 0.5); color: #c7d2fe; } /* Approximated from user's code */
         .badge-droite { background-color: rgba(42, 42, 212, 0.5); color: #c7d2fe; }
         .badge-syndicat { background-color: rgba(239, 68, 68, 0.5); color: #fca5a5; }
         .badge-neutre { background-color: rgba(34, 139, 34, 0.5); color: #e2e8f0; }
+        .badge-international { background-color: rgba(59, 130, 246, 0.5); color: #bfdbfe; }
+        .badge-centre-droit { background-color: rgba(55, 48, 163, 0.5); color: #c7d2fe; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -56,7 +54,6 @@
                         <h2 class="text-xl sm:text-2xl font-bold mb-2">📺 Réforme de l'audiovisuel public : Rachida Dati à l'épreuve du feu</h2>
                         <p class="text-gray-400 text-xs sm:text-sm">Analyse multi-perspectives • 6 sources • Dernière mise à jour : 30 juin 2025</p>
                     </div>
-                    <!-- Badge "Sujet brûlant" caché sur mobile (hidden) et visible à partir de sm: (inline-flex) -->
                     <span class="hidden sm:inline-flex items-center gap-2 px-3 py-1 bg-red-900 bg-opacity-30 text-red-400 rounded-full text-sm font-semibold whitespace-nowrap">🔴 Sujet brûlant</span>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -83,44 +80,44 @@
         </section>
 
         <!-- Alerte divergence -->
-        <div class="info-card rounded-lg p-4 mb-6 flex items-center gap-3"><span class="text-2xl">🔍</span><div><div class="font-bold">Divergence extrême détectée</div><div class="text-sm text-gray-300">Les positions vont d'un soutien institutionnel à une opposition frontale, avec des visions radicalement opposées sur l'avenir du service public</div></div></div>
+        <div class="info-card rounded-lg p-4 mb-6 flex items-center gap-3"><span class="text-2xl">🔍</span><div><div class="font-bold">Divergence extrême détectée</div><div class="text-sm text-gray-300">Les positions vont d'un soutien institutionnel à une opposition frontale, avec des visions radicalement opposées sur l'avenir du service public.</div></div></div>
 
         <!-- Perspectives multiples -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <article class="perspective-card slide-in p-6" style="animation-delay: 0.1s" onclick="window.open('https://www.franceinfo.fr/economie/medias/france-televisions/l-article-a-lire-pour-comprendre-la-reforme-de-l-audiovisuel-public-dont-l-examen-en-commission-a-l-assemblee-reprend-mardi_7175706.html', '_blank')">
+            <article class="perspective-card slide-in p-6" style="--badge-color: #808080; animation-delay: 0.1s" onclick="window.open('https://www.franceinfo.fr/economie/medias/france-televisions/l-article-a-lire-pour-comprendre-la-reforme-de-l-audiovisuel-public-dont-l-examen-en-commission-a-l-assemblee-reprend-mardi_7175706.html', '_blank')">
                 <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">France Info</h3><span class="text-xs text-gray-400">Service public</span></div><span class="badge-neutre text-xs px-2 py-1 rounded">Neutre</span></div>
-                <blockquote class="text-gray-300 mb-4 italic">"Le texte prévoit de créer une holding, France Médias, qui chapeauterait France Télévisions, Radio France et l'INA. La ministre juge la réforme 'indispensable' face à la concurrence des plateformes."</blockquote>
-                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-green-400">🎯</span><span class="text-gray-400">Focus : Explication factuelle</span></div><div class="flex items-center gap-2"><span class="text-green-400">📊</span><span class="text-gray-400">Ton : Informatif, équilibré</span></div><div class="flex items-center gap-2"><span class="text-green-400">📋</span><span class="text-gray-400">Contexte détaillé</span></div></div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"Le texte prévoit de créer une holding, France Médias, qui chapeauterait France Télévisions, Radio France et l'INA. La ministre juge la réforme 'indispensable' face à la concurrence des plateformes."</blockquote>
+                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus : Explication factuelle</span></div><div class="flex items-center gap-2"><span>📊</span><span class="text-gray-400">Ton : Informatif, équilibré</span></div><div class="flex items-center gap-2"><span>📋</span><span class="text-gray-400">Contexte détaillé</span></div></div>
                 <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Holding au 1er janvier 2026</li><li>• 80M€ de budget en moins</li><li>• France Médias Monde incertain</li></ul></div>
             </article>
-            <article class="perspective-card slide-in p-6" style="animation-delay: 0.2s" onclick="window.open('https://www.lejdd.fr/Societe/france-medias-la-reforme-explosive-de-rachida-dati-secoue-laudiovisuel-public-156777', '_blank')">
+            <article class="perspective-card slide-in p-6" style="--badge-color: #5555AA; animation-delay: 0.2s" onclick="window.open('https://www.lejdd.fr/Societe/france-medias-la-reforme-explosive-de-rachida-dati-secoue-laudiovisuel-public-156777', '_blank')">
                 <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">Le JDD</h3><span class="text-xs text-gray-400">National</span></div><span class="badge-centre-droit text-xs px-2 py-1 rounded">Extrême droite</span></div>
-                <blockquote class="text-gray-300 mb-4 italic">"Les critiques se multiplient contre une information publique perçue comme idéologiquement marquée. La réforme marque une tentative sérieuse de réformer l'audiovisuel public."</blockquote>
-                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-blue-400">🎯</span><span class="text-gray-400">Focus : Efficacité économique</span></div><div class="flex items-center gap-2"><span class="text-blue-400">💬</span><span class="text-gray-400">Ton : Critique mesuré</span></div><div class="flex items-center gap-2"><span class="text-blue-400">📈</span><span class="text-gray-400">Biais idéologique dénoncé</span></div></div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"Les critiques se multiplient contre une information publique perçue comme idéologiquement marquée. La réforme marque une tentative sérieuse de réformer l'audiovisuel public."</blockquote>
+                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus : Efficacité économique</span></div><div class="flex items-center gap-2"><span>💬</span><span class="text-gray-400">Ton : Critique mesuré</span></div><div class="flex items-center gap-2"><span>📈</span><span class="text-gray-400">Biais idéologique dénoncé</span></div></div>
                 <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• 4 milliards € de budget</li><li>• Pluralisme contesté</li><li>• Gouvernance à clarifier</li></ul></div>
             </article>
-            <article class="perspective-card slide-in p-6" style="animation-delay: 0.3s" onclick="window.open('https://www.mediapart.fr/journal/culture-et-idees/260625/rachida-dati-deteste-l-audiovisuel-public', '_blank')">
+            <article class="perspective-card slide-in p-6" style="--badge-color: #D42A2A; animation-delay: 0.3s" onclick="window.open('https://www.mediapart.fr/journal/culture-et-idees/260625/rachida-dati-deteste-l-audiovisuel-public', '_blank')">
                 <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">Mediapart</h3><span class="text-xs text-gray-400">National</span></div><span class="badge-gauche text-xs px-2 py-1 rounded">Gauche</span></div>
-                <blockquote class="text-gray-300 mb-4 italic">"Rachida Dati déteste l'audiovisuel public. C'est un retour à l'ORTF, une attaque directe contre la diversité culturelle et le pluralisme de l'information."</blockquote>
-                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-red-400">🎯</span><span class="text-gray-400">Focus : Indépendance menacée</span></div><div class="flex items-center gap-2"><span class="text-red-400">✊</span><span class="text-gray-400">Ton : Dénonciation</span></div><div class="flex items-center gap-2"><span class="text-red-400">🚨</span><span class="text-gray-400">Alerte démocratique</span></div></div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"Rachida Dati déteste l'audiovisuel public. C'est un retour à l'ORTF, une attaque directe contre la diversité culturelle et le pluralisme de l'information."</blockquote>
+                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus : Indépendance menacée</span></div><div class="flex items-center gap-2"><span>✊</span><span class="text-gray-400">Ton : Dénonciation</span></div><div class="flex items-center gap-2"><span>🚨</span><span class="text-gray-400">Alerte démocratique</span></div></div>
                 <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Retour à l'ORTF dénoncé</li><li>• Contrôle politique accru</li><li>• Attaque contre le pluralisme</li></ul></div>
             </article>
-            <article class="perspective-card slide-in p-6" style="animation-delay: 0.4s" onclick="window.open('https://www.europe1.fr/politique/audiovisuel-public-rachida-dati-presente-son-projet-de-reforme-de-linstitution-ce-lundi-a-lassemblee-nationale-761511', '_blank')">
+            <article class="perspective-card slide-in p-6" style="--badge-color: #2A2AD4; animation-delay: 0.4s" onclick="window.open('https://www.europe1.fr/politique/audiovisuel-public-rachida-dati-presente-son-projet-de-reforme-de-linstitution-ce-lundi-a-lassemblee-nationale-761511', '_blank')">
                 <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">Europe 1</h3><span class="text-xs text-gray-400">National</span></div><span class="badge-droite text-xs px-2 py-1 rounded">Droite</span></div>
-                <blockquote class="text-gray-300 mb-4 italic">"4 milliards d'euros pour un service public peu pluraliste. Le RN favorable à la privatisation partielle. Combien de temps encore justifier un tel coût ?"</blockquote>
-                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-purple-400">🎯</span><span class="text-gray-400">Focus : Coût exorbitant</span></div><div class="flex items-center gap-2"><span class="text-purple-400">💸</span><span class="text-gray-400">Ton : Critique économique</span></div><div class="flex items-center gap-2"><span class="text-purple-400">📉</span><span class="text-gray-400">Privatisation évoquée</span></div></div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"4 milliards d'euros pour un service public peu pluraliste. Le RN favorable à la privatisation partielle. Combien de temps encore justifier un tel coût ?"</blockquote>
+                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus : Coût exorbitant</span></div><div class="flex items-center gap-2"><span>💸</span><span class="text-gray-400">Ton : Critique économique</span></div><div class="flex items-center gap-2"><span>📉</span><span class="text-gray-400">Privatisation évoquée</span></div></div>
                 <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Empire coûteux</li><li>• Doublons permanents</li><li>• Gouvernance opaque</li></ul></div>
             </article>
-            <article class="perspective-card slide-in p-6" style="animation-delay: 0.5s" onclick="window.open('https://snjcgt.fr/2025/06/23/france-medias-monde-preavis-de-greve-intersyndical-contre-le-projet-de-reforme-de-laudiovisuel-public/', '_blank')">
+            <article class="perspective-card slide-in p-6" style="--badge-color: #ef4444; animation-delay: 0.5s" onclick="window.open('https://snjcgt.fr/2025/06/23/france-medias-monde-preavis-de-greve-intersyndical-contre-le-projet-de-reforme-de-laudiovisuel-public/', '_blank')">
                 <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">CGT / Intersyndicale</h3><span class="text-xs text-gray-400">Syndicats</span></div><span class="badge-syndicat text-xs px-2 py-1 rounded">Opposition</span></div>
-                <blockquote class="text-gray-300 mb-4 italic">"Projet extrêmement dangereux pour l'indépendance de l'information. Démantèlement de Radio France sous tutelle de France TV. Grève illimitée pour sauver l'audiovisuel public!"</blockquote>
-                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-red-400">🎯</span><span class="text-gray-400">Focus : Défense des emplois</span></div><div class="flex items-center gap-2"><span class="text-red-400">⚡</span><span class="text-gray-400">Ton : Mobilisation totale</span></div><div class="flex items-center gap-2"><span class="text-red-400">🛑</span><span class="text-gray-400">Grève illimitée</span></div></div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"Projet extrêmement dangereux pour l'indépendance de l'information. Démantèlement de Radio France sous tutelle de France TV. Grève illimitée pour sauver l'audiovisuel public!"</blockquote>
+                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus : Défense des emplois</span></div><div class="flex items-center gap-2"><span>⚡</span><span class="text-gray-400">Ton : Mobilisation totale</span></div><div class="flex items-center gap-2"><span>🛑</span><span class="text-gray-400">Grève illimitée</span></div></div>
                 <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• 16 000 emplois menacés</li><li>• Indépendance éditoriale</li><li>• Étranglement budgétaire</li></ul></div>
             </article>
-            <article class="perspective-card slide-in p-6" style="animation-delay: 0.6s" onclick="window.open('https://www.france24.com/fr/france/20240523-projet-de-fusion-de-l-audiovisuel-public-france-24-en-gr%C3%A8ve', '_blank')">
-                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">France 24</h3><span class="text-xs text-gray-400">International</span></div><span class="badge-international text-xs px-2 py-1 rounded">Mondial</span></div>
-                <blockquote class="text-gray-300 mb-4 italic">"France Médias Monde face à des enjeux géopolitiques spécifiques. Notre exclusion de la réforme fait débat. L'influence française dans le monde en jeu."</blockquote>
-                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-yellow-400">🎯</span><span class="text-gray-400">Focus : Rayonnement France</span></div><div class="flex items-center gap-2"><span class="text-yellow-400">🌍</span><span class="text-gray-400">Ton : Inquiétude diplomatique</span></div><div class="flex items-center gap-2"><span class="text-yellow-400">🇫🇷</span><span class="text-gray-400">Soft power menacé</span></div></div>
+            <article class="perspective-card slide-in p-6" style="--badge-color: #3b82f6; animation-delay: 0.6s" onclick="window.open('https://www.france24.com/fr/france/20240523-projet-de-fusion-de-l-audiovisuel-public-france-24-en-gr%C3%A8ve', '_blank')">
+                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">France 24</h3><span class="text-xs text-gray-400">International</span></div><span class="badge-international text-xs px-2 py-1 rounded" style="background-color: rgba(59, 130, 246, 0.5); color: #bfdbfe;">Mondial</span></div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"France Médias Monde face à des enjeux géopolitiques spécifiques. Notre exclusion de la réforme fait débat. L'influence française dans le monde en jeu."</blockquote>
+                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus : Rayonnement France</span></div><div class="flex items-center gap-2"><span>🌍</span><span class="text-gray-400">Ton : Inquiétude diplomatique</span></div><div class="flex items-center gap-2"><span>🇫🇷</span><span class="text-gray-400">Soft power menacé</span></div></div>
                 <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Exclusion du périmètre ?</li><li>• Enjeux géopolitiques</li><li>• Influence internationale</li></ul></div>
             </article>
         </div>
@@ -145,7 +142,6 @@
             <p class="mt-1">Un projet 3C - EM&LPy</p>
         </footer>
     </div>
-
     <script>
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -158,10 +154,5 @@
             observer.observe(card);
         });
     </script>
-</body>
-</html></title>
-</head>
-<body>
-
 </body>
 </html>
