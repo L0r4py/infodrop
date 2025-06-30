@@ -24,7 +24,6 @@
     </script>
 </head>
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
-    
     <script>
         // --- CONFIGURATION REQUISE ---
         const SUPABASE_URL = 'https://gxpezjcjynbkvtvtzyfo.supabase.co';
@@ -65,6 +64,8 @@
                     <div class="flex items-center gap-4">
                         <button @click="showAboutPanel = true" class="text-gray-400 hover:text-white transition" title="À propos">ℹ️</button>
                         <button x-show="isAdmin" @click="showAdminPanel = !showAdminPanel" class="text-gray-400 hover:text-white transition" title="Panel Admin">⚙️</button>
+                        <!-- BOUTON AJOUTÉ ICI ! -->
+                        <button x-show="isAdmin" @click="showCustomSourcesPanel = !showCustomSourcesPanel" class="text-gray-400 hover:text-white transition" title="Sources personnalisées">🔧</button>
                         <a :href="STRIPE_LINK" target="_blank" class="text-red-400 hover:text-red-300 transition" title="Soutenir INFODROP">❤️</a>
                         <button @click="logout()" class="text-gray-400 hover:text-white transition" title="Déconnexion">🚪</button>
                     </div>
@@ -97,6 +98,107 @@
                 </div>
             </div>
 
+            <!-- Panel Gestion des Sources Personnalisées -->
+            <div x-show="showCustomSourcesPanel && isAdmin" x-transition class="bg-gray-950/50 border-b border-gray-800">
+                <div class="max-w-5xl mx-auto p-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold text-white">🔧 Gérer les sources personnalisées</h2>
+                        <button @click="showAddCustomSource = !showAddCustomSource" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition text-sm">
+                            ➕ Ajouter une source
+                        </button>
+                    </div>
+                    
+                    <!-- Formulaire d'ajout -->
+                    <div x-show="showAddCustomSource" x-transition class="bg-gray-800 rounded-lg p-4 mb-4">
+                        <form @submit.prevent="addCustomSource()" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">Nom de la source</label>
+                                <input x-model="newCustomSource.name" type="text" placeholder="Ex: Mediapart" required 
+                                    class="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600 text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">URL à surveiller</label>
+                                <input x-model="newCustomSource.url" type="url" placeholder="https://..." required 
+                                    class="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600 text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">Type</label>
+                                <select x-model="newCustomSource.type" class="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600 text-white">
+                                    <option value="website">Site web</option>
+                                    <option value="twitter">Twitter/X</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">Orientation</label>
+                                <select x-model="newCustomSource.orientation" class="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600 text-white">
+                                    <option value="">Non définie</option>
+                                    <option value="extreme-gauche">Extrême gauche</option>
+                                    <option value="gauche">Gauche</option>
+                                    <option value="centre-gauche">Centre gauche</option>
+                                    <option value="centre">Centre</option>
+                                    <option value="centre-droit">Centre droit</option>
+                                    <option value="droite">Droite</option>
+                                    <option value="extreme-droite">Extrême droite</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-2 flex gap-3">
+                                <button type="submit" :disabled="addingCustomSource" 
+                                        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition disabled:opacity-50">
+                                    Créer la source
+                                </button>
+                                <button type="button" @click="testCustomSource()" :disabled="testingSource"
+                                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50">
+                                    Tester d'abord
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Liste des sources existantes -->
+                    <div class="space-y-2">
+                        <template x-for="source in customSources" :key="source.id">
+                            <div class="bg-gray-800 rounded-lg p-4 flex items-center justify-between">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-3">
+                                        <h3 class="font-semibold text-white" x-text="source.name"></h3>
+                                        <span class="text-xs px-2 py-0.5 rounded-full"
+                                            :class="source.is_active ? 'bg-green-800 text-green-300' : 'bg-red-800 text-red-300'"
+                                            x-text="source.is_active ? 'Actif' : 'Inactif'">
+                                        </span>
+                                    </div>
+                                    <div class="text-xs text-gray-400 mt-1">
+                                        <span x-text="source.url"></span>
+                                        <span x-show="source.last_checked" class="ml-3">
+                                            Dernière vérif: <span x-text="formatTime(source.last_checked)"></span>
+                                        </span>
+                                    </div>
+                                    <div x-show="source.last_error" class="text-xs text-red-400 mt-1" x-text="source.last_error"></div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button @click="toggleSourceActive(source)" 
+                                            class="p-2 rounded hover:bg-gray-700 transition"
+                                            :title="source.is_active ? 'Désactiver' : 'Activer'">
+                                        <span x-text="source.is_active ? '⏸️' : '▶️'"></span>
+                                    </button>
+                                    <button @click="forceCheckSource(source)" 
+                                            class="p-2 rounded hover:bg-gray-700 transition"
+                                            title="Vérifier maintenant">
+                                        🔄
+                                    </button>
+                                    <button @click="deleteCustomSource(source.id)" 
+                                            class="p-2 rounded hover:bg-red-900/50 transition"
+                                            title="Supprimer">
+                                        🗑️
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                        <div x-show="customSources.length === 0" class="text-center py-8 text-gray-500">
+                            Aucune source personnalisée configurée
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Main Content -->
             <main class="max-w-4xl mx-auto px-4 py-6 flex-grow">
                 <!-- Stats -->
@@ -105,7 +207,6 @@
                     <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700"><div class="text-2xl font-bold text-white" x-text="stats.total_sources">0</div><div class="text-sm text-gray-400">Sources</div></div>
                     <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700 col-span-2 md:col-span-1"><div class="text-2xl font-bold text-white flex items-center justify-center gap-2" x-text="connectedUsers">1</div><div class="text-sm text-gray-400">Lecteurs connectés</div></div>
                 </div>
-
                 <!-- Fil d'actualités -->
                 <div class="space-y-3">
                     <template x-for="news in newsList" :key="news.id">
@@ -127,14 +228,12 @@
                     <div x-show="!loadingNews && newsList.length === 0" class="text-center py-12 text-gray-500">Aucune actualité pour le moment. Le flux est en cours de chargement...</div>
                 </div>
             </main>
-
             <!-- Footer -->
             <footer class="text-center py-8 text-xs text-gray-500">
                 <p>© 2025 INFODROP. Tous droits réservés.</p>
                 <p class="mt-1">Un projet 3C - EM&LPy</p>
             </footer>
         </div>
-
         <!-- FENÊTRE D'ÉDITION (MODAL) -->
         <div x-show="showEditPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
             <div @click.away="showEditPanel = false" class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
@@ -157,7 +256,6 @@
                 </form>
             </div>
         </div>
-        
         <!-- FENÊTRE À PROPOS (MODAL) -->
         <div x-show="showAboutPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
             <div @click.away="showAboutPanel = false" class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
@@ -178,7 +276,6 @@
             </div>
         </div>
     </div>
-
     <script>
         function infodropApp() {
             const ORIENTATION_STYLES = { 'extreme-gauche': 'bg-[#FF0000] text-white', 'gauche': 'bg-[#D42A2A] text-white', 'centre-gauche': 'bg-[#AA5555] text-white', 'centre': 'bg-[#808080] text-white', 'centre-droit': 'bg-[#5555AA] text-white', 'droite': 'bg-[#2A2AD4] text-white', 'extreme-droite': 'bg-[#0000FF] text-white', 'neutre': 'bg-green-800 text-white' };
@@ -193,6 +290,24 @@
                 showEditPanel: false,
                 editingNews: { id: null, resume: '', source: '', url: '', orientation: '' },
                 showAboutPanel: false,
+                // --- VARS SOURCES CUSTOM ---
+                showCustomSourcesPanel: false,
+                showAddCustomSource: false,
+                customSources: [],
+                addingCustomSource: false,
+                testingSource: false,
+                newCustomSource: {
+                    name: '',
+                    url: '',
+                    type: 'website',
+                    orientation: '',
+                    selectors: {
+                        articles: '',
+                        title: '',
+                        link: '',
+                        date: ''
+                    }
+                },
 
                 async init() {
                     supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
@@ -257,7 +372,15 @@
                 
                 async logout() { if(this.realtimeChannel) { await this.realtimeChannel.untrack(); } await supabase.auth.signOut(); },
                 
-                async loadData() { this.loadingNews = true; await Promise.all([this.loadNews(), this.isAdmin ? this.loadStats() : Promise.resolve()]); this.loadingNews = false; },
+                async loadData() { 
+                    this.loadingNews = true; 
+                    await Promise.all([
+                        this.loadNews(), 
+                        this.isAdmin ? this.loadStats() : Promise.resolve(),
+                        this.isAdmin ? this.loadCustomSources() : Promise.resolve()
+                    ]); 
+                    this.loadingNews = false; 
+                },
 
                 async loadNews() {
                     try {
@@ -283,7 +406,128 @@
                 
                 stopAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); },
                 
-                formatTime(timestamp) { return new Date(timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); }
+                formatTime(timestamp) { 
+                    if (!timestamp) return '';
+                    return new Date(timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); 
+                },
+
+                // ------------------- SOURCES CUSTOM ---------------------
+                async loadCustomSources() {
+                    try {
+                        const { data, error } = await supabase
+                            .from('custom_sources_stats')
+                            .select('*')
+                            .order('created_at', { ascending: false });
+                        if (error) throw error;
+                        this.customSources = data || [];
+                    } catch (error) {
+                        console.error('Erreur chargement sources custom:', error);
+                    }
+                },
+
+                async addCustomSource() {
+                    this.addingCustomSource = true;
+                    try {
+                        const sourceData = {
+                            name: this.newCustomSource.name,
+                            url: this.newCustomSource.url,
+                            type: this.newCustomSource.type,
+                            orientation: this.newCustomSource.orientation || null,
+                            created_by: this.user.email
+                        };
+                        const { error } = await supabase
+                            .from('custom_sources')
+                            .insert(sourceData);
+                        if (error) throw error;
+                        this.newCustomSource = {
+                            name: '', url: '', type: 'website', orientation: '',
+                            selectors: { articles: '', title: '', link: '', date: '' }
+                        };
+                        this.showAddCustomSource = false;
+                        await this.loadCustomSources();
+                        alert('Source ajoutée avec succès !');
+                    } catch (error) {
+                        console.error('Erreur ajout source:', error);
+                        alert('Erreur lors de l\'ajout de la source');
+                    } finally {
+                        this.addingCustomSource = false;
+                    }
+                },
+
+                async testCustomSource() {
+                    this.testingSource = true;
+                    try {
+                        const response = await fetch('/api/test-scraper', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
+                            },
+                            body: JSON.stringify({
+                                url: this.newCustomSource.url,
+                                type: this.newCustomSource.type,
+                                selectors: this.newCustomSource.selectors
+                            })
+                        });
+                        const result = await response.json();
+                        if (result.success) {
+                            alert(`Test réussi ! ${result.articles?.length || 0} articles trouvés.`);
+                        } else {
+                            alert(`Erreur : ${result.error}`);
+                        }
+                    } catch (error) {
+                        alert('Erreur lors du test');
+                    } finally {
+                        this.testingSource = false;
+                    }
+                },
+
+                async toggleSourceActive(source) {
+                    try {
+                        const { error } = await supabase
+                            .from('custom_sources')
+                            .update({ is_active: !source.is_active })
+                            .eq('id', source.id);
+                        if (error) throw error;
+                        source.is_active = !source.is_active;
+                    } catch (error) {
+                        console.error('Erreur toggle source:', error);
+                    }
+                },
+
+                async forceCheckSource(source) {
+                    if (!confirm('Vérifier cette source maintenant ?')) return;
+                    try {
+                        const response = await fetch('/api/custom-scraper', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
+                            },
+                            body: JSON.stringify({ source_id: source.id })
+                        });
+                        const result = await response.json();
+                        alert(result.success ? 'Vérification terminée !' : 'Erreur lors de la vérification');
+                        await this.loadCustomSources();
+                    } catch (error) {
+                        alert('Erreur lors de la vérification');
+                    }
+                },
+
+                async deleteCustomSource(sourceId) {
+                    if (!confirm('Supprimer cette source et tous ses articles ?')) return;
+                    try {
+                        const { error } = await supabase
+                            .from('custom_sources')
+                            .delete()
+                            .eq('id', sourceId);
+                        if (error) throw error;
+                        this.customSources = this.customSources.filter(s => s.id !== sourceId);
+                    } catch (error) {
+                        console.error('Erreur suppression:', error);
+                        alert('Erreur lors de la suppression');
+                    }
+                }
             }
         }
     </script>
