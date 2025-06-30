@@ -17,21 +17,16 @@
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #111827; }
         ::-webkit-scrollbar-thumb { background: #4b5563; }
-        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
     </style>
-    <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: {} } }
-    </script>
+    <script> tailwind.config = { darkMode: 'class', theme: { extend: {} } } </script>
 </head>
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
+    
     <script>
-        // --- CONFIGURATION REQUISE ---
-        const SUPABASE_URL = 'https://gxpezjcjynbkvtvtzyfo.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4cGV6amNqeW5ia3Z0dnR6eWZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwMzA1MTgsImV4cCI6MjA2NjYwNjUxOH0.D90LXh1aGB2OibrpNXPhKZg8oG-mf510v7vKxoJmAog';
-        const ADMIN_EMAILS = ['l0r4.py@gmail.com'];
-        const STRIPE_LINK = 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801';
-        // --- FIN DE LA CONFIGURATION ---
-
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const ADMIN_EMAILS = ['YOUR_ADMIN_EMAIL'];
+        const STRIPE_LINK = 'YOUR_STRIPE_LINK';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </script>
 
@@ -82,13 +77,13 @@
                         <div>
                             <select x-model="newNews.orientation" class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white h-full">
                                 <option value="">Orientation...</option>
-                                <option value="extreme-gauche">Extrême gauche</option>
+                                <option value="extrême-gauche">Extrême gauche</option>
                                 <option value="gauche">Gauche</option>
                                 <option value="centre-gauche">Centre gauche</option>
                                 <option value="centre">Centre</option>
                                 <option value="centre-droit">Centre droit</option>
                                 <option value="droite">Droite</option>
-                                <option value="extreme-droite">Extrême droite</option>
+                                <option value="extrême-droite">Extrême droite</option>
                                 <option value="neutre">Neutre</option>
                             </select>
                         </div>
@@ -130,13 +125,13 @@
                                 <label class="block text-xs text-gray-400 mb-1">Orientation</label>
                                 <select x-model="newCustomSource.orientation" class="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600 text-white">
                                     <option value="">Non définie</option>
-                                    <option value="extreme-gauche">Extrême gauche</option>
+                                    <option value="extrême-gauche">Extrême gauche</option>
                                     <option value="gauche">Gauche</option>
                                     <option value="centre-gauche">Centre gauche</option>
                                     <option value="centre">Centre</option>
                                     <option value="centre-droit">Centre droit</option>
                                     <option value="droite">Droite</option>
-                                    <option value="extreme-droite">Extrême droite</option>
+                                    <option value="extrême-droite">Extrême droite</option>
                                 </select>
                             </div>
                             <!-- Bloc sélecteur CSS JSON -->
@@ -214,15 +209,21 @@
                     <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700"><div class="text-2xl font-bold text-white" x-text="stats.total_sources">0</div><div class="text-sm text-gray-400">Sources</div></div>
                     <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700 col-span-2 md:col-span-1"><div class="text-2xl font-bold text-white flex items-center justify-center gap-2" x-text="connectedUsers">1</div><div class="text-sm text-gray-400">Lecteurs connectés</div></div>
                 </div>
-                <!-- NOUVEAU : Barre de filtres et de statistiques -->
+
+                <!-- Barre de filtres et de statistiques -->
                 <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-4 mb-6">
                     <h3 class="text-sm font-semibold mb-3 text-gray-400">Filtrer par orientation :</h3>
                     <div class="flex flex-wrap gap-2">
-                        <button @click="activeFilter = 'all'" :class="{ 'bg-blue-600 text-white': activeFilter === 'all', 'bg-gray-700 hover:bg-gray-600': activeFilter !== 'all' }" class="px-3 py-1 rounded-full text-sm font-semibold transition">
+                        <button @click="activeFilter = 'all'" 
+                                :class="{ 'bg-blue-600 border-blue-600 text-white': activeFilter === 'all', 'border-gray-600 bg-gray-700/50 hover:bg-gray-700': activeFilter !== 'all' }" 
+                                class="px-3 py-1 rounded-full text-sm font-semibold transition border">
                             Tout voir
                         </button>
                         <template x-for="orientation in Object.keys(orientationStats)">
-                            <button @click="activeFilter = orientation" :class="{ 'text-white': activeFilter === orientation, 'opacity-60 hover:opacity-100': activeFilter !== orientation }" class="px-3 py-1 rounded-full text-sm font-semibold transition flex items-center gap-2" :style="{ backgroundColor: getOrientationColor(orientation) }">
+                            <button @click="activeFilter = orientation" 
+                                    :class="{ 'text-white': activeFilter === orientation, 'text-gray-300 bg-transparent hover:bg-white/10': activeFilter !== orientation }" 
+                                    class="px-3 py-1 rounded-full text-sm font-semibold transition border flex items-center gap-2"
+                                    :style="{ borderColor: getOrientationColor(orientation), backgroundColor: activeFilter === orientation ? getOrientationColor(orientation) : 'transparent' }">
                                 <span class="capitalize" x-text="orientation.replace('-', ' ')"></span>
                                 <span class="text-xs opacity-80" x-text="`(${orientationStats[orientation]}%)`"></span>
                             </button>
@@ -240,7 +241,7 @@
                                     <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
                                     <span x-show="!news.added_by" x-text="news.source"></span>
                                     <span x-text="formatTime(news.heure)"></span>
-                                    <span x-show="news.orientation" x-text="news.orientation" :class="getOrientationClass && getOrientationClass(news.orientation)" class="px-2 py-0.5 rounded-full font-semibold text-xs capitalize"></span>
+                                    <span x-show="news.orientation" x-text="news.orientation" :class="getOrientationClass(news.orientation)" class="px-2 py-0.5 rounded-full font-semibold text-xs capitalize"></span>
                                 </div>
                             </a>
                             <button x-show="isAdmin" @click.prevent="openEditPanel(news)" class="flex-shrink-0 p-2 rounded-full hover:bg-blue-900/50 transition" title="Éditer">✏️</button>
@@ -248,11 +249,12 @@
                         </div>
                     </template>
                     <div x-show="filteredNews.length === 0 && !loadingNews" class="text-center py-12">
-                        <p class="text-gray-500" x-text="activeFilter === 'all' ? 'Aucune actualité pour le moment.' : `Aucune actualité pour l\'orientation \\'${activeFilter}\\'.`"></p>
+                        <p class="text-gray-500" x-text="activeFilter === 'all' ? 'Aucune actualité pour le moment.' : `Aucune actualité pour l'orientation '${activeFilter.replace('-', ' ')}'.`"></p>
                     </div>
                     <div x-show="loadingNews && filteredNews.length === 0" class="text-center py-12"><div class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div></div>
                 </div>
             </main>
+
             <!-- Footer -->
             <footer class="text-center py-8 text-xs text-gray-500">
                 <p>© 2025 INFODROP. Tous droits réservés.</p>
@@ -272,7 +274,14 @@
                         <label class="text-sm text-gray-400 block mb-1">Orientation</label>
                         <select x-model="editingNews.orientation" class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600">
                             <option value="">Non définie</option>
-                            <option value="extreme-gauche">Extrême gauche</option><option value="gauche">Gauche</option><option value="centre-gauche">Centre gauche</option><option value="centre">Centre</option><option value="centre-droit">Centre droit</option><option value="droite">Droite</option><option value="extreme-droite">Extrême droite</option><option value="neutre">Neutre</option>
+                            <option value="extrême-gauche">Extrême gauche</option>
+                            <option value="gauche">Gauche</option>
+                            <option value="centre-gauche">Centre gauche</option>
+                            <option value="centre">Centre</option>
+                            <option value="centre-droit">Centre droit</option>
+                            <option value="droite">Droite</option>
+                            <option value="extrême-droite">Extrême droite</option>
+                            <option value="neutre">Neutre</option>
                         </select>
                     </div>
                     <div class="flex justify-end gap-4 pt-4">
@@ -305,16 +314,15 @@
 
     <script>
         function infodropApp() {
-            // --- NOUVELLE SECTION DE DONNÉES ---
             const ORIENTATION_DATA = {
-                'extreme-gauche': { color: '#FF0000', percentage: 2 },
-                'gauche': { color: '#D42A2A', percentage: 16 },
-                'centre-gauche': { color: '#AA5555', percentage: 22 },
-                'centre': { color: '#808080', percentage: 16 },
-                'centre-droit': { color: '#5555AA', percentage: 14 },
-                'droite': { color: '#2A2AD4', percentage: 4 },
-                'extreme-droite': { color: '#0000FF', percentage: 8 },
-                'neutre': { color: '#22c55e', percentage: 12 }
+                'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000', percentage: 2 },
+                'gauche': { class: 'bg-[#D42A2A] text-white', color: '#D42A2A', percentage: 16 },
+                'centre-gauche': { class: 'bg-[#AA5555] text-white', color: '#AA5555', percentage: 22 },
+                'centre': { class: 'bg-[#808080] text-white', color: '#808080', percentage: 16 },
+                'centre-droit': { class: 'bg-[#5555AA] text-white', color: '#5555AA', percentage: 14 },
+                'droite': { class: 'bg-[#2A2AD4] text-white', color: '#2A2AD4', percentage: 4 },
+                'extrême-droite': { class: 'bg-[#0000FF] text-white', color: '#0000FF', percentage: 8 },
+                'neutre': { class: 'bg-green-700 text-green-100', color: '#16a34a', percentage: 12 }
             };
 
             return {
@@ -327,7 +335,6 @@
                 showEditPanel: false,
                 editingNews: { id: null, resume: '', source: '', url: '', orientation: '' },
                 showAboutPanel: false,
-                // Custom Sources variables
                 showCustomSourcesPanel: false,
                 showAddCustomSource: false,
                 customSources: [],
@@ -347,25 +354,21 @@
                     selectorsJson: ''
                 },
 
-                // --- NOUVELLES VARIABLES POUR LE FILTRAGE ET LES STATS ---
                 activeFilter: 'all',
                 orientationStats: Object.fromEntries(Object.entries(ORIENTATION_DATA).map(([key, value]) => [key, value.percentage])),
 
-                // --- NOUVELLE PROPRIÉTÉ CALCULÉE : C'EST LA MAGIE DU FILTRE ---
                 get filteredNews() {
-                    if (this.activeFilter === 'all') {
-                        return this.newsList;
-                    }
+                    if (this.activeFilter === 'all') return this.newsList;
                     return this.newsList.filter(news => news.orientation === this.activeFilter);
                 },
-
-                // Fonction pour obtenir la couleur du badge
                 getOrientationColor(orientation) {
                     return ORIENTATION_DATA[orientation]?.color || '#808080';
                 },
+                getOrientationClass(orientation) {
+                    return ORIENTATION_DATA[orientation]?.class || 'bg-gray-700 text-gray-200';
+                },
 
-                getOrientationClass(orientation) { return 'px-2 py-0.5 rounded-full font-semibold text-xs capitalize'; },
-
+                // --- LE RESTE DES MÉTHODES RESTE INCHANGÉ ---
                 async init() {
                     supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
                     const { data: { session } } = await supabase.auth.getSession();
@@ -448,14 +451,12 @@
 
                 async loadStats() {
                     try {
-                        // Mise à jour de la vue pour qu'elle compte sur 24h glissantes
                         const { data, error } = await supabase.from('stats_today').select('*').single();
                         if (error) throw error;
                         this.stats = data || { total_articles: 0, total_sources: 0 };
                     } catch (error) { console.error('Erreur chargement stats:', error); }
                 },
 
-                // ---- SOURCES CUSTOM ----
                 async loadCustomSources() {
                     try {
                         const { data, error } = await supabase
