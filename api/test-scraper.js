@@ -1,6 +1,4 @@
-// Fichier : /api/test-scraper.js
-// Endpoint pour tester une configuration de scraping
-
+// /api/test-scraper.js
 import { createClient } from '@supabase/supabase-js';
 import * as cheerio from 'cheerio';
 
@@ -22,8 +20,8 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const { url, type, selectors } = req.body;
-    
+    const { url, type, selectors: customSelectors } = req.body;
+
     if (!url) {
         return res.status(400).json({ error: 'URL requise' });
     }
@@ -32,14 +30,13 @@ export default async function handler(req, res) {
     
     try {
         let result;
-        
+
         if (type === 'twitter') {
-            // Test simple pour Twitter
+            // Twitter (Nitter)
             const username = url.match(/(?:twitter\.com|x\.com)\/([^\/]+)/)?.[1];
             if (!username) {
                 return res.status(400).json({ error: 'URL Twitter invalide' });
             }
-            
             result = {
                 success: true,
                 message: `Compte Twitter @${username} détecté. Le scraping utilisera Nitter.`,
@@ -51,9 +48,32 @@ export default async function handler(req, res) {
                     }
                 ]
             };
-            
         } else {
-            // Test pour site web classique
+            // --------- 1. Sélecteurs CSS -------------
+            let selectors = customSelectors;
+
+            // Si pas de sélecteurs custom, tente de charger le template en base
+            if (!selectors || !selectors.articles) {
+                const { data: templates, error } = await supabase
+                    .from('scraping_templates')
+                    .select('site_pattern,selectors')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw new Error("Erreur chargement templates");
+
+                const tpl = templates?.find(t => url.startsWith(t.site_pattern));
+                if (tpl) {
+                    selectors = tpl.selectors;
+                    if (typeof selectors === 'string') selectors = JSON.parse(selectors);
+                }
+            }
+
+            // Toujours rien : abort
+            if (!selectors || !selectors.articles) {
+                return res.status(400).json({ error: 'Aucun sélecteur CSS trouvé pour ce site.' });
+            }
+
+            // --------- 2. Scrap ---------
             const response = await fetch(url, {
                 headers: {
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
@@ -66,71 +86,45 @@ export default async function handler(req, res) {
             
             const html = await response.text();
             const $ = cheerio.load(html);
-            
-            // Utiliser les sélecteurs fournis ou les defaults
-            const articleSelector = selectors?.articles || 'article, .article, .post, .news-item';
-            const titleSelector = selectors?.title || 'h1, h2, h3, .title, .headline';
-            const linkSelector = selectors?.link || 'a';
-            
+
+            const articleSelector = selectors.articles;
+            const titleSelector = selectors.title || 'h1, h2, h3';
+            const linkSelector = selectors.link || 'a';
+            const dateSelector = selectors.date || 'time';
+            const summarySelector = selectors.summary || '';
+
             const articles = [];
             $(articleSelector).each((index, element) => {
                 if (index >= 3) return; // Limiter à 3 pour le test
-                
                 const $article = $(element);
-                const title = $article.find(titleSelector).first().text().trim();
-                const link = $article.find(linkSelector).first().attr('href');
-                
-                if (title) {
+
+                const title = titleSelector ? $article.find(titleSelector).first().text().trim() : '';
+                const link = linkSelector ? $article.find(linkSelector).first().attr('href') : '';
+                const date = dateSelector ? $article.find(dateSelector).first().text().trim() : '';
+                const summary = summarySelector ? $article.find(summarySelector).first().text().trim() : '';
+
+                if (title && link) {
                     articles.push({
                         title: title.substring(0, 180),
-                        url: link ? new URL(link, url).href : url,
-                        content: $article.text().substring(0, 200).trim()
+                        url: link.startsWith('http') ? link : new URL(link, url).href,
+                        date,
+                        summary
                     });
                 }
             });
-            
-            if (articles.length === 0) {
-                // Essayer une approche plus générale
-                $('a').each((index, element) => {
-                    if (index >= 5) return;
-                    const $link = $(element);
-                    const text = $link.text().trim();
-                    const href = $link.attr('href');
-                    
-                    if (text.length > 20 && href && !href.startsWith('#')) {
-                        articles.push({
-                            title: text.substring(0, 180),
-                            url: new URL(href, url).href,
-                            content: 'Contenu détecté via analyse générique'
-                        });
-                    }
-                });
-            }
-            
+
             result = {
                 success: articles.length > 0,
                 message: articles.length > 0 
-                    ? `${articles.length} articles trouvés avec les sélecteurs ${selectors ? 'personnalisés' : 'par défaut'}`
-                    : 'Aucun article trouvé. Essayez des sélecteurs personnalisés.',
-                articles: articles.slice(0, 3),
-                suggestions: articles.length === 0 ? {
-                    selectors_found: {
-                        articles: Array.from(new Set(
-                            $('*').map((i, el) => el.tagName.toLowerCase())
-                                  .get()
-                                  .filter(tag => ['article', 'section', 'div', 'li'].includes(tag))
-                        )).slice(0, 5),
-                        titles: Array.from(new Set(
-                            $('h1, h2, h3, h4').map((i, el) => el.tagName.toLowerCase()).get()
-                        ))
-                    }
-                } : null
+                    ? `${articles.length} articles trouvés avec le template adapté` 
+                    : 'Aucun article trouvé. Vérifiez les sélecteurs CSS.',
+                articles: articles.slice(0, 3)
             };
         }
-        
-        console.log(`✅ Test réussi: ${result.articles?.length || 0} articles trouvés`);
+
+        console.log(`✅ Test scraping : ${result.articles?.length || 0} articles trouvés`);
         res.status(200).json(result);
-        
+
     } catch (error) {
         console.error('❌ Erreur test scraping:', error);
         res.status(200).json({
