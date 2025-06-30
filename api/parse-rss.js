@@ -73,7 +73,6 @@ const RSS_FEEDS = [
 
         // --- PRESSE ÉTRANGÈRE ---
     { name: 'RTBF', url: 'https://rss.rtbf.be/article/rss/highlight_rtbf_info.xml?source=internal', orientation: 'centre-gauche' },
-    { name: 'Le soir', url: 'https://www.lesoir.be/rss2/2/cible_principale', orientation: 'centre-gauche' },
 
     // --- OUTRE-MER ---
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre' },
