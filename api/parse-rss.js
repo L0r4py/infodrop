@@ -27,8 +27,6 @@ const RSS_FEEDS = [
     { name: 'France Inter', url: 'https://www.radiofrance.fr/franceinter/rss', orientation: 'centre-gauche' },
 
     // --- SOURCES OFFICIELLES & PARLEMENTAIRES ---
-    { name: 'Gouvernement.fr', url: 'https://www.info.gouv.fr/rss/actualites.xml', orientation: 'neutre' },
-    { name: 'Élysée', url: 'https://www.elysee.fr/sitemap.publication.xml', orientation: 'neutre' },
     { name: 'Sénat (Textes)', url: 'https://www.senat.fr/rss/textes.xml', orientation: 'neutre' },
     { name: 'Sénat (Presse)', url: 'https://www.senat.fr/rss/presse.xml', orientation: 'neutre' },
     { name: 'Assemblée Nat. (Docs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/documents-parlementaires', orientation: 'neutre' },
