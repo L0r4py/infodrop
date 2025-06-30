@@ -1,5 +1,5 @@
 // Fichier : /api/parse-rss.js
-// Version 18 - Ajout de nouvelles sources (Humanité, Politis, Regards, La Croix, L’Opinion, Les Échos, Valeurs Actuelles)
+// Version 19 - Ajout des sources parlementaires (Sénat & Assemblée)
 
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
@@ -25,6 +25,15 @@ const RSS_FEEDS = [
     { name: 'Ouest France', url: 'https://www.ouest-france.fr/rss-en-continu.xml', orientation: 'centre' },
     { name: 'Courrier International', url: 'https://www.courrierinternational.com/feed/all/rss.xml', orientation: 'centre' },
     { name: 'France Inter', url: 'https://www.radiofrance.fr/franceinter/rss', orientation: 'centre-gauche' },
+
+    // --- SOURCES OFFICIELLES & PARLEMENTAIRES ---
+    { name: 'Gouvernement.fr', url: 'https://www.info.gouv.fr/rss/actualites.xml', orientation: 'neutre' },
+    { name: 'Élysée', url: 'https://www.elysee.fr/sitemap.publication.xml', orientation: 'neutre' },
+    { name: 'Sénat (Textes)', url: 'https://www.senat.fr/rss/textes.xml', orientation: 'neutre' },
+    { name: 'Sénat (Presse)', url: 'https://www.senat.fr/rss/presse.xml', orientation: 'neutre' },
+    { name: 'Assemblée Nat. (Docs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/documents-parlementaires', orientation: 'neutre' },
+    { name: 'Assemblée Nat. (CRs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/crs', orientation: 'neutre' },
+
 
     // --- CULTURE / SCIENCES / SOCIÉTÉ ---
     { name: 'France Culture', url: 'https://www.radiofrance.fr/franceculture/rss', orientation: 'centre-gauche' },
