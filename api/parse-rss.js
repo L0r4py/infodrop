@@ -76,7 +76,16 @@ const GLOBAL_FILTER_KEYWORDS = [
 function createSummary(text) {
     if (!text) return '';
     // Dictionnaire complet pour gérer les entités HTML
-    const replacements = { '’': "'", '–': '-', '…': '...', '"': '"', '&': '&', '<': '<', '>': '>', ''': "'", ''': "'", ''': "'" };
+    const replacements = { 
+        '&apos;': "'", 
+        '&quot;': '"', 
+        '&amp;': '&', 
+        '&lt;': '<', 
+        '&gt;': '>', 
+        '’': "'", 
+        '–': '-', 
+        '…': '...' 
+    };
     
     let cleanText = text.replace(/(&#?[a-z0-9]+;)/gi, (match) => replacements[match] || '');
     cleanText = cleanText.replace(/<[^>]*>/g, ' ').replace(/\s\s+/g, ' ').trim();
