@@ -1,77 +1,62 @@
 // api/sitemap-parser.js
-const axios = require('axios');
-const xml2js = require('xml2js');
-const { createClient } = require('@supabase/supabase-js');
-
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+import axios from 'axios';
+import { parseStringPromise } from 'xml2js';
 
 const SOURCES = [
   {
-    name: "Élysée",
-    url: "https://www.elysee.fr/sitemap.publication.xml",
-    source: "elysee.fr"
+    name: "Elysée",
+    url: "https://www.elysee.fr/sitemap.publication.xml"
   },
   {
-    name: "Gouvernement",
-    url: "https://www.info.gouv.fr/rss/actualites.xml",
-    source: "info.gouv.fr"
+    name: "InfoGouv",
+    url: "https://www.info.gouv.fr/rss/actualites.xml"
   }
-  // Ajoute ici d'autres flux/sitemaps institutionnels si besoin
 ];
 
-async function parseElyseeSitemap(sitemapUrl) {
-  const res = await axios.get(sitemapUrl);
-  const parsed = await xml2js.parseStringPromise(res.data);
-  const urls = parsed.urlset.url.map(item => ({
-    url: item.loc[0],
-    published_at: item.lastmod ? item.lastmod[0] : null,
-    title: item.loc[0].split('/').slice(-1)[0].replace(/-/g, ' ').replace(/\.[^/.]+$/, ""),
-  }));
-  return urls;
-}
+export default async function handler(req, res) {
+  try {
+    let allArticles = [];
+    for (const source of SOURCES) {
+      let articles = [];
+      if (source.url.endsWith(".xml")) {
+        const response = await axios.get(source.url, { timeout: 10000 });
+        const data = await parseStringPromise(response.data);
 
-async function parseRssFeed(feedUrl) {
-  const res = await axios.get(feedUrl);
-  const parsed = await xml2js.parseStringPromise(res.data);
-  const items = parsed.rss.channel[0].item.map(item => ({
-    url: item.link[0],
-    published_at: item.pubDate ? new Date(item.pubDate[0]).toISOString() : null,
-    title: item.title[0],
-  }));
-  return items;
-}
+        // Cas RSS classique (exemple InfoGouv)
+        if (data.rss && data.rss.channel) {
+          const items = data.rss.channel[0].item || [];
+          articles = items.map(item => ({
+            title: item.title[0],
+            url: item.link[0],
+            source: source.name,
+            published_at: item.pubDate ? new Date(item.pubDate[0]).toISOString() : new Date().toISOString()
+          }));
+        }
 
-async function main() {
-  for (const src of SOURCES) {
-    let articles = [];
-    try {
-      if (src.url.includes("sitemap")) {
-        // sitemap XML style Elysee
-        articles = await parseElyseeSitemap(src.url);
-      } else if (src.url.endsWith(".xml")) {
-        // RSS classique style info.gouv
-        articles = await parseRssFeed(src.url);
+        // Cas sitemap (exemple Elysée)
+        if (data.urlset && data.urlset.url) {
+          articles = data.urlset.url.map(entry => ({
+            title: entry['image:image'] && entry['image:image'][0]['image:title']
+              ? entry['image:image'][0]['image:title'][0]
+              : entry.loc[0],
+            url: entry.loc[0],
+            source: source.name,
+            published_at: entry.lastmod ? entry.lastmod[0] : new Date().toISOString()
+          }));
+        }
       }
-      // Injection Supabase
-      for (const article of articles) {
-        await supabase
-          .from('scraped_articles')
-          .upsert({
-            source_id: src.source, // à adapter à ta logique ou mettre l’ID source si tu en as un dans ta table
-            url: article.url,
-            title: article.title,
-            published_at: article.published_at || new Date().toISOString(),
-            scraped_at: new Date().toISOString()
-          }, { onConflict: 'url' });
-      }
-      console.log(`✅ ${src.name} : ${articles.length} articles traités`);
-    } catch (err) {
-      console.error(`❌ Erreur pour ${src.name} :`, err.message);
+      allArticles = allArticles.concat(articles);
     }
+
+    // Ici, tu peux insérer dans Supabase ou retourner direct :
+    // await insertArticlesToSupabase(allArticles); // à coder
+
+    res.status(200).json({
+      count: allArticles.length,
+      articles: allArticles
+    });
+  } catch (error) {
+    console.error('Erreur parsing sitemap:', error);
+    res.status(500).json({ error: error.message });
   }
 }
-
-main().then(() => process.exit(0));
