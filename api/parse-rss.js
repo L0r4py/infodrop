@@ -20,11 +20,12 @@ const RSS_FEEDS = [
     { name: 'France Info', url: 'https://www.francetvinfo.fr/titres.rss', orientation: 'centre' },
     { name: 'Le Monde', url: 'https://www.lemonde.fr/rss/une.xml', orientation: 'centre-gauche' },
     { name: 'Libération', url: 'https://www.liberation.fr/arc/outboundfeeds/rss-all/?outputType=xml', orientation: 'gauche' },
-    { name: 'Le Figaro', url: 'https://www.lefigaro.fr/rss/figaro_actualites.xml', orientation: 'centre-droit' },
-    { name: 'Le Parisien', url: 'https://feeds.leparisien.fr/leparisien/rss', orientation: 'centre' },
+    { name: 'Le Figaro', url: 'https://www.lefigaro.fr/rss/figaro_actualites.xml', orientation: 'droite' },
+    { name: 'Le Parisien', url: 'https://feeds.leparisien.fr/leparisien/rss', orientation: 'centre-droit' },
     { name: 'Ouest France', url: 'https://www.ouest-france.fr/rss-en-continu.xml', orientation: 'centre' },
-    { name: 'Courrier International', url: 'https://www.courrierinternational.com/feed/all/rss.xml', orientation: 'centre' },
+    { name: 'Courrier International', url: 'https://www.courrierinternational.com/feed/all/rss.xml', orientation: 'centre-gauche' },
     { name: 'France Inter', url: 'https://www.radiofrance.fr/franceinter/rss', orientation: 'centre-gauche' },
+    { name: "France24", url: 'https://www.france24.com/fr/france/rss', orientation: 'centre-gauche' },
 
     // --- SOURCES OFFICIELLES & PARLEMENTAIRES ---
     { name: 'Sénat (Textes)', url: 'https://www.senat.fr/rss/textes.xml', orientation: 'neutre' },
@@ -39,6 +40,10 @@ const RSS_FEEDS = [
     { name: 'Konbini', url: 'https://www.konbini.com/fr/feed/', orientation: 'centre' },
     { name: 'Numerama', url: 'https://www.numerama.com/feed/', orientation: 'centre' },
     { name: "L'Obs", url: 'https://www.nouvelobs.com/rss.xml', orientation: 'centre-gauche' },
+
+    // --- ECO & CRYPTO ---
+    { name: 'Journal du coin', url: 'https://journalducoin.com/feed/', orientation: 'neutre' },
+    { name: 'Cryptoast', url: 'https://cryptoast.fr/feed/', orientation: 'neutre' },
 
     // --- INDÉPENDANTS ---
     { name: 'Reporterre', url: 'https://reporterre.net/spip.php?page=backend', orientation: 'gauche' },
@@ -65,6 +70,10 @@ const RSS_FEEDS = [
     { name: 'Révolution Permanente', url: 'https://www.revolutionpermanente.fr/spip.php?page=backend_portada', orientation: 'extrême-gauche' },
     { name: 'Cnews', url: 'https://www.cnews.fr/rss.xml', orientation: 'extrême-droite' },
     { name: 'FranceSoir', url: 'https://www.francesoir.fr/rss.xml', orientation: 'extrême-droite' },
+
+        // --- PRESSE ÉTRANGÈRE ---
+    { name: 'RTBF', url: 'https://rss.rtbf.be/article/rss/highlight_rtbf_info.xml?source=internal', orientation: 'centre-gauche' },
+    { name: 'Le soir', url: 'https://www.lesoir.be/rss2/2/cible_principale', orientation: 'centre-gauche' },
 
     // --- OUTRE-MER ---
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre' },
