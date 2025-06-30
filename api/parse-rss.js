@@ -74,9 +74,11 @@ const GLOBAL_FILTER_KEYWORDS = [
 
 function createSummary(text) {
     if (!text) return '';
-    const cleanText = text.replace(/<[^>]*>/g, ' ').replace(/\s\s+/g, ' ').trim();
+    const replacements = { '’': "'", '–': '-', '…': '...', '"': '"', '&': '&', '<': '<', '>': '>' };
+    let cleanText = text.replace(/(&#?[a-z0-9]+;)/gi, (match) => replacements[match] || '');
+    cleanText = cleanText.replace(/<[^>]*>/g, ' ').replace(/\s\s+/g, ' ').trim();
     if (cleanText.length > 180) {
-        return cleanText.substring(0, 177) + '...';
+        cleanText = cleanText.substring(0, 177) + '...';
     }
     return cleanText;
 }
