@@ -31,6 +31,7 @@ const RSS_FEEDS = [
     { name: 'Sénat (Presse)', url: 'https://www.senat.fr/rss/presse.xml', orientation: 'neutre' },
     { name: 'Assemblée Nat. (Docs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/documents-parlementaires', orientation: 'neutre' },
     { name: 'Assemblée Nat. (CRs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/crs', orientation: 'neutre' },
+    { name: 'Info.gouv', url: 'https://www.info.gouv.fr/rss/actualites.xml', orientation: 'neutre' },
 
     // --- CULTURE / SCIENCES / SOCIÉTÉ ---
     { name: 'France Culture', url: 'https://www.radiofrance.fr/franceculture/rss', orientation: 'centre-gauche' },
