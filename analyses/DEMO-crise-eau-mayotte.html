@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INFODROP 360° - Crise de l'eau à Mayotte</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';}
+        .perspective-card { background: linear-gradient(145deg, #1e293b, #334155); border-radius: 16px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .perspective-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--gradient); opacity: 0.8; }
+        .perspective-card:hover { transform: translateY(-4px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
+        .consensus-meter { height: 8px; background: #334155; border-radius: 4px; overflow: hidden; position: relative; }
+        .consensus-fill { height: 100%; background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981); transition: width 0.5s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        .slide-in { animation: slideIn 0.5s ease-out forwards; }
+        .fact-badge, .warning-badge, .tag-item { backdrop-filter: blur(10px); }
+        .fact-badge { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .warning-badge { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .info-card { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); backdrop-filter: blur(10px); }
+        .metric-card { background: linear-gradient(145deg, #1e293b, #2d3748); border: 1px solid #334155; }
+        .badge-gauche { background-color: rgba(153, 27, 27, 0.5); color: #fca5a5; }
+        .badge-centre-droit { background-color: rgba(55, 48, 163, 0.5); color: #c7d2fe; }
+        .badge-local, .badge-terrain { background-color: rgba(5, 150, 105, 0.5); color: #a7f3d0; }
+        .badge-public, .badge-international { background-color: rgba(59, 130, 246, 0.5); color: #bfdbfe; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl sm:text-3xl font-bold">📰 INFODROP <span class="text-blue-400">360°</span></h1>
+                <a href="/index.html" class="px-3 sm:px-4 py-2 text-sm font-semibold text-gray-300 bg-gray-700 rounded-lg hover:bg-gray-600 transition flex items-center gap-2">
+                    <span class="text-base">←</span>
+                    <span class="hidden sm:inline">Retour au flux</span>
+                </a>
+            </div>
+            <div class="info-card rounded-lg p-4 text-center text-sm sm:text-base">
+                <p><span class="font-bold">Note :</span> Ceci est une démonstration de la future fonctionnalité INFODROP 360°. Pour l'instant, cette analyse est statique et sert de preuve de concept.</p>
+            </div>
+        </header>
+
+        <!-- Sujet principal -->
+        <section class="mb-8">
+            <div class="bg-gray-800 rounded-2xl p-6 mb-6 border border-gray-700">
+                <div class="flex items-start justify-between gap-4 mb-4">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold mb-2">🌀 Mayotte : L'île toujours sans eau courante 5 mois après le cyclone Belal</h2>
+                        <p class="text-gray-400 text-xs sm:text-sm">Analyse multi-perspectives • 6 sources • Dernière mise à jour : il y a 15 min</p>
+                    </div>
+                    <!-- Badge "Sujet brûlant" caché sur mobile (hidden) et visible à partir de sm: (inline-flex) -->
+                    <span class="hidden sm:inline-flex items-center gap-2 px-3 py-1 bg-red-900 bg-opacity-30 text-red-400 rounded-full text-sm font-semibold whitespace-nowrap">🔴 Sujet brûlant</span>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="metric-card rounded-lg p-3 text-center"><div class="text-xl sm:text-2xl font-bold text-blue-400">5 mois</div><div class="text-xs text-gray-400">Depuis le cyclone</div></div>
+                    <div class="metric-card rounded-lg p-3 text-center"><div class="text-xl sm:text-2xl font-bold text-red-400">120 000</div><div class="text-xs text-gray-400">Habitants affectés</div></div>
+                    <div class="metric-card rounded-lg p-3 text-center"><div class="text-xl sm:text-2xl font-bold text-yellow-400">3h/jour</div><div class="text-xs text-gray-400">Accès à l'eau</div></div>
+                    <div class="metric-card rounded-lg p-3 text-center"><div class="text-xl sm:text-2xl font-bold text-green-400">45%</div><div class="text-xs text-gray-400">Consensus média</div></div>
+                </div>
+                <div class="mb-4">
+                    <div class="flex justify-between items-center text-xs sm:text-sm text-gray-400 mb-2">
+                        <span>Consensus sur la gravité de la situation</span>
+                        <span class="font-semibold text-right">45% - Divergence forte</span>
+                    </div>
+                    <div class="consensus-meter"><div class="consensus-fill" style="width: 45%"></div></div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="fact-badge px-3 py-1 rounded-full text-xs sm:text-sm">✅ Chiffres vérifiés</span>
+                    <span class="warning-badge px-3 py-1 rounded-full text-xs sm:text-sm">⚠️ Tensions politiques</span>
+                    <span class="tag-item text-xs sm:text-sm px-3 py-1 bg-gray-700 rounded-full">#Mayotte</span>
+                    <span class="tag-item text-xs sm:text-sm px-3 py-1 bg-gray-700 rounded-full">#CriseDeLeau</span>
+                    <span class="tag-item text-xs sm:text-sm px-3 py-1 bg-gray-700 rounded-full">#DOM</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alerte divergence -->
+        <div class="info-card rounded-lg p-4 mb-6 flex items-center gap-3"><span class="text-2xl">🔍</span><div><div class="font-bold">Forte divergence détectée</div><div class="text-sm text-gray-300">Les médias locaux et nationaux présentent des visions très différentes de la situation</div></div></div>
+
+        <!-- Perspectives multiples -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <article class="perspective-card slide-in p-6" style="animation-delay: 0.1s">
+                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">L'info Kwezi</h3><span class="text-xs text-gray-400">Mayotte</span></div><span class="badge-local text-xs px-2 py-1 rounded">Local</span></div>
+                <blockquote class="text-gray-300 mb-4 italic">"Situation catastrophique : des familles parcourent 5km chaque jour pour trouver de l'eau potable. Les écoles ferment, les hôpitaux sont débordés. L'État nous a abandonnés."</blockquote>
+                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-red-400">🎯</span><span class="text-gray-400">Focus : Témoignages habitants</span></div><div class="flex items-center gap-2"><span class="text-red-400">😡</span><span class="text-gray-400">Ton : Colère, urgence</span></div><div class="flex items-center gap-2"><span class="text-red-400">📸</span><span class="text-gray-400">12 photos terrain</span></div></div>
+                <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Files d'attente dès 4h du matin</li><li>• Risques sanitaires majeurs</li><li>• Promesses non tenues depuis janvier</li></ul></div>
+            </article>
+            <article class="perspective-card slide-in p-6" style="animation-delay: 0.2s">
+                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">France Info</h3><span class="text-xs text-gray-400">National</span></div><span class="badge-public text-xs px-2 py-1 rounded">Public</span></div>
+                <blockquote class="text-gray-300 mb-4 italic">"Le gouvernement annonce un plan d'urgence de 50 millions d'euros. Les travaux de réparation du réseau avancent, avec un retour à la normale prévu pour septembre."</blockquote>
+                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-blue-400">🎯</span><span class="text-gray-400">Focus : Actions gouvernement</span></div><div class="flex items-center gap-2"><span class="text-blue-400">📊</span><span class="text-gray-400">Ton : Informatif, mesuré</span></div><div class="flex items-center gap-2"><span class="text-blue-400">🎙️</span><span class="text-gray-400">Interview préfet</span></div></div>
+                <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• 50M€ débloqués</li><li>• 200 techniciens mobilisés</li><li>• Distribution quotidienne assurée</li></ul></div>
+            </article>
+            <article class="perspective-card slide-in p-6" style="animation-delay: 0.3s">
+                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">Le Figaro</h3><span class="text-xs text-gray-400">National</span></div><span class="badge-centre-droit text-xs px-2 py-1 rounded">Centre-droit</span></div>
+                <blockquote class="text-gray-300 mb-4 italic">"Mayotte paye le prix de décennies de sous-investissement. L'immigration clandestine aggrave la pression sur des infrastructures déjà fragiles."</blockquote>
+                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-purple-400">🎯</span><span class="text-gray-400">Focus : Causes structurelles</span></div><div class="flex items-center gap-2"><span class="text-purple-400">💬</span><span class="text-gray-400">Ton : Analytique</span></div><div class="flex items-center gap-2"><span class="text-purple-400">📈</span><span class="text-gray-400">Données démographiques</span></div></div>
+                <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Population x2 en 20 ans</li><li>• Infrastructures sous-dimensionnées</li><li>• Besoin plan Marshall</li></ul></div>
+            </article>
+            <article class="perspective-card slide-in p-6" style="animation-delay: 0.4s">
+                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">Libération</h3><span class="text-xs text-gray-400">National</span></div><span class="badge-gauche text-xs px-2 py-1 rounded">Gauche</span></div>
+                <blockquote class="text-gray-300 mb-4 italic">"Scandale d'État : Mayotte, territoire français, vit comme un pays du tiers-monde. Cette crise révèle le racisme structurel envers les DOM-TOM."</blockquote>
+                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-orange-400">🎯</span><span class="text-gray-400">Focus : Inégalités DOM</span></div><div class="flex items-center gap-2"><span class="text-orange-400">✊</span><span class="text-gray-400">Ton : Dénonciation</span></div><div class="flex items-center gap-2"><span class="text-orange-400">📢</span><span class="text-gray-400">Tribune collectif</span></div></div>
+                <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Discrimination systémique</li><li>• Comparaison métropole</li><li>• Appel mobilisation nationale</li></ul></div>
+            </article>
+            <article class="perspective-card slide-in p-6" style="animation-delay: 0.5s">
+                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">RFI</h3><span class="text-xs text-gray-400">International</span></div><span class="badge-international text-xs px-2 py-1 rounded">Mondial</span></div>
+                <blockquote class="text-gray-300 mb-4 italic">"La France face à ses contradictions : comment le 6e pays le plus riche peut-il laisser 300 000 citoyens sans eau potable ? L'ONU s'inquiète."</blockquote>
+                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-yellow-400">🎯</span><span class="text-gray-400">Focus : Image internationale</span></div><div class="flex items-center gap-2"><span class="text-yellow-400">🌍</span><span class="text-gray-400">Ton : Perspective globale</span></div><div class="flex items-center gap-2"><span class="text-yellow-400">🇺🇳</span><span class="text-gray-400">Réaction ONU</span></div></div>
+                <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Droits humains bafoués</li><li>• Comparaisons régionales</li><li>• Pression diplomatique</li></ul></div>
+            </article>
+            <article class="perspective-card slide-in p-6" style="animation-delay: 0.6s">
+                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">Journal de Mayotte</h3><span class="text-xs text-gray-400">Local</span></div><span class="badge-terrain text-xs px-2 py-1 rounded">Terrain</span></div>
+                <blockquote class="text-gray-300 mb-4 italic">"Entre débrouille et solidarité : comment les Mahorais s'organisent face à l'abandon. Reportage dans les villages où l'entraide remplace l'État."</blockquote>
+                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-green-400">🎯</span><span class="text-gray-400">Focus : Solutions locales</span></div><div class="flex items-center gap-2"><span class="text-green-400">🤝</span><span class="text-gray-400">Ton : Résilience</span></div><div class="flex items-center gap-2"><span class="text-green-400">📹</span><span class="text-gray-400">Vidéos terrain</span></div></div>
+                <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Systèmes D innovants</li><li>• Réseaux solidarité</li><li>• Leaders communautaires</li></ul></div>
+            </article>
+        </div>
+
+        <!-- Synthèse IA -->
+        <section class="mt-8 bg-gray-800 rounded-2xl p-6 border border-gray-700">
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">🤖 Analyse INFODROP IA</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div><h4 class="font-bold mb-3 text-green-400">✅ Faits établis</h4><ul class="space-y-2 text-sm"><li>• 5 mois sans eau courante</li><li>• 120 000+ habitants affectés</li><li>• Distribution 3h/jour max</li><li>• 50M€ annoncés par l'État</li><li>• Cyclone Belal en janvier</li></ul></div>
+                <div><h4 class="font-bold mb-3 text-orange-400">⚡ Points de divergence</h4><ul class="space-y-2 text-sm"><li>• <b>Gravité :</b> "Catastrophe" vs "Gérable"</li><li>• <b>Responsabilité :</b> État vs Local vs Historique</li><li>• <b>Solutions :</b> Urgence vs Structurel</li><li>• <b>Timeline :</b> "Septembre" vs "Indéterminé"</li><li>• <b>Causes :</b> Cyclone vs Sous-investissement</li></ul></div>
+                <div><h4 class="font-bold mb-3 text-blue-400">📊 Analyse des biais</h4><div class="space-y-3 text-sm"><div class="p-3 bg-gray-900 bg-opacity-50 rounded"><div class="font-semibold text-green-400">Médias locaux</div><div class="text-xs">Proximité émotionnelle, témoignages directs, urgence</div></div><div class="p-3 bg-gray-900 bg-opacity-50 rounded"><div class="font-semibold text-blue-400">Médias nationaux</div><div class="text-xs">Distance, focus politique, minimisation relative</div></div><div class="p-3 bg-gray-900 bg-opacity-50 rounded"><div class="font-semibold text-yellow-400">Angle manquant</div><div class="text-xs">Voix des Comores (immigration), expertise technique eau</div></div></div></div>
+            </div>
+            <div class="mt-6 p-4 bg-gray-900 bg-opacity-50 rounded-lg border border-gray-700">
+                <p class="text-sm mb-2"><span class="font-bold text-yellow-400">⚠️ Alerte :</span> Écart majeur entre perception locale et nationale. Les médias de Mayotte parlent de "crise humanitaire" tandis que les médias nationaux évoquent une "situation difficile mais sous contrôle".</p>
+                <p class="text-sm text-gray-400">💡 <b>Recommandation :</b> Privilégier les sources locales pour la réalité terrain, croiser avec les données officielles pour les chiffres.</p>
+            </div>
+        </section>
+
+        <!-- Pied de page -->
+        <footer class="text-center py-8 text-xs text-gray-500 mt-8">
+            <p>© 2025 INFODROP. Tous droits réservés.</p>
+            <p class="mt-1">Un projet 3C - EM&LPy</p>
+        </footer>
+    </div>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('slide-in');
+                }
+            });
+        });
+        document.querySelectorAll('.perspective-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
