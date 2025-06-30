@@ -31,7 +31,6 @@ const RSS_FEEDS = [
     { name: 'Sénat (Presse)', url: 'https://www.senat.fr/rss/presse.xml', orientation: 'neutre' },
     { name: 'Assemblée Nat. (Docs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/documents-parlementaires', orientation: 'neutre' },
     { name: 'Assemblée Nat. (CRs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/crs', orientation: 'neutre' },
-    { name: 'Info.gouv', url: 'https://www.info.gouv.fr/rss/actualites.xml', orientation: 'neutre' },
 
     // --- CULTURE / SCIENCES / SOCIÉTÉ ---
     { name: 'France Culture', url: 'https://www.radiofrance.fr/franceculture/rss', orientation: 'centre-gauche' },
@@ -45,6 +44,8 @@ const RSS_FEEDS = [
     { name: 'Reporterre', url: 'https://reporterre.net/spip.php?page=backend', orientation: 'gauche' },
     { name: 'Blast', url: 'https://api.blast-info.fr/rss.xml', orientation: 'gauche' },
     { name: 'Arrêt sur Images', url: 'https://api.arretsurimages.net/api/public/rss/all-content', orientation: 'centre-gauche' },
+    { name: 'Apar.tv', url: 'https://www.apar.tv/latest/rss/', orientation: 'centre-gauche' },
+    { name: 'Le Média en 4-4-2', url: 'https://lemediaen442.fr/feed/', orientation: 'centre-gauche' },
 
     // --- PRESSE D’OPINION & IDÉOLOGIQUE ---
     { name: "L'Humanité - Politique", url: 'https://www.humanite.fr/sections/politique/feed', orientation: 'gauche' },
@@ -61,6 +62,9 @@ const RSS_FEEDS = [
     { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/news-24-7/', orientation: 'centre-droit' },
     { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/people/', orientation: 'centre-droit' },
     { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/crypto/', orientation: 'centre-droit' },
+    { name: 'Révolution Permanente', url: 'https://www.revolutionpermanente.fr/spip.php?page=backend_portada', orientation: 'extrême-gauche' },
+    { name: 'Cnews', url: 'https://www.cnews.fr/rss.xml', orientation: 'extrême-droite' },
+    { name: 'FranceSoir', url: 'https://www.francesoir.fr/rss.xml', orientation: 'extrême-droite' },
 
     // --- OUTRE-MER ---
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre' },
