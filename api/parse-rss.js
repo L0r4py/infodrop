@@ -56,6 +56,10 @@ const RSS_FEEDS = [
     { name: 'La Croix - Culture', url: 'https://www.la-croix.com/feeds/rss/culture.xml', orientation: 'centre-droit' },
     { name: "L'Opinion", url: 'https://www.lopinion.fr/index.rss', orientation: 'droite' },
     { name: 'Valeurs Actuelles', url: 'https://www.valeursactuelles.com/feed?post_type=post', orientation: 'extrême-droite' },
+    { name: 'Causeur', url: 'https://www.causeur.fr/feed', orientation: 'extrême-droite' },
+    { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/news-24-7/', orientation: 'centre-droit' },
+    { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/people/', orientation: 'centre-droit' },
+    { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/crypto/', orientation: 'centre-droit' },
 
     // --- OUTRE-MER ---
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre' },
