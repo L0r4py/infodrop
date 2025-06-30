@@ -1,6 +1,3 @@
-// Fichier : /api/parse-rss.js
-// Version 19 - Ajout des sources parlementaires (Sénat & Assemblée)
-
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
 
@@ -14,7 +11,7 @@ const parser = new Parser({
     headers: { 'User-Agent': 'INFODROP RSS Parser/1.0' }
 });
 
-// La liste des flux RSS finale, nettoyée et stable
+// Ta liste de flux RSS complète et organisée
 const RSS_FEEDS = [
     // --- GENERALISTES ---
     { name: 'France Info', url: 'https://www.francetvinfo.fr/titres.rss', orientation: 'centre' },
@@ -31,7 +28,6 @@ const RSS_FEEDS = [
     { name: 'Sénat (Presse)', url: 'https://www.senat.fr/rss/presse.xml', orientation: 'neutre' },
     { name: 'Assemblée Nat. (Docs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/documents-parlementaires', orientation: 'neutre' },
     { name: 'Assemblée Nat. (CRs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/crs', orientation: 'neutre' },
-
 
     // --- CULTURE / SCIENCES / SOCIÉTÉ ---
     { name: 'France Culture', url: 'https://www.radiofrance.fr/franceculture/rss', orientation: 'centre-gauche' },
@@ -97,12 +93,11 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    console.log('🚀 Démarrage du parsing RSS INFODROP (v18 - Nouvelles sources intégrées)');
+    console.log('🚀 Démarrage du parsing RSS INFODROP (v19 - Safeguard Dates)');
 
     let articlesToInsert = [];
     let filteredCount = 0;
-    const twentyFourHoursAgo = new Date();
-    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+    const now = new Date(); // On définit l'heure actuelle une seule fois pour la comparaison
 
     for (const feed of RSS_FEEDS) {
         try {
@@ -112,7 +107,18 @@ export default async function handler(req, res) {
                     filteredCount++;
                     continue;
                 }
-                const pubDate = item.isoDate ? new Date(item.isoDate) : new Date();
+                
+                let pubDate = item.isoDate ? new Date(item.isoDate) : new Date();
+
+                // --- GARDE-FOU TEMPOREL AJOUTÉ ICI ---
+                // Si la date de l'article est dans le futur...
+                if (pubDate > now) {
+                    // ...on la force à l'heure actuelle pour éviter les incohérences.
+                    pubDate = now; 
+                }
+                // --- FIN DU GARDE-FOU ---
+
+                const twentyFourHoursAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
                 if (pubDate >= twentyFourHoursAgo && item.link) {
                     articlesToInsert.push({
                         resume: createSummary(item.title || item.contentSnippet),
