@@ -1,3 +1,6 @@
+// Fichier : /api/parse-rss.js
+// Version 21 - La version finale et définitive avec toutes les corrections
+
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
 
@@ -69,9 +72,12 @@ const GLOBAL_FILTER_KEYWORDS = [
     'horoscope', 'astrologie', 'loterie', 'programme tv', 'recette', 'mots croisés', 'sudoku'
 ];
 
+// --- VERSION CORRIGÉE DE createSummary ---
 function createSummary(text) {
     if (!text) return '';
-    const replacements = { '’': "'", '–': '-', '…': '...', '"': '"', '&': '&', '<': '<', '>': '>' };
+    // Dictionnaire complet pour gérer les entités HTML
+    const replacements = { '’': "'", '–': '-', '…': '...', '"': '"', '&': '&', '<': '<', '>': '>', ''': "'", ''': "'", ''': "'" };
+    
     let cleanText = text.replace(/(&#?[a-z0-9]+;)/gi, (match) => replacements[match] || '');
     cleanText = cleanText.replace(/<[^>]*>/g, ' ').replace(/\s\s+/g, ' ').trim();
     if (cleanText.length > 180) {
@@ -93,7 +99,7 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    console.log('🚀 Démarrage du parsing RSS INFODROP (v19 - Safeguard Dates)');
+    console.log('🚀 Démarrage du parsing RSS INFODROP (v21 - Final Version)');
 
     let articlesToInsert = [];
     let filteredCount = 0;
@@ -108,17 +114,15 @@ export default async function handler(req, res) {
                     continue;
                 }
                 
-                let pubDate = item.isoDate ? new Date(item.isoDate) : new Date();
+                let pubDate = item.isoDate ? new Date(item.isoDate) : new Date(now);
 
-                // --- GARDE-FOU TEMPOREL AJOUTÉ ICI ---
-                // Si la date de l'article est dans le futur...
+                // --- GARDE-FOU TEMPOREL CORRIGÉ ---
                 if (pubDate > now) {
-                    // ...on la force à l'heure actuelle pour éviter les incohérences.
-                    pubDate = now; 
+                    pubDate = new Date(now); 
                 }
-                // --- FIN DU GARDE-FOU ---
 
                 const twentyFourHoursAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+                
                 if (pubDate >= twentyFourHoursAgo && item.link) {
                     articlesToInsert.push({
                         resume: createSummary(item.title || item.contentSnippet),
