@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Open Graph pour Facebook, WhatsApp, LinkedIn -->
+    <meta property="og:title" content="INFODROP360 - L'actualité essentielle" />
+    <meta property="og:description" content="L'actualité essentielle. Agrégation multi-sources en temps réel." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://infodrop.live/" />
+    <meta property="og:image" content="https://infodrop.live/images/infodrop-share.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="INFODROP360 - L'actualité essentielle">
+    <meta name="twitter:description" content="L'actualité essentielle. Agrégation multi-sources en temps réel.">
+    <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png">
     <title>INFODROP 360° - Analyses</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <style>
         body { background-color: #0f172a; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';}
         .topic-card {
@@ -20,67 +33,138 @@
             border-color: #4f46e5;
         }
         .info-card { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); backdrop-filter: blur(10px); }
+        /* Améliorations pour le menu mobile */
+        @media (max-width: 640px) {
+            .mobile-menu {
+                min-width: 92vw !important;
+                max-width: 98vw !important;
+                right: 1vw !important;
+            }
+            .mobile-logo {
+                font-size: 1.2rem !important;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen">
-    <div class="max-w-4xl mx-auto px-4 py-6">
-        <!-- Header -->
-        <header class="mb-8">
-            <div class="flex items-center justify-between mb-4">
-                <h1 class="text-3xl font-bold">
-                    📰 INFODROP <span class="text-blue-400">360°</span>
-                </h1>
-                <a href="/index.html" class="px-4 py-2 text-sm font-semibold text-gray-300 bg-gray-700 rounded-lg hover:bg-gray-600 transition flex items-center gap-2">
-                    <span class="text-base">←</span>
-                    <span class="hidden sm:inline">Retour au flux</span>
+
+<div class="w-full" x-data="{ showMenu: false, showAboutPanel: false }">
+    <!-- HEADER harmonisé & mobile friendly -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-800 shadow">
+        <div class="max-w-4xl mx-auto px-3 py-3 grid grid-cols-3 items-center">
+            <!-- LOGO CLIQUABLE -->
+            <div class="justify-self-start">
+                <a href="/index.html"
+                   class="flex items-center gap-2 text-xl font-bold text-white hover:text-blue-400 transition mobile-logo"
+                   style="line-height:1;">
+                    <span class="text-lg md:text-xl" style="display:inline-block;vertical-align:middle;">📰</span>
+                    <span class="tracking-tight" style="display:inline-block;vertical-align:middle;">
+                        INFODROP <span class="text-blue-400">360°</span>
+                    </span>
                 </a>
             </div>
-            <div class="info-card rounded-lg p-4 text-center">
-                <p>Explorez des sujets d'actualité sous tous les angles. Chaque analyse déconstruit un événement en présentant des faits, des perspectives multiples et les points de divergence pour vous aider à former votre propre opinion.</p>
+            <div class="justify-self-center"></div>
+            <!-- Bouton menu hamburger -->
+            <div class="justify-self-end relative" x-data="{ showMenu: false }">
+                <button @click="showMenu = !showMenu"
+                        class="p-2 rounded-full hover:bg-gray-700 transition focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        :aria-expanded="showMenu"
+                        aria-label="Menu"
+                        >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <!-- MENU HAMBURGER -->
+                <div x-show="showMenu"
+                     @click.away="showMenu = false"
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 scale-90"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-100"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-90"
+                     class="mobile-menu absolute top-full right-0 mt-3 w-72 bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl z-50 py-2"
+                     style="display: none;">
+                    <a @click="showAboutPanel = true; showMenu = false" href="#" class="flex items-center gap-3 px-5 py-3 text-base text-gray-300 hover:bg-gray-700 transition">ℹ️ À propos</a>
+                    <a href="https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801" target="_blank" class="flex items-center gap-3 px-5 py-3 text-base text-red-400 hover:bg-gray-700 transition">❤️ Soutenir</a>
+                    <div class="border-t border-gray-700 my-1"></div>
+                    <a href="#" @click="alert('Déconnexion désactivée sur cette page.'); showMenu=false;" class="flex items-center gap-3 px-5 py-3 text-base text-gray-300 hover:bg-gray-700 transition">🚪 Déconnexion</a>
+                </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- Liste des Sujets d'Analyse -->
-        <main>
-            <h2 class="text-2xl font-bold mb-6">Analyses Disponibles</h2>
-            <div class="space-y-4">
-                
-                <!-- SUJET 1 : Crise de l'eau à Mayotte -->
-                <a href="/analyses/DEMO-crise-eau-mayotte.html" class="block topic-card p-6">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm text-blue-400 font-semibold">Crise Sociale</p>
-                            <h3 class="text-xl font-bold mt-1">Crise de l'eau à Mayotte : la République oubliée ? DEMO</h3>
-                        </div>
-                        <div class="mt-4 sm:mt-0 text-sm text-gray-400 text-left sm:text-right">
-                            <p>Publié le 29 juin 2025</p>
-                            <p>6 sources analysées</p>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- SUJET 2 : Réforme de l'audiovisuel public -->
-                <a href="/analyses/reforme-audiovisuel-public.html" class="block topic-card p-6">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm text-red-400 font-semibold">Politique & Médias</p>
-                            <h3 class="text-xl font-bold mt-1">Réforme de l'audiovisuel public : la création controversée de "France Médias"</h3>
-                        </div>
-                        <div class="mt-4 sm:mt-0 text-sm text-gray-400 text-left sm:text-right">
-                            <p>Publié le 30 juin 2025</p>
-                            <p>6 sources analysées</p>
-                        </div>
-                    </div>
-                </a>
-
-            </div>
-        </main>
-
-        <!-- Pied de page -->
-        <footer class="text-center py-8 text-xs text-gray-500 mt-8">
-            <p>© 2025 INFODROP. Tous droits réservés.</p>
-            <p class="mt-1">Un projet 3C - EM&LPy</p>
-        </footer>
+    <!-- Bandeau info -->
+    <div class="max-w-4xl mx-auto px-4 mt-6">
+        <div class="info-card rounded-lg p-4 text-center">
+            <p>Explorez des sujets d'actualité sous tous les angles. Chaque analyse déconstruit un événement en présentant des faits, des perspectives multiples et les points de divergence pour vous aider à former votre propre opinion.</p>
+        </div>
     </div>
+
+    <!-- LISTE DES ANALYSES -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6">Analyses Disponibles</h2>
+        <div class="space-y-4">
+
+            <!-- SUJET 1 : Crise de l'eau à Mayotte -->
+            <a href="/analyses/DEMO-crise-eau-mayotte.html" class="block topic-card p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-sm text-blue-400 font-semibold">Crise Sociale</p>
+                        <h3 class="text-xl font-bold mt-1">Crise de l'eau à Mayotte : la République oubliée ? DEMO</h3>
+                    </div>
+                    <div class="mt-4 sm:mt-0 text-sm text-gray-400 text-left sm:text-right">
+                        <p>Publié le 29 juin 2025</p>
+                        <p>6 sources analysées</p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- SUJET 2 : Réforme de l'audiovisuel public -->
+            <a href="/analyses/reforme-audiovisuel-public.html" class="block topic-card p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-sm text-red-400 font-semibold">Politique & Médias</p>
+                        <h3 class="text-xl font-bold mt-1">Réforme de l'audiovisuel public : la création controversée de "France Médias"</h3>
+                    </div>
+                    <div class="mt-4 sm:mt-0 text-sm text-gray-400 text-left sm:text-right">
+                        <p>Publié le 30 juin 2025</p>
+                        <p>6 sources analysées</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="text-center py-8 text-xs text-gray-500 mt-8">
+        <p>© 2025 INFODROP. Tous droits réservés.</p>
+        <p class="mt-1">Un projet 3C - EM&LPy</p>
+    </footer>
+
+    <!-- MODAL À PROPOS -->
+    <div x-show="showAboutPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+         x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+         class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+        <div @click.away="showAboutPanel = false" class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
+            <h3 class="text-xl font-bold mb-4">À propos d'INFODROP</h3>
+            <div class="space-y-4 text-gray-300">
+                <div>
+                    <h4 class="font-semibold text-white">📰 INFODROP (Le Flux)</h4>
+                    <p class="text-sm">L'objectif initial est simple : fournir un flux d'actualités minimaliste, rapide et sans fioritures. Il agrège en temps réel les dernières informations des sources françaises les plus pertinentes pour un aperçu immédiat de ce qui se passe.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-blue-400">🌍 INFODROP 360° (L'Analyse)</h4>
+                    <p class="text-sm">La mission de 360° est plus profonde : lutter contre les bulles de filtres en contextualisant l'information. Pour un même sujet, il expose les perspectives de médias d'orientations différentes, analyse les faits, les divergences et les biais. L'objectif n'est plus seulement de savoir ce qui se passe, mais de comprendre pourquoi on en parle de différentes manières.</p>
+                </div>
+            </div>
+            <div class="flex justify-end pt-6">
+                <button type="button" @click="showAboutPanel = false" class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
