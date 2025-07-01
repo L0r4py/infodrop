@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr" class="dark">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,58 +24,20 @@
         .news-card {
             transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
         }
-
-        .news-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-
+        .news-card:hover { transform: translateY(-2px); }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px);}
+            to   { opacity: 1; transform: translateY(0);}
         }
-
-        .loading-pulse {
-            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: .5;
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #111827;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #4b5563;
-        }
+        .loading-pulse { animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111827; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; }
     </style>
     <script> tailwind.config = { darkMode: 'class', theme: { extend: {} } } </script>
 </head>
-
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
 
     <script>
@@ -88,11 +49,14 @@
     </script>
 
     <div x-data="infodropApp()" x-init="init()" class="w-full">
+        <!-- LOADER : affiché tant que la session n'est pas vérifiée -->
+        <div x-show="!sessionLoaded" class="min-h-screen flex items-center justify-center bg-gray-900">
+            <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
 
-        <!-- Connexion -->
-        <div x-show="!user" x-transition class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
-            <div
-                class="max-w-sm w-full bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-2xl p-8 border border-gray-700">
+        <!-- Connexion : affiché seulement si pas connecté et sessionLoaded -->
+        <div x-show="sessionLoaded && !user" x-transition class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
+            <div class="max-w-sm w-full bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-2xl p-8 border border-gray-700">
                 <h1 class="text-3xl font-bold text-center text-white mb-2">📰 INFODROP</h1>
                 <p class="text-gray-400 text-center mb-8">L'actualité essentielle, rien que l'essentiel.</p>
                 <form @submit.prevent="login()" class="space-y-4">
@@ -113,8 +77,8 @@
             </div>
         </div>
 
-        <!-- Application principale -->
-        <div x-show="user" x-transition.opacity class="min-h-screen flex flex-col">
+        <!-- Application principale : affiché uniquement si connecté et sessionLoaded -->
+        <div x-show="sessionLoaded && user" x-transition.opacity class="min-h-screen flex flex-col">
 
             <!-- HEADER AVEC MENU HAMBURGER ET LOGO CLIQUABLE -->
             <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-800">
@@ -400,6 +364,7 @@
             };
 
             return {
+                sessionLoaded: false, // Etat pour bloquer toute la page tant que la session n'est pas vérifiée
                 user: null, email: '', loading: false, message: '', messageType: '',
                 newsList: [], loadingNews: true, updateInterval: null,
                 isAdmin: false, showAdminPanel: false, addingNews: false,
@@ -431,6 +396,7 @@
                     supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
                     const { data: { session } } = await supabase.auth.getSession();
                     this.handleSession(session);
+                    this.sessionLoaded = true; // Quand la session est vérifiée, on peut tout afficher
                 },
 
                 handleSession(session) {
@@ -547,5 +513,4 @@
         }
     </script>
 </body>
-
 </html>
