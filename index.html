@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Open Graph pour Facebook, WhatsApp, LinkedIn -->
     <meta property="og:title" content="INFODROP - L'actualité essentielle" />
-    <meta property="og:description"
-        content="L'actualité essentielle. Agrégation multi-sources en temps réel." />
+    <meta property="og:description" content="L'actualité essentielle. Agrégation multi-sources en temps réel." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://infodrop.live/" />
     <meta property="og:image" content="https://infodrop.live/images/infodrop-share.png" />
@@ -15,8 +14,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="INFODROP - L'actualité essentielle">
-    <meta name="twitter:description"
-        content="L'actualité essentielle. Agrégation multi-sources en temps réel.">
+    <meta name="twitter:description" content="L'actualité essentielle. Agrégation multi-sources en temps réel.">
     <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png">
 
     <title>INFODROP - L'actualité essentielle</title>
@@ -234,7 +232,8 @@
                         <div class="text-sm text-gray-400">Lecteurs connectés</div>
                     </div>
                 </div>
-                <div class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
+                <!-- Panneau de filtre : caché tant que loadingNews -->
+                <div x-show="!loadingNews" x-transition class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
                     <button @click="showFilters = !showFilters" class="w-full flex items-center justify-between p-4">
                         <h3 class="font-semibold text-gray-300">Filtrer</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform"
@@ -258,6 +257,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="space-y-3">
                     <template x-for="news in filteredNews" :key="news.id">
                         <div
