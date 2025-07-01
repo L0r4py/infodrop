@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INFODROP 360° - Crise de l'eau à Mayotte</title>
+    <!-- Open Graph -->
+    <meta property="og:title" content="INFODROP360 - L'actualité essentielle" />
+    <meta property="og:description" content="L'actualité essentielle. Agrégation multi-sources en temps réel." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://infodrop.live/" />
+    <meta property="og:image" content="https://infodrop.live/images/infodrop-share.png" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="INFODROP360 - L'actualité essentielle">
+    <meta name="twitter:description" content="L'actualité essentielle. Agrégation multi-sources en temps réel.">
+    <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <style>
         body { background-color: #0f172a; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';}
         .perspective-card { background: linear-gradient(145deg, #1e293b, #334155); border-radius: 16px; transition: all 0.3s ease; position: relative; overflow: hidden; }
@@ -26,22 +38,62 @@
     </style>
 </head>
 <body class="min-h-screen">
-    <div class="max-w-7xl mx-auto px-4 py-6">
-        <!-- Header -->
-        <header class="mb-8">
-            <div class="flex items-center justify-between mb-4">
-                <h1 class="text-2xl sm:text-3xl font-bold">📰 INFODROP <span class="text-blue-400">360°</span></h1>
-                <a href="/index.html" class="px-3 sm:px-4 py-2 text-sm font-semibold text-gray-300 bg-gray-700 rounded-lg hover:bg-gray-600 transition flex items-center gap-2">
-                    <span class="text-base">←</span>
-                    <span class="hidden sm:inline">Retour au flux</span>
+
+<div class="w-full" x-data="{ showMenu: false, showAboutPanel: false }">
+    <!-- HEADER harmonisé -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
+            <!-- Logo cliquable -->
+            <div class="justify-self-start">
+                <a href="/index.html"
+                   class="flex items-center gap-2 text-xl font-bold text-white hover:text-blue-400 transition"
+                   style="line-height:1;white-space:nowrap;">
+                    <span class="text-lg md:text-xl"
+                          style="display:inline-block;vertical-align:middle;">📰</span>
+                    <span class="tracking-tight"
+                          style="display:inline-block;vertical-align:middle;white-space:nowrap;">
+                        INFODROP <span style="color:#3b82f6;display:inline;font-weight:700;">360°</span>
+                    </span>
                 </a>
             </div>
-            <div class="info-card rounded-lg p-4 text-center text-sm sm:text-base">
-                <p><span class="font-bold">Note :</span> Ceci est une démonstration de la future fonctionnalité INFODROP 360°. Pour l'instant, cette analyse est statique et sert de preuve de concept.</p>
+            <div class="justify-self-center"></div>
+            <div class="justify-self-end relative">
+                <button @click="showMenu = !showMenu" class="p-2 rounded-full hover:bg-gray-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <!-- MENU HAMBURGER -->
+                <div x-show="showMenu" @click.away="showMenu = false" x-transition
+                     class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50"
+                     style="display: none;">
+                    <div class="px-4 py-2 border-b border-gray-700">
+                        <a href="/infodrop360.html"
+                           class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">🌐 Analyses 360°</a>
+                    </div>
+                    <a @click="showAboutPanel = true; showMenu = false" href="#"
+                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">ℹ️ À propos</a>
+                    <a href="https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801" target="_blank"
+                       class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-700">❤️ Soutenir</a>
+                    <div class="border-t border-gray-700 my-1"></div>
+                    <a href="#" @click="alert('Déconnexion désactivée sur cette page.'); showMenu=false;"
+                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">🚪 Déconnexion</a>
+                </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- Sujet principal -->
+    <!-- Note de démo -->
+    <div class="max-w-7xl mx-auto px-4 mt-6">
+        <div class="info-card rounded-lg p-4 text-center text-sm sm:text-base">
+            <p><span class="font-bold">Note :</span> Ceci est une démonstration de la future fonctionnalité INFODROP 360°. Pour l'instant, cette analyse est statique et sert de preuve de concept.</p>
+        </div>
+    </div>
+
+    <!-- Sujet principal -->
+    <div class="max-w-7xl mx-auto px-4 py-6">
         <section class="mb-8">
             <div class="bg-gray-800 rounded-2xl p-6 mb-6 border border-gray-700">
                 <div class="flex items-start justify-between gap-4 mb-4">
@@ -49,7 +101,6 @@
                         <h2 class="text-xl sm:text-2xl font-bold mb-2">🌀 Mayotte : L'île toujours sans eau courante 5 mois après le cyclone Belal</h2>
                         <p class="text-gray-400 text-xs sm:text-sm">Analyse multi-perspectives • 6 sources • Dernière mise à jour : il y a 15 min</p>
                     </div>
-                    <!-- Badge "Sujet brûlant" caché sur mobile (hidden) et visible à partir de sm: (inline-flex) -->
                     <span class="hidden sm:inline-flex items-center gap-2 px-3 py-1 bg-red-900 bg-opacity-30 text-red-400 rounded-full text-sm font-semibold whitespace-nowrap">🔴 Sujet brûlant</span>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -76,45 +127,159 @@
         </section>
 
         <!-- Alerte divergence -->
-        <div class="info-card rounded-lg p-4 mb-6 flex items-center gap-3"><span class="text-2xl">🔍</span><div><div class="font-bold">Forte divergence détectée</div><div class="text-sm text-gray-300">Les médias locaux et nationaux présentent des visions très différentes de la situation</div></div></div>
+        <div class="info-card rounded-lg p-4 mb-6 flex items-center gap-3">
+            <span class="text-2xl">🔍</span>
+            <div>
+                <div class="font-bold">Forte divergence détectée</div>
+                <div class="text-sm text-gray-300">Les médias locaux et nationaux présentent des visions très différentes de la situation</div>
+            </div>
+        </div>
 
         <!-- Perspectives multiples -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <article class="perspective-card slide-in p-6" style="animation-delay: 0.1s">
-                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">L'info Kwezi</h3><span class="text-xs text-gray-400">Mayotte</span></div><span class="badge-local text-xs px-2 py-1 rounded">Local</span></div>
+            <!-- 1 -->
+            <article class="perspective-card p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">L'info Kwezi</h3>
+                        <span class="text-xs text-gray-400">Mayotte</span>
+                    </div>
+                    <span class="badge-local text-xs px-2 py-1 rounded">Local</span>
+                </div>
                 <blockquote class="text-gray-300 mb-4 italic">"Situation catastrophique : des familles parcourent 5km chaque jour pour trouver de l'eau potable. Les écoles ferment, les hôpitaux sont débordés. L'État nous a abandonnés."</blockquote>
-                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-red-400">🎯</span><span class="text-gray-400">Focus : Témoignages habitants</span></div><div class="flex items-center gap-2"><span class="text-red-400">😡</span><span class="text-gray-400">Ton : Colère, urgence</span></div><div class="flex items-center gap-2"><span class="text-red-400">📸</span><span class="text-gray-400">12 photos terrain</span></div></div>
-                <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Files d'attente dès 4h du matin</li><li>• Risques sanitaires majeurs</li><li>• Promesses non tenues depuis janvier</li></ul></div>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-red-400">🎯</span><span class="text-gray-400">Focus : Témoignages habitants</span></div>
+                    <div class="flex items-center gap-2"><span class="text-red-400">😡</span><span class="text-gray-400">Ton : Colère, urgence</span></div>
+                    <div class="flex items-center gap-2"><span class="text-red-400">📸</span><span class="text-gray-400">12 photos terrain</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• Files d'attente dès 4h du matin</li>
+                        <li>• Risques sanitaires majeurs</li>
+                        <li>• Promesses non tenues depuis janvier</li>
+                    </ul>
+                </div>
             </article>
-            <article class="perspective-card slide-in p-6" style="animation-delay: 0.2s">
-                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">France Info</h3><span class="text-xs text-gray-400">National</span></div><span class="badge-public text-xs px-2 py-1 rounded">Public</span></div>
+            <!-- 2 -->
+            <article class="perspective-card p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">France Info</h3>
+                        <span class="text-xs text-gray-400">National</span>
+                    </div>
+                    <span class="badge-public text-xs px-2 py-1 rounded">Public</span>
+                </div>
                 <blockquote class="text-gray-300 mb-4 italic">"Le gouvernement annonce un plan d'urgence de 50 millions d'euros. Les travaux de réparation du réseau avancent, avec un retour à la normale prévu pour septembre."</blockquote>
-                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-blue-400">🎯</span><span class="text-gray-400">Focus : Actions gouvernement</span></div><div class="flex items-center gap-2"><span class="text-blue-400">📊</span><span class="text-gray-400">Ton : Informatif, mesuré</span></div><div class="flex items-center gap-2"><span class="text-blue-400">🎙️</span><span class="text-gray-400">Interview préfet</span></div></div>
-                <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• 50M€ débloqués</li><li>• 200 techniciens mobilisés</li><li>• Distribution quotidienne assurée</li></ul></div>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-blue-400">🎯</span><span class="text-gray-400">Focus : Actions gouvernement</span></div>
+                    <div class="flex items-center gap-2"><span class="text-blue-400">📊</span><span class="text-gray-400">Ton : Informatif, mesuré</span></div>
+                    <div class="flex items-center gap-2"><span class="text-blue-400">🎙️</span><span class="text-gray-400">Interview préfet</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• 50M€ débloqués</li>
+                        <li>• 200 techniciens mobilisés</li>
+                        <li>• Distribution quotidienne assurée</li>
+                    </ul>
+                </div>
             </article>
-            <article class="perspective-card slide-in p-6" style="animation-delay: 0.3s">
-                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">Le Figaro</h3><span class="text-xs text-gray-400">National</span></div><span class="badge-centre-droit text-xs px-2 py-1 rounded">Centre-droit</span></div>
+            <!-- 3 -->
+            <article class="perspective-card p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">Le Figaro</h3>
+                        <span class="text-xs text-gray-400">National</span>
+                    </div>
+                    <span class="badge-centre-droit text-xs px-2 py-1 rounded">Centre-droit</span>
+                </div>
                 <blockquote class="text-gray-300 mb-4 italic">"Mayotte paye le prix de décennies de sous-investissement. L'immigration clandestine aggrave la pression sur des infrastructures déjà fragiles."</blockquote>
-                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-purple-400">🎯</span><span class="text-gray-400">Focus : Causes structurelles</span></div><div class="flex items-center gap-2"><span class="text-purple-400">💬</span><span class="text-gray-400">Ton : Analytique</span></div><div class="flex items-center gap-2"><span class="text-purple-400">📈</span><span class="text-gray-400">Données démographiques</span></div></div>
-                <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Population x2 en 20 ans</li><li>• Infrastructures sous-dimensionnées</li><li>• Besoin plan Marshall</li></ul></div>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-purple-400">🎯</span><span class="text-gray-400">Focus : Causes structurelles</span></div>
+                    <div class="flex items-center gap-2"><span class="text-purple-400">💬</span><span class="text-gray-400">Ton : Analytique</span></div>
+                    <div class="flex items-center gap-2"><span class="text-purple-400">📈</span><span class="text-gray-400">Données démographiques</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• Population x2 en 20 ans</li>
+                        <li>• Infrastructures sous-dimensionnées</li>
+                        <li>• Besoin plan Marshall</li>
+                    </ul>
+                </div>
             </article>
-            <article class="perspective-card slide-in p-6" style="animation-delay: 0.4s">
-                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">Libération</h3><span class="text-xs text-gray-400">National</span></div><span class="badge-gauche text-xs px-2 py-1 rounded">Gauche</span></div>
+            <!-- 4 -->
+            <article class="perspective-card p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">Libération</h3>
+                        <span class="text-xs text-gray-400">National</span>
+                    </div>
+                    <span class="badge-gauche text-xs px-2 py-1 rounded">Gauche</span>
+                </div>
                 <blockquote class="text-gray-300 mb-4 italic">"Scandale d'État : Mayotte, territoire français, vit comme un pays du tiers-monde. Cette crise révèle le racisme structurel envers les DOM-TOM."</blockquote>
-                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-orange-400">🎯</span><span class="text-gray-400">Focus : Inégalités DOM</span></div><div class="flex items-center gap-2"><span class="text-orange-400">✊</span><span class="text-gray-400">Ton : Dénonciation</span></div><div class="flex items-center gap-2"><span class="text-orange-400">📢</span><span class="text-gray-400">Tribune collectif</span></div></div>
-                <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Discrimination systémique</li><li>• Comparaison métropole</li><li>• Appel mobilisation nationale</li></ul></div>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-orange-400">🎯</span><span class="text-gray-400">Focus : Inégalités DOM</span></div>
+                    <div class="flex items-center gap-2"><span class="text-orange-400">✊</span><span class="text-gray-400">Ton : Dénonciation</span></div>
+                    <div class="flex items-center gap-2"><span class="text-orange-400">📢</span><span class="text-gray-400">Tribune collectif</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• Discrimination systémique</li>
+                        <li>• Comparaison métropole</li>
+                        <li>• Appel mobilisation nationale</li>
+                    </ul>
+                </div>
             </article>
-            <article class="perspective-card slide-in p-6" style="animation-delay: 0.5s">
-                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">RFI</h3><span class="text-xs text-gray-400">International</span></div><span class="badge-international text-xs px-2 py-1 rounded">Mondial</span></div>
+            <!-- 5 -->
+            <article class="perspective-card p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">RFI</h3>
+                        <span class="text-xs text-gray-400">International</span>
+                    </div>
+                    <span class="badge-international text-xs px-2 py-1 rounded">Mondial</span>
+                </div>
                 <blockquote class="text-gray-300 mb-4 italic">"La France face à ses contradictions : comment le 6e pays le plus riche peut-il laisser 300 000 citoyens sans eau potable ? L'ONU s'inquiète."</blockquote>
-                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-yellow-400">🎯</span><span class="text-gray-400">Focus : Image internationale</span></div><div class="flex items-center gap-2"><span class="text-yellow-400">🌍</span><span class="text-gray-400">Ton : Perspective globale</span></div><div class="flex items-center gap-2"><span class="text-yellow-400">🇺🇳</span><span class="text-gray-400">Réaction ONU</span></div></div>
-                <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Droits humains bafoués</li><li>• Comparaisons régionales</li><li>• Pression diplomatique</li></ul></div>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-yellow-400">🎯</span><span class="text-gray-400">Focus : Image internationale</span></div>
+                    <div class="flex items-center gap-2"><span class="text-yellow-400">🌍</span><span class="text-gray-400">Ton : Perspective globale</span></div>
+                    <div class="flex items-center gap-2"><span class="text-yellow-400">🇺🇳</span><span class="text-gray-400">Réaction ONU</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• Droits humains bafoués</li>
+                        <li>• Comparaisons régionales</li>
+                        <li>• Pression diplomatique</li>
+                    </ul>
+                </div>
             </article>
-            <article class="perspective-card slide-in p-6" style="animation-delay: 0.6s">
-                <div class="flex items-center justify-between mb-3"><div><h3 class="font-bold text-lg">Journal de Mayotte</h3><span class="text-xs text-gray-400">Local</span></div><span class="badge-terrain text-xs px-2 py-1 rounded">Terrain</span></div>
+            <!-- 6 -->
+            <article class="perspective-card p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">Journal de Mayotte</h3>
+                        <span class="text-xs text-gray-400">Local</span>
+                    </div>
+                    <span class="badge-terrain text-xs px-2 py-1 rounded">Terrain</span>
+                </div>
                 <blockquote class="text-gray-300 mb-4 italic">"Entre débrouille et solidarité : comment les Mahorais s'organisent face à l'abandon. Reportage dans les villages où l'entraide remplace l'État."</blockquote>
-                <div class="text-sm space-y-2"><div class="flex items-center gap-2"><span class="text-green-400">🎯</span><span class="text-gray-400">Focus : Solutions locales</span></div><div class="flex items-center gap-2"><span class="text-green-400">🤝</span><span class="text-gray-400">Ton : Résilience</span></div><div class="flex items-center gap-2"><span class="text-green-400">📹</span><span class="text-gray-400">Vidéos terrain</span></div></div>
-                <div class="mt-4 pt-4 border-t border-gray-600"><div class="text-xs text-gray-500">Points clés :</div><ul class="text-xs text-gray-400 mt-1 space-y-1"><li>• Systèmes D innovants</li><li>• Réseaux solidarité</li><li>• Leaders communautaires</li></ul></div>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-green-400">🎯</span><span class="text-gray-400">Focus : Solutions locales</span></div>
+                    <div class="flex items-center gap-2"><span class="text-green-400">🤝</span><span class="text-gray-400">Ton : Résilience</span></div>
+                    <div class="flex items-center gap-2"><span class="text-green-400">📹</span><span class="text-gray-400">Vidéos terrain</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• Systèmes D innovants</li>
+                        <li>• Réseaux solidarité</li>
+                        <li>• Leaders communautaires</li>
+                    </ul>
+                </div>
             </article>
         </div>
 
@@ -122,24 +287,85 @@
         <section class="mt-8 bg-gray-800 rounded-2xl p-6 border border-gray-700">
             <h3 class="text-xl font-bold mb-4 flex items-center gap-2">🤖 Analyse INFODROP IA</h3>
             <div class="grid md:grid-cols-3 gap-6">
-                <div><h4 class="font-bold mb-3 text-green-400">✅ Faits établis</h4><ul class="space-y-2 text-sm"><li>• 5 mois sans eau courante</li><li>• 120 000+ habitants affectés</li><li>• Distribution 3h/jour max</li><li>• 50M€ annoncés par l'État</li><li>• Cyclone Belal en janvier</li></ul></div>
-                <div><h4 class="font-bold mb-3 text-orange-400">⚡ Points de divergence</h4><ul class="space-y-2 text-sm"><li>• <b>Gravité :</b> "Catastrophe" vs "Gérable"</li><li>• <b>Responsabilité :</b> État vs Local vs Historique</li><li>• <b>Solutions :</b> Urgence vs Structurel</li><li>• <b>Timeline :</b> "Septembre" vs "Indéterminé"</li><li>• <b>Causes :</b> Cyclone vs Sous-investissement</li></ul></div>
-                <div><h4 class="font-bold mb-3 text-blue-400">📊 Analyse des biais</h4><div class="space-y-3 text-sm"><div class="p-3 bg-gray-900 bg-opacity-50 rounded"><div class="font-semibold text-green-400">Médias locaux</div><div class="text-xs">Proximité émotionnelle, témoignages directs, urgence</div></div><div class="p-3 bg-gray-900 bg-opacity-50 rounded"><div class="font-semibold text-blue-400">Médias nationaux</div><div class="text-xs">Distance, focus politique, minimisation relative</div></div><div class="p-3 bg-gray-900 bg-opacity-50 rounded"><div class="font-semibold text-yellow-400">Angle manquant</div><div class="text-xs">Voix des Comores (immigration), expertise technique eau</div></div></div></div>
+                <div>
+                    <h4 class="font-bold mb-3 text-green-400">✅ Faits établis</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li>• 5 mois sans eau courante</li>
+                        <li>• 120 000+ habitants affectés</li>
+                        <li>• Distribution 3h/jour max</li>
+                        <li>• 50M€ annoncés par l'État</li>
+                        <li>• Cyclone Belal en janvier</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-orange-400">⚡ Points de divergence</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li>• <b>Gravité :</b> "Catastrophe" vs "Gérable"</li>
+                        <li>• <b>Responsabilité :</b> État vs Local vs Historique</li>
+                        <li>• <b>Solutions :</b> Urgence vs Structurel</li>
+                        <li>• <b>Timeline :</b> "Septembre" vs "Indéterminé"</li>
+                        <li>• <b>Causes :</b> Cyclone vs Sous-investissement</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-blue-400">📊 Analyse des biais</h4>
+                    <div class="space-y-3 text-sm">
+                        <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                            <div class="font-semibold text-green-400">Médias locaux</div>
+                            <div class="text-xs">Proximité émotionnelle, témoignages directs, urgence</div>
+                        </div>
+                        <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                            <div class="font-semibold text-blue-400">Médias nationaux</div>
+                            <div class="text-xs">Distance, focus politique, minimisation relative</div>
+                        </div>
+                        <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                            <div class="font-semibold text-yellow-400">Angle manquant</div>
+                            <div class="text-xs">Voix des Comores (immigration), expertise technique eau</div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="mt-6 p-4 bg-gray-900 bg-opacity-50 rounded-lg border border-gray-700">
                 <p class="text-sm mb-2"><span class="font-bold text-yellow-400">⚠️ Alerte :</span> Écart majeur entre perception locale et nationale. Les médias de Mayotte parlent de "crise humanitaire" tandis que les médias nationaux évoquent une "situation difficile mais sous contrôle".</p>
                 <p class="text-sm text-gray-400">💡 <b>Recommandation :</b> Privilégier les sources locales pour la réalité terrain, croiser avec les données officielles pour les chiffres.</p>
             </div>
         </section>
-
-        <!-- Pied de page -->
-        <footer class="text-center py-8 text-xs text-gray-500 mt-8">
-            <p>© 2025 INFODROP. Tous droits réservés.</p>
-            <p class="mt-1">Un projet 3C - EM&LPy</p>
-        </footer>
     </div>
 
-    <script>
+    <!-- MODAL À PROPOS -->
+    <div x-show="showAboutPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+         x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+        <div @click.away="showAboutPanel = false"
+             class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
+            <h3 class="text-xl font-bold mb-4">À propos d'INFODROP</h3>
+            <div class="space-y-4 text-gray-300">
+                <div>
+                    <h4 class="font-semibold text-white">📰 INFODROP (Le Flux)</h4>
+                    <p class="text-sm">L'objectif initial est simple : fournir un flux d'actualités minimaliste, rapide et sans fioritures. Il agrège en temps réel les dernières informations des sources françaises les plus pertinentes pour un aperçu immédiat de ce qui se passe.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-blue-400">🌍 INFODROP 360° (L'Analyse)</h4>
+                    <p class="text-sm">La mission de 360° est plus profonde : lutter contre les bulles de filtres en contextualisant l'information. Pour un même sujet, il expose les perspectives de médias d'orientations différentes, analyse les faits, les divergences et les biais. L'objectif n'est plus seulement de savoir ce qui se passe, mais de comprendre pourquoi on en parle de différentes manières.</p>
+                </div>
+            </div>
+            <div class="flex justify-end pt-6">
+                <button type="button" @click="showAboutPanel = false"
+                        class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center py-8 text-xs text-gray-500 mt-8">
+        <p>© 2025 INFODROP. Tous droits réservés.</p>
+        <p class="mt-1">Un projet 3C - EM&LPy</p>
+    </footer>
+</div>
+
+<!-- Animation perspectives JS -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -150,6 +376,7 @@
         document.querySelectorAll('.perspective-card').forEach(card => {
             observer.observe(card);
         });
-    </script>
+    });
+</script>
 </body>
 </html>
