@@ -20,9 +20,6 @@
 </head>
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
 
-<!-- ======================
-     CONFIGURATION JS
-====================== -->
 <script>
 const SUPABASE_URL = 'https://gxpezjcjynbkvtvtzyfo.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4cGV6amNqeW5ia3Z0dnR6eWZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwMzA1MTgsImV4cCI6MjA2NjYwNjUxOH0.D90LXh1aGB2OibrpNXPhKZg8oG-mf510v7vKxoJmAog';
@@ -33,9 +30,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 <div x-data="infodropApp()" x-init="init()" class="w-full">
 
-    <!-- ======================
-         1. PAGE DE CONNEXION
-    ======================= -->
+    <!-- Connexion -->
     <div x-show="!user" x-transition class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
         <div class="max-w-sm w-full bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-2xl p-8 border border-gray-700">
             <h1 class="text-3xl font-bold text-center text-white mb-2">📰 INFODROP</h1>
@@ -53,24 +48,38 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         </div>
     </div>
 
-    <!-- ======================
-         2. APPLICATION PRINCIPALE
-    ======================= -->
+    <!-- Application principale -->
     <div x-show="user" x-transition.opacity class="min-h-screen flex flex-col">
 
-        <!-- ================
-             2.1 HEADER & MENU
-        ================= -->
+        <!-- HEADER AVEC MENU HAMBURGER ET LOGO CLIQUABLE -->
         <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-800">
             <div class="max-w-4xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
-                <div class="justify-self-start"><h1 class="text-xl font-bold text-white flex items-center gap-3">📰 INFODROP</h1></div>
-                <div class="justify-self-center"><a href="/infodrop360.html" class="px-3 py-1 text-sm font-semibold text-blue-300 bg-blue-900/50 rounded-full hover:bg-blue-900 transition whitespace-nowrap">Analyses 360°</a></div>
+                <!-- LOGO CLIQUABLE -->
+                <div class="justify-self-start">
+                    <a href="/index.html" class="text-xl font-bold text-white flex items-center gap-3 hover:text-blue-400 transition">📰 INFODROP</a>
+                </div>
+                <div class="justify-self-center"></div>
                 <div class="justify-self-end relative" x-data="{ showMenu: false }">
-                    <button @click="showMenu = !showMenu" class="p-2 rounded-full hover:bg-gray-700 transition"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg></button>
-                    <div x-show="showMenu" @click.away="showMenu = false" x-transition class="absolute top-full right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50" style="display: none;">
+                    <button @click="showMenu = !showMenu" class="p-2 rounded-full hover:bg-gray-700 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <!-- MENU HAMBURGER, AVEC ANALYSES 360° EN PREMIER DANS UNE SECTION SÉPARÉE -->
+                    <div x-show="showMenu" @click.away="showMenu = false" x-transition class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50" style="display: none;">
+                        <!-- SECTION DÉDIÉE Analyses 360° -->
+                        <div class="px-4 py-2 border-b border-gray-700">
+                            <a href="/infodrop360.html" class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">🌐 Analyses 360°</a>
+                        </div>
+                        <!-- Menu général -->
                         <a @click="showAboutPanel = true; showMenu = false" href="#" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">ℹ️ À propos</a>
                         <a :href="STRIPE_LINK" target="_blank" class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-700">❤️ Soutenir</a>
-                        <template x-if="isAdmin"><div><div class="border-t border-gray-700 my-1"></div><a @click="showAdminPanel = !showAdminPanel; showMenu = false" href="#" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">⚙️ Ajouter une actu</a></div></template>
+                        <template x-if="isAdmin">
+                            <div>
+                                <div class="border-t border-gray-700 my-1"></div>
+                                <a @click="showAdminPanel = !showAdminPanel; showMenu = false" href="#" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">⚙️ Ajouter une actu</a>
+                            </div>
+                        </template>
                         <div class="border-t border-gray-700 my-1"></div>
                         <a @click="logout()" href="#" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">🚪 Déconnexion</a>
                     </div>
@@ -78,9 +87,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             </div>
         </header>
 
-        <!-- ================
-             2.2 PANEL ADMIN : AJOUT ACTU
-        ================= -->
+        <!-- PANEL ADMIN AJOUT ACTU -->
         <div x-show="showAdminPanel && isAdmin" x-transition class="bg-gray-950/50 border-b border-gray-800">
             <div class="max-w-4xl mx-auto p-4">
                 <h2 class="text-lg font-bold text-white mb-3">🧨 Ajouter une actualité</h2>
@@ -109,19 +116,13 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             </div>
         </div>
 
-        <!-- ================
-             2.3 PANNEAU FILTRES
-        ================= -->
+        <!-- PANNEAU FILTRES & NEWS -->
         <main class="max-w-4xl mx-auto px-4 py-6 flex-grow">
-
-            <!-- 2.3.1 Stats admin -->
             <div x-show="isAdmin" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6 text-center">
                 <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700"><div class="text-2xl font-bold text-white" x-text="stats.total_articles">0</div><div class="text-sm text-gray-400">Articles</div></div>
                 <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700"><div class="text-2xl font-bold text-white" x-text="stats.total_sources">0</div><div class="text-sm text-gray-400">Sources</div></div>
                 <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700 col-span-2 md:col-span-1"><div class="text-2xl font-bold text-white flex items-center justify-center gap-2" x-text="connectedUsers">1</div><div class="text-sm text-gray-400">Lecteurs connectés</div></div>
             </div>
-
-            <!-- 2.3.2 Filtres rétractables -->
             <div class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
                 <button @click="showFilters = !showFilters" class="w-full flex items-center justify-between p-4">
                     <h3 class="font-semibold text-gray-300">Filtrer</h3>
@@ -136,8 +137,6 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                     </div>
                 </div>
             </div>
-
-            <!-- 2.3.3 Liste d'actualités (avec badges orientation + tags) -->
             <div class="space-y-3">
                 <template x-for="news in filteredNews" :key="news.id">
                     <div class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
@@ -166,10 +165,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             </div>
         </main>
 
-        <!-- ================
-             2.4 MODALS (ÉDITION ACTU & À PROPOS)
-        ================= -->
-        <!-- Modal édition actu -->
+        <!-- MODALS -->
         <div x-show="showEditPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
             <div @click.away="showEditPanel = false" class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
                 <h3 class="text-xl font-bold mb-4">Éditer l'actualité</h3>
@@ -203,7 +199,6 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             </div>
         </div>
 
-        <!-- Modal à propos -->
         <div x-show="showAboutPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
             <div @click.away="showAboutPanel = false" class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
                 <h3 class="text-xl font-bold mb-4">À propos d'INFODROP</h3>
@@ -223,9 +218,6 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             </div>
         </div>
 
-        <!-- ================
-             2.5 FOOTER
-        ================= -->
         <footer class="text-center py-8 text-xs text-gray-500">
             <p>© 2025 INFODROP. Tous droits réservés.</p>
             <p class="mt-1">Un projet 3C - EM&LPy</p>
@@ -233,9 +225,6 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </div>
 </div>
 
-<!-- ======================
-     LOGIQUE JS PRINCIPALE
-====================== -->
 <script>
 function infodropApp() {
     const ORIENTATION_DATA = {
@@ -250,7 +239,6 @@ function infodropApp() {
     };
 
     return {
-        // État principal et UI
         user: null, email: '', loading: false, message: '', messageType: '',
         newsList: [], loadingNews: true, updateInterval: null,
         isAdmin: false, showAdminPanel: false, addingNews: false,
@@ -264,7 +252,6 @@ function infodropApp() {
         activeFilter: 'all',
         allTags: [],
 
-        // FILTRAGE
         get filteredNews() {
             if (this.activeFilter === 'all') return this.newsList;
             return this.newsList.filter(news =>
@@ -279,7 +266,6 @@ function infodropApp() {
             return ORIENTATION_DATA[orientation]?.class || 'bg-gray-700 text-gray-200';
         },
 
-        // INIT + SESSION
         async init() {
             supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
             const { data: { session } } = await supabase.auth.getSession();
@@ -305,7 +291,6 @@ function infodropApp() {
             }).subscribe(async (status) => { if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); } });
         },
 
-        // AJOUT / ÉDITION ACTU
         openEditPanel(news) {
             this.editingNews = { ...JSON.parse(JSON.stringify(news)), tagsText: (news.tags || []).join(', ') };
             this.showEditPanel = true;
@@ -361,7 +346,6 @@ function infodropApp() {
             }
         },
 
-        // STATS, NEWS, TAGS
         async loadData() {
             this.loadingNews = true;
             await Promise.all([this.loadNews(), this.isAdmin ? this.loadStats() : Promise.resolve()]);
@@ -392,11 +376,9 @@ function infodropApp() {
             } catch (error) { console.error('Erreur chargement stats:', error); }
         },
 
-        // AUTH
         async login() { if (this.loading) return; this.loading = true; this.message = ''; try { const { error } = await supabase.auth.signInWithOtp({ email: this.email, options: { emailRedirectTo: window.location.origin }}); if (error) throw error; this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.'; this.messageType = 'success'; } catch (error) { this.message = error.message || 'Erreur lors de l\'envoi du lien.'; this.messageType = 'error'; } finally { this.loading = false; } },
         async logout() { if(this.realtimeChannel) { await this.realtimeChannel.untrack(); } await supabase.auth.signOut(); },
 
-        // AUTO-REFRESH, UTIL
         startAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); this.updateInterval = setInterval(() => this.loadData(), 30000); },
         stopAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); },
         formatTime(timestamp) { return new Date(timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); }
