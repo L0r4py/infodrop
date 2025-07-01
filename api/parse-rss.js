@@ -1,5 +1,5 @@
 // Fichier : /api/parse-rss.js
-// Version 22 - Correction finale de la syntaxe
+// Version 23.2 - Ajout colonne tags (prudent, non destructif)
 
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
@@ -17,66 +17,71 @@ const parser = new Parser({
 // Ta liste de flux RSS complète et organisée
 const RSS_FEEDS = [
     // --- GENERALISTES ---
-    { name: 'France Info', url: 'https://www.francetvinfo.fr/titres.rss', orientation: 'centre' },
-    { name: 'Le Monde', url: 'https://www.lemonde.fr/rss/une.xml', orientation: 'centre-gauche' },
-    { name: 'Libération', url: 'https://www.liberation.fr/arc/outboundfeeds/rss-all/?outputType=xml', orientation: 'gauche' },
-    { name: 'Le Figaro', url: 'https://www.lefigaro.fr/rss/figaro_actualites.xml', orientation: 'droite' },
-    { name: 'Le Parisien', url: 'https://feeds.leparisien.fr/leparisien/rss', orientation: 'centre-droit' },
-    { name: 'Ouest France', url: 'https://www.ouest-france.fr/rss-en-continu.xml', orientation: 'centre' },
-    { name: 'Courrier International', url: 'https://www.courrierinternational.com/feed/all/rss.xml', orientation: 'centre-gauche' },
-    { name: 'France Inter', url: 'https://www.radiofrance.fr/franceinter/rss', orientation: 'centre-gauche' },
-    { name: "France24", url: 'https://www.france24.com/fr/france/rss', orientation: 'centre-gauche' },
+    { name: 'France Info', url: 'https://www.francetvinfo.fr/titres.rss', orientation: 'centre', tags: ['national', 'public'] },
+    { name: 'Le Monde', url: 'https://www.lemonde.fr/rss/une.xml', orientation: 'centre-gauche', tags: ['national', 'référence'] },
+    { name: 'Libération', url: 'https://www.liberation.fr/arc/outboundfeeds/rss-all/?outputType=xml', orientation: 'gauche', tags: ['national'] },
+    { name: 'Le Figaro', url: 'https://www.lefigaro.fr/rss/figaro_actualites.xml', orientation: 'droite', tags: ['national'] },
+    { name: 'Le Parisien', url: 'https://feeds.leparisien.fr/leparisien/rss', orientation: 'centre-droit', tags: ['national', 'faits divers'] },
+    { name: 'Ouest France', url: 'https://www.ouest-france.fr/rss-en-continu.xml', orientation: 'centre', tags: ['regional', 'ouest'] },
+    { name: 'Courrier International', url: 'https://www.courrierinternational.com/feed/all/rss.xml', orientation: 'centre-gauche', tags: ['international', 'traduction'] },
+    { name: 'France Inter', url: 'https://www.radiofrance.fr/franceinter/rss', orientation: 'centre-gauche', tags: ['national', 'radio', 'public'] },
+    { name: "France24", url: 'https://www.france24.com/fr/france/rss', orientation: 'centre-gauche', tags: ['international', 'francophone'] },
+    { name: "L'Obs", url: 'https://www.nouvelobs.com/rss.xml', orientation: 'centre-gauche', tags: ['national'] },
+
+    // --- RÉGIONALES ---
+    { name: "La Depeche", url: 'https://www.ladepeche.fr/rss.xml', orientation: 'centre-gauche', tags: ['regional', 'sud-ouest'] },
+    { name: "Sud Ouest", url: 'https://www.sudouest.fr/rss.xml', orientation: 'centre-gauche', tags: ['regional', 'sud-ouest'] },
+    { name: "La Republique des Pyrenees", url: 'https://www.larepubliquedespyrenees.fr/rss.xml', orientation: 'centre-gauche', tags: ['regional', 'pyrenees'] },
 
     // --- SOURCES OFFICIELLES & PARLEMENTAIRES ---
-    { name: 'Sénat (Textes)', url: 'https://www.senat.fr/rss/textes.xml', orientation: 'neutre' },
-    { name: 'Sénat (Presse)', url: 'https://www.senat.fr/rss/presse.xml', orientation: 'neutre' },
-    { name: 'Assemblée Nat. (Docs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/documents-parlementaires', orientation: 'neutre' },
-    { name: 'Assemblée Nat. (CRs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/crs', orientation: 'neutre' },
+    { name: 'Sénat (Textes)', url: 'https://www.senat.fr/rss/textes.xml', orientation: 'neutre', tags: ['officiel', 'parlement'] },
+    { name: 'Sénat (Presse)', url: 'https://www.senat.fr/rss/presse.xml', orientation: 'neutre', tags: ['officiel', 'parlement'] },
+    { name: 'Assemblée Nat. (Docs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/documents-parlementaires', orientation: 'neutre', tags: ['officiel', 'parlement'] },
+    { name: 'Assemblée Nat. (CRs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/crs', orientation: 'neutre', tags: ['officiel', 'parlement'] },
 
     // --- CULTURE / SCIENCES / SOCIÉTÉ ---
-    { name: 'France Culture', url: 'https://www.radiofrance.fr/franceculture/rss', orientation: 'centre-gauche' },
-    { name: 'Futura Sciences', url: 'https://www.futura-sciences.com/rss/actualites.xml', orientation: 'centre' },
-    { name: 'Sciences et Avenir', url: 'https://www.sciencesetavenir.fr/rss.xml', orientation: 'centre' },
-    { name: 'Konbini', url: 'https://www.konbini.com/fr/feed/', orientation: 'centre' },
-    { name: 'Numerama', url: 'https://www.numerama.com/feed/', orientation: 'centre' },
-    { name: "L'Obs", url: 'https://www.nouvelobs.com/rss.xml', orientation: 'centre-gauche' },
+    { name: 'France Culture', url: 'https://www.radiofrance.fr/franceculture/rss', orientation: 'centre-gauche', tags: ['radio', 'culture'] },
+    { name: 'Futura Sciences', url: 'https://www.futura-sciences.com/rss/actualites.xml', orientation: 'centre', tags: ['sciences'] },
+    { name: 'Sciences et Avenir', url: 'https://www.sciencesetavenir.fr/rss.xml', orientation: 'centre', tags: ['sciences'] },
+    { name: 'Konbini', url: 'https://www.konbini.com/fr/feed/', orientation: 'centre', tags: ['pop', 'culture', 'tendance'] },
+    { name: 'Numerama', url: 'https://www.numerama.com/feed/', orientation: 'centre', tags: ['tech'] },
 
     // --- ECO & CRYPTO ---
-    { name: 'Journal du coin', url: 'https://journalducoin.com/feed/', orientation: 'neutre' },
-    { name: 'Cryptoast', url: 'https://cryptoast.fr/feed/', orientation: 'neutre' },
+    { name: 'Journal du coin', url: 'https://journalducoin.com/feed/', orientation: 'neutre', tags: ['crypto'] },
+    { name: 'Cryptoast', url: 'https://cryptoast.fr/feed/', orientation: 'neutre', tags: ['crypto'] },
 
     // --- INDÉPENDANTS ---
-    { name: 'Reporterre', url: 'https://reporterre.net/spip.php?page=backend', orientation: 'gauche' },
-    { name: 'Blast', url: 'https://api.blast-info.fr/rss.xml', orientation: 'gauche' },
-    { name: 'Arrêt sur Images', url: 'https://api.arretsurimages.net/api/public/rss/all-content', orientation: 'centre-gauche' },
-    { name: 'Apar.tv', url: 'https://www.apar.tv/latest/rss/', orientation: 'centre-gauche' },
-    { name: 'Le Média en 4-4-2', url: 'https://lemediaen442.fr/feed/', orientation: 'centre-gauche' },
+    { name: 'Reporterre', url: 'https://reporterre.net/spip.php?page=backend', orientation: 'gauche', tags: ['independant', 'écologie'] },
+    { name: 'Blast', url: 'https://api.blast-info.fr/rss.xml', orientation: 'gauche', tags: ['independant'] },
+    { name: 'Arrêt sur Images', url: 'https://api.arretsurimages.net/api/public/rss/all-content', orientation: 'centre-gauche', tags: ['media'] },
+    { name: 'Apar.tv', url: 'https://www.apar.tv/latest/rss/', orientation: 'centre-gauche', tags: ['info-fiction', 'culture'] },
+    { name: 'Le Média en 4-4-2', url: 'https://lemediaen442.fr/feed/', orientation: 'centre-gauche', tags: ['independant'] },
 
     // --- PRESSE D’OPINION & IDÉOLOGIQUE ---
-    { name: "L'Humanité - Politique", url: 'https://www.humanite.fr/sections/politique/feed', orientation: 'gauche' },
-    { name: "L'Humanité - Social et Économie", url: 'https://www.humanite.fr/sections/social-et-economie/feed', orientation: 'gauche' },
-    { name: "L'Humanité - Extrême droite", url: 'https://www.humanite.fr/mot-cle/extreme-droite/feed', orientation: 'gauche' },
-    { name: 'Politis', url: 'https://www.politis.fr/flux-rss-apps/', orientation: 'gauche' },
-    { name: 'Regards', url: 'https://regards.fr/category/l-actu/feed/', orientation: 'gauche' },
-    { name: 'La Croix - Société', url: 'https://www.la-croix.com/feeds/rss/societe.xml', orientation: 'centre-droit' },
-    { name: 'La Croix - Politique', url: 'https://www.la-croix.com/feeds/rss/politique.xml', orientation: 'centre-droit' },
-    { name: 'La Croix - Culture', url: 'https://www.la-croix.com/feeds/rss/culture.xml', orientation: 'centre-droit' },
-    { name: "L'Opinion", url: 'https://www.lopinion.fr/index.rss', orientation: 'droite' },
-    { name: 'Valeurs Actuelles', url: 'https://www.valeursactuelles.com/feed?post_type=post', orientation: 'extrême-droite' },
-    { name: 'Causeur', url: 'https://www.causeur.fr/feed', orientation: 'extrême-droite' },
-    { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/news-24-7/', orientation: 'centre-droit' },
-    { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/people/', orientation: 'centre-droit' },
-    { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/crypto/', orientation: 'centre-droit' },
-    { name: 'Révolution Permanente', url: 'https://www.revolutionpermanente.fr/spip.php?page=backend_portada', orientation: 'extrême-gauche' },
-    { name: 'Cnews', url: 'https://www.cnews.fr/rss.xml', orientation: 'extrême-droite' },
-    { name: 'FranceSoir', url: 'https://www.francesoir.fr/rss.xml', orientation: 'extrême-droite' },
+    { name: "L'Humanité - Politique", url: 'https://www.humanite.fr/sections/politique/feed', orientation: 'gauche', tags: ['opinion', 'politique'] },
+    { name: "L'Humanité - Social et Économie", url: 'https://www.humanite.fr/sections/social-et-economie/feed', orientation: 'gauche', tags: ['opinion', 'économie'] },
+    { name: "L'Humanité - Extrême droite", url: 'https://www.humanite.fr/mot-cle/extreme-droite/feed', orientation: 'gauche', tags: ['opinion'] },
+    { name: 'Politis', url: 'https://www.politis.fr/flux-rss-apps/', orientation: 'gauche', tags: ['opinion'] },
+    { name: 'Regards', url: 'https://regards.fr/category/l-actu/feed/', orientation: 'gauche', tags: ['opinion'] },
+    { name: 'La Croix - Société', url: 'https://www.la-croix.com/feeds/rss/societe.xml', orientation: 'centre-droit', tags: ['national', 'catho'] },
+    { name: 'La Croix - Politique', url: 'https://www.la-croix.com/feeds/rss/politique.xml', orientation: 'centre-droit', tags: ['national', 'catho'] },
+    { name: 'La Croix - Culture', url: 'https://www.la-croix.com/feeds/rss/culture.xml', orientation: 'centre-droit', tags: ['culture', 'catho'] },
+    { name: "L'Opinion", url: 'https://www.lopinion.fr/index.rss', orientation: 'droite', tags: ['opinion'] },
+    { name: 'Valeurs Actuelles', url: 'https://www.valeursactuelles.com/feed?post_type=post', orientation: 'extrême-droite', tags: ['opinion'] },
+    { name: 'Causeur', url: 'https://www.causeur.fr/feed', orientation: 'extrême-droite', tags: ['opinion'] },
+    { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/news-24-7/', orientation: 'centre-droit', tags: ['news', 'tv'] },
+    { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/people/', orientation: 'centre-droit', tags: ['people', 'tv'] },
+    { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/crypto/', orientation: 'centre-droit', tags: ['crypto', 'tv'] },
+    { name: 'Révolution Permanente', url: 'https://www.revolutionpermanente.fr/spip.php?page=backend_portada', orientation: 'extrême-gauche', tags: ['opinion', 'gauche radicale'] },
+    { name: 'Cnews', url: 'https://www.cnews.fr/rss.xml', orientation: 'extrême-droite', tags: ['tv', 'opinion'] },
+    { name: 'FranceSoir', url: 'https://www.francesoir.fr/rss.xml', orientation: 'extrême-droite', tags: ['opinion'] },
 
-        // --- PRESSE ÉTRANGÈRE ---
-    { name: 'RTBF', url: 'https://rss.rtbf.be/article/rss/highlight_rtbf_info.xml?source=internal', orientation: 'centre-gauche' },
+    // --- PRESSE ÉTRANGÈRE ---
+    { name: 'RTBF', url: 'https://rss.rtbf.be/article/rss/highlight_rtbf_info.xml?source=internal', orientation: 'centre-gauche', tags: ['belgique', 'étranger'] },
 
     // --- OUTRE-MER ---
-    { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre' },
-    { name: "L'Info Kwezi", url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre' }
+    { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre', tags: ['outre-mer', 'local'] },
+    { name: "L'Info Kwezi", url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre', tags: ['outre-mer', 'local'] }
 ];
 
 // RÈGLES DE FILTRAGE PAR MOTS-CLÉS
@@ -113,7 +118,7 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    console.log('🚀 Démarrage du parsing RSS INFODROP (v22 - Syntax Fix)');
+    console.log('🚀 Démarrage du parsing RSS INFODROP (v23.2 - Ajout prudent colonne tags)');
 
     let articlesToInsert = [];
     let filteredCount = 0;
@@ -142,7 +147,8 @@ export default async function handler(req, res) {
                         source: feed.name,
                         url: item.link,
                         heure: pubDate.toISOString(),
-                        orientation: feed.orientation
+                        orientation: feed.orientation,
+                        tags: feed.tags || null
                     });
                 }
             }
