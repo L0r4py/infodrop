@@ -83,7 +83,19 @@ const RSS_FEEDS = [
 
     // --- OUTRE-MER ---
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre', tags: ['outre-mer', 'local'] },
-    { name: "L'Info Kwezi", url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre', tags: ['outre-mer', 'local'] }
+    { name: "L'Info Kwezi", url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre', tags: ['outre-mer', 'local'] },
+
+    // === NOUVELLES SOURCES AJOUTÉES EN JUILLET 2025 ===
+    // --- MULTIPERSPECTIVES / OPINION / GÉOPOLITIQUE / ALTERNATIF ---
+    { name: 'Réseau International', url: 'https://reseauinternational.net/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
+    { name: 'Le Saker Francophone', url: 'https://lesakerfrancophone.fr/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
+    { name: 'Geopolintel', url: 'https://geopolintel.fr/spip.php?page=backend', orientation: 'extrême-droite', tags: ['alternatif'] },
+    { name: 'Le Grand Continent', url: 'https://legrandcontinent.eu/fr/feed/', orientation: 'centre-gauche', tags: ['europe'] },
+    { name: 'La Réclame', url: 'https://lareclame.fr/feed', orientation: 'centre', tags: ['communication'] },
+    { name: 'Mind Media', url: 'https://www.mindmedia.fr/feed/', orientation: 'centre-droit', tags: ['communication'] },
+    { name: 'The Conversation France', url: 'https://theconversation.com/fr/articles.atom', orientation: 'centre', tags: ['science'] },
+    { name: 'Nexus', url: 'https://nexus.fr/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
+    { name: 'CNRS Le Journal', url: 'https://lejournal.cnrs.fr/rss', orientation: 'neutre', tags: ['science'] }
 ];
 
 // RÈGLES DE FILTRAGE PAR MOTS-CLÉS
