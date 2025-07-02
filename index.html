@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,20 +25,58 @@
         .news-card {
             transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
         }
-        .news-card:hover { transform: translateY(-2px); }
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px);}
-            to   { opacity: 1; transform: translateY(0);}
+
+        .news-card:hover {
+            transform: translateY(-2px);
         }
-        .loading-pulse { animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #111827; }
-        ::-webkit-scrollbar-thumb { background: #4b5563; }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading-pulse {
+            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111827;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+        }
     </style>
     <script> tailwind.config = { darkMode: 'class', theme: { extend: {} } } </script>
 </head>
+
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
 
     <script>
@@ -55,8 +94,10 @@
         </div>
 
         <!-- Connexion : affiché seulement si pas connecté et sessionLoaded -->
-        <div x-show="sessionLoaded && !user" x-transition class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
-            <div class="max-w-sm w-full bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-2xl p-8 border border-gray-700">
+        <div x-show="sessionLoaded && !user" x-transition
+            class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
+            <div
+                class="max-w-sm w-full bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-2xl p-8 border border-gray-700">
                 <h1 class="text-3xl font-bold text-center text-white mb-2">📰 INFODROP</h1>
                 <p class="text-gray-400 text-center mb-8">L'actualité essentielle, rien que l'essentiel.</p>
                 <form @submit.prevent="login()" class="space-y-4">
@@ -196,6 +237,78 @@
                         <div class="text-sm text-gray-400">Lecteurs connectés</div>
                     </div>
                 </div>
+
+                <!-- MODULE CONTEXTE QUOTIDIEN -->
+                <div x-show="!loadingNews" x-transition x-data="dailyContext()" x-init="initContext()"
+                    class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
+                    <button @click="showContext = !showContext" class="w-full flex items-center justify-between p-4">
+                        <h3 class="font-semibold text-gray-300">📅 Contexte du jour</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform"
+                            :class="{ 'rotate-180': showContext }" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+
+                    <div x-show="showContext" x-transition class="p-4 border-t border-gray-700">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Colonne gauche : Date et temps -->
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl">📅</span>
+                                    <div>
+                                        <p class="text-white font-medium" x-text="dateInfo.fullDate"></p>
+                                        <p class="text-gray-400 text-sm">
+                                            Jour <span x-text="dateInfo.dayOfYear"></span>/365 •
+                                            Semaine <span x-text="dateInfo.weekNumber"></span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl">⏰</span>
+                                    <div>
+                                        <p class="text-white font-medium" x-text="currentTime"></p>
+                                        <p class="text-gray-400 text-sm">
+                                            <span x-text="dateInfo.daysUntilNewYear"></span> jours avant 2026
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-2" x-show="todayFeast">
+                                    <span class="text-2xl">🎉</span>
+                                    <div>
+                                        <p class="text-white font-medium" x-text="todayFeast"></p>
+                                        <p class="text-gray-400 text-sm">Fête du jour</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Colonne droite : Météo et lune -->
+                            <div class="space-y-3">
+                                <div x-show="weather.temperature !== null" class="flex items-center gap-2">
+                                    <span class="text-2xl" x-text="weather.icon"></span>
+                                    <div>
+                                        <p class="text-white font-medium">
+                                            <span x-text="weather.temperature"></span>°C
+                                        </p>
+                                        <p class="text-gray-400 text-sm" x-text="weather.description"></p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl" x-text="moonPhase.icon"></span>
+                                    <div>
+                                        <p class="text-white font-medium" x-text="moonPhase.name"></p>
+                                        <p class="text-gray-400 text-sm" x-text="moonPhase.nextInfo"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Panneau de filtre : caché tant que loadingNews -->
                 <div x-show="!loadingNews" x-transition class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
                     <button @click="showFilters = !showFilters" class="w-full flex items-center justify-between p-4">
@@ -351,6 +464,202 @@
     </div>
 
     <script>
+        // FONCTION POUR LE MODULE DE CONTEXTE QUOTIDIEN
+        function dailyContext() {
+            return {
+                showContext: true, // Ouvert par défaut
+                currentTime: '',
+                dateInfo: {
+                    fullDate: '',
+                    dayOfYear: 0,
+                    weekNumber: 0,
+                    daysUntilNewYear: 0
+                },
+                todayFeast: '',
+                weather: {
+                    temperature: null,
+                    description: '',
+                    icon: '🌡️'
+                },
+                moonPhase: {
+                    name: '',
+                    icon: '🌙',
+                    nextInfo: ''
+                },
+
+                // Dictionnaire des fêtes (principales fêtes françaises)
+                feasts: {
+                    '01-01': 'Jour de l\'an',
+                    '01-06': 'Épiphanie',
+                    '02-02': 'Chandeleur',
+                    '02-14': 'Saint-Valentin',
+                    '03-17': 'Saint-Patrick',
+                    '04-01': 'Poisson d\'avril',
+                    '05-01': 'Fête du travail',
+                    '05-08': 'Victoire 1945',
+                    '06-21': 'Fête de la musique',
+                    '07-14': 'Fête nationale',
+                    '08-15': 'Assomption',
+                    '10-31': 'Halloween',
+                    '11-01': 'Toussaint',
+                    '11-11': 'Armistice 1918',
+                    '12-25': 'Noël',
+                    '12-31': 'Saint-Sylvestre'
+                },
+
+                async initContext() {
+                    this.updateDateTime();
+                    this.updateMoonPhase();
+                    await this.getWeather();
+
+                    // Mise à jour toutes les secondes pour l'heure
+                    setInterval(() => this.updateDateTime(), 1000);
+
+                    // Mise à jour météo toutes les 10 minutes
+                    setInterval(() => this.getWeather(), 600000);
+                },
+
+                updateDateTime() {
+                    const now = new Date();
+
+                    // Heure actuelle
+                    this.currentTime = now.toLocaleTimeString('fr-FR');
+
+                    // Date complète
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    this.dateInfo.fullDate = now.toLocaleDateString('fr-FR', options);
+                    this.dateInfo.fullDate = this.dateInfo.fullDate.charAt(0).toUpperCase() + this.dateInfo.fullDate.slice(1);
+
+                    // Jour de l'année
+                    const start = new Date(now.getFullYear(), 0, 0);
+                    const diff = now - start;
+                    this.dateInfo.dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+                    // Numéro de semaine
+                    const firstJan = new Date(now.getFullYear(), 0, 1);
+                    const days = Math.floor((now - firstJan) / (24 * 60 * 60 * 1000));
+                    this.dateInfo.weekNumber = Math.ceil((now.getDay() + 1 + days) / 7);
+
+                    // Jours jusqu'à la nouvelle année
+                    const nextYear = new Date(now.getFullYear() + 1, 0, 1);
+                    this.dateInfo.daysUntilNewYear = Math.ceil((nextYear - now) / (1000 * 60 * 60 * 24));
+
+                    // Fête du jour
+                    const monthDay = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+                    this.todayFeast = this.feasts[monthDay] || '';
+                },
+
+                updateMoonPhase() {
+                    // Calcul simplifié de la phase lunaire
+                    const now = new Date();
+                    const year = now.getFullYear();
+                    const month = now.getMonth();
+                    const day = now.getDate();
+
+                    // Nouvelle lune de référence : 6 janvier 2000
+                    const refNewMoon = new Date(2000, 0, 6);
+                    const lunarCycle = 29.53058867; // jours
+
+                    const daysSinceRef = (now - refNewMoon) / (1000 * 60 * 60 * 24);
+                    const moonAge = daysSinceRef % lunarCycle;
+
+                    if (moonAge < 1.84566) {
+                        this.moonPhase.name = 'Nouvelle lune';
+                        this.moonPhase.icon = '🌑';
+                    } else if (moonAge < 5.53699) {
+                        this.moonPhase.name = 'Premier croissant';
+                        this.moonPhase.icon = '🌒';
+                    } else if (moonAge < 9.22831) {
+                        this.moonPhase.name = 'Premier quartier';
+                        this.moonPhase.icon = '🌓';
+                    } else if (moonAge < 12.91963) {
+                        this.moonPhase.name = 'Lune gibbeuse croissante';
+                        this.moonPhase.icon = '🌔';
+                    } else if (moonAge < 16.61096) {
+                        this.moonPhase.name = 'Pleine lune';
+                        this.moonPhase.icon = '🌕';
+                    } else if (moonAge < 20.30228) {
+                        this.moonPhase.name = 'Lune gibbeuse décroissante';
+                        this.moonPhase.icon = '🌖';
+                    } else if (moonAge < 23.99361) {
+                        this.moonPhase.name = 'Dernier quartier';
+                        this.moonPhase.icon = '🌗';
+                    } else {
+                        this.moonPhase.name = 'Dernier croissant';
+                        this.moonPhase.icon = '🌘';
+                    }
+
+                    // Calcul des prochaines phases
+                    const daysUntilNew = (lunarCycle - moonAge) % lunarCycle;
+                    const daysUntilFull = (14.765 - moonAge + lunarCycle) % lunarCycle;
+
+                    if (daysUntilNew < daysUntilFull) {
+                        this.moonPhase.nextInfo = `Nouvelle lune dans ${Math.round(daysUntilNew)} jours`;
+                    } else {
+                        this.moonPhase.nextInfo = `Pleine lune dans ${Math.round(daysUntilFull)} jours`;
+                    }
+                },
+
+                async getWeather() {
+                    try {
+                        // Obtenir la position de l'utilisateur
+                        const position = await new Promise((resolve, reject) => {
+                            navigator.geolocation.getCurrentPosition(resolve, reject);
+                        });
+
+                        const { latitude, longitude } = position.coords;
+
+                        // Appel à l'API Open-Meteo (gratuite, sans clé)
+                        const response = await fetch(
+                            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&timezone=Europe/Paris`
+                        );
+
+                        const data = await response.json();
+                        const current = data.current_weather;
+
+                        this.weather.temperature = Math.round(current.temperature);
+
+                        // Interprétation du code météo
+                        const weatherCode = current.weathercode;
+                        if (weatherCode === 0) {
+                            this.weather.description = 'Ciel dégagé';
+                            this.weather.icon = '☀️';
+                        } else if (weatherCode <= 3) {
+                            this.weather.description = 'Partiellement nuageux';
+                            this.weather.icon = '⛅';
+                        } else if (weatherCode <= 48) {
+                            this.weather.description = 'Nuageux';
+                            this.weather.icon = '☁️';
+                        } else if (weatherCode <= 67) {
+                            this.weather.description = 'Pluie';
+                            this.weather.icon = '🌧️';
+                        } else if (weatherCode <= 77) {
+                            this.weather.description = 'Neige';
+                            this.weather.icon = '❄️';
+                        } else if (weatherCode <= 99) {
+                            this.weather.description = 'Orage';
+                            this.weather.icon = '⛈️';
+                        }
+
+                    } catch (error) {
+                        // Si la géolocalisation échoue, utiliser Pessac par défaut
+                        try {
+                            const response = await fetch(
+                                'https://api.open-meteo.com/v1/forecast?latitude=44.8061&longitude=-0.6306&current_weather=true&timezone=Europe/Paris'
+                            );
+                            const data = await response.json();
+                            const current = data.current_weather;
+
+                            this.weather.temperature = Math.round(current.temperature);
+                            this.weather.description = 'Météo à Pessac';
+                            this.weather.icon = '🌤️';
+                        } catch (err) {
+                            console.error('Erreur météo:', err);
+                        }
+                    }
+                }
+            };
+        }
         function infodropApp() {
             const ORIENTATION_DATA = {
                 'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000', percentage: 2 },
@@ -513,4 +822,5 @@
         }
     </script>
 </body>
+
 </html>
