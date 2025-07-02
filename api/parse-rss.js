@@ -76,7 +76,6 @@ const RSS_FEEDS = [
     { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/crypto/', orientation: 'centre-droit', tags: ['crypto'] },
     { name: 'Révolution Permanente', url: 'https://www.revolutionpermanente.fr/spip.php?page=backend_portada', orientation: 'extrême-gauche', tags: ['opinion'] },
     { name: 'Cnews', url: 'https://www.cnews.fr/rss.xml', orientation: 'extrême-droite', tags: ['opinion'] },
-    { name: 'FranceSoir', url: 'https://www.francesoir.fr/rss.xml', orientation: 'extrême-droite', tags: ['opinion'] },
 
     // --- PRESSE ÉTRANGÈRE ---
     { name: 'RTBF', url: 'https://rss.rtbf.be/article/rss/highlight_rtbf_info.xml?source=internal', orientation: 'centre-gauche', tags: ['belgique'] },
