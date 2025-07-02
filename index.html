@@ -800,7 +800,7 @@
                 allTags: [],
 
                 // Nouvelles fonctionnalités
-                readArticles: JSON.parse(localStorage.getItem('infodrop_read') || '{}'),
+                readArticles: {},
                 totalReadCount: 0,
                 diversityScore: null,
                 readOrientations: [],
@@ -852,6 +852,8 @@
                     if (session?.user) {
                         if (!this.user) {
                             this.user = session.user;
+                            const userReadData = localStorage.getItem('infodrop_read_' + this.user.id) || '{}';
+                            this.readArticles = JSON.parse(userReadData);
                             this.isAdmin = ADMIN_EMAILS.includes(session.user.email);
                             this.loadData();
                             this.startAutoUpdate();
@@ -1019,7 +1021,7 @@
 
                     if (!this.readArticles[newsId]) {
                         this.readArticles[newsId] = timestamp;
-                        localStorage.setItem('infodrop_read', JSON.stringify(this.readArticles));
+                        localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
                         this.updateTotalReadCount();
 
                         // Ajouter aux données de diversité
