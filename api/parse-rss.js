@@ -96,7 +96,6 @@ const RSS_FEEDS = [
     { name: 'Le Grand Continent', url: 'https://legrandcontinent.eu/fr/feed/', orientation: 'centre-gauche', tags: ['europe'] },
     { name: 'The Conversation France', url: 'https://theconversation.com/fr/articles.atom', orientation: 'centre', tags: ['science'] },
     { name: 'CNRS Le Journal', url: 'https://lejournal.cnrs.fr/rss', orientation: 'neutre', tags: ['science'] },
-    { name: 'La Réclame', url: 'https://lareclame.fr/feed', orientation: 'centre', tags: ['communication'] },
     { name: 'Mind Media', url: 'https://www.mindmedia.fr/feed/', orientation: 'centre-droit', tags: ['communication'] }
 ];
 
