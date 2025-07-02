@@ -526,7 +526,8 @@
                             <h4 class="font-semibold text-white">📰 INFODROP (Le Flux)</h4>
                             <p class="text-sm">L'objectif initial est simple : fournir un flux d'actualités minimaliste,
                                 rapide et sans fioritures. Il agrège en temps réel les dernières informations des
-                                sources francophones les plus pertinentes pour un aperçu immédiat de ce qui se passe.</p>
+                                sources francophones les plus pertinentes pour un aperçu immédiat de ce qui se passe.
+                            </p>
                         </div>
                         <div>
                             <h4 class="font-semibold text-blue-400">🌍 INFODROP 360° (L'Analyse)</h4>
@@ -958,35 +959,34 @@
                     this.loadingNews = false;
                 },
 
-                // Smart refresh
+                // Smart refresh - NOUVELLE VERSION AMÉLIORÉE
                 async loadNews() {
                     try {
                         const twentyFourHoursAgo = new Date();
                         twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
 
-                        const currentFirstId = this.newsList[0]?.id;
-                        const currentCount = this.newsList.length;
-
-                        const { data, error } = await supabase
+                        const { data: newData, error } = await supabase
                             .from('actu')
                             .select('*')
                             .gte('heure', twentyFourHoursAgo.toISOString())
                             .order('heure', { ascending: false });
 
                         if (error) throw error;
+                        if (!newData || newData.length === 0) {
+                            console.log('✓ Pas de nouveau contenu depuis le serveur.');
+                            return;
+                        }
+ 
+                        const existingIds = new Set(this.newsList.map(news => news.id));
 
-                        const newData = data || [];
+                        const newArticles = newData.filter(news => !existingIds.has(news.id));
 
-                        // Smart refresh
-                        const hasNewContent = newData.length !== currentCount ||
-                            (newData[0]?.id !== currentFirstId);
-
-                        if (hasNewContent) {
-                            this.newsList = newData;
+                        if (newArticles.length > 0) {
+                            console.log(`📰 ${newArticles.length} nouvelle(s) actualité(s) ajoutée(s).`);
+                            this.newsList = [...newArticles, ...this.newsList];
                             this.updateTagsList();
-                            console.log(`📰 ${newData.length - currentCount} nouvelles actualités`);
                         } else {
-                            console.log('✓ Pas de nouveau contenu');
+                            console.log('✓ Pas de nouveau contenu à ajouter.');
                         }
 
                         this.updateTotalReadCount();
