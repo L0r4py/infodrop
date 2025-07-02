@@ -949,14 +949,20 @@
                     }
                 },
 
-                // Chargement des données
-                async loadData() {
-                    this.loadingNews = true;
+                // Chargement des données - NOUVELLE VERSION
+                async loadData(isInitialLoad = false) {
+                    if (isInitialLoad) {
+                        this.loadingNews = true;
+                    }
+
                     await Promise.all([
                         this.loadNews(),
                         this.isAdmin ? this.loadStats() : Promise.resolve()
                     ]);
-                    this.loadingNews = false;
+
+                    if (isInitialLoad) {
+                        this.loadingNews = false;
+                    }
                 },
 
                 // Smart refresh - NOUVELLE VERSION AMÉLIORÉE
@@ -976,7 +982,7 @@
                             console.log('✓ Pas de nouveau contenu depuis le serveur.');
                             return;
                         }
- 
+
                         const existingIds = new Set(this.newsList.map(news => news.id));
 
                         const newArticles = newData.filter(news => !existingIds.has(news.id));
