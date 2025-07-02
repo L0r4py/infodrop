@@ -93,31 +93,6 @@
             animation-play-state: paused;
         }
         
-        /* Effet de pulsation lors du clic long */
-        @keyframes longPressIndicator {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.5);
-                opacity: 0;
-            }
-        }
-        
-        .long-press-active::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            border: 2px solid rgba(99, 102, 241, 0.5);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            animation: longPressIndicator 0.5s ease-out;
-        }
-        
         /* Animation confettis */
         .confetti {
             position: fixed;
@@ -187,9 +162,9 @@
         <div x-show="sessionLoaded && user" x-transition.opacity class="min-h-screen flex flex-col">
 
             <!-- ========== HEADER UNIFIÉ AVEC BANDEAU ========== -->
-            <div class="sticky top-0 z-50 transition-shadow duration-300" id="stickyHeader">
+            <div class="sticky top-0 z-40 transition-shadow duration-300" id="stickyHeader">
                 <!-- HEADER PRINCIPAL -->
-                <header class="bg-gray-900/80 backdrop-blur-sm border-b border-gray-800">
+                <header class="bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
                     <div class="max-w-4xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
                         <!-- LOGO -->
                         <div class="justify-self-start">
@@ -217,7 +192,7 @@
                             </button>
                             <!-- DROPDOWN MENU -->
                             <div x-show="showMenu" @click.away="showMenu = false" x-transition
-                                class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-[60]"
+                                class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-[100]"
                                 style="display: none;">
                                 <!-- ANALYSES 360° -->
                                 <div class="px-4 py-2 border-b border-gray-700">
@@ -251,7 +226,7 @@
 
                 <!-- BANDEAU CONTEXTUEL DÉFILANT -->
                 <div x-data="contextTicker()" x-init="initTicker()"
-                    class="bg-gray-800/90 border-b border-gray-700 overflow-hidden h-8 flex items-center relative">
+                    class="bg-gray-800/95 border-b border-gray-700 overflow-hidden h-8 flex items-center relative">
                     <div class="ticker-content flex items-center gap-8 animate-scroll whitespace-nowrap px-4">
                         <!-- Contenu dupliqué pour défilement continu -->
                         <template x-for="i in [1, 2]" :key="i">
@@ -289,12 +264,12 @@
                     </div>
                 </div>
                 
-                <!-- COMPTEUR D'ACTUS LUES -->
-                <div x-show="dailyReadCount > 0" x-transition
-                     class="bg-green-900/20 border-t border-green-800/30 px-4 py-2 text-center">
-                    <p class="text-sm text-green-400">
-                        📚 <span class="font-semibold text-white" x-text="dailyReadCount"></span> 
-                        <span x-text="dailyReadCount === 1 ? 'article lu' : 'articles lus'"></span> aujourd'hui
+                <!-- COMPTEUR D'ARTICLES LUS -->
+                <div x-show="totalReadCount > 0" x-transition
+                     class="bg-gray-800/95 border-b border-gray-700 px-4 py-2 text-center">
+                    <p class="text-sm text-gray-400">
+                        📚 <span class="font-semibold text-white" x-text="totalReadCount"></span> 
+                        <span x-text="totalReadCount === 1 ? 'article lu' : 'articles lus'"></span>
                     </p>
                 </div>
             </div>
@@ -375,7 +350,7 @@
                     <div x-show="showDiversityChecker" x-transition class="p-4 border-t border-gray-700">
                         <div class="flex items-center justify-between mb-4">
                             <div>
-                                <p class="text-xs text-gray-500">Basé sur vos lectures du jour</p>
+                                <p class="text-xs text-gray-500">Basé sur vos dernières lectures</p>
                             </div>
                             <div class="text-right">
                                 <div class="text-2xl font-bold" 
@@ -463,57 +438,6 @@
                                     </template>
                                 </div>
                             </a>
-                            
-                            <!-- REACTION BUTTON -->
-                            <div class="relative reaction-button" x-data="reactionMenu(news.id)" @click.stop>
-                                <button @mousedown="startLongPress" 
-                                        @mouseup="endLongPress" 
-                                        @mouseleave="endLongPress"
-                                        @touchstart.prevent="startLongPress" 
-                                        @touchend.prevent="endLongPress"
-                                        @contextmenu.prevent="showMenu"
-                                        class="relative p-2 rounded-full hover:bg-gray-700 transition-all group"
-                                        :class="{ 
-                                            'bg-gray-700': hasAnyReaction(news.id),
-                                            'long-press-active': pressTimer !== null 
-                                        }">
-                                    <span x-show="!hasAnyReaction(news.id)" class="text-gray-500 text-sm">💬</span>
-                                    <span x-show="hasAnyReaction(news.id)" x-text="getMainReaction(news.id)" class="text-sm"></span>
-                                </button>
-                                
-                                <!-- Menu des reactions -->
-                                <div x-show="isOpen" 
-                                     x-transition:enter="transition ease-out duration-100"
-                                     x-transition:enter-start="transform opacity-0 scale-95"
-                                     x-transition:enter-end="transform opacity-100 scale-100"
-                                     x-transition:leave="transition ease-in duration-75"
-                                     x-transition:leave-start="transform opacity-100 scale-100"
-                                     x-transition:leave-end="transform opacity-0 scale-95"
-                                     @click.away="isOpen = false"
-                                     class="absolute bottom-full right-0 mb-2 bg-gray-800 rounded-lg shadow-xl border border-gray-700 p-2 flex gap-1 z-20 min-w-max"
-                                     style="display: none;">
-                                    <div class="absolute -bottom-1 right-3 w-2 h-2 bg-gray-800 border-r border-b border-gray-700 transform rotate-45"></div>
-                                    
-                                    <template x-for="reaction in ['👍', '❤️', '😮', '💭']" :key="reaction">
-                                        <button @click="selectReaction(reaction)"
-                                                :class="{ 
-                                                    'bg-indigo-600 scale-110': $parent.hasReaction(news.id, reaction),
-                                                    'hover:bg-gray-700': !$parent.hasReaction(news.id, reaction)
-                                                }"
-                                                class="p-2 rounded-lg transition-all text-lg relative group">
-                                            <span x-text="reaction"></span>
-                                        </button>
-                                    </template>
-                                    
-                                    <div class="border-l border-gray-700 ml-1 pl-1">
-                                        <button @click="selectReaction('❌')"
-                                                x-show="hasAnyReaction(news.id)"
-                                                class="p-2 rounded-lg hover:bg-red-900/50 transition-all text-sm text-gray-400 hover:text-red-400">
-                                            ✕
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
                             
                             <!-- BOUTONS ADMIN -->
                             <button x-show="isAdmin" @click.prevent="openEditPanel(news)"
@@ -632,7 +556,7 @@
             x-transition
             @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
             x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
-            class="fixed bottom-6 right-6 z-40 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110"
+            class="fixed bottom-6 right-6 z-40 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110 border border-gray-700"
             style="display: none;">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
@@ -641,42 +565,6 @@
 
     <!-- ========== JAVASCRIPT ========== -->
     <script>
-        // ========== FONCTION MENU REACTIONS ==========
-        function reactionMenu(newsId) {
-            return {
-                isOpen: false,
-                pressTimer: null,
-                newsId: newsId,
-                
-                startLongPress(e) {
-                    e.preventDefault();
-                    this.pressTimer = setTimeout(() => {
-                        this.showMenu();
-                        if (navigator.vibrate) {
-                            navigator.vibrate(50);
-                        }
-                    }, 500);
-                },
-                
-                endLongPress() {
-                    if (this.pressTimer) {
-                        clearTimeout(this.pressTimer);
-                        this.pressTimer = null;
-                    }
-                },
-                
-                showMenu() {
-                    this.isOpen = true;
-                    this.endLongPress();
-                },
-                
-                selectReaction(reaction) {
-                    this.$parent.toggleReaction(this.newsId, reaction);
-                    this.isOpen = false;
-                }
-            };
-        }
-
         // ========== FONCTION BANDEAU CONTEXTUEL ==========
         function contextTicker() {
             return {
@@ -911,12 +799,12 @@
                 allTags: [],
                 
                 // Nouvelles fonctionnalités
-                reactions: JSON.parse(localStorage.getItem('infodrop_reactions') || '{}'),
                 readArticles: JSON.parse(localStorage.getItem('infodrop_read') || '{}'),
-                dailyReadCount: 0,
+                totalReadCount: 0,
                 diversityScore: null,
                 readOrientations: [],
                 showDiversityChecker: true,
+                diversityData: JSON.parse(localStorage.getItem('infodrop_diversity') || '{}'),
 
                 // Getters
                 get filteredNews() {
@@ -937,6 +825,9 @@
 
                 // Initialisation
                 async init() {
+                    // Nettoyer les données de diversité si plus de 24h
+                    this.cleanOldDiversityData();
+                    
                     // Effet d'ombre sur scroll
                     window.addEventListener('scroll', () => {
                         const header = document.getElementById('stickyHeader');
@@ -964,7 +855,7 @@
                             this.loadData(); 
                             this.startAutoUpdate(); 
                             this.setupRealtime(session);
-                            this.updateDailyReadCount();
+                            this.updateTotalReadCount();
                             this.calculateDiversityScore();
                         }
                     } else {
@@ -1095,7 +986,7 @@
                             console.log('✓ Pas de nouveau contenu');
                         }
                         
-                        this.updateDailyReadCount();
+                        this.updateTotalReadCount();
                         
                     } catch (error) { 
                         console.error('Erreur chargement actus:', error); 
@@ -1121,59 +1012,89 @@
                     }
                 },
 
-                // Gestion des reactions
-                toggleReaction(newsId, reaction) {
-                    if (reaction === '❌') {
-                        delete this.reactions[newsId];
-                    } else {
-                        if (!this.reactions[newsId]) this.reactions[newsId] = {};
-                        
-                        if (this.reactions[newsId][reaction]) {
-                            delete this.reactions[newsId];
-                        } else {
-                            this.reactions[newsId] = { [reaction]: true };
-                        }
-                    }
-                    
-                    localStorage.setItem('infodrop_reactions', JSON.stringify(this.reactions));
-                },
-                
-                hasReaction(newsId, reaction) {
-                    return this.reactions[newsId] && this.reactions[newsId][reaction] === true;
-                },
-                
-                hasAnyReaction(newsId) {
-                    return this.reactions[newsId] && Object.keys(this.reactions[newsId]).length > 0;
-                },
-                
-                getMainReaction(newsId) {
-                    if (!this.reactions[newsId]) return '💬';
-                    const reactions = Object.keys(this.reactions[newsId]);
-                    return reactions.length > 0 ? reactions[0] : '💬';
-                },
-
                 // Gestion des lectures
                 markAsRead(newsId) {
-                    const today = new Date().toDateString();
-                    if (!this.readArticles[today]) this.readArticles[today] = [];
+                    const timestamp = new Date().toISOString();
                     
-                    if (!this.readArticles[today].includes(newsId)) {
-                        this.readArticles[today].push(newsId);
+                    if (!this.readArticles[newsId]) {
+                        this.readArticles[newsId] = timestamp;
                         localStorage.setItem('infodrop_read', JSON.stringify(this.readArticles));
-                        this.updateDailyReadCount();
-                        this.calculateDiversityScore();
+                        this.updateTotalReadCount();
+                        
+                        // Ajouter aux données de diversité
+                        const article = this.newsList.find(n => n.id === newsId);
+                        if (article) {
+                            this.addToDiversityData(article);
+                        }
                         
                         // 100e article !
-                        const totalRead = Object.values(this.readArticles).flat().length;
-                        if (totalRead === 100) {
+                        if (this.totalReadCount === 100) {
                             this.celebrate100Articles();
                         }
                     }
                 },
                 
-                updateDailyReadCount() {
-                    const today = new Date().toDateString();
-                    this.dailyReadCount = this.readArticles[today]?.length || 0;
+                updateTotalReadCount() {
+                    this.totalReadCount = Object.keys(this.readArticles).length;
+                },
+                
+                // Gestion de la diversité
+                cleanOldDiversityData() {
+                    const now = new Date().getTime();
+                    const twentyFourHours = 24 * 60 * 60 * 1000;
+                    
+                    // Nettoyer les lectures de plus de 24h
+                    Object.keys(this.diversityData).forEach(timestamp => {
+                        if (now - new Date(timestamp).getTime() > twentyFourHours) {
+                            delete this.diversityData[timestamp];
+                        }
+                    });
+                    
+                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
+                },
+                
+                addToDiversityData(article) {
+                    const timestamp = new Date().toISOString();
+                    this.diversityData[timestamp] = {
+                        orientation: article.orientation,
+                        source: article.source
+                    };
+                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
+                    this.calculateDiversityScore();
+                },
+                
+                calculateDiversityScore() {
+                    this.cleanOldDiversityData();
+                    
+                    const recentReads = Object.values(this.diversityData);
+                    
+                    if (recentReads.length === 0) {
+                        this.diversityScore = null;
+                        this.readOrientations = [];
+                        return;
+                    }
+                    
+                    const orientations = new Set();
+                    const sources = new Set();
+                    
+                    recentReads.forEach(read => {
+                        if (read.orientation) orientations.add(read.orientation);
+                        if (read.source) sources.add(read.source);
+                    });
+                    
+                    this.readOrientations = Array.from(orientations);
+                    
+                    const maxOrientations = 8;
+                    const orientationScore = (orientations.size / maxOrientations) * 50;
+                    const sourceScore = Math.min((sources.size / 5) * 50, 50);
+                    
+                    this.diversityScore = Math.round(orientationScore + sourceScore);
+                },
+                
+                getDiversityMessage() {
+                    if (this.diversityScore < 30) return "Bulle de filtre détectée";
+                    if (this.diversityScore < 70) return "Diversité correcte";
+                    return "Excellente diversité !";
                 },
                 
                 // Confettis
@@ -1217,43 +1138,6 @@
                         message.classList.add('opacity-0', 'transition-opacity', 'duration-500');
                         setTimeout(() => message.remove(), 500);
                     }, 5000);
-                },
-
-                // Diversity checker
-                calculateDiversityScore() {
-                    const today = new Date().toDateString();
-                    const todayReads = this.readArticles[today] || [];
-                    
-                    if (todayReads.length === 0) {
-                        this.diversityScore = null;
-                        this.readOrientations = [];
-                        return;
-                    }
-                    
-                    const orientations = new Set();
-                    const sources = new Set();
-                    
-                    todayReads.forEach(articleId => {
-                        const article = this.newsList.find(n => n.id === articleId);
-                        if (article) {
-                            if (article.orientation) orientations.add(article.orientation);
-                            if (article.source) sources.add(article.source);
-                        }
-                    });
-                    
-                    this.readOrientations = Array.from(orientations);
-                    
-                    const maxOrientations = 8;
-                    const orientationScore = (orientations.size / maxOrientations) * 50;
-                    const sourceScore = Math.min((sources.size / 5) * 50, 50);
-                    
-                    this.diversityScore = Math.round(orientationScore + sourceScore);
-                },
-                
-                getDiversityMessage() {
-                    if (this.diversityScore < 30) return "Bulle de filtre détectée";
-                    if (this.diversityScore < 70) return "Diversité correcte";
-                    return "Excellente diversité !";
                 },
 
                 // Auth
