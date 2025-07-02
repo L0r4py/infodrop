@@ -1,5 +1,5 @@
 // Fichier : /api/parse-rss.js
-// Version 23.2 - Ajout colonne tags (prudent, non destructif)
+// Version 23.3 - Ajout decodeHtmlEntities pour titres Konbini mal encodés + nouvelles sources
 
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
@@ -98,6 +98,22 @@ const RSS_FEEDS = [
     { name: 'CNRS Le Journal', url: 'https://lejournal.cnrs.fr/rss', orientation: 'neutre', tags: ['science'] }
 ];
 
+// --- DÉCODEUR D'ENTITÉS HTML POUR LES SOURCES MAL ENCODÉES ---
+function decodeHtmlEntities(str) {
+    if (!str) return '';
+    return str.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&amp;/g, '&')
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&eacute;/g, 'é')
+              .replace(/&egrave;/g, 'è')
+              .replace(/&ecirc;/g, 'ê')
+              .replace(/&rsquo;/g, '’')
+              .replace(/&hellip;/g, '…');
+}
+
 // RÈGLES DE FILTRAGE PAR MOTS-CLÉS
 const FILTER_RULES = {
     'Le Parisien': ['météo', 'horoscope']
@@ -110,6 +126,9 @@ const GLOBAL_FILTER_KEYWORDS = [
 
 function createSummary(text) {
     if (!text) return '';
+    // Ajout : décode les entités HTML pour tous les titres (optionnel, sinon juste Konbini dans la boucle)
+    text = decodeHtmlEntities(text);
+
     const replacements = { '’': "'", '–': '-', '…': '...', '"': '"', '&': '&', '<': '<', '>': '>' };
     let cleanText = text.replace(/(&#?[a-z0-9]+;)/gi, (match) => replacements[match] || '');
     cleanText = cleanText.replace(/<[^>]*>/g, ' ').replace(/\s\s+/g, ' ').trim();
@@ -132,7 +151,7 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    console.log('🚀 Démarrage du parsing RSS INFODROP (v23.2 - Ajout prudent colonne tags)');
+    console.log('🚀 Démarrage du parsing RSS INFODROP (v23.3 - Ajout decodeHtmlEntities titres Konbini)');
 
     let articlesToInsert = [];
     let filteredCount = 0;
@@ -156,8 +175,13 @@ export default async function handler(req, res) {
                 const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
                 if (pubDate >= twentyFourHoursAgo && item.link) {
+                    // Correction affichage pour Konbini uniquement (titre mal encodé)
+                    let titleToUse = item.title;
+                    if (feed.name === 'Konbini') {
+                        titleToUse = decodeHtmlEntities(item.title);
+                    }
                     articlesToInsert.push({
-                        resume: createSummary(item.title || item.contentSnippet),
+                        resume: createSummary(titleToUse || item.contentSnippet),
                         source: feed.name,
                         url: item.link,
                         heure: pubDate.toISOString(),
