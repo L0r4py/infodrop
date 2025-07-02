@@ -21,7 +21,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    
+    <!-- ========== STYLES ========== -->
     <style>
+        /* Animations et transitions principales */
         .news-card {
             transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
         }
@@ -39,7 +42,6 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -51,17 +53,15 @@
         }
 
         @keyframes pulse {
-
-            0%,
-            100% {
+            0%, 100% {
                 opacity: 1;
             }
-
             50% {
                 opacity: .5;
             }
         }
 
+        /* Scrollbar personnalisée */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -73,12 +73,76 @@
         ::-webkit-scrollbar-thumb {
             background: #4b5563;
         }
+        
+        /* Animation du bandeau défilant */
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        
+        .animate-scroll {
+            animation: scroll 30s linear infinite;
+        }
+        
+        /* Pause au survol */
+        .ticker-content:hover {
+            animation-play-state: paused;
+        }
+        
+        /* Effet de pulsation lors du clic long */
+        @keyframes longPressIndicator {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        .long-press-active::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(99, 102, 241, 0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: longPressIndicator 0.5s ease-out;
+        }
+        
+        /* Animation confettis */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            animation: confetti-fall 3s linear forwards;
+        }
+        
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
     </style>
-    <script> tailwind.config = { darkMode: 'class', theme: { extend: {} } } </script>
+    
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: {} } }
+    </script>
 </head>
 
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
 
+    <!-- ========== CONFIGURATION SUPABASE ========== -->
     <script>
         const SUPABASE_URL = 'https://gxpezjcjynbkvtvtzyfo.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4cGV6amNqeW5ia3Z0dnR6eWZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwMzA1MTgsImV4cCI6MjA2NjYwNjUxOH0.D90LXh1aGB2OibrpNXPhKZg8oG-mf510v7vKxoJmAog';
@@ -87,17 +151,18 @@
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </script>
 
+    <!-- ========== APPLICATION PRINCIPALE ========== -->
     <div x-data="infodropApp()" x-init="init()" class="w-full">
-        <!-- LOADER : affiché tant que la session n'est pas vérifiée -->
+        
+        <!-- ========== LOADER ========== -->
         <div x-show="!sessionLoaded" class="min-h-screen flex items-center justify-center bg-gray-900">
             <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
 
-        <!-- Connexion : affiché seulement si pas connecté et sessionLoaded -->
+        <!-- ========== PAGE DE CONNEXION ========== -->
         <div x-show="sessionLoaded && !user" x-transition
             class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
-            <div
-                class="max-w-sm w-full bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-2xl p-8 border border-gray-700">
+            <div class="max-w-sm w-full bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-2xl p-8 border border-gray-700">
                 <h1 class="text-3xl font-bold text-center text-white mb-2">📰 INFODROP</h1>
                 <p class="text-gray-400 text-center mb-8">L'actualité essentielle, rien que l'essentiel.</p>
                 <form @submit.prevent="login()" class="space-y-4">
@@ -118,15 +183,15 @@
             </div>
         </div>
 
-        <!-- Application principale : affiché uniquement si connecté et sessionLoaded -->
+        <!-- ========== APPLICATION (USER CONNECTÉ) ========== -->
         <div x-show="sessionLoaded && user" x-transition.opacity class="min-h-screen flex flex-col">
 
-            <!-- <!-- HEADER UNIFIÉ AVEC BANDEAU ET EFFET D'OMBRE -->
+            <!-- ========== HEADER UNIFIÉ AVEC BANDEAU ========== -->
             <div class="sticky top-0 z-50 transition-shadow duration-300" id="stickyHeader">
                 <!-- HEADER PRINCIPAL -->
                 <header class="bg-gray-900/80 backdrop-blur-sm border-b border-gray-800">
                     <div class="max-w-4xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
-                        <!-- LOGO CLIQUABLE -->
+                        <!-- LOGO -->
                         <div class="justify-self-start">
                             <a href="/index.html"
                                 class="flex items-center gap-2 text-xl font-bold text-white hover:text-blue-400 transition"
@@ -139,6 +204,8 @@
                         </div>
 
                         <div class="justify-self-center"></div>
+                        
+                        <!-- MENU HAMBURGER -->
                         <div class="justify-self-end relative" x-data="{ showMenu: false }">
                             <button @click="showMenu = !showMenu" class="p-2 rounded-full hover:bg-gray-700 transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
@@ -148,21 +215,20 @@
                                         clip-rule="evenodd" />
                                 </svg>
                             </button>
-                            <!-- MENU HAMBURGER -->
+                            <!-- DROPDOWN MENU -->
                             <div x-show="showMenu" @click.away="showMenu = false" x-transition
-                                class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50"
+                                class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-[60]"
                                 style="display: none;">
-                                <!-- SECTION DÉDIÉE Analyses 360° -->
+                                <!-- ANALYSES 360° -->
                                 <div class="px-4 py-2 border-b border-gray-700">
                                     <a href="/infodrop360.html"
                                         class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">🌐
                                         Analyses 360°</a>
                                 </div>
-                                <!-- Menu général -->
+                                <!-- MENU ITEMS -->
                                 <a @click="showAboutPanel = true; showMenu = false" href="#"
                                     class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">ℹ️
-                                    À
-                                    propos</a>
+                                    À propos</a>
                                 <a :href="STRIPE_LINK" target="_blank"
                                     class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-700">❤️
                                     Soutenir</a>
@@ -187,72 +253,53 @@
                 <div x-data="contextTicker()" x-init="initTicker()"
                     class="bg-gray-800/90 border-b border-gray-700 overflow-hidden h-8 flex items-center relative">
                     <div class="ticker-content flex items-center gap-8 animate-scroll whitespace-nowrap px-4">
-                        <!-- Contenu dupliqué pour un défilement continu -->
+                        <!-- Contenu dupliqué pour défilement continu -->
                         <template x-for="i in [1, 2]" :key="i">
                             <div class="flex items-center gap-8 text-sm text-gray-300">
                                 <span class="flex items-center gap-1">
                                     <span class="text-yellow-400">📅</span>
                                     <span x-text="dateInfo.fullDate"></span>
                                 </span>
-
                                 <span class="flex items-center gap-1">
                                     <span class="text-blue-400">📊</span>
                                     Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365
                                 </span>
-
                                 <span x-show="todayFeast" class="flex items-center gap-1">
                                     <span class="text-red-400">🎉</span>
                                     <span class="font-semibold text-white" x-text="todayFeast"></span>
                                 </span>
-
                                 <span x-show="weather.temperature !== null" class="flex items-center gap-1">
                                     <span x-text="weather.icon"></span>
                                     <span class="font-semibold text-white"><span
                                             x-text="weather.temperature"></span>°C</span>
                                     <span class="text-gray-400" x-text="weather.description"></span>
                                 </span>
-
                                 <span class="flex items-center gap-1">
                                     <span x-text="moonPhase.icon"></span>
                                     <span x-text="moonPhase.name"></span>
                                 </span>
-
                                 <span class="flex items-center gap-1">
                                     <span class="text-green-400">⏳</span>
                                     <span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span>
                                     jours avant 2026
                                 </span>
-
-                                <!-- Séparateur visuel -->
                                 <span class="text-gray-600">•</span>
                             </div>
                         </template>
                     </div>
                 </div>
+                
+                <!-- COMPTEUR D'ACTUS LUES -->
+                <div x-show="dailyReadCount > 0" x-transition
+                     class="bg-green-900/20 border-t border-green-800/30 px-4 py-2 text-center">
+                    <p class="text-sm text-green-400">
+                        📚 <span class="font-semibold text-white" x-text="dailyReadCount"></span> 
+                        <span x-text="dailyReadCount === 1 ? 'article lu' : 'articles lus'"></span> aujourd'hui
+                    </p>
+                </div>
             </div>
 
-            <style>
-                @keyframes scroll {
-                    0% {
-                        transform: translateX(0);
-                    }
-
-                    100% {
-                        transform: translateX(-50%);
-                    }
-                }
-
-                .animate-scroll {
-                    animation: scroll 30s linear infinite;
-                }
-
-                /* Pause au survol */
-                .ticker-content:hover {
-                    animation-play-state: paused;
-                }
-            </style>
-
-            <!-- PANEL ADMIN AJOUT ACTU -->
+            <!-- ========== PANEL ADMIN ========== -->
             <div x-show="showAdminPanel && isAdmin" x-transition class="bg-gray-950/50 border-b border-gray-800">
                 <div class="max-w-4xl mx-auto p-4">
                     <h2 class="text-lg font-bold text-white mb-3">🧨 Ajouter une actualité</h2>
@@ -292,8 +339,10 @@
                 </div>
             </div>
 
-            <!-- PANNEAU FILTRES & NEWS -->
-            <main class="max-w-4xl mx-auto px-4 py-6 flex-grow">
+            <!-- ========== CONTENU PRINCIPAL ========== -->
+            <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full">
+                
+                <!-- STATS ADMIN -->
                 <div x-show="isAdmin" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6 text-center">
                     <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
                         <div class="text-2xl font-bold text-white" x-text="stats.total_articles">0</div>
@@ -309,7 +358,64 @@
                         <div class="text-sm text-gray-400">Lecteurs connectés</div>
                     </div>
                 </div>
-                <!-- Panneau de filtre : caché tant que loadingNews -->
+                
+                <!-- DIVERSITY CHECKER -->
+                <div x-show="!loadingNews && diversityScore !== null" x-transition 
+                     class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
+                    <button @click="showDiversityChecker = !showDiversityChecker" 
+                            class="w-full flex items-center justify-between p-4">
+                        <h3 class="font-semibold text-gray-300">Score de diversité</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform"
+                            :class="{ 'rotate-180': showDiversityChecker }" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div x-show="showDiversityChecker" x-transition class="p-4 border-t border-gray-700">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <p class="text-xs text-gray-500">Basé sur vos lectures du jour</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold" 
+                                     :class="{
+                                         'text-red-400': diversityScore < 30,
+                                         'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
+                                         'text-green-400': diversityScore >= 70
+                                     }"
+                                     x-text="diversityScore + '%'"></div>
+                                <p class="text-xs" 
+                                   :class="{
+                                       'text-red-400': diversityScore < 30,
+                                       'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
+                                       'text-green-400': diversityScore >= 70
+                                   }"
+                                   x-text="getDiversityMessage()"></p>
+                            </div>
+                        </div>
+                        <!-- Barre de progression -->
+                        <div class="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-1000"
+                                 :class="{
+                                     'bg-red-400': diversityScore < 30,
+                                     'bg-yellow-400': diversityScore >= 30 && diversityScore < 70,
+                                     'bg-green-400': diversityScore >= 70
+                                 }"
+                                 :style="`width: ${diversityScore}%`"></div>
+                        </div>
+                        <!-- Orientations lues -->
+                        <div class="mt-3 flex flex-wrap gap-2" x-show="readOrientations.length > 0">
+                            <template x-for="orientation in readOrientations" :key="orientation">
+                                <span class="text-xs px-2 py-1 rounded-full"
+                                      :class="getOrientationClass(orientation)"
+                                      x-text="orientation"></span>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FILTRES -->
                 <div x-show="!loadingNews" x-transition class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
                     <button @click="showFilters = !showFilters" class="w-full flex items-center justify-between p-4">
                         <h3 class="font-semibold text-gray-300">Filtrer</h3>
@@ -335,11 +441,11 @@
                     </div>
                 </div>
 
+                <!-- LISTE DES NEWS -->
                 <div class="space-y-3">
                     <template x-for="news in filteredNews" :key="news.id">
-                        <div
-                            class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
-                            <a :href="news.url" target="_blank" class="flex-grow">
+                        <div class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
+                            <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="flex-grow">
                                 <p class="text-base text-white mb-2" x-text="news.resume"></p>
                                 <div class="flex items-center flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400">
                                     <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
@@ -357,6 +463,59 @@
                                     </template>
                                 </div>
                             </a>
+                            
+                            <!-- REACTION BUTTON -->
+                            <div class="relative reaction-button" x-data="reactionMenu(news.id)" @click.stop>
+                                <button @mousedown="startLongPress" 
+                                        @mouseup="endLongPress" 
+                                        @mouseleave="endLongPress"
+                                        @touchstart.prevent="startLongPress" 
+                                        @touchend.prevent="endLongPress"
+                                        @contextmenu.prevent="showMenu"
+                                        class="relative p-2 rounded-full hover:bg-gray-700 transition-all group"
+                                        :class="{ 
+                                            'bg-gray-700': hasAnyReaction(news.id),
+                                            'long-press-active': pressTimer !== null 
+                                        }">
+                                    <span x-show="!hasAnyReaction(news.id)" class="text-gray-500 text-sm">💬</span>
+                                    <span x-show="hasAnyReaction(news.id)" x-text="getMainReaction(news.id)" class="text-sm"></span>
+                                </button>
+                                
+                                <!-- Menu des reactions -->
+                                <div x-show="isOpen" 
+                                     x-transition:enter="transition ease-out duration-100"
+                                     x-transition:enter-start="transform opacity-0 scale-95"
+                                     x-transition:enter-end="transform opacity-100 scale-100"
+                                     x-transition:leave="transition ease-in duration-75"
+                                     x-transition:leave-start="transform opacity-100 scale-100"
+                                     x-transition:leave-end="transform opacity-0 scale-95"
+                                     @click.away="isOpen = false"
+                                     class="absolute bottom-full right-0 mb-2 bg-gray-800 rounded-lg shadow-xl border border-gray-700 p-2 flex gap-1 z-20 min-w-max"
+                                     style="display: none;">
+                                    <div class="absolute -bottom-1 right-3 w-2 h-2 bg-gray-800 border-r border-b border-gray-700 transform rotate-45"></div>
+                                    
+                                    <template x-for="reaction in ['👍', '❤️', '😮', '💭']" :key="reaction">
+                                        <button @click="selectReaction(reaction)"
+                                                :class="{ 
+                                                    'bg-indigo-600 scale-110': $parent.hasReaction(news.id, reaction),
+                                                    'hover:bg-gray-700': !$parent.hasReaction(news.id, reaction)
+                                                }"
+                                                class="p-2 rounded-lg transition-all text-lg relative group">
+                                            <span x-text="reaction"></span>
+                                        </button>
+                                    </template>
+                                    
+                                    <div class="border-l border-gray-700 ml-1 pl-1">
+                                        <button @click="selectReaction('❌')"
+                                                x-show="hasAnyReaction(news.id)"
+                                                class="p-2 rounded-lg hover:bg-red-900/50 transition-all text-sm text-gray-400 hover:text-red-400">
+                                            ✕
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- BOUTONS ADMIN -->
                             <button x-show="isAdmin" @click.prevent="openEditPanel(news)"
                                 class="flex-shrink-0 p-2 rounded-full hover:bg-blue-900/50 transition"
                                 title="Éditer">✏️</button>
@@ -365,20 +524,22 @@
                                 title="Supprimer">🗑️</button>
                         </div>
                     </template>
+                    
+                    <!-- MESSAGES D'ÉTAT -->
                     <div x-show="filteredNews.length === 0 && !loadingNews" class="text-center py-12">
                         <p class="text-gray-500"
                             x-text="activeFilter === 'all' ? 'Aucune actualité pour le moment.' : `Aucune actualité pour le filtre '${activeFilter}'.`">
                         </p>
                     </div>
                     <div x-show="loadingNews && filteredNews.length === 0" class="text-center py-12">
-                        <div
-                            class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin">
-                        </div>
+                        <div class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 </div>
             </main>
 
-            <!-- MODALS -->
+            <!-- ========== MODALS ========== -->
+            
+            <!-- MODAL EDIT -->
             <div x-show="showEditPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
                 x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
@@ -426,6 +587,7 @@
                 </div>
             </div>
 
+            <!-- MODAL ABOUT -->
             <div x-show="showAboutPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
                 x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
@@ -456,16 +618,66 @@
                 </div>
             </div>
 
+            <!-- FOOTER -->
             <footer class="text-center py-8 text-xs text-gray-500">
                 <p>© 2025 INFODROP. Tous droits réservés.</p>
                 <p class="mt-1">Un projet 3C - EM&LPy</p>
             </footer>
         </div>
     </div>
+    
+    <!-- ========== BOUTON SCROLL TO TOP ========== -->
+    <button x-data="{ show: false }" 
+            x-show="show" 
+            x-transition
+            @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
+            class="fixed bottom-6 right-6 z-40 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110"
+            style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+        </svg>
+    </button>
 
+    <!-- ========== JAVASCRIPT ========== -->
     <script>
+        // ========== FONCTION MENU REACTIONS ==========
+        function reactionMenu(newsId) {
+            return {
+                isOpen: false,
+                pressTimer: null,
+                newsId: newsId,
+                
+                startLongPress(e) {
+                    e.preventDefault();
+                    this.pressTimer = setTimeout(() => {
+                        this.showMenu();
+                        if (navigator.vibrate) {
+                            navigator.vibrate(50);
+                        }
+                    }, 500);
+                },
+                
+                endLongPress() {
+                    if (this.pressTimer) {
+                        clearTimeout(this.pressTimer);
+                        this.pressTimer = null;
+                    }
+                },
+                
+                showMenu() {
+                    this.isOpen = true;
+                    this.endLongPress();
+                },
+                
+                selectReaction(reaction) {
+                    this.$parent.toggleReaction(this.newsId, reaction);
+                    this.isOpen = false;
+                }
+            };
+        }
 
-        // FONCTION POUR LE BANDEAU CONTEXTUEL DÉFILANT
+        // ========== FONCTION BANDEAU CONTEXTUEL ==========
         function contextTicker() {
             return {
                 dateInfo: {
@@ -484,7 +696,6 @@
                     icon: '🌙'
                 },
 
-                // Dictionnaire des fêtes (principales fêtes françaises)
                 feasts: {
                     '01-01': 'Jour de l\'an',
                     '01-06': 'Épiphanie',
@@ -509,7 +720,6 @@
                     this.updateMoonPhase();
                     await this.getWeather();
 
-                    // Mise à jour quotidienne à minuit
                     const now = new Date();
                     const tomorrow = new Date(now);
                     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -519,46 +729,36 @@
                     setTimeout(() => {
                         this.updateDateInfo();
                         this.updateMoonPhase();
-                        // Puis mise à jour toutes les 24h
                         setInterval(() => {
                             this.updateDateInfo();
                             this.updateMoonPhase();
                         }, 86400000);
                     }, msUntilMidnight);
 
-                    // Mise à jour météo toutes les 10 minutes
                     setInterval(() => this.getWeather(), 600000);
                 },
 
                 updateDateInfo() {
                     const now = new Date();
-
-                    // Date complète (format court)
                     const options = { weekday: 'long', day: 'numeric', month: 'long' };
                     this.dateInfo.fullDate = now.toLocaleDateString('fr-FR', options);
                     this.dateInfo.fullDate = this.dateInfo.fullDate.charAt(0).toUpperCase() + this.dateInfo.fullDate.slice(1);
 
-                    // Jour de l'année
                     const start = new Date(now.getFullYear(), 0, 0);
                     const diff = now - start;
                     this.dateInfo.dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-                    // Jours jusqu'à la nouvelle année
                     const nextYear = new Date(now.getFullYear() + 1, 0, 1);
                     this.dateInfo.daysUntilNewYear = Math.ceil((nextYear - now) / (1000 * 60 * 60 * 24));
 
-                    // Fête du jour
                     const monthDay = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
                     this.todayFeast = this.feasts[monthDay] || '';
                 },
 
                 updateMoonPhase() {
-                    // Calcul simplifié de la phase lunaire
                     const now = new Date();
-
-                    // Nouvelle lune de référence : 6 janvier 2000
                     const refNewMoon = new Date(2000, 0, 6);
-                    const lunarCycle = 29.53058867; // jours
+                    const lunarCycle = 29.53058867;
 
                     const daysSinceRef = (now - refNewMoon) / (1000 * 60 * 60 * 24);
                     const moonAge = daysSinceRef % lunarCycle;
@@ -592,14 +792,12 @@
 
                 async getWeather() {
                     try {
-                        // Obtenir la position de l'utilisateur
                         const position = await new Promise((resolve, reject) => {
                             navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
                         });
 
                         const { latitude, longitude } = position.coords;
 
-                        // Appel à l'API Open-Meteo
                         const response = await fetch(
                             `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&timezone=auto`
                         );
@@ -609,7 +807,6 @@
 
                         this.weather.temperature = Math.round(current.temperature);
 
-                        // Interprétation du code météo
                         const weatherCode = current.weathercode;
                         if (weatherCode === 0) {
                             this.weather.description = 'Ciel dégagé';
@@ -632,7 +829,6 @@
                         }
 
                     } catch (error) {
-                        // Si la géolocalisation échoue, utiliser Pessac par défaut
                         try {
                             const response = await fetch(
                                 'https://api.open-meteo.com/v1/forecast?latitude=44.8061&longitude=-0.6306&current_weather=true&timezone=Europe/Paris'
@@ -642,7 +838,6 @@
 
                             this.weather.temperature = Math.round(current.temperature);
 
-                            // Code météo simplifié pour Pessac
                             const weatherCode = current.weathercode;
                             if (weatherCode === 0) {
                                 this.weather.icon = '☀️';
@@ -667,6 +862,7 @@
             };
         }
 
+        // ========== APPLICATION PRINCIPALE ==========
         function infodropApp() {
             const ORIENTATION_DATA = {
                 'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000', percentage: 2 },
@@ -680,20 +876,49 @@
             };
 
             return {
-                sessionLoaded: false, // Etat pour bloquer toute la page tant que la session n'est pas vérifiée
-                user: null, email: '', loading: false, message: '', messageType: '',
-                newsList: [], loadingNews: true, updateInterval: null,
-                isAdmin: false, showAdminPanel: false, addingNews: false,
+                // État de session
+                sessionLoaded: false,
+                user: null, 
+                email: '', 
+                loading: false, 
+                message: '', 
+                messageType: '',
+                
+                // Données principales
+                newsList: [], 
+                loadingNews: true, 
+                updateInterval: null,
+                
+                // Admin
+                isAdmin: false, 
+                showAdminPanel: false, 
+                addingNews: false,
                 newNews: { resume: '', source: '', url: '', orientation: '', tagsText: '' },
                 stats: { total_articles: 0, total_sources: 0 },
-                connectedUsers: 0, realtimeChannel: null,
+                
+                // Temps réel
+                connectedUsers: 0, 
+                realtimeChannel: null,
+                
+                // Modals et panels
                 showEditPanel: false,
                 editingNews: { id: null, resume: '', source: '', url: '', orientation: '', tags: [], tagsText: '' },
                 showAboutPanel: false,
+                
+                // Filtres
                 showFilters: false,
                 activeFilter: 'all',
                 allTags: [],
+                
+                // Nouvelles fonctionnalités
+                reactions: JSON.parse(localStorage.getItem('infodrop_reactions') || '{}'),
+                readArticles: JSON.parse(localStorage.getItem('infodrop_read') || '{}'),
+                dailyReadCount: 0,
+                diversityScore: null,
+                readOrientations: [],
+                showDiversityChecker: true,
 
+                // Getters
                 get filteredNews() {
                     if (this.activeFilter === 'all') return this.newsList;
                     return this.newsList.filter(news =>
@@ -701,15 +926,18 @@
                         news.orientation === this.activeFilter
                     );
                 },
+                
                 getOrientationColor(orientation) {
                     return ORIENTATION_DATA[orientation]?.color || '#808080';
                 },
+                
                 getOrientationClass(orientation) {
                     return ORIENTATION_DATA[orientation]?.class || 'bg-gray-700 text-gray-200';
                 },
 
+                // Initialisation
                 async init() {
-                    // Effet d'ombre progressive sur le header lors du scroll
+                    // Effet d'ombre sur scroll
                     window.addEventListener('scroll', () => {
                         const header = document.getElementById('stickyHeader');
                         if (header) {
@@ -724,37 +952,60 @@
                     supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
                     const { data: { session } } = await supabase.auth.getSession();
                     this.handleSession(session);
-                    this.sessionLoaded = true; // Quand la session est vérifiée, on peut tout afficher
+                    this.sessionLoaded = true;
                 },
 
+                // Gestion de session
                 handleSession(session) {
                     if (session?.user) {
                         if (!this.user) {
-                            this.user = session.user; this.isAdmin = ADMIN_EMAILS.includes(session.user.email);
-                            this.loadData(); this.startAutoUpdate(); this.setupRealtime(session);
+                            this.user = session.user; 
+                            this.isAdmin = ADMIN_EMAILS.includes(session.user.email);
+                            this.loadData(); 
+                            this.startAutoUpdate(); 
+                            this.setupRealtime(session);
+                            this.updateDailyReadCount();
+                            this.calculateDiversityScore();
                         }
                     } else {
-                        this.user = null; this.stopAutoUpdate();
-                        if (this.realtimeChannel) { supabase.removeChannel(this.realtimeChannel); this.realtimeChannel = null; }
+                        this.user = null; 
+                        this.stopAutoUpdate();
+                        if (this.realtimeChannel) { 
+                            supabase.removeChannel(this.realtimeChannel); 
+                            this.realtimeChannel = null; 
+                        }
                     }
                 },
 
                 setupRealtime(session) {
-                    this.realtimeChannel = supabase.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } });
+                    this.realtimeChannel = supabase.channel('infodrop-online-users', { 
+                        config: { presence: { key: session.user.id } } 
+                    });
                     this.realtimeChannel.on('presence', { event: 'sync' }, () => {
                         this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
-                    }).subscribe(async (status) => { if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); } });
+                    }).subscribe(async (status) => { 
+                        if (status === 'SUBSCRIBED') { 
+                            await this.realtimeChannel.track({ online_at: new Date().toISOString() }); 
+                        } 
+                    });
                 },
 
+                // CRUD Operations
                 openEditPanel(news) {
-                    this.editingNews = { ...JSON.parse(JSON.stringify(news)), tagsText: (news.tags || []).join(', ') };
+                    this.editingNews = { 
+                        ...JSON.parse(JSON.stringify(news)), 
+                        tagsText: (news.tags || []).join(', ') 
+                    };
                     this.showEditPanel = true;
                 },
+                
                 async updateNews() {
                     const { id, resume, source, url, orientation, tagsText } = this.editingNews;
                     const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
                     try {
-                        const { error } = await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id);
+                        const { error } = await supabase.from('actu')
+                            .update({ resume, source, url, orientation, tags })
+                            .eq('id', id);
                         if (error) throw error;
                         this.showEditPanel = false;
                         this.loadNews();
@@ -763,6 +1014,7 @@
                         alert("La mise à jour a échoué.");
                     }
                 },
+                
                 async deleteNews(newsId) {
                     if (!confirm("Voulez-vous vraiment supprimer cette actualité ?")) return;
                     this.newsList = this.newsList.filter(n => n.id !== newsId);
@@ -776,6 +1028,7 @@
                         this.loadNews();
                     }
                 },
+                
                 async addManualNews() {
                     this.addingNews = true;
                     try {
@@ -801,20 +1054,54 @@
                     }
                 },
 
+                // Chargement des données
                 async loadData() {
                     this.loadingNews = true;
-                    await Promise.all([this.loadNews(), this.isAdmin ? this.loadStats() : Promise.resolve()]);
+                    await Promise.all([
+                        this.loadNews(), 
+                        this.isAdmin ? this.loadStats() : Promise.resolve()
+                    ]);
                     this.loadingNews = false;
                 },
+                
+                // Smart refresh
                 async loadNews() {
                     try {
-                        const twentyFourHoursAgo = new Date(); twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
-                        const { data, error } = await supabase.from('actu').select('*').gte('heure', twentyFourHoursAgo.toISOString()).order('heure', { ascending: false });
+                        const twentyFourHoursAgo = new Date(); 
+                        twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+                        
+                        const currentFirstId = this.newsList[0]?.id;
+                        const currentCount = this.newsList.length;
+                        
+                        const { data, error } = await supabase
+                            .from('actu')
+                            .select('*')
+                            .gte('heure', twentyFourHoursAgo.toISOString())
+                            .order('heure', { ascending: false });
+                            
                         if (error) throw error;
-                        this.newsList = data || [];
-                        this.updateTagsList();
-                    } catch (error) { console.error('Erreur chargement actus:', error); }
+                        
+                        const newData = data || [];
+                        
+                        // Smart refresh
+                        const hasNewContent = newData.length !== currentCount || 
+                            (newData[0]?.id !== currentFirstId);
+                        
+                        if (hasNewContent) {
+                            this.newsList = newData;
+                            this.updateTagsList();
+                            console.log(`📰 ${newData.length - currentCount} nouvelles actualités`);
+                        } else {
+                            console.log('✓ Pas de nouveau contenu');
+                        }
+                        
+                        this.updateDailyReadCount();
+                        
+                    } catch (error) { 
+                        console.error('Erreur chargement actus:', error); 
+                    }
                 },
+                
                 updateTagsList() {
                     const tagSet = new Set();
                     this.newsList.forEach(news => {
@@ -823,20 +1110,197 @@
                     });
                     this.allTags = Array.from(tagSet).sort();
                 },
+                
                 async loadStats() {
                     try {
                         const { data, error } = await supabase.from('stats_today').select('*').single();
                         if (error) throw error;
                         this.stats = data || { total_articles: 0, total_sources: 0 };
-                    } catch (error) { console.error('Erreur chargement stats:', error); }
+                    } catch (error) { 
+                        console.error('Erreur chargement stats:', error); 
+                    }
                 },
 
-                async login() { if (this.loading) return; this.loading = true; this.message = ''; try { const { error } = await supabase.auth.signInWithOtp({ email: this.email, options: { emailRedirectTo: window.location.origin } }); if (error) throw error; this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.'; this.messageType = 'success'; } catch (error) { this.message = error.message || 'Erreur lors de l\'envoi du lien.'; this.messageType = 'error'; } finally { this.loading = false; } },
-                async logout() { if (this.realtimeChannel) { await this.realtimeChannel.untrack(); } await supabase.auth.signOut(); },
+                // Gestion des reactions
+                toggleReaction(newsId, reaction) {
+                    if (reaction === '❌') {
+                        delete this.reactions[newsId];
+                    } else {
+                        if (!this.reactions[newsId]) this.reactions[newsId] = {};
+                        
+                        if (this.reactions[newsId][reaction]) {
+                            delete this.reactions[newsId];
+                        } else {
+                            this.reactions[newsId] = { [reaction]: true };
+                        }
+                    }
+                    
+                    localStorage.setItem('infodrop_reactions', JSON.stringify(this.reactions));
+                },
+                
+                hasReaction(newsId, reaction) {
+                    return this.reactions[newsId] && this.reactions[newsId][reaction] === true;
+                },
+                
+                hasAnyReaction(newsId) {
+                    return this.reactions[newsId] && Object.keys(this.reactions[newsId]).length > 0;
+                },
+                
+                getMainReaction(newsId) {
+                    if (!this.reactions[newsId]) return '💬';
+                    const reactions = Object.keys(this.reactions[newsId]);
+                    return reactions.length > 0 ? reactions[0] : '💬';
+                },
 
-                startAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); this.updateInterval = setInterval(() => this.loadData(), 30000); },
-                stopAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); },
-                formatTime(timestamp) { return new Date(timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); }
+                // Gestion des lectures
+                markAsRead(newsId) {
+                    const today = new Date().toDateString();
+                    if (!this.readArticles[today]) this.readArticles[today] = [];
+                    
+                    if (!this.readArticles[today].includes(newsId)) {
+                        this.readArticles[today].push(newsId);
+                        localStorage.setItem('infodrop_read', JSON.stringify(this.readArticles));
+                        this.updateDailyReadCount();
+                        this.calculateDiversityScore();
+                        
+                        // 100e article !
+                        const totalRead = Object.values(this.readArticles).flat().length;
+                        if (totalRead === 100) {
+                            this.celebrate100Articles();
+                        }
+                    }
+                },
+                
+                updateDailyReadCount() {
+                    const today = new Date().toDateString();
+                    this.dailyReadCount = this.readArticles[today]?.length || 0;
+                },
+                
+                // Confettis
+                celebrate100Articles() {
+                    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7', '#A29BFE'];
+                    const confettiContainer = document.createElement('div');
+                    confettiContainer.style.position = 'fixed';
+                    confettiContainer.style.top = '0';
+                    confettiContainer.style.left = '0';
+                    confettiContainer.style.width = '100%';
+                    confettiContainer.style.height = '100%';
+                    confettiContainer.style.pointerEvents = 'none';
+                    confettiContainer.style.zIndex = '9999';
+                    document.body.appendChild(confettiContainer);
+                    
+                    for (let i = 0; i < 50; i++) {
+                        const confetti = document.createElement('div');
+                        confetti.style.position = 'absolute';
+                        confetti.style.width = '10px';
+                        confetti.style.height = '10px';
+                        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        confetti.style.left = Math.random() * 100 + '%';
+                        confetti.style.top = '-10px';
+                        confetti.style.opacity = Math.random() + 0.5;
+                        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                        confetti.style.animation = `confetti-fall ${3 + Math.random() * 2}s linear forwards`;
+                        confettiContainer.appendChild(confetti);
+                    }
+                    
+                    const message = document.createElement('div');
+                    message.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
+                    message.innerHTML = `
+                        <h2 class="text-3xl font-bold mb-2">🎉 Félicitations ! 🎉</h2>
+                        <p class="text-lg">100 articles lus !</p>
+                        <p class="text-sm mt-2 opacity-90">Vous êtes un lecteur assidu</p>
+                    `;
+                    document.body.appendChild(message);
+                    
+                    setTimeout(() => {
+                        confettiContainer.remove();
+                        message.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                        setTimeout(() => message.remove(), 500);
+                    }, 5000);
+                },
+
+                // Diversity checker
+                calculateDiversityScore() {
+                    const today = new Date().toDateString();
+                    const todayReads = this.readArticles[today] || [];
+                    
+                    if (todayReads.length === 0) {
+                        this.diversityScore = null;
+                        this.readOrientations = [];
+                        return;
+                    }
+                    
+                    const orientations = new Set();
+                    const sources = new Set();
+                    
+                    todayReads.forEach(articleId => {
+                        const article = this.newsList.find(n => n.id === articleId);
+                        if (article) {
+                            if (article.orientation) orientations.add(article.orientation);
+                            if (article.source) sources.add(article.source);
+                        }
+                    });
+                    
+                    this.readOrientations = Array.from(orientations);
+                    
+                    const maxOrientations = 8;
+                    const orientationScore = (orientations.size / maxOrientations) * 50;
+                    const sourceScore = Math.min((sources.size / 5) * 50, 50);
+                    
+                    this.diversityScore = Math.round(orientationScore + sourceScore);
+                },
+                
+                getDiversityMessage() {
+                    if (this.diversityScore < 30) return "Bulle de filtre détectée";
+                    if (this.diversityScore < 70) return "Diversité correcte";
+                    return "Excellente diversité !";
+                },
+
+                // Auth
+                async login() { 
+                    if (this.loading) return; 
+                    this.loading = true; 
+                    this.message = ''; 
+                    try { 
+                        const { error } = await supabase.auth.signInWithOtp({ 
+                            email: this.email, 
+                            options: { emailRedirectTo: window.location.origin } 
+                        }); 
+                        if (error) throw error; 
+                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.'; 
+                        this.messageType = 'success'; 
+                    } catch (error) { 
+                        this.message = error.message || 'Erreur lors de l\'envoi du lien.'; 
+                        this.messageType = 'error'; 
+                    } finally { 
+                        this.loading = false; 
+                    } 
+                },
+                
+                async logout() { 
+                    if (this.realtimeChannel) { 
+                        await this.realtimeChannel.untrack(); 
+                    } 
+                    await supabase.auth.signOut(); 
+                },
+
+                // Auto-update
+                startAutoUpdate() { 
+                    if (this.updateInterval) clearInterval(this.updateInterval); 
+                    this.updateInterval = setInterval(() => this.loadData(), 30000); 
+                },
+                
+                stopAutoUpdate() { 
+                    if (this.updateInterval) clearInterval(this.updateInterval); 
+                },
+                
+                // Utils
+                formatTime(timestamp) { 
+                    return new Date(timestamp).toLocaleTimeString('fr-FR', { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    }); 
+                }
             }
         }
     </script>
