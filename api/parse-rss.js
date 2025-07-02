@@ -82,7 +82,7 @@ const RSS_FEEDS = [
     { name: 'RTBF', url: 'https://rss.rtbf.be/article/rss/highlight_rtbf_info.xml?source=internal', orientation: 'centre-gauche', tags: ['belgique'] },
 
     // === ZAP ===
-    { name: 'VU FranceTV', url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCkFQ5NCQ3y5Jm_XnyT6YWWA', orientation: 'neutre', tags: ['zap'] },
+    { name: 'VU FranceTV', url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCqt99sKYNTxqlHtzV9weUYA', orientation: 'neutre', tags: ['zap'] },
 
     // === OUTRE-MER ===
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre', tags: ['outre-mer', 'local'] },
