@@ -88,7 +88,7 @@ const RSS_FEEDS = [
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre', tags: ['outre-mer', 'local'] },
     { name: "L'Info Kwezi", url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre', tags: ['outre-mer', 'local'] },
 
-    // === NOUVELLES SOURCES JUILLET 2025 : MULTIPERSPECTIVES / ALTERNATIF / GÉOPOLITIQUE / SCIENCE ===
+    // === NOUVELLES SOURCES JUILLET 2025 : MULTIPERSPECTIVES / ALTERNATIF / GÉOPOLITIQUE / SCIENCES ===
     // --- ALTERNATIF / OPINION / GÉOPOLITIQUE ---
     { name: 'Réseau International', url: 'https://reseauinternational.net/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
     { name: 'Le Saker Francophone', url: 'https://lesakerfrancophone.fr/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
@@ -98,8 +98,8 @@ const RSS_FEEDS = [
 
     // --- EUROPÉEN / SCIENCE / COMMUNICATION ---
     { name: 'Le Grand Continent', url: 'https://legrandcontinent.eu/fr/feed/', orientation: 'centre-gauche', tags: ['europe'] },
-    { name: 'The Conversation France', url: 'https://theconversation.com/fr/articles.atom', orientation: 'centre', tags: ['science'] },
-    { name: 'CNRS Le Journal', url: 'https://lejournal.cnrs.fr/rss', orientation: 'neutre', tags: ['science'] },
+    { name: 'The Conversation France', url: 'https://theconversation.com/fr/articles.atom', orientation: 'centre', tags: ['sciences'] },
+    { name: 'CNRS Le Journal', url: 'https://lejournal.cnrs.fr/rss', orientation: 'neutre', tags: ['sciences'] },
     { name: 'Mind Media', url: 'https://www.mindmedia.fr/feed/', orientation: 'centre-droit', tags: ['communication'] }
 ];
 
