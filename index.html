@@ -182,7 +182,7 @@
 
             <!-- BANDEAU CONTEXTUEL DÉFILANT -->
             <div x-data="contextTicker()" x-init="initTicker()"
-                class="bg-gray-800/90 border-b border-gray-700 overflow-hidden h-8 flex items-center relative">
+                class="bg-gray-800/90 border-b border-gray-700 overflow-hidden h-8 flex items-center relative sticky top-[52px] z-40 backdrop-blur-sm">
                 <div class="ticker-content flex items-center gap-8 animate-scroll whitespace-nowrap px-4">
                     <!-- Contenu dupliqué pour un défilement continu -->
                     <template x-for="i in [1, 2]" :key="i">
@@ -662,7 +662,7 @@
                 }
             };
         }
-        
+
         function infodropApp() {
             const ORIENTATION_DATA = {
                 'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000', percentage: 2 },
