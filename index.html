@@ -456,8 +456,10 @@
                         <!-- Orientations lues -->
                         <div class="mt-3 flex flex-wrap gap-2" x-show="readOrientations.length > 0">
                             <template x-for="orientation in readOrientations" :key="orientation">
-                                <span class="text-xs px-2 py-1 rounded-full" :class="getOrientationClass(orientation)"
-                                    x-text="orientation"></span>
+                                <span class="text-xs px-2 py-1 rounded-full" :class="getOrientationClass(orientation)">
+                                    <span
+                                        x-text="orientation === 'gouvernement' ? '🇫🇷 Gouvernement' : orientation.replace('-', ' ')"></span>
+                                </span>
                             </template>
                         </div>
                     </div>
