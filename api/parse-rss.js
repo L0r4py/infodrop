@@ -86,8 +86,15 @@ const RSS_FEEDS = [
     { name: 'VU FranceTV', url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCqt99sKYNTxqlHtzV9weUYA', orientation: 'neutre', tags: ['zap'] },
 
     // === OUTRE-MER ===
-    { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre', tags: ['outre-mer', 'local'] },
-    { name: "L'Info Kwezi", url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre', tags: ['outre-mer', 'local'] },
+    { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre', tags: ['outre-mer'] },
+    { name: "L'Info Kwezi", url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre', tags: ['outre-mer'] },
+    { name: 'Zinfos974', url: 'https://www.zinfos974.com/xml/syndication.rss', orientation: 'droite', tags: ['outre-mer'] },
+    { name: 'Clicanoo', url: 'https://www.clicanoo.re/rss', orientation: 'centre', tags: ['outre-mer'] },
+    { name: 'France-Antilles', url: 'https://www.martinique.franceantilles.fr/rss', orientation: 'centre', tags: ['outre-mer'] },
+    { name: 'RCI.fm', url: 'https://rci.fm/martinique/rss', orientation: 'centre', tags: ['outre-mer'] },
+    { name: 'Tahiti Infos', url: 'https://www.tahiti-infos.com/xml/syndication.rss', orientation: 'centre', tags: ['outre-mer'] },
+    { name: 'Outremers360', url: 'https://outremers360.com/feed', orientation: 'centre', tags: ['outre-mer'] }
+
 
     // === ALTERNATIF / INDÉPENDANT ===
     { name: 'Le Gossip', url: 'https://www.legossip.net/spip.php?page=backend', orientation: 'neutre', tags: ['people'] },
