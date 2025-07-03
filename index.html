@@ -881,15 +881,40 @@
                 },
 
                 async updateNews() {
+                    // On récupère les données modifiées comme avant
                     const { id, resume, source, url, orientation, tagsText } = this.editingNews;
                     const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
+
                     try {
+                        // 1. On sauvegarde dans Supabase, comme avant
                         const { error } = await supabase.from('actu')
                             .update({ resume, source, url, orientation, tags })
                             .eq('id', id);
+
+                        // Si la sauvegarde échoue, on arrête tout
                         if (error) throw error;
+
+                        // 2. SI LA SAUVEGARDE A RÉUSSI, on met à jour la liste locale
+                        // On trouve l'index de l'article à modifier dans notre liste `newsList`
+                        const index = this.newsList.findIndex(news => news.id === id);
+
+                        // Si on l'a trouvé...
+                        if (index !== -1) {
+                            // ...on met à jour ses propriétés une par une.
+                            // C'est ça qui va forcer Alpine.js à rafraîchir l'affichage instantanément.
+                            this.newsList[index].resume = resume;
+                            this.newsList[index].source = source;
+                            this.newsList[index].url = url;
+                            this.newsList[index].orientation = orientation;
+                            this.newsList[index].tags = tags;
+                        }
+
+                        // 3. On ferme la modale d'édition
                         this.showEditPanel = false;
-                        this.loadNews();
+
+                        // 4. On met à jour la liste des filtres au cas où un tag aurait été ajouté/modifié
+                        this.updateTagsList();
+
                     } catch (error) {
                         console.error("Erreur de mise à jour:", error);
                         alert("La mise à jour a échoué.");
