@@ -78,7 +78,6 @@ const RSS_FEEDS = [
     { name: 'RMC', url: 'https://rmc.bfmtv.com/rss/actualites/', orientation: 'centre', tags: ['radio', 'tv'] },
     { name: 'Révolution Permanente', url: 'https://www.revolutionpermanente.fr/spip.php?page=backend_portada', orientation: 'extrême-gauche', tags: ['opinion'] },
     { name: 'Cnews', url: 'https://www.cnews.fr/rss.xml', orientation: 'extrême-droite', tags: ['opinion'] },
-    { name: 'France Soir', url: 'https://www.francesoir.fr/rss.xml', orientation: 'extrême-droite', tags: ['opinion'] },
 
     // === PRESSE ÉTRANGÈRE ===
     { name: 'RTBF', url: 'https://rss.rtbf.be/article/rss/highlight_rtbf_info.xml?source=internal', orientation: 'centre-gauche', tags: ['belgique'] },
@@ -89,13 +88,10 @@ const RSS_FEEDS = [
     // === OUTRE-MER ===
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre', tags: ['outre-mer'] },
     { name: "L'Info Kwezi", url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre', tags: ['outre-mer'] },
-    { name: 'Zinfos974', url: 'https://www.zinfos974.com/xml/syndication.rss', orientation: 'droite', tags: ['outre-mer'] },
-    { name: 'Clicanoo', url: 'https://www.clicanoo.re/rss', orientation: 'centre', tags: ['outre-mer'] },
     { name: 'France-Antilles', url: 'https://www.martinique.franceantilles.fr/actualite/rss.xml', orientation: 'centre', tags: ['outre-mer'] },
     { name: 'RCI.fm', url: 'https://rci.fm/martinique/fb/articles_rss_mq', orientation: 'centre', tags: ['outre-mer'] },
     { name: 'Tahiti Infos', url: 'https://www.tahiti-infos.com/xml/syndication.rss', orientation: 'centre', tags: ['outre-mer'] },
     { name: 'Outremers360', url: 'https://api.outremers360.com/rss/fil-info.xml', orientation: 'centre', tags: ['outre-mer'] },
-
 
     // === ALTERNATIF / INDÉPENDANT ===
     { name: 'Le Gossip', url: 'https://www.legossip.net/spip.php?page=backend', orientation: 'neutre', tags: ['people'] },
@@ -114,7 +110,6 @@ const RSS_FEEDS = [
     { name: 'CNRS Le Journal', url: 'https://lejournal.cnrs.fr/rss', orientation: 'neutre', tags: ['sciences'] },
     { name: 'Mind Media', url: 'https://www.mindmedia.fr/feed/', orientation: 'centre-droit', tags: ['communication'] }
 ];
-
 
 function decodeHtmlEntities(str) {
     if (!str) return '';
