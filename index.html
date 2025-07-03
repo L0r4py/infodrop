@@ -491,10 +491,11 @@
                                 <template x-for="orientation in allOrientations" :key="orientation">
                                     <button @click="activeFilter = orientation"
                                         :class="activeFilter === orientation ? getOrientationClass(orientation) : 
-                               hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 'bg-gray-800 text-gray-500 border border-gray-600'"
+               hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 'bg-gray-800 text-gray-500 border border-gray-600'"
                                         class="px-3 py-1 rounded-full text-sm font-semibold transition capitalize relative"
-                                        :title="hasArticlesForOrientation(orientation) ? '' : 'Aucun article ces dernières 24h'"
-                                        x-text="orientation.replace('-', ' ')">
+                                        :title="hasArticlesForOrientation(orientation) ? '' : 'Aucun article ces dernières 24h'">
+                                        <span
+                                            x-text="orientation === 'gouvernement' ? '🇫🇷 Gouvernement' : orientation.replace('-', ' ')"></span>
                                     </button>
                                 </template>
                             </div>
@@ -529,9 +530,11 @@
                                     <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
                                     <span x-show="!news.added_by" x-text="news.source"></span>
                                     <span x-text="formatTime(news.heure)"></span>
-                                    <span x-show="news.orientation" x-text="news.orientation.replace('-', ' ')"
-                                        :class="getOrientationClass(news.orientation)"
-                                        class="px-2 py-0.5 rounded-full font-semibold text-xs capitalize"></span>
+                                    <span x-show="news.orientation" :class="getOrientationClass(news.orientation)"
+                                        class="px-2 py-0.5 rounded-full font-semibold text-xs capitalize">
+                                        <span
+                                            x-text="news.orientation === 'gouvernement' ? '🇫🇷 Gouvernement' : news.orientation.replace('-', ' ')"></span>
+                                    </span>
                                     <template x-if="news.tags && news.tags.length">
                                         <template x-for="tag in news.tags" :key="tag">
                                             <span
@@ -876,6 +879,7 @@
                 'centre-droit': { class: 'bg-[#5555AA] text-white', color: '#5555AA', percentage: 14 },
                 'droite': { class: 'bg-[#2A2AD4] text-white', color: '#2A2AD4', percentage: 4 },
                 'extrême-droite': { class: 'bg-[#0000FF] text-white', color: '#0000FF', percentage: 8 },
+                'gouvernement': { class: 'bg-blue-800 text-blue-100', color: '#1e40af', percentage: 5 },
                 'neutre': { class: 'bg-green-700 text-green-100', color: '#16a34a', percentage: 12 }
             };
 
@@ -1144,6 +1148,7 @@
                         'centre-droit',
                         'droite',
                         'extrême-droite',
+                        'gouvernement',
                         'neutre'
                     ];
 
@@ -1282,6 +1287,7 @@
                         'centre-droit',
                         'droite',
                         'extrême-droite',
+                        'gouvernement',
                         'neutre'
                     ];
 
