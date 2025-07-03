@@ -78,6 +78,9 @@ const RSS_FEEDS = [
     { name: 'RMC', url: 'https://rmc.bfmtv.com/rss/actualites/', orientation: 'centre', tags: ['radio', 'tv'] },
     { name: 'Révolution Permanente', url: 'https://www.revolutionpermanente.fr/spip.php?page=backend_portada', orientation: 'extrême-gauche', tags: ['opinion'] },
     { name: 'Cnews', url: 'https://www.cnews.fr/rss.xml', orientation: 'extrême-droite', tags: ['opinion'] },
+    { name: 'Basta!', url: 'https://basta.media/spip.php?page=backend', orientation: 'extrême-gauche', tags: ['opinion'] },
+    { name: 'Ballast', url: 'https://www.revue-ballast.fr/feed/', orientation: 'extrême-gauche', tags: ['opinion'] },
+
 
     // === PRESSE ÉTRANGÈRE ===
     { name: 'RTBF', url: 'https://rss.rtbf.be/article/rss/highlight_rtbf_info.xml?source=internal', orientation: 'centre-gauche', tags: ['belgique'] },
