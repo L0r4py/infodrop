@@ -125,8 +125,22 @@ function decodeHtmlEntities(str) {
         .replace(/&eacute;/g, 'é')
         .replace(/&egrave;/g, 'è')
         .replace(/&ecirc;/g, 'ê')
-        .replace(/&rsquo;/g, '’')
-        .replace(/&hellip;/g, '…');
+        .replace(/&rsquo;/g, "'")
+        .replace(/&hellip;/g, '…')
+        // 🇫🇷 FIX ENCODAGE GOUVERNEMENT
+        .replace(/�/g, 'é')
+        .replace(/ç/g, 'ç')  
+        .replace(/à/g, 'à')
+        .replace(/è/g, 'è')
+        .replace(/ê/g, 'ê')
+        .replace(/ô/g, 'ô')
+        .replace(/û/g, 'û')
+        .replace(/â/g, 'â')
+        .replace(/î/g, 'î')
+        .replace(/ù/g, 'ù')
+        .replace(/É/g, 'É')
+        .replace(/À/g, 'À')
+        .replace(/È/g, 'È');
 }
 
 const FILTER_RULES = { 'Le Parisien': ['météo', 'horoscope'] };
