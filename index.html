@@ -475,66 +475,86 @@
                         </svg>
                     </button>
                     <div x-show="showFilters" x-transition class="p-4 border-t border-gray-700">
-                        <div class="flex flex-wrap gap-2 mb-2">
-                            <button @click="activeFilter = 'all'"
-                                :class="{ 'bg-blue-600 text-white': activeFilter === 'all', 'bg-gray-700 text-gray-300': activeFilter !== 'all' }"
-                                class="px-3 py-1 rounded-full text-sm font-semibold transition">Tout voir</button>
-                            <template x-for="tag in allTags" :key="tag">
-                                <button @click="activeFilter = tag"
-                                    :class="{ 'bg-blue-600 text-white': activeFilter === tag, 'bg-gray-700 text-gray-300': activeFilter !== tag }"
-                                    class="px-3 py-1 rounded-full text-sm font-semibold transition capitalize"
-                                    x-text="tag"></button>
-                            </template>
+                        <!-- Bouton Tout voir -->
+                        <button @click="activeFilter = 'all'"
+                            :class="{ 'bg-blue-600 text-white': activeFilter === 'all', 'bg-gray-700 text-gray-300': activeFilter !== 'all' }"
+                            class="px-3 py-1 rounded-full text-sm font-semibold transition mb-3">
+                            Tout voir
+                        </button>
+
+                        <!-- Section Orientations -->
+                        <div x-show="allOrientations.length > 0" class="mb-4">
+                            <h4 class="text-xs text-gray-500 uppercase tracking-wider mb-2">Orientations politiques</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <template x-for="orientation in allOrientations" :key="orientation">
+                                    <button @click="activeFilter = orientation"
+                                        :class="activeFilter === orientation ? getOrientationClass(orientation) : 'bg-gray-700 text-gray-300 hover:opacity-80'"
+                                        class="px-3 py-1 rounded-full text-sm font-semibold transition capitalize"
+                                        x-text="orientation.replace('-', ' ')"></button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Section Autres tags -->
+                        <div x-show="allOtherTags.length > 0">
+                            <h4 class="text-xs text-gray-500 uppercase tracking-wider mb-2">Catégories</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <template x-for="tag in allOtherTags" :key="tag">
+                                    <button @click="activeFilter = tag"
+                                        :class="{ 'bg-blue-600 text-white': activeFilter === tag, 'bg-gray-700 text-gray-300': activeFilter !== tag }"
+                                        class="px-3 py-1 rounded-full text-sm font-semibold transition capitalize"
+                                        x-text="tag"></button>
+                                </template>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- LISTE DES NEWS -->
-                <div class="space-y-3">
-                    <template x-for="news in filteredNews" :key="news.id">
-                        <div
-                            class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
-                            <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="flex-grow">
-                                <p class="text-base text-white mb-2" x-text="news.resume"></p>
-                                <div class="flex items-center flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400">
-                                    <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
-                                    <span x-show="!news.added_by" x-text="news.source"></span>
-                                    <span x-text="formatTime(news.heure)"></span>
-                                    <span x-show="news.orientation" x-text="news.orientation.replace('-', ' ')"
-                                        :class="getOrientationClass(news.orientation)"
-                                        class="px-2 py-0.5 rounded-full font-semibold text-xs capitalize"></span>
-                                    <template x-if="news.tags && news.tags.length">
-                                        <template x-for="tag in news.tags" :key="tag">
-                                            <span
-                                                class="ml-1 px-2 py-0.5 rounded-full font-medium text-xs capitalize bg-gray-700 text-gray-300 border border-gray-600"
-                                                x-text="tag"></span>
+                    <!-- LISTE DES NEWS -->
+                    <div class="space-y-3">
+                        <template x-for="news in filteredNews" :key="news.id">
+                            <div
+                                class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
+                                <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="flex-grow">
+                                    <p class="text-base text-white mb-2" x-text="news.resume"></p>
+                                    <div class="flex items-center flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400">
+                                        <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
+                                        <span x-show="!news.added_by" x-text="news.source"></span>
+                                        <span x-text="formatTime(news.heure)"></span>
+                                        <span x-show="news.orientation" x-text="news.orientation.replace('-', ' ')"
+                                            :class="getOrientationClass(news.orientation)"
+                                            class="px-2 py-0.5 rounded-full font-semibold text-xs capitalize"></span>
+                                        <template x-if="news.tags && news.tags.length">
+                                            <template x-for="tag in news.tags" :key="tag">
+                                                <span
+                                                    class="ml-1 px-2 py-0.5 rounded-full font-medium text-xs capitalize bg-gray-700 text-gray-300 border border-gray-600"
+                                                    x-text="tag"></span>
+                                            </template>
                                         </template>
-                                    </template>
-                                </div>
-                            </a>
+                                    </div>
+                                </a>
 
-                            <!-- BOUTONS ADMIN -->
-                            <button x-show="isAdmin" @click.prevent="openEditPanel(news)"
-                                class="flex-shrink-0 p-2 rounded-full hover:bg-blue-900/50 transition"
-                                title="Éditer">✏️</button>
-                            <button x-show="isAdmin" @click.prevent="deleteNews(news.id)"
-                                class="flex-shrink-0 p-2 rounded-full hover:bg-red-900/50 transition"
-                                title="Supprimer">🗑️</button>
-                        </div>
-                    </template>
+                                <!-- BOUTONS ADMIN -->
+                                <button x-show="isAdmin" @click.prevent="openEditPanel(news)"
+                                    class="flex-shrink-0 p-2 rounded-full hover:bg-blue-900/50 transition"
+                                    title="Éditer">✏️</button>
+                                <button x-show="isAdmin" @click.prevent="deleteNews(news.id)"
+                                    class="flex-shrink-0 p-2 rounded-full hover:bg-red-900/50 transition"
+                                    title="Supprimer">🗑️</button>
+                            </div>
+                        </template>
 
-                    <!-- MESSAGES D'ÉTAT -->
-                    <div x-show="filteredNews.length === 0 && !loadingNews" class="text-center py-12">
-                        <p class="text-gray-500"
-                            x-text="activeFilter === 'all' ? 'Aucune actualité pour le moment.' : `Aucune actualité pour le filtre '${activeFilter}'.`">
-                        </p>
-                    </div>
-                    <div x-show="loadingNews && filteredNews.length === 0" class="text-center py-12">
-                        <div
-                            class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin">
+                        <!-- MESSAGES D'ÉTAT -->
+                        <div x-show="filteredNews.length === 0 && !loadingNews" class="text-center py-12">
+                            <p class="text-gray-500"
+                                x-text="activeFilter === 'all' ? 'Aucune actualité pour le moment.' : `Aucune actualité pour le filtre '${activeFilter}'.`">
+                            </p>
+                        </div>
+                        <div x-show="loadingNews && filteredNews.length === 0" class="text-center py-12">
+                            <div
+                                class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin">
+                            </div>
                         </div>
                     </div>
-                </div>
             </main>
 
             <!-- ========== MODALS ========== -->
@@ -873,6 +893,8 @@
                 showFilters: false,
                 activeFilter: 'all',
                 allTags: [],
+                allOrientations: [],
+                allOtherTags: [],
 
                 // Nouvelles fonctionnalités
                 readArticles: {},
@@ -1092,12 +1114,38 @@
                 },
 
                 updateTagsList() {
+                    const orientationSet = new Set();
                     const tagSet = new Set();
+
                     this.newsList.forEach(news => {
-                        if (news.orientation) tagSet.add(news.orientation);
-                        if (news.tags && Array.isArray(news.tags)) news.tags.forEach(tag => tagSet.add(tag));
+                        if (news.orientation) orientationSet.add(news.orientation);
+                        if (news.tags && Array.isArray(news.tags)) {
+                            news.tags.forEach(tag => tagSet.add(tag));
+                        }
                     });
-                    this.allTags = Array.from(tagSet).sort();
+
+                    // Ordre du spectre politique
+                    const spectrumOrder = [
+                        'extrême-gauche',
+                        'gauche',
+                        'centre-gauche',
+                        'centre',
+                        'centre-droit',
+                        'droite',
+                        'extrême-droite',
+                        'neutre'
+                    ];
+
+                    // Trier les orientations selon le spectre
+                    this.allOrientations = Array.from(orientationSet).sort((a, b) => {
+                        return spectrumOrder.indexOf(a) - spectrumOrder.indexOf(b);
+                    });
+
+                    // Trier les autres tags alphabétiquement
+                    this.allOtherTags = Array.from(tagSet).sort();
+
+                    // Garder allTags pour la compatibilité
+                    this.allTags = [...this.allOrientations, ...this.allOtherTags];
                 },
 
                 async loadStats() {
