@@ -93,7 +93,7 @@ const RSS_FEEDS = [
     { name: 'France-Antilles', url: 'https://www.martinique.franceantilles.fr/rss', orientation: 'centre', tags: ['outre-mer'] },
     { name: 'RCI.fm', url: 'https://rci.fm/martinique/rss', orientation: 'centre', tags: ['outre-mer'] },
     { name: 'Tahiti Infos', url: 'https://www.tahiti-infos.com/xml/syndication.rss', orientation: 'centre', tags: ['outre-mer'] },
-    { name: 'Outremers360', url: 'https://outremers360.com/feed', orientation: 'centre', tags: ['outre-mer'] }
+    { name: 'Outremers360', url: 'https://outremers360.com/feed', orientation: 'centre', tags: ['outre-mer'] },
 
 
     // === ALTERNATIF / INDÉPENDANT ===
