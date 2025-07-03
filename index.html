@@ -78,24 +78,29 @@
             background: #4b5563;
         }
 
-        /* Animation du bandeau défilant */
-        @keyframes scroll {
+        /* Animation du bandeau défilant - VERSION FINALE PRO */
+        .ticker-train {
+            /* Fait en sorte que la largeur soit la somme de tous les enfants */
+            display: inline-flex;
+            /* On nomme notre animation 'scroll-left' */
+            animation: scroll-left 40s linear infinite;
+        }
+
+        @keyframes scroll-left {
             from {
-                transform: translateX(0);
+                /* Le train commence à sa position initiale */
+                transform: translateX(0%);
             }
 
             to {
-                transform: translateX(-100%);
+                /* Le train se déplace vers la gauche de la moitié de sa propre largeur. */
+                /* Comme le train est fait de 2 copies, il se déplace de la largeur d'UNE copie. */
+                transform: translateX(-50%);
             }
         }
 
-        .animate-scroll {
-            animation: scroll 30s linear infinite;
-            /* On peut ajuster la durée ici si besoin */
-        }
-
-        /* Pause au survol */
-        .ticker-content:hover {
+        /* On met en pause au survol comme avant */
+        .ticker-train:hover {
             animation-play-state: paused;
         }
 
@@ -231,46 +236,53 @@
                     </div>
                 </header>
 
-                <!-- BANDEAU CONTEXTUEL DÉFILANT - VERSION CORRIGÉE -->
-                <div x-data="contextTicker()" x-init="initTicker()"
-                    class="bg-gray-800/95 border-b border-gray-700 overflow-hidden relative">
+                <!-- BANDEAU CONTEXTUEL DÉFILANT - VERSION FINALE PRO -->
+                <div x-data="contextTicker()" x-init="initTicker()" class="bg-gray-800/95 border-b border-gray-700 h-8">
 
-                    <!-- NOUVEAU : Conteneur 'rail' flexible -->
-                    <div class="flex">
-                        <template x-for="i in [1, 2]" :key="i">
-                            <div
-                                class="flex-shrink-0 flex items-center gap-8 animate-scroll whitespace-nowrap px-4 py-1 h-8">
-                                <!-- Le contenu reste identique -->
-                                <span class="flex items-center gap-1">
-                                    <span class="text-yellow-400">📅</span>
-                                    <span x-text="dateInfo.fullDate"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span class="text-blue-400">📊</span>
-                                    Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365
-                                </span>
-                                <span x-show="todayFeast" class="flex items-center gap-1">
-                                    <span class="text-red-400">🎉</span>
-                                    <span class="font-semibold text-white" x-text="todayFeast"></span>
-                                </span>
-                                <span x-show="weather.temperature !== null" class="flex items-center gap-1">
-                                    <span x-text="weather.icon"></span>
-                                    <span class="font-semibold text-white"><span
-                                            x-text="weather.temperature"></span>°C</span>
-                                    <span class="text-gray-400" x-text="weather.description"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span x-text="moonPhase.icon"></span>
-                                    <span x-text="moonPhase.name"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span class="text-green-400">⏳</span>
-                                    <span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span>
-                                    jours avant 2026
-                                </span>
-                                <span class="text-gray-600">•</span>
-                            </div>
-                        </template>
+                    <!-- 1. LE MASQUE : Ce conteneur a une taille fixe et cache tout ce qui déborde. -->
+                    <div class="overflow-hidden h-full">
+
+                        <!-- 2. LE TRAIN : Ce conteneur est très large et c'est LUI qui est animé. -->
+                        <div class="ticker-train flex items-center h-full">
+
+                            <!-- On duplique le contenu 2 fois pour être sûr qu'il soit plus large que l'écran -->
+                            <template x-for="i in [1, 2]">
+                                <div
+                                    class="flex-shrink-0 flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
+                                    <!-- Le contenu en lui-même ne change pas -->
+                                    <span class="flex items-center gap-1">
+                                        <span class="text-yellow-400">📅</span>
+                                        <span x-text="dateInfo.fullDate"></span>
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <span class="text-blue-400">📊</span>
+                                        Jour <span class="font-semibold text-white"
+                                            x-text="dateInfo.dayOfYear"></span>/365
+                                    </span>
+                                    <span x-show="todayFeast" class="flex items-center gap-1">
+                                        <span class="text-red-400">🎉</span>
+                                        <span class="font-semibold text-white" x-text="todayFeast"></span>
+                                    </span>
+                                    <span x-show="weather.temperature !== null" class="flex items-center gap-1">
+                                        <span x-text="weather.icon"></span>
+                                        <span class="font-semibold text-white"><span
+                                                x-text="weather.temperature"></span>°C</span>
+                                        <span class="text-gray-400" x-text="weather.description"></span>
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <span x-text="moonPhase.icon"></span>
+                                        <span x-text="moonPhase.name"></span>
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <span class="text-green-400">⏳</span>
+                                        <span class="font-semibold text-white"
+                                            x-text="dateInfo.daysUntilNewYear"></span>
+                                        jours avant 2026
+                                    </span>
+                                    <span class="text-gray-600">•</span>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                 </div>
 
