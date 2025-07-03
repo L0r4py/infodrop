@@ -1115,12 +1115,15 @@
 
                 updateTagsList() {
                     const orientationSet = new Set();
-                    const tagSet = new Set();
+                    const tagCounts = {}; // Pour compter la fréquence des tags
 
                     this.newsList.forEach(news => {
                         if (news.orientation) orientationSet.add(news.orientation);
                         if (news.tags && Array.isArray(news.tags)) {
-                            news.tags.forEach(tag => tagSet.add(tag));
+                            news.tags.forEach(tag => {
+                                // Compter les occurrences de chaque tag
+                                tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                            });
                         }
                     });
 
@@ -1141,8 +1144,14 @@
                         return spectrumOrder.indexOf(a) - spectrumOrder.indexOf(b);
                     });
 
-                    // Trier les autres tags alphabétiquement
-                    this.allOtherTags = Array.from(tagSet).sort();
+                    // Filtrer les tags : garder seulement ceux qui apparaissent au moins 3 fois
+                    // et limiter à 20 tags maximum
+                    this.allOtherTags = Object.entries(tagCounts)
+                        .filter(([tag, count]) => count >= 1)
+                        .sort((a, b) => b[1] - a[1])
+                        .slice(0, 50)
+                        .map(([tag]) => tag)
+                        .sort();
 
                     // Garder allTags pour la compatibilité
                     this.allTags = [...this.allOrientations, ...this.allOtherTags];
