@@ -76,7 +76,7 @@ const RSS_FEEDS = [
     { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/crypto/', orientation: 'centre-droit', tags: ['crypto'] },
     { name: 'Révolution Permanente', url: 'https://www.revolutionpermanente.fr/spip.php?page=backend_portada', orientation: 'extrême-gauche', tags: ['opinion'] },
     { name: 'Cnews', url: 'https://www.cnews.fr/rss.xml', orientation: 'extrême-droite', tags: ['opinion'] },
-    // { name: 'France Soir', url: 'https://www.francesoir.fr/rss.xml', orientation: 'extrême-droite', tags: ['opinion'] },
+    { name: 'France Soir', url: 'https://www.francesoir.fr/rss.xml', orientation: 'extrême-droite', tags: ['opinion'] },
 
     // === PRESSE ÉTRANGÈRE ===
     { name: 'RTBF', url: 'https://rss.rtbf.be/article/rss/highlight_rtbf_info.xml?source=internal', orientation: 'centre-gauche', tags: ['belgique'] },
@@ -88,7 +88,10 @@ const RSS_FEEDS = [
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre', tags: ['outre-mer', 'local'] },
     { name: "L'Info Kwezi", url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre', tags: ['outre-mer', 'local'] },
 
-    // === NOUVELLES SOURCES JUILLET 2025 : MULTIPERSPECTIVES / ALTERNATIF / GÉOPOLITIQUE / SCIENCES ===
+    // === ALTERNATIF / INDÉPENDANT ===
+    { name: 'Le Gossip', url: 'https://www.legossip.net/spip.php?page=backend', orientation: 'neutre', tags: ['people'] },
+    { name: 'Public', url: 'https://www.public.fr/feed', orientation: 'neutre', tags: ['people'] },
+
     // --- ALTERNATIF / OPINION / GÉOPOLITIQUE ---
     { name: 'Réseau International', url: 'https://reseauinternational.net/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
     { name: 'Le Saker Francophone', url: 'https://lesakerfrancophone.fr/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
