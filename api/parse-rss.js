@@ -54,7 +54,6 @@ const RSS_FEEDS = [
     { name: 'Cryptoast', url: 'https://cryptoast.fr/feed/', orientation: 'neutre', tags: ['crypto'] },
 
     // === DÉFENSE / MILITAIRE ===
-    { name: 'data.gouv.fr', url: 'https://www.data.gouv.fr/api/1/datasets/recent.atom', orientation: 'gouvernement', tags: ['open-data'] },
     { name: 'Cyber.gouv.fr (ANSSI)', url: 'https://cyber.gouv.fr/actualites/feed', orientation: 'gouvernement', tags: ['cyber'] },
     { name: 'OPEX360', url: 'https://feeds.feedburner.com/ZoneMilitaire', orientation: 'droite', tags: ['militaire'] },
 
