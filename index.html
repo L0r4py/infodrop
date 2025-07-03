@@ -239,496 +239,512 @@
                 </header>
 
                 <!-- BANDEAU CONTEXTUEL - VERSION STATIQUE ET CENTRÉE -->
-                <div x-ignore>
-                    <div x-data="contextTicker()" x-init="initTicker()"
-                        class="bg-gray-800/95 border-b border-gray-700 h-8">
-                        <div class="md:hidden h-full">
-                            <div class="overflow-hidden h-full">
-                                <div class="ticker-train flex items-center h-full">
-                                    <template x-for="i in [1, 2]">
-                                        <div
-                                            class="flex-shrink-0 flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
-                                            <span class="flex items-center gap-1"><span
-                                                    class="text-yellow-400">📅</span>
-                                                <span x-text="dateInfo.fullDate"></span></span>
-                                            <span class="flex items-center gap-1"><span class="text-blue-400">📊</span>
-                                                Jour
-                                                <span class="font-semibold text-white"
-                                                    x-text="dateInfo.dayOfYear"></span>/365</span>
-                                            <span x-show="todayFeast" class="flex items-center gap-1"><span
-                                                    class="text-red-400">🎉</span> <span
-                                                    class="font-semibold text-white" x-text="todayFeast"></span></span>
-                                            <span x-show="weather.temperature !== null"
-                                                class="flex items-center gap-1"><span x-text="weather.icon"></span>
-                                                <span class="font-semibold text-white"><span
-                                                        x-text="weather.temperature"></span>°C</span> <span
-                                                    class="text-gray-400" x-text="weather.description"></span></span>
-                                            <span class="flex items-center gap-1"><span x-text="moonPhase.icon"></span>
-                                                <span x-text="moonPhase.name"></span></span>
-                                            <span class="flex items-center gap-1"><span class="text-green-400">⏳</span>
-                                                <span class="font-semibold text-white"
-                                                    x-text="dateInfo.daysUntilNewYear"></span> jours avant 2026</span>
-                                            <span class="text-gray-600">•</span>
-                                        </div>
-                                    </template>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="hidden md:flex items-center justify-center h-full">
-                            <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
-                                <span class="flex items-center gap-1"><span class="text-yellow-400">📅</span> <span
-                                        x-text="dateInfo.fullDate"></span></span>
-                                <span class="flex items-center gap-1"><span class="text-blue-400">📊</span> Jour <span
-                                        class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365</span>
-                                <span x-show="todayFeast" class="flex items-center gap-1"><span
-                                        class="text-red-400">🎉</span> <span class="font-semibold text-white"
-                                        x-text="todayFeast"></span></span>
-                                <span x-show="weather.temperature !== null" class="flex items-center gap-1"><span
-                                        x-text="weather.icon"></span> <span class="font-semibold text-white"><span
-                                            x-text="weather.temperature"></span>°C</span> <span class="text-gray-400"
-                                        x-text="weather.description"></span></span>
-                                <span class="flex items-center gap-1"><span x-text="moonPhase.icon"></span> <span
-                                        x-text="moonPhase.name"></span></span>
-                                <span class="flex items-center gap-1"><span class="text-green-400">⏳</span> <span
-                                        class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span>
-                                    jours
-                                    avant 2026</span>
+                <div x-data="contextTicker()" x-init="initTicker()" class="bg-gray-800/95 border-b border-gray-700 h-8">
+                    <div class="md:hidden h-full">
+                        <div class="overflow-hidden h-full">
+                            <div class="ticker-train flex items-center h-full">
+                                <template x-for="i in [1, 2]">
+                                    <div
+                                        class="flex-shrink-0 flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
+                                        <span class="flex items-center gap-1"><span class="text-yellow-400">📅</span>
+                                            <span x-text="dateInfo.fullDate"></span></span>
+                                        <span class="flex items-center gap-1"><span class="text-blue-400">📊</span> Jour
+                                            <span class="font-semibold text-white"
+                                                x-text="dateInfo.dayOfYear"></span>/365</span>
+                                        <span x-show="todayFeast" class="flex items-center gap-1"><span
+                                                class="text-red-400">🎉</span> <span class="font-semibold text-white"
+                                                x-text="todayFeast"></span></span>
+                                        <span x-show="weather.temperature !== null"
+                                            class="flex items-center gap-1"><span x-text="weather.icon"></span> <span
+                                                class="font-semibold text-white"><span
+                                                    x-text="weather.temperature"></span>°C</span> <span
+                                                class="text-gray-400" x-text="weather.description"></span></span>
+                                        <span class="flex items-center gap-1"><span x-text="moonPhase.icon"></span>
+                                            <span x-text="moonPhase.name"></span></span>
+                                        <span class="flex items-center gap-1"><span class="text-green-400">⏳</span>
+                                            <span class="font-semibold text-white"
+                                                x-text="dateInfo.daysUntilNewYear"></span> jours avant 2026</span>
+                                        <span class="text-gray-600">•</span>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>
-
-                    <!-- COMPTEUR D'ARTICLES LUS -->
-                    <div x-show="totalReadCount > 0" x-transition
-                        class="bg-gray-800/95 border-b border-gray-700 px-4 py-2 text-center">
-                        <p class="text-sm text-gray-400">
-                            📚 <span class="font-semibold text-white" x-text="totalReadCount"></span>
-                            <span x-text="totalReadCount === 1 ? 'article lu' : 'articles lus'"></span>
-                        </p>
+                    <div class="hidden md:flex items-center justify-center h-full">
+                        <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
+                            <span class="flex items-center gap-1"><span class="text-yellow-400">📅</span> <span
+                                    x-text="dateInfo.fullDate"></span></span>
+                            <span class="flex items-center gap-1"><span class="text-blue-400">📊</span> Jour <span
+                                    class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365</span>
+                            <span x-show="todayFeast" class="flex items-center gap-1"><span
+                                    class="text-red-400">🎉</span> <span class="font-semibold text-white"
+                                    x-text="todayFeast"></span></span>
+                            <span x-show="weather.temperature !== null" class="flex items-center gap-1"><span
+                                    x-text="weather.icon"></span> <span class="font-semibold text-white"><span
+                                        x-text="weather.temperature"></span>°C</span> <span class="text-gray-400"
+                                    x-text="weather.description"></span></span>
+                            <span class="flex items-center gap-1"><span x-text="moonPhase.icon"></span> <span
+                                    x-text="moonPhase.name"></span></span>
+                            <span class="flex items-center gap-1"><span class="text-green-400">⏳</span> <span
+                                    class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span> jours
+                                avant 2026</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- ========== PANEL ADMIN ========== -->
-                <div x-show="showAdminPanel && isAdmin" x-transition class="bg-gray-950/50 border-b border-gray-800">
-                    <div class="max-w-4xl mx-auto p-4">
-                        <h2 class="text-lg font-bold text-white mb-3">🧨 Ajouter une actualité</h2>
-                        <form @submit.prevent="addManualNews()" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div class="md:col-span-3"><input x-model="newNews.resume" type="text" placeholder="Résumé"
-                                    maxlength="180" required
-                                    class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
-                            </div>
-                            <div><input x-model="newNews.source" type="text" placeholder="Source" required
-                                    class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
-                            </div>
-                            <div><input x-model="newNews.url" type="url" placeholder="URL de l'article" required
-                                    class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
-                            </div>
+                <!-- COMPTEUR D'ARTICLES LUS -->
+                <div x-show="totalReadCount > 0" x-transition
+                    class="bg-gray-800/95 border-b border-gray-700 px-4 py-2 text-center">
+                    <p class="text-sm text-gray-400">
+                        📚 <span class="font-semibold text-white" x-text="totalReadCount"></span>
+                        <span x-text="totalReadCount === 1 ? 'article lu' : 'articles lus'"></span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- ========== PANEL ADMIN ========== -->
+            <div x-show="showAdminPanel && isAdmin" x-transition class="bg-gray-950/50 border-b border-gray-800">
+                <div class="max-w-4xl mx-auto p-4">
+                    <h2 class="text-lg font-bold text-white mb-3">🧨 Ajouter une actualité</h2>
+                    <form @submit.prevent="addManualNews()" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="md:col-span-3"><input x-model="newNews.resume" type="text" placeholder="Résumé"
+                                maxlength="180" required
+                                class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
+                        </div>
+                        <div><input x-model="newNews.source" type="text" placeholder="Source" required
+                                class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
+                        </div>
+                        <div><input x-model="newNews.url" type="url" placeholder="URL de l'article" required
+                                class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
+                        </div>
+                        <div>
+                            <select x-model="newNews.orientation"
+                                class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white h-full">
+                                <option value="">Orientation...</option>
+                                <option value="extrême-gauche">Extrême gauche</option>
+                                <option value="gauche">Gauche</option>
+                                <option value="centre-gauche">Centre gauche</option>
+                                <option value="centre">Centre</option>
+                                <option value="centre-droit">Centre droit</option>
+                                <option value="droite">Droite</option>
+                                <option value="extrême-droite">Extrême droite</option>
+                                <option value="neutre">Neutre</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <input x-model="newNews.tagsText" type="text" placeholder="Tags (séparés par des virgules)"
+                                class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
+                        </div>
+                        <div class="md:col-span-3"><button type="submit" :disabled="addingNews"
+                                class="bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 transition disabled:opacity-50">Publier</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ========== CONTENU PRINCIPAL ========== -->
+            <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full">
+
+                <!-- STATS ADMIN -->
+                <div x-show="isAdmin" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6 text-center">
+                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+                        <div class="text-2xl font-bold text-white" x-text="stats.total_articles">0</div>
+                        <div class="text-sm text-gray-400">Articles</div>
+                    </div>
+                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+                        <div class="text-2xl font-bold text-white" x-text="stats.total_sources">0</div>
+                        <div class="text-sm text-gray-400">Sources</div>
+                    </div>
+                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700 col-span-2 md:col-span-1">
+                        <div class="text-2xl font-bold text-white flex items-center justify-center gap-2"
+                            x-text="connectedUsers">1</div>
+                        <div class="text-sm text-gray-400">Lecteurs connectés</div>
+                    </div>
+                </div>
+
+                <!-- DIVERSITY CHECKER -->
+                <div x-show="!loadingNews && diversityScore !== null" x-transition
+                    class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
+                    <button @click="showDiversityChecker = !showDiversityChecker"
+                        class="w-full flex items-center justify-between p-4">
+                        <h3 class="font-semibold text-gray-300">Score de diversité</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform"
+                            :class="{ 'rotate-180': showDiversityChecker }" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div x-show="showDiversityChecker" x-transition class="p-4 border-t border-gray-700">
+                        <div class="flex items-center justify-between mb-4">
                             <div>
-                                <select x-model="newNews.orientation"
-                                    class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white h-full">
-                                    <option value="">Orientation...</option>
-                                    <option value="extrême-gauche">Extrême gauche</option>
-                                    <option value="gauche">Gauche</option>
-                                    <option value="centre-gauche">Centre gauche</option>
-                                    <option value="centre">Centre</option>
-                                    <option value="centre-droit">Centre droit</option>
-                                    <option value="droite">Droite</option>
-                                    <option value="extrême-droite">Extrême droite</option>
-                                    <option value="neutre">Neutre</option>
-                                </select>
+                                <p class="text-xs text-gray-500">Basé sur vos dernières lectures</p>
                             </div>
-                            <div class="md:col-span-2">
-                                <input x-model="newNews.tagsText" type="text"
-                                    placeholder="Tags (séparés par des virgules)"
-                                    class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
-                            </div>
-                            <div class="md:col-span-3"><button type="submit" :disabled="addingNews"
-                                    class="bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 transition disabled:opacity-50">Publier</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- ========== CONTENU PRINCIPAL ========== -->
-                <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full">
-
-                    <!-- STATS ADMIN -->
-                    <div x-show="isAdmin" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6 text-center">
-                        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
-                            <div class="text-2xl font-bold text-white" x-text="stats.total_articles">0</div>
-                            <div class="text-sm text-gray-400">Articles</div>
-                        </div>
-                        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
-                            <div class="text-2xl font-bold text-white" x-text="stats.total_sources">0</div>
-                            <div class="text-sm text-gray-400">Sources</div>
-                        </div>
-                        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700 col-span-2 md:col-span-1">
-                            <div class="text-2xl font-bold text-white flex items-center justify-center gap-2"
-                                x-text="connectedUsers">1</div>
-                            <div class="text-sm text-gray-400">Lecteurs connectés</div>
-                        </div>
-                    </div>
-
-                    <!-- DIVERSITY CHECKER -->
-                    <div x-show="!loadingNews && diversityScore !== null" x-transition
-                        class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
-                        <button @click="showDiversityChecker = !showDiversityChecker"
-                            class="w-full flex items-center justify-between p-4">
-                            <h3 class="font-semibold text-gray-300">Score de diversité</h3>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform"
-                                :class="{ 'rotate-180': showDiversityChecker }" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                        <div x-show="showDiversityChecker" x-transition class="p-4 border-t border-gray-700">
-                            <div class="flex items-center justify-between mb-4">
-                                <div>
-                                    <p class="text-xs text-gray-500">Basé sur vos dernières lectures</p>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-bold" :class="{
+                            <div class="text-right">
+                                <div class="text-2xl font-bold" :class="{
                                          'text-red-400': diversityScore < 30,
                                          'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
                                          'text-green-400': diversityScore >= 70
                                      }" x-text="diversityScore + '%'"></div>
-                                    <p class="text-xs" :class="{
+                                <p class="text-xs" :class="{
                                        'text-red-400': diversityScore < 30,
                                        'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
                                        'text-green-400': diversityScore >= 70
                                    }" x-text="getDiversityMessage()"></p>
-                                </div>
                             </div>
-                            <!-- Barre de progression -->
-                            <div class="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
-                                <div class="h-full rounded-full transition-all duration-1000" :class="{
+                        </div>
+                        <!-- Barre de progression -->
+                        <div class="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-1000" :class="{
                                      'bg-red-400': diversityScore < 30,
                                      'bg-yellow-400': diversityScore >= 30 && diversityScore < 70,
                                      'bg-green-400': diversityScore >= 70
                                  }" :style="`width: ${diversityScore}%`"></div>
-                            </div>
-                            <!-- Orientations lues -->
-                            <div class="mt-3 flex flex-wrap gap-2" x-show="readOrientations.length > 0">
-                                <template x-for="orientation in readOrientations" :key="orientation">
-                                    <span class="text-xs px-2 py-1 rounded-full"
-                                        :class="getOrientationClass(orientation)" x-text="orientation"></span>
-                                </template>
-                            </div>
+                        </div>
+                        <!-- Orientations lues -->
+                        <div class="mt-3 flex flex-wrap gap-2" x-show="readOrientations.length > 0">
+                            <template x-for="orientation in readOrientations" :key="orientation">
+                                <span class="text-xs px-2 py-1 rounded-full" :class="getOrientationClass(orientation)"
+                                    x-text="orientation"></span>
+                            </template>
                         </div>
                     </div>
+                </div>
 
-                    <!-- FILTRES -->
-                    <div x-show="!loadingNews" x-transition
-                        class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
-                        <button @click="showFilters = !showFilters"
-                            class="w-full flex items-center justify-between p-4">
-                            <h3 class="font-semibold text-gray-300">Filtrer</h3>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform"
-                                :class="{ 'rotate-180': showFilters }" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                        <div x-show="showFilters" x-transition class="p-4 border-t border-gray-700">
-                            <div class="flex flex-wrap gap-2 mb-2">
-                                <button @click="activeFilter = 'all'"
-                                    :class="{ 'bg-blue-600 text-white': activeFilter === 'all', 'bg-gray-700 text-gray-300': activeFilter !== 'all' }"
-                                    class="px-3 py-1 rounded-full text-sm font-semibold transition">Tout voir</button>
-                                <template x-for="tag in allTags" :key="tag">
-                                    <button @click="activeFilter = tag"
-                                        :class="{ 'bg-blue-600 text-white': activeFilter === tag, 'bg-gray-700 text-gray-300': activeFilter !== tag }"
-                                        class="px-3 py-1 rounded-full text-sm font-semibold transition capitalize"
-                                        x-text="tag"></button>
-                                </template>
-                            </div>
+                <!-- FILTRES -->
+                <div x-show="!loadingNews" x-transition class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
+                    <button @click="showFilters = !showFilters" class="w-full flex items-center justify-between p-4">
+                        <h3 class="font-semibold text-gray-300">Filtrer</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform"
+                            :class="{ 'rotate-180': showFilters }" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div x-show="showFilters" x-transition class="p-4 border-t border-gray-700">
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            <button @click="activeFilter = 'all'"
+                                :class="{ 'bg-blue-600 text-white': activeFilter === 'all', 'bg-gray-700 text-gray-300': activeFilter !== 'all' }"
+                                class="px-3 py-1 rounded-full text-sm font-semibold transition">Tout voir</button>
+                            <template x-for="tag in allTags" :key="tag">
+                                <button @click="activeFilter = tag"
+                                    :class="{ 'bg-blue-600 text-white': activeFilter === tag, 'bg-gray-700 text-gray-300': activeFilter !== tag }"
+                                    class="px-3 py-1 rounded-full text-sm font-semibold transition capitalize"
+                                    x-text="tag"></button>
+                            </template>
                         </div>
                     </div>
+                </div>
 
-                    <!-- LISTE DES NEWS -->
-                    <div class="space-y-3">
-                        <template x-for="news in filteredNews" :key="news.id">
-                            <div
-                                class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
-                                <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="flex-grow">
-                                    <p class="text-base text-white mb-2" x-text="news.resume"></p>
-                                    <div class="flex items-center flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400">
-                                        <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
-                                        <span x-show="!news.added_by" x-text="news.source"></span>
-                                        <span x-text="formatTime(news.heure)"></span>
-                                        <span x-show="news.orientation" x-text="news.orientation.replace('-', ' ')"
-                                            :class="getOrientationClass(news.orientation)"
-                                            class="px-2 py-0.5 rounded-full font-semibold text-xs capitalize"></span>
-                                        <template x-if="news.tags && news.tags.length">
-                                            <template x-for="tag in news.tags" :key="tag">
-                                                <span
-                                                    class="ml-1 px-2 py-0.5 rounded-full font-medium text-xs capitalize bg-gray-700 text-gray-300 border border-gray-600"
-                                                    x-text="tag"></span>
-                                            </template>
+                <!-- LISTE DES NEWS -->
+                <div class="space-y-3">
+                    <template x-for="news in filteredNews" :key="news.id">
+                        <div
+                            class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
+                            <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="flex-grow">
+                                <p class="text-base text-white mb-2" x-text="news.resume"></p>
+                                <div class="flex items-center flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400">
+                                    <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
+                                    <span x-show="!news.added_by" x-text="news.source"></span>
+                                    <span x-text="formatTime(news.heure)"></span>
+                                    <span x-show="news.orientation" x-text="news.orientation.replace('-', ' ')"
+                                        :class="getOrientationClass(news.orientation)"
+                                        class="px-2 py-0.5 rounded-full font-semibold text-xs capitalize"></span>
+                                    <template x-if="news.tags && news.tags.length">
+                                        <template x-for="tag in news.tags" :key="tag">
+                                            <span
+                                                class="ml-1 px-2 py-0.5 rounded-full font-medium text-xs capitalize bg-gray-700 text-gray-300 border border-gray-600"
+                                                x-text="tag"></span>
                                         </template>
-                                    </div>
-                                </a>
+                                    </template>
+                                </div>
+                            </a>
 
-                                <!-- BOUTONS ADMIN -->
-                                <button x-show="isAdmin" @click.prevent="openEditPanel(news)"
-                                    class="flex-shrink-0 p-2 rounded-full hover:bg-blue-900/50 transition"
-                                    title="Éditer">✏️</button>
-                                <button x-show="isAdmin" @click.prevent="deleteNews(news.id)"
-                                    class="flex-shrink-0 p-2 rounded-full hover:bg-red-900/50 transition"
-                                    title="Supprimer">🗑️</button>
-                            </div>
-                        </template>
+                            <!-- BOUTONS ADMIN -->
+                            <button x-show="isAdmin" @click.prevent="openEditPanel(news)"
+                                class="flex-shrink-0 p-2 rounded-full hover:bg-blue-900/50 transition"
+                                title="Éditer">✏️</button>
+                            <button x-show="isAdmin" @click.prevent="deleteNews(news.id)"
+                                class="flex-shrink-0 p-2 rounded-full hover:bg-red-900/50 transition"
+                                title="Supprimer">🗑️</button>
+                        </div>
+                    </template>
 
-                        <!-- MESSAGES D'ÉTAT -->
-                        <div x-show="filteredNews.length === 0 && !loadingNews" class="text-center py-12">
-                            <p class="text-gray-500"
-                                x-text="activeFilter === 'all' ? 'Aucune actualité pour le moment.' : `Aucune actualité pour le filtre '${activeFilter}'.`">
+                    <!-- MESSAGES D'ÉTAT -->
+                    <div x-show="filteredNews.length === 0 && !loadingNews" class="text-center py-12">
+                        <p class="text-gray-500"
+                            x-text="activeFilter === 'all' ? 'Aucune actualité pour le moment.' : `Aucune actualité pour le filtre '${activeFilter}'.`">
+                        </p>
+                    </div>
+                    <div x-show="loadingNews && filteredNews.length === 0" class="text-center py-12">
+                        <div
+                            class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin">
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- ========== MODALS ========== -->
+
+            <!-- MODAL EDIT -->
+            <div x-show="showEditPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+                x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+                <div @click.away="showEditPanel = false"
+                    class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
+                    <h3 class="text-xl font-bold mb-4">Éditer l'actualité</h3>
+                    <form @submit.prevent="updateNews()" class="space-y-4">
+                        <div><label class="text-sm text-gray-400 block mb-1">Résumé</label><input
+                                x-model="editingNews.resume" type="text"
+                                class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
+                        <div><label class="text-sm text-gray-400 block mb-1">Source</label><input
+                                x-model="editingNews.source" type="text"
+                                class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
+                        <div><label class="text-sm text-gray-400 block mb-1">URL</label><input x-model="editingNews.url"
+                                type="url" class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">Orientation</label>
+                            <select x-model="editingNews.orientation"
+                                class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600">
+                                <option value="">Non définie</option>
+                                <option value="extrême-gauche">Extrême gauche</option>
+                                <option value="gauche">Gauche</option>
+                                <option value="centre-gauche">Centre gauche</option>
+                                <option value="centre">Centre</option>
+                                <option value="centre-droit">Centre droit</option>
+                                <option value="droite">Droite</option>
+                                <option value="extrême-droite">Extrême droite</option>
+                                <option value="neutre">Neutre</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">Tags (séparés par des virgules)</label>
+                            <input x-model="editingNews.tagsText" type="text"
+                                class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"
+                                placeholder="ex: national, crypto, tv">
+                        </div>
+                        <div class="flex justify-end gap-4 pt-4">
+                            <button type="button" @click="showEditPanel = false"
+                                class="px-4 py-2 bg-gray-600 rounded-lg hover:bg-gray-500 transition">Annuler</button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- MODAL ABOUT -->
+            <div x-show="showAboutPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+                x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+                <div @click.away="showAboutPanel = false"
+                    class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
+                    <h3 class="text-xl font-bold mb-4">À propos d'INFODROP</h3>
+                    <div class="space-y-4 text-gray-300">
+                        <div>
+                            <h4 class="font-semibold text-white">📰 INFODROP (Le Flux)</h4>
+                            <p class="text-sm">L'objectif initial est simple : fournir un flux d'actualités minimaliste,
+                                rapide et sans fioritures. Il agrège en temps réel les dernières informations des
+                                sources francophones les plus pertinentes pour un aperçu immédiat de ce qui se passe.
                             </p>
                         </div>
-                        <div x-show="loadingNews && filteredNews.length === 0" class="text-center py-12">
-                            <div
-                                class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin">
-                            </div>
+                        <div>
+                            <h4 class="font-semibold text-blue-400">🌍 INFODROP 360° (L'Analyse)</h4>
+                            <p class="text-sm">La mission de 360° est plus profonde : lutter contre les bulles de
+                                filtres en contextualisant l'information. Pour un même sujet, il expose les perspectives
+                                de médias d'orientations différentes, analyse les faits, les divergences et les biais.
+                                L'objectif n'est plus seulement de savoir ce qui se passe, mais de comprendre pourquoi
+                                on en parle de différentes manières.</p>
                         </div>
                     </div>
-                </main>
-
-                <!-- ========== MODALS ========== -->
-
-                <!-- MODAL EDIT -->
-                <div x-show="showEditPanel" x-transition:enter="ease-out duration-300"
-                    x-transition:enter-start="opacity-0" x-transition:leave="ease-in duration-200"
-                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                    class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
-                    <div @click.away="showEditPanel = false"
-                        class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
-                        <h3 class="text-xl font-bold mb-4">Éditer l'actualité</h3>
-                        <form @submit.prevent="updateNews()" class="space-y-4">
-                            <div><label class="text-sm text-gray-400 block mb-1">Résumé</label><input
-                                    x-model="editingNews.resume" type="text"
-                                    class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
-                            <div><label class="text-sm text-gray-400 block mb-1">Source</label><input
-                                    x-model="editingNews.source" type="text"
-                                    class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
-                            <div><label class="text-sm text-gray-400 block mb-1">URL</label><input
-                                    x-model="editingNews.url" type="url"
-                                    class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
-                            <div>
-                                <label class="text-sm text-gray-400 block mb-1">Orientation</label>
-                                <select x-model="editingNews.orientation"
-                                    class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600">
-                                    <option value="">Non définie</option>
-                                    <option value="extrême-gauche">Extrême gauche</option>
-                                    <option value="gauche">Gauche</option>
-                                    <option value="centre-gauche">Centre gauche</option>
-                                    <option value="centre">Centre</option>
-                                    <option value="centre-droit">Centre droit</option>
-                                    <option value="droite">Droite</option>
-                                    <option value="extrême-droite">Extrême droite</option>
-                                    <option value="neutre">Neutre</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="text-sm text-gray-400 block mb-1">Tags (séparés par des virgules)</label>
-                                <input x-model="editingNews.tagsText" type="text"
-                                    class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"
-                                    placeholder="ex: national, crypto, tv">
-                            </div>
-                            <div class="flex justify-end gap-4 pt-4">
-                                <button type="button" @click="showEditPanel = false"
-                                    class="px-4 py-2 bg-gray-600 rounded-lg hover:bg-gray-500 transition">Annuler</button>
-                                <button type="submit"
-                                    class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Enregistrer</button>
-                            </div>
-                        </form>
+                    <div class="flex justify-end pt-6">
+                        <button type="button" @click="showAboutPanel = false"
+                            class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Fermer</button>
                     </div>
                 </div>
-
-                <!-- MODAL ABOUT -->
-                <div x-show="showAboutPanel" x-transition:enter="ease-out duration-300"
-                    x-transition:enter-start="opacity-0" x-transition:leave="ease-in duration-200"
-                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                    class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
-                    <div @click.away="showAboutPanel = false"
-                        class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
-                        <h3 class="text-xl font-bold mb-4">À propos d'INFODROP</h3>
-                        <div class="space-y-4 text-gray-300">
-                            <div>
-                                <h4 class="font-semibold text-white">📰 INFODROP (Le Flux)</h4>
-                                <p class="text-sm">L'objectif initial est simple : fournir un flux d'actualités
-                                    minimaliste,
-                                    rapide et sans fioritures. Il agrège en temps réel les dernières informations des
-                                    sources francophones les plus pertinentes pour un aperçu immédiat de ce qui se
-                                    passe.
-                                </p>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-blue-400">🌍 INFODROP 360° (L'Analyse)</h4>
-                                <p class="text-sm">La mission de 360° est plus profonde : lutter contre les bulles de
-                                    filtres en contextualisant l'information. Pour un même sujet, il expose les
-                                    perspectives
-                                    de médias d'orientations différentes, analyse les faits, les divergences et les
-                                    biais.
-                                    L'objectif n'est plus seulement de savoir ce qui se passe, mais de comprendre
-                                    pourquoi
-                                    on en parle de différentes manières.</p>
-                            </div>
-                        </div>
-                        <div class="flex justify-end pt-6">
-                            <button type="button" @click="showAboutPanel = false"
-                                class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Fermer</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FOOTER -->
-                <footer class="text-center py-8 text-xs text-gray-500">
-                    <p>© 2025 INFODROP. Tous droits réservés.</p>
-                    <p class="mt-1">Un projet 3C - EM&LPy</p>
-                </footer>
             </div>
+
+            <!-- FOOTER -->
+            <footer class="text-center py-8 text-xs text-gray-500">
+                <p>© 2025 INFODROP. Tous droits réservés.</p>
+                <p class="mt-1">Un projet 3C - EM&LPy</p>
+            </footer>
         </div>
+    </div>
 
-        <!-- ========== BOUTON SCROLL TO TOP ========== -->
-        <button x-data="{ show: false }" x-show="show" x-transition
-            @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
-            x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
-            class="fixed bottom-6 right-6 z-40 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110 border border-gray-700"
-            style="display: none;">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd"
-                    d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd" />
-            </svg>
-        </button>
+    <!-- ========== BOUTON SCROLL TO TOP ========== -->
+    <button x-data="{ show: false }" x-show="show" x-transition @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+        x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
+        class="fixed bottom-6 right-6 z-40 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110 border border-gray-700"
+        style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+                d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
+                clip-rule="evenodd" />
+        </svg>
+    </button>
 
-        <!-- ========== JAVASCRIPT ========== -->
-        <script>
-            // ========== FONCTION BANDEAU CONTEXTUEL ==========
-            function contextTicker() {
-                return {
-                    dateInfo: {
-                        fullDate: '',
-                        dayOfYear: 0,
-                        daysUntilNewYear: 0
-                    },
-                    todayFeast: '',
-                    weather: {
-                        temperature: null,
-                        description: '',
-                        icon: '🌡️'
-                    },
-                    moonPhase: {
-                        name: '',
-                        icon: '🌙'
-                    },
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        // ========== FONCTION BANDEAU CONTEXTUEL ==========
+        function contextTicker() {
+            return {
+                dateInfo: {
+                    fullDate: '',
+                    dayOfYear: 0,
+                    daysUntilNewYear: 0
+                },
+                todayFeast: '',
+                weather: {
+                    temperature: null,
+                    description: '',
+                    icon: '🌡️'
+                },
+                moonPhase: {
+                    name: '',
+                    icon: '🌙'
+                },
 
-                    feasts: {
-                        '01-01': 'Jour de l\'an',
-                        '01-06': 'Épiphanie',
-                        '02-02': 'Chandeleur',
-                        '02-14': 'Saint-Valentin',
-                        '03-17': 'Saint-Patrick',
-                        '04-01': 'Poisson d\'avril',
-                        '05-01': 'Fête du travail',
-                        '05-08': 'Victoire 1945',
-                        '06-21': 'Fête de la musique',
-                        '07-14': 'Fête nationale',
-                        '08-15': 'Assomption',
-                        '10-31': 'Halloween',
-                        '11-01': 'Toussaint',
-                        '11-11': 'Armistice 1918',
-                        '12-25': 'Noël',
-                        '12-31': 'Saint-Sylvestre'
-                    },
+                feasts: {
+                    '01-01': 'Jour de l\'an',
+                    '01-06': 'Épiphanie',
+                    '02-02': 'Chandeleur',
+                    '02-14': 'Saint-Valentin',
+                    '03-17': 'Saint-Patrick',
+                    '04-01': 'Poisson d\'avril',
+                    '05-01': 'Fête du travail',
+                    '05-08': 'Victoire 1945',
+                    '06-21': 'Fête de la musique',
+                    '07-14': 'Fête nationale',
+                    '08-15': 'Assomption',
+                    '10-31': 'Halloween',
+                    '11-01': 'Toussaint',
+                    '11-11': 'Armistice 1918',
+                    '12-25': 'Noël',
+                    '12-31': 'Saint-Sylvestre'
+                },
 
-                    async initTicker() {
+                async initTicker() {
+                    this.updateDateInfo();
+                    this.updateMoonPhase();
+                    await this.getWeather();
+
+                    const now = new Date();
+                    const tomorrow = new Date(now);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    tomorrow.setHours(0, 0, 0, 0);
+                    const msUntilMidnight = tomorrow - now;
+
+                    setTimeout(() => {
                         this.updateDateInfo();
                         this.updateMoonPhase();
-                        await this.getWeather();
-
-                        const now = new Date();
-                        const tomorrow = new Date(now);
-                        tomorrow.setDate(tomorrow.getDate() + 1);
-                        tomorrow.setHours(0, 0, 0, 0);
-                        const msUntilMidnight = tomorrow - now;
-
-                        setTimeout(() => {
+                        setInterval(() => {
                             this.updateDateInfo();
                             this.updateMoonPhase();
-                            setInterval(() => {
-                                this.updateDateInfo();
-                                this.updateMoonPhase();
-                            }, 86400000);
-                        }, msUntilMidnight);
+                        }, 86400000);
+                    }, msUntilMidnight);
 
-                        setInterval(() => this.getWeather(), 600000);
-                    },
+                    setInterval(() => this.getWeather(), 600000);
+                },
 
-                    updateDateInfo() {
-                        const now = new Date();
-                        const options = { weekday: 'long', day: 'numeric', month: 'long' };
-                        this.dateInfo.fullDate = now.toLocaleDateString('fr-FR', options);
-                        this.dateInfo.fullDate = this.dateInfo.fullDate.charAt(0).toUpperCase() + this.dateInfo.fullDate.slice(1);
+                updateDateInfo() {
+                    const now = new Date();
+                    const options = { weekday: 'long', day: 'numeric', month: 'long' };
+                    this.dateInfo.fullDate = now.toLocaleDateString('fr-FR', options);
+                    this.dateInfo.fullDate = this.dateInfo.fullDate.charAt(0).toUpperCase() + this.dateInfo.fullDate.slice(1);
 
-                        const start = new Date(now.getFullYear(), 0, 0);
-                        const diff = now - start;
-                        this.dateInfo.dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const start = new Date(now.getFullYear(), 0, 0);
+                    const diff = now - start;
+                    this.dateInfo.dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-                        const nextYear = new Date(now.getFullYear() + 1, 0, 1);
-                        this.dateInfo.daysUntilNewYear = Math.ceil((nextYear - now) / (1000 * 60 * 60 * 24));
+                    const nextYear = new Date(now.getFullYear() + 1, 0, 1);
+                    this.dateInfo.daysUntilNewYear = Math.ceil((nextYear - now) / (1000 * 60 * 60 * 24));
 
-                        const monthDay = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-                        this.todayFeast = this.feasts[monthDay] || '';
-                    },
+                    const monthDay = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+                    this.todayFeast = this.feasts[monthDay] || '';
+                },
 
-                    updateMoonPhase() {
-                        const now = new Date();
-                        const refNewMoon = new Date(2000, 0, 6);
-                        const lunarCycle = 29.53058867;
+                updateMoonPhase() {
+                    const now = new Date();
+                    const refNewMoon = new Date(2000, 0, 6);
+                    const lunarCycle = 29.53058867;
 
-                        const daysSinceRef = (now - refNewMoon) / (1000 * 60 * 60 * 24);
-                        const moonAge = daysSinceRef % lunarCycle;
+                    const daysSinceRef = (now - refNewMoon) / (1000 * 60 * 60 * 24);
+                    const moonAge = daysSinceRef % lunarCycle;
 
-                        if (moonAge < 1.84566) {
-                            this.moonPhase.name = 'Nouvelle lune';
-                            this.moonPhase.icon = '🌑';
-                        } else if (moonAge < 5.53699) {
-                            this.moonPhase.name = 'Premier croissant';
-                            this.moonPhase.icon = '🌒';
-                        } else if (moonAge < 9.22831) {
-                            this.moonPhase.name = 'Premier quartier';
-                            this.moonPhase.icon = '🌓';
-                        } else if (moonAge < 12.91963) {
-                            this.moonPhase.name = 'Gibbeuse croissante';
-                            this.moonPhase.icon = '🌔';
-                        } else if (moonAge < 16.61096) {
-                            this.moonPhase.name = 'Pleine lune';
-                            this.moonPhase.icon = '🌕';
-                        } else if (moonAge < 20.30228) {
-                            this.moonPhase.name = 'Gibbeuse décroissante';
-                            this.moonPhase.icon = '🌖';
-                        } else if (moonAge < 23.99361) {
-                            this.moonPhase.name = 'Dernier quartier';
-                            this.moonPhase.icon = '🌗';
-                        } else {
-                            this.moonPhase.name = 'Dernier croissant';
-                            this.moonPhase.icon = '🌘';
+                    if (moonAge < 1.84566) {
+                        this.moonPhase.name = 'Nouvelle lune';
+                        this.moonPhase.icon = '🌑';
+                    } else if (moonAge < 5.53699) {
+                        this.moonPhase.name = 'Premier croissant';
+                        this.moonPhase.icon = '🌒';
+                    } else if (moonAge < 9.22831) {
+                        this.moonPhase.name = 'Premier quartier';
+                        this.moonPhase.icon = '🌓';
+                    } else if (moonAge < 12.91963) {
+                        this.moonPhase.name = 'Gibbeuse croissante';
+                        this.moonPhase.icon = '🌔';
+                    } else if (moonAge < 16.61096) {
+                        this.moonPhase.name = 'Pleine lune';
+                        this.moonPhase.icon = '🌕';
+                    } else if (moonAge < 20.30228) {
+                        this.moonPhase.name = 'Gibbeuse décroissante';
+                        this.moonPhase.icon = '🌖';
+                    } else if (moonAge < 23.99361) {
+                        this.moonPhase.name = 'Dernier quartier';
+                        this.moonPhase.icon = '🌗';
+                    } else {
+                        this.moonPhase.name = 'Dernier croissant';
+                        this.moonPhase.icon = '🌘';
+                    }
+                },
+
+                async getWeather() {
+                    try {
+                        const position = await new Promise((resolve, reject) => {
+                            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+                        });
+
+                        const { latitude, longitude } = position.coords;
+
+                        const response = await fetch(
+                            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&timezone=auto`
+                        );
+
+                        const data = await response.json();
+                        const current = data.current_weather;
+
+                        this.weather.temperature = Math.round(current.temperature);
+
+                        const weatherCode = current.weathercode;
+                        if (weatherCode === 0) {
+                            this.weather.description = 'Ciel dégagé';
+                            this.weather.icon = '☀️';
+                        } else if (weatherCode <= 3) {
+                            this.weather.description = 'Partiellement nuageux';
+                            this.weather.icon = '⛅';
+                        } else if (weatherCode <= 48) {
+                            this.weather.description = 'Nuageux';
+                            this.weather.icon = '☁️';
+                        } else if (weatherCode <= 67) {
+                            this.weather.description = 'Pluie';
+                            this.weather.icon = '🌧️';
+                        } else if (weatherCode <= 77) {
+                            this.weather.description = 'Neige';
+                            this.weather.icon = '❄️';
+                        } else if (weatherCode <= 99) {
+                            this.weather.description = 'Orage';
+                            this.weather.icon = '⛈️';
                         }
-                    },
 
-                    async getWeather() {
+                    } catch (error) {
                         try {
-                            const position = await new Promise((resolve, reject) => {
-                                navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
-                            });
-
-                            const { latitude, longitude } = position.coords;
-
                             const response = await fetch(
-                                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&timezone=auto`
+                                'https://api.open-meteo.com/v1/forecast?latitude=44.8061&longitude=-0.6306&current_weather=true&timezone=Europe/Paris'
                             );
-
                             const data = await response.json();
                             const current = data.current_weather;
 
@@ -736,521 +752,490 @@
 
                             const weatherCode = current.weathercode;
                             if (weatherCode === 0) {
-                                this.weather.description = 'Ciel dégagé';
                                 this.weather.icon = '☀️';
                             } else if (weatherCode <= 3) {
-                                this.weather.description = 'Partiellement nuageux';
                                 this.weather.icon = '⛅';
                             } else if (weatherCode <= 48) {
-                                this.weather.description = 'Nuageux';
                                 this.weather.icon = '☁️';
                             } else if (weatherCode <= 67) {
-                                this.weather.description = 'Pluie';
                                 this.weather.icon = '🌧️';
                             } else if (weatherCode <= 77) {
-                                this.weather.description = 'Neige';
                                 this.weather.icon = '❄️';
-                            } else if (weatherCode <= 99) {
-                                this.weather.description = 'Orage';
+                            } else {
                                 this.weather.icon = '⛈️';
                             }
 
-                        } catch (error) {
-                            try {
-                                const response = await fetch(
-                                    'https://api.open-meteo.com/v1/forecast?latitude=44.8061&longitude=-0.6306&current_weather=true&timezone=Europe/Paris'
-                                );
-                                const data = await response.json();
-                                const current = data.current_weather;
-
-                                this.weather.temperature = Math.round(current.temperature);
-
-                                const weatherCode = current.weathercode;
-                                if (weatherCode === 0) {
-                                    this.weather.icon = '☀️';
-                                } else if (weatherCode <= 3) {
-                                    this.weather.icon = '⛅';
-                                } else if (weatherCode <= 48) {
-                                    this.weather.icon = '☁️';
-                                } else if (weatherCode <= 67) {
-                                    this.weather.icon = '🌧️';
-                                } else if (weatherCode <= 77) {
-                                    this.weather.icon = '❄️';
-                                } else {
-                                    this.weather.icon = '⛈️';
-                                }
-
-                                this.weather.description = 'Pessac';
-                            } catch (err) {
-                                console.error('Erreur météo:', err);
-                            }
+                            this.weather.description = 'Pessac';
+                        } catch (err) {
+                            console.error('Erreur météo:', err);
                         }
                     }
-                };
-            }
+                }
+            };
+        }
 
-            // ========== APPLICATION PRINCIPALE ==========
-            function infodropApp() {
-                const ORIENTATION_DATA = {
-                    'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000', percentage: 2 },
-                    'gauche': { class: 'bg-[#D42A2A] text-white', color: '#D42A2A', percentage: 16 },
-                    'centre-gauche': { class: 'bg-[#AA5555] text-white', color: '#AA5555', percentage: 22 },
-                    'centre': { class: 'bg-[#808080] text-white', color: '#808080', percentage: 16 },
-                    'centre-droit': { class: 'bg-[#5555AA] text-white', color: '#5555AA', percentage: 14 },
-                    'droite': { class: 'bg-[#2A2AD4] text-white', color: '#2A2AD4', percentage: 4 },
-                    'extrême-droite': { class: 'bg-[#0000FF] text-white', color: '#0000FF', percentage: 8 },
-                    'neutre': { class: 'bg-green-700 text-green-100', color: '#16a34a', percentage: 12 }
-                };
+        // ========== APPLICATION PRINCIPALE ==========
+        function infodropApp() {
+            const ORIENTATION_DATA = {
+                'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000', percentage: 2 },
+                'gauche': { class: 'bg-[#D42A2A] text-white', color: '#D42A2A', percentage: 16 },
+                'centre-gauche': { class: 'bg-[#AA5555] text-white', color: '#AA5555', percentage: 22 },
+                'centre': { class: 'bg-[#808080] text-white', color: '#808080', percentage: 16 },
+                'centre-droit': { class: 'bg-[#5555AA] text-white', color: '#5555AA', percentage: 14 },
+                'droite': { class: 'bg-[#2A2AD4] text-white', color: '#2A2AD4', percentage: 4 },
+                'extrême-droite': { class: 'bg-[#0000FF] text-white', color: '#0000FF', percentage: 8 },
+                'neutre': { class: 'bg-green-700 text-green-100', color: '#16a34a', percentage: 12 }
+            };
 
-                return {
-                    // État de session
-                    sessionLoaded: false,
-                    user: null,
-                    email: '',
-                    loading: false,
-                    message: '',
-                    messageType: '',
+            return {
+                // État de session
+                sessionLoaded: false,
+                user: null,
+                email: '',
+                loading: false,
+                message: '',
+                messageType: '',
 
-                    // Données principales
-                    newsList: [],
-                    loadingNews: true,
-                    updateInterval: null,
+                // Données principales
+                newsList: [],
+                loadingNews: true,
+                updateInterval: null,
 
-                    // Admin
-                    isAdmin: false,
-                    showAdminPanel: false,
-                    addingNews: false,
-                    newNews: { resume: '', source: '', url: '', orientation: '', tagsText: '' },
-                    stats: { total_articles: 0, total_sources: 0 },
+                // Admin
+                isAdmin: false,
+                showAdminPanel: false,
+                addingNews: false,
+                newNews: { resume: '', source: '', url: '', orientation: '', tagsText: '' },
+                stats: { total_articles: 0, total_sources: 0 },
 
-                    // Temps réel
-                    connectedUsers: 0,
-                    realtimeChannel: null,
+                // Temps réel
+                connectedUsers: 0,
+                realtimeChannel: null,
 
-                    // Modals et panels
-                    showEditPanel: false,
-                    editingNews: { id: null, resume: '', source: '', url: '', orientation: '', tags: [], tagsText: '' },
-                    showAboutPanel: false,
+                // Modals et panels
+                showEditPanel: false,
+                editingNews: { id: null, resume: '', source: '', url: '', orientation: '', tags: [], tagsText: '' },
+                showAboutPanel: false,
 
-                    // Filtres
-                    showFilters: false,
-                    activeFilter: 'all',
-                    allTags: [],
+                // Filtres
+                showFilters: false,
+                activeFilter: 'all',
+                allTags: [],
 
-                    // Nouvelles fonctionnalités
-                    readArticles: {},
-                    totalReadCount: 0,
-                    diversityScore: null,
-                    readOrientations: [],
-                    showDiversityChecker: true,
-                    diversityData: JSON.parse(localStorage.getItem('infodrop_diversity') || '{}'),
+                // Nouvelles fonctionnalités
+                readArticles: {},
+                totalReadCount: 0,
+                diversityScore: null,
+                readOrientations: [],
+                showDiversityChecker: true,
+                diversityData: JSON.parse(localStorage.getItem('infodrop_diversity') || '{}'),
 
-                    // Getters
-                    get filteredNews() {
-                        if (this.activeFilter === 'all') return this.newsList;
-                        return this.newsList.filter(news =>
-                            (news.tags && news.tags.includes(this.activeFilter)) ||
-                            news.orientation === this.activeFilter
-                        );
-                    },
+                // Getters
+                get filteredNews() {
+                    if (this.activeFilter === 'all') return this.newsList;
+                    return this.newsList.filter(news =>
+                        (news.tags && news.tags.includes(this.activeFilter)) ||
+                        news.orientation === this.activeFilter
+                    );
+                },
 
-                    getOrientationColor(orientation) {
-                        return ORIENTATION_DATA[orientation]?.color || '#808080';
-                    },
+                getOrientationColor(orientation) {
+                    return ORIENTATION_DATA[orientation]?.color || '#808080';
+                },
 
-                    getOrientationClass(orientation) {
-                        return ORIENTATION_DATA[orientation]?.class || 'bg-gray-700 text-gray-200';
-                    },
+                getOrientationClass(orientation) {
+                    return ORIENTATION_DATA[orientation]?.class || 'bg-gray-700 text-gray-200';
+                },
 
-                    // Initialisation
-                    async init() {
-                        // Nettoyer les données de diversité si plus de 24h
-                        this.cleanOldDiversityData();
+                // Initialisation
+                async init() {
+                    // Nettoyer les données de diversité si plus de 24h
+                    this.cleanOldDiversityData();
 
-                        // Effet d'ombre sur scroll
-                        window.addEventListener('scroll', () => {
-                            const header = document.getElementById('stickyHeader');
-                            if (header) {
-                                if (window.scrollY > 10) {
-                                    header.classList.add('shadow-xl');
-                                } else {
-                                    header.classList.remove('shadow-xl');
-                                }
-                            }
-                        });
-
-                        supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
-                        const { data: { session } } = await supabase.auth.getSession();
-                        this.handleSession(session);
-                        this.sessionLoaded = true;
-                    },
-
-                    // Gestion de session
-                    handleSession(session) {
-                        if (session?.user) {
-                            if (!this.user) {
-                                this.user = session.user;
-                                const userReadData = localStorage.getItem('infodrop_read_' + this.user.id) || '{}';
-                                this.readArticles = JSON.parse(userReadData);
-                                this.isAdmin = ADMIN_EMAILS.includes(session.user.email);
-                                this.loadData(true);
-                                this.startAutoUpdate();
-                                this.setupRealtime(session);
-                                this.updateTotalReadCount();
-                                this.calculateDiversityScore();
-                            }
-                        } else {
-                            this.user = null;
-                            this.stopAutoUpdate();
-                            if (this.realtimeChannel) {
-                                supabase.removeChannel(this.realtimeChannel);
-                                this.realtimeChannel = null;
-                            }
-                        }
-                    },
-
-                    setupRealtime(session) {
-                        this.realtimeChannel = supabase.channel('infodrop-online-users', {
-                            config: { presence: { key: session.user.id } }
-                        });
-                        this.realtimeChannel.on('presence', { event: 'sync' }, () => {
-                            this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
-                        }).subscribe(async (status) => {
-                            if (status === 'SUBSCRIBED') {
-                                await this.realtimeChannel.track({ online_at: new Date().toISOString() });
-                            }
-                        });
-                    },
-
-                    // CRUD Operations
-                    openEditPanel(news) {
-                        this.editingNews = {
-                            ...JSON.parse(JSON.stringify(news)),
-                            tagsText: (news.tags || []).join(', ')
-                        };
-                        this.showEditPanel = true;
-                    },
-
-                    async updateNews() {
-                        const { id, resume, source, url, orientation, tagsText } = this.editingNews;
-                        const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
-
-                        try {
-                            const { error } = await supabase.from('actu')
-                                .update({ resume, source, url, orientation, tags })
-                                .eq('id', id);
-
-                            if (error) throw error;
-
-                            const index = this.newsList.findIndex(news => news.id === id);
-
-                            if (index !== -1) {
-
-                                this.newsList[index].resume = resume;
-                                this.newsList[index].source = source;
-                                this.newsList[index].url = url;
-                                this.newsList[index].orientation = orientation;
-                                this.newsList[index].tags = tags;
-                            }
-
-                            this.showEditPanel = false;
-                            this.updateTagsList();
-
-                        } catch (error) {
-                            console.error("Erreur de mise à jour:", error);
-                            alert("La mise à jour a échoué.");
-                        }
-                    },
-
-                    async deleteNews(newsId) {
-                        if (!confirm("Voulez-vous vraiment supprimer cette actualité ?")) return;
-                        this.newsList = this.newsList.filter(n => n.id !== newsId);
-                        try {
-                            const { error } = await supabase.from('actu').delete().eq('id', newsId);
-                            if (error) { throw error; }
-                            if (this.isAdmin) { this.loadStats(); }
-                        } catch (error) {
-                            console.error("Erreur de suppression:", error);
-                            alert("La suppression a échoué.");
-                            this.loadNews();
-                        }
-                    },
-
-                    async addManualNews() {
-                        this.addingNews = true;
-                        try {
-                            const tags = this.newNews.tagsText ? this.newNews.tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
-                            const { error } = await supabase.from('actu').insert({
-                                resume: this.newNews.resume,
-                                source: this.newNews.source,
-                                url: this.newNews.url,
-                                orientation: this.newNews.orientation,
-                                heure: new Date().toISOString(),
-                                tags,
-                                added_by: this.user.email
-                            });
-                            if (error) throw error;
-                            this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
-                            this.showAdminPanel = false;
-                            this.loadData();
-                        } catch (error) {
-                            console.error('Erreur ajout:', error);
-                            alert('Erreur lors de l\'ajout.');
-                        } finally {
-                            this.addingNews = false;
-                        }
-                    },
-
-                    // Chargement des données - NOUVELLE VERSION
-                    async loadData(isInitialLoad = false) {
-                        if (isInitialLoad) {
-                            this.loadingNews = true;
-                        }
-
-                        await Promise.all([
-                            this.loadNews(),
-                            this.isAdmin ? this.loadStats() : Promise.resolve()
-                        ]);
-
-                        if (isInitialLoad) {
-                            this.loadingNews = false;
-                        }
-                    },
-
-                    // Smart refresh - NOUVELLE VERSION AMÉLIORÉE
-                    async loadNews() {
-                        try {
-                            const twentyFourHoursAgo = new Date();
-                            twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
-
-                            const { data: newData, error } = await supabase
-                                .from('actu')
-                                .select('*')
-                                .gte('heure', twentyFourHoursAgo.toISOString())
-                                .order('heure', { ascending: false });
-
-                            if (error) throw error;
-                            if (!newData || newData.length === 0) {
-                                console.log('✓ Pas de nouveau contenu depuis le serveur.');
-                                return;
-                            }
-
-                            const existingIds = new Set(this.newsList.map(news => news.id));
-
-                            const newArticles = newData.filter(news => !existingIds.has(news.id));
-
-                            if (newArticles.length > 0) {
-                                console.log(`📰 ${newArticles.length} nouvelle(s) actualité(s) ajoutée(s).`);
-                                this.newsList = [...newArticles, ...this.newsList];
-                                this.updateTagsList();
+                    // Effet d'ombre sur scroll
+                    window.addEventListener('scroll', () => {
+                        const header = document.getElementById('stickyHeader');
+                        if (header) {
+                            if (window.scrollY > 10) {
+                                header.classList.add('shadow-xl');
                             } else {
-                                console.log('✓ Pas de nouveau contenu à ajouter.');
+                                header.classList.remove('shadow-xl');
                             }
+                        }
+                    });
 
+                    supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
+                    const { data: { session } } = await supabase.auth.getSession();
+                    this.handleSession(session);
+                    this.sessionLoaded = true;
+                },
+
+                // Gestion de session
+                handleSession(session) {
+                    if (session?.user) {
+                        if (!this.user) {
+                            this.user = session.user;
+                            const userReadData = localStorage.getItem('infodrop_read_' + this.user.id) || '{}';
+                            this.readArticles = JSON.parse(userReadData);
+                            this.isAdmin = ADMIN_EMAILS.includes(session.user.email);
+                            this.loadData(true);
+                            this.startAutoUpdate();
+                            this.setupRealtime(session);
                             this.updateTotalReadCount();
-
-                        } catch (error) {
-                            console.error('Erreur chargement actus:', error);
+                            this.calculateDiversityScore();
                         }
-                    },
+                    } else {
+                        this.user = null;
+                        this.stopAutoUpdate();
+                        if (this.realtimeChannel) {
+                            supabase.removeChannel(this.realtimeChannel);
+                            this.realtimeChannel = null;
+                        }
+                    }
+                },
 
-                    updateTagsList() {
-                        const tagSet = new Set();
-                        this.newsList.forEach(news => {
-                            if (news.orientation) tagSet.add(news.orientation);
-                            if (news.tags && Array.isArray(news.tags)) news.tags.forEach(tag => tagSet.add(tag));
+                setupRealtime(session) {
+                    this.realtimeChannel = supabase.channel('infodrop-online-users', {
+                        config: { presence: { key: session.user.id } }
+                    });
+                    this.realtimeChannel.on('presence', { event: 'sync' }, () => {
+                        this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
+                    }).subscribe(async (status) => {
+                        if (status === 'SUBSCRIBED') {
+                            await this.realtimeChannel.track({ online_at: new Date().toISOString() });
+                        }
+                    });
+                },
+
+                // CRUD Operations
+                openEditPanel(news) {
+                    this.editingNews = {
+                        ...JSON.parse(JSON.stringify(news)),
+                        tagsText: (news.tags || []).join(', ')
+                    };
+                    this.showEditPanel = true;
+                },
+
+                async updateNews() {
+                    const { id, resume, source, url, orientation, tagsText } = this.editingNews;
+                    const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
+
+                    try {
+                        const { error } = await supabase.from('actu')
+                            .update({ resume, source, url, orientation, tags })
+                            .eq('id', id);
+
+                        if (error) throw error;
+
+                        const index = this.newsList.findIndex(news => news.id === id);
+
+                        if (index !== -1) {
+
+                            this.newsList[index].resume = resume;
+                            this.newsList[index].source = source;
+                            this.newsList[index].url = url;
+                            this.newsList[index].orientation = orientation;
+                            this.newsList[index].tags = tags;
+                        }
+
+                        this.showEditPanel = false;
+                        this.updateTagsList();
+
+                    } catch (error) {
+                        console.error("Erreur de mise à jour:", error);
+                        alert("La mise à jour a échoué.");
+                    }
+                },
+
+                async deleteNews(newsId) {
+                    if (!confirm("Voulez-vous vraiment supprimer cette actualité ?")) return;
+                    this.newsList = this.newsList.filter(n => n.id !== newsId);
+                    try {
+                        const { error } = await supabase.from('actu').delete().eq('id', newsId);
+                        if (error) { throw error; }
+                        if (this.isAdmin) { this.loadStats(); }
+                    } catch (error) {
+                        console.error("Erreur de suppression:", error);
+                        alert("La suppression a échoué.");
+                        this.loadNews();
+                    }
+                },
+
+                async addManualNews() {
+                    this.addingNews = true;
+                    try {
+                        const tags = this.newNews.tagsText ? this.newNews.tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
+                        const { error } = await supabase.from('actu').insert({
+                            resume: this.newNews.resume,
+                            source: this.newNews.source,
+                            url: this.newNews.url,
+                            orientation: this.newNews.orientation,
+                            heure: new Date().toISOString(),
+                            tags,
+                            added_by: this.user.email
                         });
-                        this.allTags = Array.from(tagSet).sort();
-                    },
+                        if (error) throw error;
+                        this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
+                        this.showAdminPanel = false;
+                        this.loadData();
+                    } catch (error) {
+                        console.error('Erreur ajout:', error);
+                        alert('Erreur lors de l\'ajout.');
+                    } finally {
+                        this.addingNews = false;
+                    }
+                },
 
-                    async loadStats() {
-                        try {
-                            const { data, error } = await supabase.from('stats_today').select('*').single();
-                            if (error) throw error;
-                            this.stats = data || { total_articles: 0, total_sources: 0 };
-                        } catch (error) {
-                            console.error('Erreur chargement stats:', error);
-                        }
-                    },
+                // Chargement des données - NOUVELLE VERSION
+                async loadData(isInitialLoad = false) {
+                    if (isInitialLoad) {
+                        this.loadingNews = true;
+                    }
 
-                    // Gestion des lectures
-                    markAsRead(newsId) {
-                        const timestamp = new Date().toISOString();
+                    await Promise.all([
+                        this.loadNews(),
+                        this.isAdmin ? this.loadStats() : Promise.resolve()
+                    ]);
 
-                        if (!this.readArticles[newsId]) {
-                            this.readArticles[newsId] = timestamp;
-                            localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
-                            this.updateTotalReadCount();
+                    if (isInitialLoad) {
+                        this.loadingNews = false;
+                    }
+                },
 
-                            // Ajouter aux données de diversité
-                            const article = this.newsList.find(n => n.id === newsId);
-                            if (article) {
-                                this.addToDiversityData(article);
-                            }
+                // Smart refresh - NOUVELLE VERSION AMÉLIORÉE
+                async loadNews() {
+                    try {
+                        const twentyFourHoursAgo = new Date();
+                        twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
 
-                            // 100e article !
-                            if (this.totalReadCount === 100) {
-                                this.celebrate100Articles();
-                            }
-                        }
-                    },
+                        const { data: newData, error } = await supabase
+                            .from('actu')
+                            .select('*')
+                            .gte('heure', twentyFourHoursAgo.toISOString())
+                            .order('heure', { ascending: false });
 
-                    updateTotalReadCount() {
-                        this.totalReadCount = Object.keys(this.readArticles).length;
-                    },
-
-                    // Gestion de la diversité
-                    cleanOldDiversityData() {
-                        const now = new Date().getTime();
-                        const twentyFourHours = 24 * 60 * 60 * 1000;
-
-                        // Nettoyer les lectures de plus de 24h
-                        Object.keys(this.diversityData).forEach(timestamp => {
-                            if (now - new Date(timestamp).getTime() > twentyFourHours) {
-                                delete this.diversityData[timestamp];
-                            }
-                        });
-
-                        localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
-                    },
-
-                    addToDiversityData(article) {
-                        const timestamp = new Date().toISOString();
-                        this.diversityData[timestamp] = {
-                            orientation: article.orientation,
-                            source: article.source
-                        };
-                        localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
-                        this.calculateDiversityScore();
-                    },
-
-                    // NOUVELLE VERSION DE calculateDiversityScore
-                    calculateDiversityScore() {
-                        this.cleanOldDiversityData();
-
-                        const recentReads = Object.values(this.diversityData);
-
-                        if (recentReads.length === 0) {
-                            this.diversityScore = null;
-                            this.readOrientations = [];
+                        if (error) throw error;
+                        if (!newData || newData.length === 0) {
+                            console.log('✓ Pas de nouveau contenu depuis le serveur.');
                             return;
                         }
 
-                        const orientations = new Set();
-                        const sources = new Set();
+                        const existingIds = new Set(this.newsList.map(news => news.id));
 
-                        recentReads.forEach(read => {
-                            if (read.orientation) orientations.add(read.orientation);
-                            if (read.source) sources.add(read.source);
-                        });
+                        const newArticles = newData.filter(news => !existingIds.has(news.id));
 
-                        this.readOrientations = Array.from(orientations);
-
-                        const maxOrientations = 8;
-                        const orientationScore = (orientations.size / maxOrientations) * 50;
-                        const sourceScore = Math.min((sources.size / 5) * 50, 50);
-
-                        this.diversityScore = Math.round(orientationScore + sourceScore);
-                        this.showDiversityChecker = this.diversityScore < 100;
-                    },
-
-                    getDiversityMessage() {
-                        if (this.diversityScore < 30) return "Bulle de filtre détectée";
-                        if (this.diversityScore < 70) return "Diversité correcte";
-                        return "Excellente diversité !";
-                    },
-
-                    // Confettis
-                    celebrate100Articles() {
-                        const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7', '#A29BFE'];
-                        const confettiContainer = document.createElement('div');
-                        confettiContainer.style.position = 'fixed';
-                        confettiContainer.style.top = '0';
-                        confettiContainer.style.left = '0';
-                        confettiContainer.style.width = '100%';
-                        confettiContainer.style.height = '100%';
-                        confettiContainer.style.pointerEvents = 'none';
-                        confettiContainer.style.zIndex = '9999';
-                        document.body.appendChild(confettiContainer);
-
-                        for (let i = 0; i < 50; i++) {
-                            const confetti = document.createElement('div');
-                            confetti.style.position = 'absolute';
-                            confetti.style.width = '10px';
-                            confetti.style.height = '10px';
-                            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                            confetti.style.left = Math.random() * 100 + '%';
-                            confetti.style.top = '-10px';
-                            confetti.style.opacity = Math.random() + 0.5;
-                            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-                            confetti.style.animation = `confetti-fall ${3 + Math.random() * 2}s linear forwards`;
-                            confettiContainer.appendChild(confetti);
+                        if (newArticles.length > 0) {
+                            console.log(`📰 ${newArticles.length} nouvelle(s) actualité(s) ajoutée(s).`);
+                            this.newsList = [...newArticles, ...this.newsList];
+                            this.updateTagsList();
+                        } else {
+                            console.log('✓ Pas de nouveau contenu à ajouter.');
                         }
 
-                        const message = document.createElement('div');
-                        message.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
-                        message.innerHTML = `
+                        this.updateTotalReadCount();
+
+                    } catch (error) {
+                        console.error('Erreur chargement actus:', error);
+                    }
+                },
+
+                updateTagsList() {
+                    const tagSet = new Set();
+                    this.newsList.forEach(news => {
+                        if (news.orientation) tagSet.add(news.orientation);
+                        if (news.tags && Array.isArray(news.tags)) news.tags.forEach(tag => tagSet.add(tag));
+                    });
+                    this.allTags = Array.from(tagSet).sort();
+                },
+
+                async loadStats() {
+                    try {
+                        const { data, error } = await supabase.from('stats_today').select('*').single();
+                        if (error) throw error;
+                        this.stats = data || { total_articles: 0, total_sources: 0 };
+                    } catch (error) {
+                        console.error('Erreur chargement stats:', error);
+                    }
+                },
+
+                // Gestion des lectures
+                markAsRead(newsId) {
+                    const timestamp = new Date().toISOString();
+
+                    if (!this.readArticles[newsId]) {
+                        this.readArticles[newsId] = timestamp;
+                        localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
+                        this.updateTotalReadCount();
+
+                        // Ajouter aux données de diversité
+                        const article = this.newsList.find(n => n.id === newsId);
+                        if (article) {
+                            this.addToDiversityData(article);
+                        }
+
+                        // 100e article !
+                        if (this.totalReadCount === 100) {
+                            this.celebrate100Articles();
+                        }
+                    }
+                },
+
+                updateTotalReadCount() {
+                    this.totalReadCount = Object.keys(this.readArticles).length;
+                },
+
+                // Gestion de la diversité
+                cleanOldDiversityData() {
+                    const now = new Date().getTime();
+                    const twentyFourHours = 24 * 60 * 60 * 1000;
+
+                    // Nettoyer les lectures de plus de 24h
+                    Object.keys(this.diversityData).forEach(timestamp => {
+                        if (now - new Date(timestamp).getTime() > twentyFourHours) {
+                            delete this.diversityData[timestamp];
+                        }
+                    });
+
+                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
+                },
+
+                addToDiversityData(article) {
+                    const timestamp = new Date().toISOString();
+                    this.diversityData[timestamp] = {
+                        orientation: article.orientation,
+                        source: article.source
+                    };
+                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
+                    this.calculateDiversityScore();
+                },
+
+                // NOUVELLE VERSION DE calculateDiversityScore
+                calculateDiversityScore() {
+                    this.cleanOldDiversityData();
+
+                    const recentReads = Object.values(this.diversityData);
+
+                    if (recentReads.length === 0) {
+                        this.diversityScore = null;
+                        this.readOrientations = [];
+                        return;
+                    }
+
+                    const orientations = new Set();
+                    const sources = new Set();
+
+                    recentReads.forEach(read => {
+                        if (read.orientation) orientations.add(read.orientation);
+                        if (read.source) sources.add(read.source);
+                    });
+
+                    this.readOrientations = Array.from(orientations);
+
+                    const maxOrientations = 8;
+                    const orientationScore = (orientations.size / maxOrientations) * 50;
+                    const sourceScore = Math.min((sources.size / 5) * 50, 50);
+
+                    this.diversityScore = Math.round(orientationScore + sourceScore);
+                    this.showDiversityChecker = this.diversityScore < 100;
+                },
+
+                getDiversityMessage() {
+                    if (this.diversityScore < 30) return "Bulle de filtre détectée";
+                    if (this.diversityScore < 70) return "Diversité correcte";
+                    return "Excellente diversité !";
+                },
+
+                // Confettis
+                celebrate100Articles() {
+                    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7', '#A29BFE'];
+                    const confettiContainer = document.createElement('div');
+                    confettiContainer.style.position = 'fixed';
+                    confettiContainer.style.top = '0';
+                    confettiContainer.style.left = '0';
+                    confettiContainer.style.width = '100%';
+                    confettiContainer.style.height = '100%';
+                    confettiContainer.style.pointerEvents = 'none';
+                    confettiContainer.style.zIndex = '9999';
+                    document.body.appendChild(confettiContainer);
+
+                    for (let i = 0; i < 50; i++) {
+                        const confetti = document.createElement('div');
+                        confetti.style.position = 'absolute';
+                        confetti.style.width = '10px';
+                        confetti.style.height = '10px';
+                        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        confetti.style.left = Math.random() * 100 + '%';
+                        confetti.style.top = '-10px';
+                        confetti.style.opacity = Math.random() + 0.5;
+                        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                        confetti.style.animation = `confetti-fall ${3 + Math.random() * 2}s linear forwards`;
+                        confettiContainer.appendChild(confetti);
+                    }
+
+                    const message = document.createElement('div');
+                    message.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
+                    message.innerHTML = `
                         <h2 class="text-3xl font-bold mb-2">🎉 Félicitations ! 🎉</h2>
                         <p class="text-lg">100 articles lus !</p>
                         <p class="text-sm mt-2 opacity-90">Vous êtes un lecteur assidu</p>
                     `;
-                        document.body.appendChild(message);
+                    document.body.appendChild(message);
 
-                        setTimeout(() => {
-                            confettiContainer.remove();
-                            message.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-                            setTimeout(() => message.remove(), 500);
-                        }, 5000);
-                    },
+                    setTimeout(() => {
+                        confettiContainer.remove();
+                        message.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                        setTimeout(() => message.remove(), 500);
+                    }, 5000);
+                },
 
-                    // Auth
-                    async login() {
-                        if (this.loading) return;
-                        this.loading = true;
-                        this.message = '';
-                        try {
-                            const { error } = await supabase.auth.signInWithOtp({
-                                email: this.email,
-                                options: { emailRedirectTo: window.location.origin }
-                            });
-                            if (error) throw error;
-                            this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
-                            this.messageType = 'success';
-                        } catch (error) {
-                            this.message = error.message || 'Erreur lors de l\'envoi du lien.';
-                            this.messageType = 'error';
-                        } finally {
-                            this.loading = false;
-                        }
-                    },
-
-                    async logout() {
-                        if (this.realtimeChannel) {
-                            await this.realtimeChannel.untrack();
-                        }
-                        await supabase.auth.signOut();
-                    },
-
-                    // Auto-update
-                    startAutoUpdate() {
-                        if (this.updateInterval) clearInterval(this.updateInterval);
-                        this.updateInterval = setInterval(() => this.loadData(), 30000);
-                    },
-
-                    stopAutoUpdate() {
-                        if (this.updateInterval) clearInterval(this.updateInterval);
-                    },
-
-                    // Utils
-                    formatTime(timestamp) {
-                        return new Date(timestamp).toLocaleTimeString('fr-FR', {
-                            hour: '2-digit',
-                            minute: '2-digit'
+                // Auth
+                async login() {
+                    if (this.loading) return;
+                    this.loading = true;
+                    this.message = '';
+                    try {
+                        const { error } = await supabase.auth.signInWithOtp({
+                            email: this.email,
+                            options: { emailRedirectTo: window.location.origin }
                         });
+                        if (error) throw error;
+                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
+                        this.messageType = 'success';
+                    } catch (error) {
+                        this.message = error.message || 'Erreur lors de l\'envoi du lien.';
+                        this.messageType = 'error';
+                    } finally {
+                        this.loading = false;
                     }
+                },
+
+                async logout() {
+                    if (this.realtimeChannel) {
+                        await this.realtimeChannel.untrack();
+                    }
+                    await supabase.auth.signOut();
+                },
+
+                // Auto-update
+                startAutoUpdate() {
+                    if (this.updateInterval) clearInterval(this.updateInterval);
+                    this.updateInterval = setInterval(() => this.loadData(), 30000);
+                },
+
+                stopAutoUpdate() {
+                    if (this.updateInterval) clearInterval(this.updateInterval);
+                },
+
+                // Utils
+                formatTime(timestamp) {
+                    return new Date(timestamp).toLocaleTimeString('fr-FR', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
                 }
             }
-        </script>
+        }
+    </script>
 </body>
 
 </html>
