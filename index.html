@@ -1181,7 +1181,22 @@
                         if (read.source) sources.add(read.source);
                     });
 
-                    this.readOrientations = Array.from(orientations);
+                    // Ordre logique du spectre politique
+                    const spectrumOrder = [
+                        'extrême-gauche',
+                        'gauche',
+                        'centre-gauche',
+                        'centre',
+                        'centre-droit',
+                        'droite',
+                        'extrême-droite',
+                        'neutre'
+                    ];
+
+                    // Trier les orientations selon l'ordre du spectre
+                    this.readOrientations = Array.from(orientations).sort((a, b) => {
+                        return spectrumOrder.indexOf(a) - spectrumOrder.indexOf(b);
+                    });
 
                     const maxOrientations = 8;
                     const orientationScore = (orientations.size / maxOrientations) * 50;
