@@ -575,114 +575,96 @@
                         </div>
                     </div>
                 </div>
+            </main>
 
-                <!-- BOUTONS ADMIN -->
-                <button x-show="isAdmin" @click.prevent="openEditPanel(news)"
-                    class="flex-shrink-0 p-2 rounded-full hover:bg-blue-900/50 transition" title="Éditer">✏️</button>
-                <button x-show="isAdmin" @click.prevent="deleteNews(news.id)"
-                    class="flex-shrink-0 p-2 rounded-full hover:bg-red-900/50 transition" title="Supprimer">🗑️</button>
-        </div>
-        </template>
+            <!-- ========== MODALS ========== -->
 
-        <!-- MESSAGES D'ÉTAT -->
-        <div x-show="filteredNews.length === 0 && !loadingNews" class="text-center py-12">
-            <p class="text-gray-500"
-                x-text="activeFilter === 'all' ? 'Aucune actualité pour le moment.' : `Aucune actualité pour le filtre '${activeFilter}'.`">
-            </p>
-        </div>
-        <div x-show="loadingNews && filteredNews.length === 0" class="text-center py-12">
-            <div class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin">
-            </div>
-        </div>
-    </div>
-    </main>
-
-    <!-- ========== MODALS ========== -->
-
-    <!-- MODAL EDIT -->
-    <div x-show="showEditPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
-        x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50"
-        style="display: none;">
-        <div @click.away="showEditPanel = false"
-            class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
-            <h3 class="text-xl font-bold mb-4">Éditer l'actualité</h3>
-            <form @submit.prevent="updateNews()" class="space-y-4">
-                <div><label class="text-sm text-gray-400 block mb-1">Résumé</label><input x-model="editingNews.resume"
-                        type="text" class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
-                <div><label class="text-sm text-gray-400 block mb-1">Source</label><input x-model="editingNews.source"
-                        type="text" class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
-                <div><label class="text-sm text-gray-400 block mb-1">URL</label><input x-model="editingNews.url"
-                        type="url" class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
-                <div>
-                    <label class="text-sm text-gray-400 block mb-1">Orientation</label>
-                    <select x-model="editingNews.orientation"
-                        class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600">
-                        <option value="">Non définie</option>
-                        <option value="extrême-gauche">Extrême gauche</option>
-                        <option value="gauche">Gauche</option>
-                        <option value="centre-gauche">Centre gauche</option>
-                        <option value="centre">Centre</option>
-                        <option value="centre-droit">Centre droit</option>
-                        <option value="droite">Droite</option>
-                        <option value="extrême-droite">Extrême droite</option>
-                        <option value="neutre">Neutre</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-sm text-gray-400 block mb-1">Tags (séparés par des virgules)</label>
-                    <input x-model="editingNews.tagsText" type="text"
-                        class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"
-                        placeholder="ex: national, crypto, tv">
-                </div>
-                <div class="flex justify-end gap-4 pt-4">
-                    <button type="button" @click="showEditPanel = false"
-                        class="px-4 py-2 bg-gray-600 rounded-lg hover:bg-gray-500 transition">Annuler</button>
-                    <button type="submit"
-                        class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Enregistrer</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL ABOUT -->
-    <div x-show="showAboutPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
-        x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50"
-        style="display: none;">
-        <div @click.away="showAboutPanel = false"
-            class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
-            <h3 class="text-xl font-bold mb-4">À propos d'INFODROP</h3>
-            <div class="space-y-4 text-gray-300">
-                <div>
-                    <h4 class="font-semibold text-white">📰 INFODROP (Le Flux)</h4>
-                    <p class="text-sm">L'objectif initial est simple : fournir un flux d'actualités minimaliste,
-                        rapide et sans fioritures. Il agrège en temps réel les dernières informations des
-                        sources francophones les plus pertinentes pour un aperçu immédiat de ce qui se passe.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-blue-400">🌍 INFODROP 360° (L'Analyse)</h4>
-                    <p class="text-sm">La mission de 360° est plus profonde : lutter contre les bulles de
-                        filtres en contextualisant l'information. Pour un même sujet, il expose les perspectives
-                        de médias d'orientations différentes, analyse les faits, les divergences et les biais.
-                        L'objectif n'est plus seulement de savoir ce qui se passe, mais de comprendre pourquoi
-                        on en parle de différentes manières.</p>
+            <!-- MODAL EDIT -->
+            <div x-show="showEditPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+                x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+                <div @click.away="showEditPanel = false"
+                    class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
+                    <h3 class="text-xl font-bold mb-4">Éditer l'actualité</h3>
+                    <form @submit.prevent="updateNews()" class="space-y-4">
+                        <div><label class="text-sm text-gray-400 block mb-1">Résumé</label><input
+                                x-model="editingNews.resume" type="text"
+                                class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
+                        <div><label class="text-sm text-gray-400 block mb-1">Source</label><input
+                                x-model="editingNews.source" type="text"
+                                class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
+                        <div><label class="text-sm text-gray-400 block mb-1">URL</label><input x-model="editingNews.url"
+                                type="url" class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"></div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">Orientation</label>
+                            <select x-model="editingNews.orientation"
+                                class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600">
+                                <option value="">Non définie</option>
+                                <option value="extrême-gauche">Extrême gauche</option>
+                                <option value="gauche">Gauche</option>
+                                <option value="centre-gauche">Centre gauche</option>
+                                <option value="centre">Centre</option>
+                                <option value="centre-droit">Centre droit</option>
+                                <option value="droite">Droite</option>
+                                <option value="extrême-droite">Extrême droite</option>
+                                <option value="neutre">Neutre</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">Tags (séparés par des virgules)</label>
+                            <input x-model="editingNews.tagsText" type="text"
+                                class="w-full px-3 py-2 bg-gray-900 rounded border border-gray-600"
+                                placeholder="ex: national, crypto, tv">
+                        </div>
+                        <div class="flex justify-end gap-4 pt-4">
+                            <button type="button" @click="showEditPanel = false"
+                                class="px-4 py-2 bg-gray-600 rounded-lg hover:bg-gray-500 transition">Annuler</button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Enregistrer</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="flex justify-end pt-6">
-                <button type="button" @click="showAboutPanel = false"
-                    class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Fermer</button>
-            </div>
-        </div>
-    </div>
 
-    <!-- FOOTER -->
-    <footer class="text-center py-8 text-xs text-gray-500">
-        <p>© 2025 INFODROP. Tous droits réservés.</p>
-        <p class="mt-1">Un projet 3C - EM&LPy</p>
-    </footer>
-    </div>
+            <!-- MODAL ABOUT -->
+            <div x-show="showAboutPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+                x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+                <div @click.away="showAboutPanel = false"
+                    class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
+                    <h3 class="text-xl font-bold mb-4">À propos d'INFODROP</h3>
+                    <div class="space-y-4 text-gray-300">
+                        <div>
+                            <h4 class="font-semibold text-white">📰 INFODROP (Le Flux)</h4>
+                            <p class="text-sm">L'objectif initial est simple : fournir un flux d'actualités minimaliste,
+                                rapide et sans fioritures. Il agrège en temps réel les dernières informations des
+                                sources francophones les plus pertinentes pour un aperçu immédiat de ce qui se passe.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-blue-400">🌍 INFODROP 360° (L'Analyse)</h4>
+                            <p class="text-sm">La mission de 360° est plus profonde : lutter contre les bulles de
+                                filtres en contextualisant l'information. Pour un même sujet, il expose les perspectives
+                                de médias d'orientations différentes, analyse les faits, les divergences et les biais.
+                                L'objectif n'est plus seulement de savoir ce qui se passe, mais de comprendre pourquoi
+                                on en parle de différentes manières.</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-end pt-6">
+                        <button type="button" @click="showAboutPanel = false"
+                            class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Fermer</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <footer class="text-center py-8 text-xs text-gray-500">
+                <p>© 2025 INFODROP. Tous droits réservés.</p>
+                <p class="mt-1">Un projet 3C - EM&LPy</p>
+            </footer>
+        </div>
     </div>
 
     <!-- ========== BOUTON SCROLL TO TOP ========== -->
