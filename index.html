@@ -101,7 +101,7 @@
         /* Animation du bandeau défilant (uniquement pour mobile) */
         .ticker-train {
             display: inline-flex;
-            animation: scroll-left 10s linear infinite;
+            animation: scroll-left 25s linear infinite;
         }
 
         @keyframes scroll-left {
@@ -238,60 +238,64 @@
                     </div>
                 </header>
 
-                <!-- BANDEAU CONTEXTUEL - VERSION RESPONSIVE CORRIGÉE -->
-                <div x-data="contextTicker()" x-init="initTicker()" class="bg-gray-800/95 border-b border-gray-700 h-8">
+                <!-- BANDEAU CONTEXTUEL - LA SOLUTION FINALE AVEC ISOLATION -->
+                <div x-ignore>
+                    <div x-data="contextTicker()" x-init="initTicker()"
+                        class="bg-gray-800/95 border-b border-gray-700 h-8">
 
-                    <!-- ===== VERSION MOBILE (Défilante) ===== -->
-                    <!-- Sera cachée sur les écrans de taille moyenne (md) et plus grands -->
-                    <div class="md:hidden h-full overflow-hidden">
-                        <div class="ticker-train flex items-center h-full">
-                            <template x-for="i in [1, 2]">
-                                <div
-                                    class="flex-shrink-0 flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
-                                    <span class="flex items-center gap-1"><span class="text-yellow-400">📅</span> <span
-                                            x-text="dateInfo.fullDate"></span></span>
-                                    <span class="flex items-center gap-1"><span class="text-blue-400">📊</span> Jour
-                                        <span class="font-semibold text-white"
-                                            x-text="dateInfo.dayOfYear"></span>/365</span>
-                                    <span x-show="todayFeast" class="flex items-center gap-1"><span
-                                            class="text-red-400">🎉</span> <span class="font-semibold text-white"
-                                            x-text="todayFeast"></span></span>
-                                    <span x-show="weather.temperature !== null" class="flex items-center gap-1"><span
-                                            x-text="weather.icon"></span> <span class="font-semibold text-white"><span
-                                                x-text="weather.temperature"></span>°C</span> <span
-                                            class="text-gray-400" x-text="weather.description"></span></span>
-                                    <span class="flex items-center gap-1"><span x-text="moonPhase.icon"></span> <span
-                                            x-text="moonPhase.name"></span></span>
-                                    <span class="flex items-center gap-1"><span class="text-green-400">⏳</span> <span
-                                            class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span>
-                                        jours avant 2026</span>
-                                    <span class="text-gray-600">•</span>
-                                </div>
-                            </template>
+                        <!-- ===== VERSION MOBILE (Défilante) ===== -->
+                        <div class="md:hidden h-full overflow-hidden">
+                            <div class="ticker-train flex items-center h-full">
+                                <!-- ... contenu dupliqué ... -->
+                                <template x-for="i in [1, 2]">
+                                    <div
+                                        class="flex-shrink-0 flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
+                                        <span class="flex items-center gap-1"><span class="text-yellow-400">📅</span>
+                                            <span x-text="dateInfo.fullDate"></span></span>
+                                        <span class="flex items-center gap-1"><span class="text-blue-400">📊</span> Jour
+                                            <span class="font-semibold text-white"
+                                                x-text="dateInfo.dayOfYear"></span>/365</span>
+                                        <span x-show="todayFeast" class="flex items-center gap-1"><span
+                                                class="text-red-400">🎉</span> <span class="font-semibold text-white"
+                                                x-text="todayFeast"></span></span>
+                                        <span x-show="weather.temperature !== null"
+                                            class="flex items-center gap-1"><span x-text="weather.icon"></span> <span
+                                                class="font-semibold text-white"><span
+                                                    x-text="weather.temperature"></span>°C</span> <span
+                                                class="text-gray-400" x-text="weather.description"></span></span>
+                                        <span class="flex items-center gap-1"><span x-text="moonPhase.icon"></span>
+                                            <span x-text="moonPhase.name"></span></span>
+                                        <span class="flex items-center gap-1"><span class="text-green-400">⏳</span>
+                                            <span class="font-semibold text-white"
+                                                x-text="dateInfo.daysUntilNewYear"></span> jours avant 2026</span>
+                                        <span class="text-gray-600">•</span>
+                                    </div>
+                                </template>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- ===== VERSION DESKTOP (Statique) ===== -->
-                    <!-- Cachée par défaut, mais s'affiche en flex sur les écrans 'md' et plus -->
-                    <div class="hidden md:flex items-center justify-center h-full">
-                        <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
-                            <span class="flex items-center gap-1"><span class="text-yellow-400">📅</span> <span
-                                    x-text="dateInfo.fullDate"></span></span>
-                            <span class="flex items-center gap-1"><span class="text-blue-400">📊</span> Jour <span
-                                    class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365</span>
-                            <span x-show="todayFeast" class="flex items-center gap-1"><span
-                                    class="text-red-400">🎉</span> <span class="font-semibold text-white"
-                                    x-text="todayFeast"></span></span>
-                            <span x-show="weather.temperature !== null" class="flex items-center gap-1"><span
-                                    x-text="weather.icon"></span> <span class="font-semibold text-white"><span
-                                        x-text="weather.temperature"></span>°C</span> <span class="text-gray-400"
-                                    x-text="weather.description"></span></span>
-                            <span class="flex items-center gap-1"><span x-text="moonPhase.icon"></span> <span
-                                    x-text="moonPhase.name"></span></span>
-                            <span class="flex items-center gap-1"><span class="text-green-400">⏳</span> <span
-                                    class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span> jours
-                                avant 2026</span>
+                        <!-- ===== VERSION DESKTOP (Statique) ===== -->
+                        <div class="hidden md:flex items-center justify-center h-full">
+                            <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
+                                <span class="flex items-center gap-1"><span class="text-yellow-400">📅</span> <span
+                                        x-text="dateInfo.fullDate"></span></span>
+                                <span class="flex items-center gap-1"><span class="text-blue-400">📊</span> Jour <span
+                                        class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365</span>
+                                <span x-show="todayFeast" class="flex items-center gap-1"><span
+                                        class="text-red-400">🎉</span> <span class="font-semibold text-white"
+                                        x-text="todayFeast"></span></span>
+                                <span x-show="weather.temperature !== null" class="flex items-center gap-1"><span
+                                        x-text="weather.icon"></span> <span class="font-semibold text-white"><span
+                                            x-text="weather.temperature"></span>°C</span> <span class="text-gray-400"
+                                        x-text="weather.description"></span></span>
+                                <span class="flex items-center gap-1"><span x-text="moonPhase.icon"></span> <span
+                                        x-text="moonPhase.name"></span></span>
+                                <span class="flex items-center gap-1"><span class="text-green-400">⏳</span> <span
+                                        class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span>
+                                    jours avant 2026</span>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
