@@ -126,13 +126,39 @@
 
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
 
-    <!-- ========== CONFIGURATION SUPABASE ========== -->
+    <!-- ========== CONFIGURATION SUPABASE SÉCURISÉE ========== -->
     <script>
-        const SUPABASE_URL = 'https://gxpezjcjynbkvtvtzyfo.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4cGV6amNqeW5ia3Z0dnR6eWZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwMzA1MTgsImV4cCI6MjA2NjYwNjUxOH0.D90LXh1aGB2OibrpNXPhKZg8oG-mf510v7vKxoJmAog';
+        // Configuration sécurisée - les clés sont récupérées depuis l'API
+        let supabase = null;
         const ADMIN_EMAILS = ['l0r4.py@gmail.com'];
         const STRIPE_LINK = 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Fonction pour initialiser Supabase de manière sécurisée
+        async function initializeSupabase() {
+            try {
+                console.log('🔐 Récupération de la configuration sécurisée...');
+
+                // Récupérer la configuration depuis l'API sécurisée
+                const response = await fetch('/api/config');
+
+                if (!response.ok) {
+                    throw new Error('Impossible de récupérer la configuration');
+                }
+
+                const config = await response.json();
+
+                // Initialiser Supabase avec les clés récupérées
+                supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+
+                console.log('✅ Supabase initialisé de manière sécurisée');
+                return true;
+
+            } catch (error) {
+                console.error('❌ Erreur initialisation Supabase:', error);
+                alert('Erreur de connexion à la base de données. Veuillez recharger la page.');
+                return false;
+            }
+        }
     </script>
 
     <!-- ========== APPLICATION PRINCIPALE ========== -->
@@ -948,12 +974,22 @@
                     return ORIENTATION_DATA[orientation]?.class || 'bg-gray-700 text-gray-200';
                 },
 
-                // Initialisation
                 async init() {
-                    // Nettoyer les données de diversité si plus de 24h
+                    // 1. D'abord initialiser Supabase de manière sécurisée
+                    console.log('🚀 Initialisation de l\'application...');
+                    const supabaseReady = await initializeSupabase();
+
+                    // Vérifier que Supabase est bien initialisé
+                    if (!supabaseReady || !supabase) {
+                        console.error('❌ Supabase non initialisé');
+                        this.sessionLoaded = true; // Pour arrêter le loader
+                        return;
+                    }
+
+                    // 2. Nettoyer les données de diversité si plus de 24h
                     this.cleanOldDiversityData();
 
-                    // Effet d'ombre sur scroll
+                    // 3. Effet d'ombre sur scroll
                     window.addEventListener('scroll', () => {
                         const header = document.getElementById('stickyHeader');
                         if (header) {
@@ -965,6 +1001,7 @@
                         }
                     });
 
+                    // 4. Gestion des sessions Supabase
                     supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
                     const { data: { session } } = await supabase.auth.getSession();
                     this.handleSession(session);
