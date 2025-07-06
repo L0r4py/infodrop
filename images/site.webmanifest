@@ -1,7 +1,7 @@
 {
     "name": "INFODROP",
     "short_name": "INFODROP", 
-    "description": "L'actualité essentielle",
+    "description": "Le Club privé de l’actu centralisée ",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#111827",
