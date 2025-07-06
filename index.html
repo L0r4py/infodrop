@@ -1498,23 +1498,157 @@
                 async addManualNews() {
                     this.addingNews = true;
                     try {
-                        let tags = ['🧨INFODROP'];
-                        if (this.newNews.tagsText) {
-                            tags.push(...this.newNews.tagsText.split(',').map(t => t.trim()).filter(Boolean).filter(t => t !== '🧨INFODROP'));
+                        console.log('🔄 Début ajout article...');
+                        console.log('📝 Données du formulaire:', this.newNews);
+
+                        // === VALIDATION DES CHAMPS OBLIGATOIRES ===
+                        if (!this.newNews.resume || !this.newNews.resume.trim()) {
+                            throw new Error('Le résumé est obligatoire');
                         }
-                        await supabase.from('actu').insert({
-                            ...this.newNews,
+                        if (!this.newNews.source || !this.newNews.source.trim()) {
+                            throw new Error('La source est obligatoire');
+                        }
+                        if (!this.newNews.url || !this.newNews.url.trim()) {
+                            throw new Error('L\'URL est obligatoire');
+                        }
+
+                        // === PRÉPARATION DES TAGS (ARRAY DE STRINGS) ===
+                        let tags = ['🧨INFODROP'];
+
+                        if (this.newNews.tagsText && this.newNews.tagsText.trim()) {
+                            const additionalTags = this.newNews.tagsText
+                                .split(',')
+                                .map(tag => tag.trim())
+                                .filter(tag => tag.length > 0)
+                                .filter(tag => tag !== '🧨INFODROP'); // Éviter doublons
+
+                            tags = tags.concat(additionalTags);
+                        }
+
+                        // === OBJET FINAL POUR LA DB (COLONNES EXACTES) ===
+                        const articleData = {
+                            resume: this.newNews.resume.trim(),
+                            source: this.newNews.source.trim(),
+                            url: this.newNews.url.trim(),
                             heure: new Date().toISOString(),
-                            tags,
+                            tags: tags, // Array de strings
                             added_by: this.user.email
-                        });
-                        this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
+                        };
+
+                        // === ORIENTATION OPTIONNELLE ===
+                        if (this.newNews.orientation && this.newNews.orientation.trim()) {
+                            articleData.orientation = this.newNews.orientation.trim();
+                        }
+
+                        console.log('📤 Données finales pour Supabase:', articleData);
+                        console.log('🏷️ Tags array:', tags);
+
+                        // === INSERTION AVEC GESTION D'ERREUR DÉTAILLÉE ===
+                        const { data, error } = await supabase
+                            .from('actu')
+                            .insert(articleData)
+                            .select('*');
+
+                        if (error) {
+                            console.error('❌ Erreur Supabase complète:', error);
+                            console.error('❌ Code erreur:', error.code);
+                            console.error('❌ Message:', error.message);
+                            console.error('❌ Détails:', error.details);
+
+                            // Messages d'erreur plus clairs
+                            if (error.code === '23505') {
+                                throw new Error('Cette URL existe déjà dans la base de données');
+                            } else if (error.code === '23502') {
+                                throw new Error('Un champ obligatoire est manquant');
+                            } else if (error.code === '42703') {
+                                throw new Error('Erreur de structure de données');
+                            } else {
+                                throw new Error(`Erreur DB: ${error.message}`);
+                            }
+                        }
+
+                        console.log('✅ Article créé avec succès:', data);
+
+                        // === NETTOYAGE DU FORMULAIRE ===
+                        this.newNews = {
+                            resume: '',
+                            source: '',
+                            url: '',
+                            orientation: '',
+                            tagsText: ''
+                        };
+
+                        // === FERMETURE DU PANEL ET RECHARGEMENT ===
                         this.showAdminPanel = false;
-                        this.loadData();
-                    } catch (e) {
-                        alert('Erreur.');
+                        await this.loadData(); // Recharger les articles
+
+                        console.log('✅ Processus terminé avec succès');
+                        alert('✅ Article ajouté avec succès !');
+
+                    } catch (error) {
+                        console.error('❌ Erreur dans addManualNews:', error);
+
+                        let userMessage = 'Erreur lors de l\'ajout de l\'article: ';
+
+                        if (error.message.includes('obligatoire')) {
+                            userMessage += error.message;
+                        } else if (error.message.includes('existe déjà')) {
+                            userMessage += 'Cette URL est déjà utilisée pour un autre article.';
+                        } else if (error.message.includes('permission')) {
+                            userMessage += 'Vous n\'avez pas les droits pour ajouter un article.';
+                        } else {
+                            userMessage += error.message || 'Erreur inconnue';
+                        }
+
+                        alert(userMessage);
+
                     } finally {
                         this.addingNews = false;
+                    }
+                },
+
+                // ============================================================
+                // 🔧 FONCTION DE GÉNÉRATION DE CODE (CORRIGÉE AUSSI)
+                // ============================================================
+
+                async generateInviteCode() {
+                    if (!this.isAdmin) return;
+
+                    try {
+                        console.log('🎁 Génération code d\'invitation...');
+
+                        const { data: { session } } = await supabase.auth.getSession();
+                        if (!session) {
+                            throw new Error("Session introuvable");
+                        }
+
+                        const response = await fetch('/api/generate-invite', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${session.access_token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        const result = await response.json();
+
+                        if (!result.success) {
+                            throw new Error(result.error || 'Erreur lors de la génération');
+                        }
+
+                        this.lastGeneratedCode = result.code;
+
+                        // Copier dans le presse-papier
+                        if (navigator.clipboard) {
+                            await navigator.clipboard.writeText(result.code);
+                            console.log('✅ Code copié dans le presse-papier');
+                        }
+
+                        console.log('✅ Code généré:', result.code);
+
+                    } catch (error) {
+                        console.error('❌ Erreur génération code:', error);
+                        alert('Erreur lors de la génération du code: ' + error.message);
                     }
                 },
 
