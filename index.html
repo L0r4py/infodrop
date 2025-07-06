@@ -1195,7 +1195,7 @@
                     }
 
                     // === GESTION DES ÉVÉNEMENTS D'AUTHENTIFICATION ===
-                    supabase.auth.onAuthStateChange((event, session) => {
+                    supabase.auth.onAuthStateChange(async (event, session) => {
                         this.user = session?.user || null;
                         this.sessionLoaded = true;
                         if (event === 'SIGNED_IN') {
@@ -1208,7 +1208,10 @@
                             this.setupRealtime(session);
                             this.updateTotalReadCount();
                             this.calculateDiversityScore();
-                            this.loadUserInviteData();
+                            await this.loadUserInviteData();
+                            if (this.isAdmin && !this.userInviteData.code) {
+                                await this.ensureAdminHasInviteCode();
+                            }
                         }
                         if (event === 'SIGNED_OUT') {
                             this.stopAutoUpdate();
@@ -1307,10 +1310,55 @@
                         return;
                     }
 
-                    try {
-                        console.log('🔄 Chargement des données d\'invitation pour:', this.user.email);
+                    // === VÉRIFICATION ADMIN ===
+                    if (this.isAdmin) {
+                        console.log('👑 Utilisateur admin détecté, traitement spécial...');
 
-                        // === ÉTAPE 1 : Récupérer le code d'invitation du compte connecté ===
+                        try {
+                            // Pour un admin, on vérifie s'il a déjà un code d'invitation
+                            const { data: adminCode, error: adminError } = await supabase
+                                .from('invitation_codes')
+                                .select('*')
+                                .ilike('owner_email', this.user.email.toLowerCase())
+                                .maybeSingle();
+
+                            if (adminError && adminError.code !== 'PGRST116') {
+                                console.error('❌ Erreur requête admin:', adminError);
+                                return;
+                            }
+
+                            if (adminCode) {
+                                // L'admin a déjà un code
+                                console.log('✅ Code admin existant trouvé:', adminCode.code);
+                                this.userInviteData.code = adminCode.code;
+                                this.userInviteData.is_used = adminCode.is_used || false;
+
+                                if (adminCode.is_used && adminCode.used_by_email) {
+                                    this.userInviteData.filleulEmail = adminCode.used_by_email;
+                                }
+                            } else {
+                                // L'admin n'a pas de code, on peut en créer un automatiquement
+                                console.log('ℹ️ Aucun code d\'invitation pour l\'admin, c\'est normal');
+                                this.userInviteData.code = null;
+                            }
+
+                            // Un admin n'a jamais de parrain
+                            this.userInviteData.parrainEmail = null;
+
+                            console.log('✅ Données admin configurées:', this.userInviteData);
+                            return;
+
+                        } catch (error) {
+                            console.error('❌ Erreur traitement admin:', error);
+                            return;
+                        }
+                    }
+
+                    // === TRAITEMENT POUR UTILISATEURS NORMAUX ===
+                    try {
+                        console.log('🔄 Chargement des données d\'invitation pour utilisateur normal:', this.user.email);
+
+                        // Récupérer le code d'invitation du compte connecté
                         const { data: ownCode, error: ownCodeError } = await supabase
                             .from('invitation_codes')
                             .select('*')
@@ -1318,54 +1366,36 @@
                             .maybeSingle();
 
                         // Gestion de l'erreur pour ownCode
-                        if (ownCodeError) {
+                        if (ownCodeError && ownCodeError.code !== 'PGRST116') {
                             console.error('❌ Erreur récupération code proprio:', ownCodeError);
-                            // Ne pas faire throw, juste log l'erreur et continuer
-                        } else {
+                        } else if (ownCode) {
                             console.log('✅ Code proprio récupéré:', ownCode);
 
-                            // Mise à jour sécurisée des données
-                            this.userInviteData.code = ownCode?.code || null;
-                            this.userInviteData.is_used = ownCode?.is_used || false;
+                            this.userInviteData.code = ownCode.code;
+                            this.userInviteData.is_used = ownCode.is_used || false;
 
-                            if (ownCode?.is_used && ownCode.used_by_email) {
+                            if (ownCode.is_used && ownCode.used_by_email) {
                                 this.userInviteData.filleulEmail = ownCode.used_by_email;
-                            } else {
-                                this.userInviteData.filleulEmail = null;
                             }
                         }
 
-                        // === ÉTAPE 2 : Récupérer le parrain (qui a invité cet utilisateur) ===
+                        // Récupérer le parrain (qui a invité cet utilisateur)
                         const { data: usedCode, error: usedCodeError } = await supabase
                             .from('invitation_codes')
                             .select('owner_email')
                             .ilike('used_by_email', this.user.email.toLowerCase())
                             .maybeSingle();
 
-                        // Gestion de l'erreur pour usedCode
-                        if (usedCodeError) {
+                        if (usedCodeError && usedCodeError.code !== 'PGRST116') {
                             console.error('❌ Erreur récupération parrain:', usedCodeError);
-                            // Ne pas faire throw, juste log l'erreur
-                        } else {
+                        } else if (usedCode) {
                             console.log('✅ Parrain récupéré:', usedCode);
-
-                            if (usedCode && usedCode.owner_email) {
-                                this.userInviteData.parrainEmail = usedCode.owner_email;
-                            } else {
-                                this.userInviteData.parrainEmail = null;
-                            }
+                            this.userInviteData.parrainEmail = usedCode.owner_email;
                         }
 
-                        // === ÉTAPE 3 : Log du résultat final ===
-                        console.log('✅ Données d\'invitation finales:', {
-                            code: this.userInviteData.code,
-                            is_used: this.userInviteData.is_used,
-                            filleulEmail: this.userInviteData.filleulEmail,
-                            parrainEmail: this.userInviteData.parrainEmail
-                        });
+                        console.log('✅ Données d\'invitation finales:', this.userInviteData);
 
                     } catch (error) {
-                        // Gestion globale des erreurs
                         console.error("❌ Erreur générale lors du chargement des données d'invitation:", error);
 
                         // Réinitialiser les données en cas d'erreur
@@ -1377,22 +1407,36 @@
                         };
                     }
                 },
-                // === GÉNÉRATION DE CODES D'INVITATION (ADMIN) ===
-                async generateInviteCode() {
-                    if (!this.isAdmin) return;
+
+                // ============================================================
+                // 🆕 FONCTION BONUS : Créer un code pour l'admin si besoin
+                // ============================================================
+
+                async ensureAdminHasInviteCode() {
+                    if (!this.isAdmin || this.userInviteData.code) {
+                        return; // Pas admin ou a déjà un code
+                    }
+
                     try {
-                        const { data: { session } } = await supabase.auth.getSession();
-                        if (!session) throw new Error("Session introuvable.");
-                        const res = await fetch('/api/generate-invite', {
+                        console.log('🎁 Création d\'un code d\'invitation pour l\'admin...');
+
+                        // Générer un code automatiquement pour l'admin
+                        const response = await fetch('/api/generate-invite', {
                             method: 'POST',
-                            headers: { 'Authorization': `Bearer ${session.access_token}` }
+                            headers: {
+                                'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session.access_token}`
+                            }
                         });
-                        const data = await res.json();
-                        if (!data.success) throw new Error(data.error);
-                        this.lastGeneratedCode = data.code;
-                        navigator.clipboard.writeText(data.code);
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            console.log('✅ Code admin créé:', result.code);
+                            this.userInviteData.code = result.code;
+                        }
+
                     } catch (error) {
-                        alert('Erreur: ' + error.message);
+                        console.log('ℹ️ Impossible de créer un code admin automatiquement:', error.message);
                     }
                 },
 
