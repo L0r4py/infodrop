@@ -868,7 +868,6 @@
                     console.log('🚀 Initialisation de l\'application...');
                     const supabaseReady = await initializeSupabase();
                     if (!supabaseReady) { this.sessionLoaded = true; return; }
-
                     supabase.auth.onAuthStateChange((event, session) => {
                         this.user = session?.user || null;
                         this.sessionLoaded = true;
@@ -935,10 +934,7 @@
                     } catch (error) { alert('Erreur: ' + error.message); }
                 },
 
-                setupRealtime(session) {
-                    this.realtimeChannel = supabase.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } });
-                    this.realtimeChannel.on('presence', { event: 'sync' }, () => { this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length; }).subscribe(async (status) => { if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); } });
-                },
+                setupRealtime(session) { this.realtimeChannel = supabase.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } }); this.realtimeChannel.on('presence', { event: 'sync' }, () => { this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length; }).subscribe(async (status) => { if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); } }); },
                 openEditPanel(news) { this.editingNews = { ...JSON.parse(JSON.stringify(news)), tagsText: (news.tags || []).join(', ') }; this.showEditPanel = true; },
                 async updateNews() { const { id, resume, source, url, orientation, tagsText } = this.editingNews; const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : []; try { await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id); const index = this.newsList.findIndex(n => n.id === id); if (index !== -1) { this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; } this.showEditPanel = false; this.updateTagsList(); } catch (e) { alert("La mise à jour a échoué."); } },
                 async deleteNews(id) { if (!confirm("Supprimer ?")) return; this.newsList = this.newsList.filter(n => n.id !== id); try { await supabase.from('actu').delete().eq('id', id); if (this.isAdmin) this.loadStats(); } catch (e) { alert("La suppression a échoué."); this.loadNews(); } },
@@ -953,14 +949,24 @@
                 updateTotalReadCount() { this.totalReadCount = Object.keys(this.readArticles).length; },
                 cleanOldDiversityData() { const expiry = Date.now() - 24 * 60 * 60 * 1000; Object.keys(this.diversityData).forEach(t => { if (new Date(t).getTime() < expiry) delete this.diversityData[t]; }); localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); },
                 addToDiversityData(article) { let o = article.orientation || 'neutre'; if (article.tags?.includes('🧨INFODROP')) o = '🧨INFODROP'; this.diversityData[new Date().toISOString()] = { orientation: o, source: article.source }; localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); this.calculateDiversityScore(); },
-                calculateDiversityScore() { this.cleanOldDiversityData(); const reads = Object.values(this.diversityData); if (reads.length === 0) { this.diversityScore = null; this.readOrientations = []; return; } const oSet = new Set(reads.map(r => r.orientation)); const sSet = new Set(reads.map(r => r.source)); const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP']; this.readOrientations = [...oSet].sort((a, b) => spec.indexOf(a) - spec.indexOf(b)); this.diversityScore = Math.round(((oSet.size / 10) * 50) + (Math.min((sSet.size / 5) * 50, 50))); this.showDiversityChecker = this.diversityScore < 100; },
+                calculateDiversityScore() {
+                    this.cleanOldDiversityData();
+                    const reads = Object.values(this.diversityData);
+                    if (reads.length === 0) { this.diversityScore = null; this.readOrientations = []; return; }
+                    const oSet = new Set(reads.map(r => r.orientation).filter(Boolean)); // <-- CORRECTION TAG VIDE
+                    const sSet = new Set(reads.map(r => r.source));
+                    const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
+                    this.readOrientations = [...oSet].sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
+                    this.diversityScore = Math.round(((oSet.size / 10) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
+                    this.showDiversityChecker = this.diversityScore < 100;
+                },
                 getDiversityMessage() { if (this.diversityScore < 30) return "Bulle de filtre détectée"; if (this.diversityScore < 70) return "Diversité correcte"; return "Excellente diversité !"; },
                 celebrate100Articles() { const cont = document.createElement('div'); cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;'; document.body.appendChild(cont); const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7']; for (let i = 0; i < 50; i++) { const conf = document.createElement('div'); conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;`; cont.appendChild(conf); } const msg = document.createElement('div'); msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce'; msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">🎉 Félicitations ! 🎉</h2><p class="text-lg">100 articles lus !</p>`; document.body.appendChild(msg); setTimeout(() => { cont.remove(); msg.classList.add('opacity-0', 'transition-opacity', 'duration-500'); setTimeout(() => msg.remove(), 500); }, 5000); },
                 async logout() { if (this.realtimeChannel) await this.realtimeChannel.untrack(); await supabase.auth.signOut(); },
                 startAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); this.updateInterval = setInterval(() => this.loadData(), 30000); },
                 stopAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); },
                 formatTime(t) { return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); }
-            }
+            };
         }
     </script>
 </body>
