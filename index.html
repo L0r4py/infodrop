@@ -206,7 +206,7 @@
                 <p class="text-gray-400 text-center mb-8">L'actualité essentielle, rien que l'essentiel.</p>
                 <form @submit.prevent="login()" class="space-y-4">
                     <div>
-                        <input x-model="email" type="email" required
+                        <input x-model="email" type="email" required @input="email = email.toLowerCase()"
                             class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-500 text-white"
                             placeholder="votre@email.com">
                     </div>
@@ -1045,7 +1045,7 @@
                         const checkRes = await fetch('/api/check-email', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ email: this.email })
+                            body: JSON.stringify({ email: this.email.toLowerCase() })
                         });
                         if (!checkRes.ok) {
                             const err = await checkRes.json();
@@ -1077,7 +1077,7 @@
 
                         // On envoie l'OTP (lien magique) seulement si tout est OK
                         const { error: otpError } = await supabase.auth.signInWithOtp({
-                            email: this.email,
+                            email: this.email.toLowerCase(),
                             options: { emailRedirectTo: window.location.origin }
                         });
                         if (otpError) throw otpError;
@@ -1099,7 +1099,7 @@
                         const { data: ownCode, error: ownCodeError } = await supabase
                             .from('invitation_codes')
                             .select('*')
-                            .ilike('owner_email', this.user.email)
+                            .ilike('owner_email', this.user.email.toLowerCase())
                             .maybeSingle();
                         if (ownCodeError) throw ownCodeError;
                         this.userInviteData.code = ownCode?.code || null;
@@ -1114,7 +1114,7 @@
                         const { data: usedCode, error: usedCodeError } = await supabase
                             .from('invitation_codes')
                             .select('owner_email')
-                            .ilike('used_by_email', this.user.email)
+                            .ilike('used_by_email', this.user.email.toLowerCase())
                             .maybeSingle();
                         if (usedCodeError) throw usedCodeError;
                         if (usedCode) {
