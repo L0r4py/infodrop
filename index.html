@@ -596,8 +596,9 @@
                                         <span
                                             x-text="news.orientation === 'gouvernement' ? '🇫🇷 Gouvernement' : news.orientation.replace('-', ' ')"></span>
                                     </span>
-                                    <template x-if="news.tags && news.tags.length">
-                                        <template x-for="tag in news.tags" :key="tag">
+                                    <template x-if="news.tags && news.tags.filter(tag => tag !== '🧨INFODROP').length">
+                                        <template x-for="tag in news.tags.filter(tag => tag !== '🧨INFODROP')"
+                                            :key="tag">
                                             <span
                                                 class="ml-1 px-2 py-0.5 rounded-full font-medium text-xs capitalize bg-gray-700 text-gray-300 border border-gray-600"
                                                 x-text="tag"></span>
