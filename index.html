@@ -807,45 +807,186 @@
         // ========== FONCTION BANDEAU CONTEXTUEL ==========
         function contextTicker() {
             return {
-                dateInfo: { fullDate: '', dayOfYear: 0, daysUntilNewYear: 0 },
+                dateInfo: {
+                    fullDate: '',
+                    dayOfYear: 0,
+                    daysUntilNewYear: 0
+                },
                 todayFeast: '',
-                weather: { temperature: null, description: '', icon: '🌡️' },
-                moonPhase: { name: '', icon: '🌙' },
-                feasts: { '01-01': 'Jour de l\'an', '01-06': 'Épiphanie', '02-02': 'Chandeleur', '02-14': 'Saint-Valentin', '03-17': 'Saint-Patrick', '04-01': 'Poisson d\'avril', '05-01': 'Fête du travail', '05-08': 'Victoire 1945', '06-21': 'Fête de la musique', '07-14': 'Fête nationale', '08-15': 'Assomption', '10-31': 'Halloween', '11-01': 'Toussaint', '11-11': 'Armistice 1918', '12-25': 'Noël', '12-31': 'Saint-Sylvestre' },
+                weather: {
+                    temperature: null,
+                    description: '',
+                    icon: '🌡️'
+                },
+                moonPhase: {
+                    name: '',
+                    icon: '🌙'
+                },
+
+                feasts: {
+                    '01-01': 'Jour de l\'an',
+                    '01-06': 'Épiphanie',
+                    '02-02': 'Chandeleur',
+                    '02-14': 'Saint-Valentin',
+                    '03-17': 'Saint-Patrick',
+                    '04-01': 'Poisson d\'avril',
+                    '05-01': 'Fête du travail',
+                    '05-08': 'Victoire 1945',
+                    '06-21': 'Fête de la musique',
+                    '07-14': 'Fête nationale',
+                    '08-15': 'Assomption',
+                    '10-31': 'Halloween',
+                    '11-01': 'Toussaint',
+                    '11-11': 'Armistice 1918',
+                    '12-25': 'Noël',
+                    '12-31': 'Saint-Sylvestre'
+                },
+
                 async initTicker() {
-                    this.updateDateInfo(); this.updateMoonPhase(); await this.getWeather();
-                    const now = new Date(); const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1); tomorrow.setHours(0, 0, 0, 0); const msUntilMidnight = tomorrow - now;
-                    setTimeout(() => { this.updateDateInfo(); this.updateMoonPhase(); setInterval(() => { this.updateDateInfo(); this.updateMoonPhase(); }, 86400000); }, msUntilMidnight);
+                    this.updateDateInfo();
+                    this.updateMoonPhase();
+                    await this.getWeather();
+
+                    const now = new Date();
+                    const tomorrow = new Date(now);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    tomorrow.setHours(0, 0, 0, 0);
+                    const msUntilMidnight = tomorrow - now;
+
+                    setTimeout(() => {
+                        this.updateDateInfo();
+                        this.updateMoonPhase();
+                        setInterval(() => {
+                            this.updateDateInfo();
+                            this.updateMoonPhase();
+                        }, 86400000);
+                    }, msUntilMidnight);
+
                     setInterval(() => this.getWeather(), 600000);
                 },
+
                 updateDateInfo() {
-                    const now = new Date(); const options = { weekday: 'long', day: 'numeric', month: 'long' }; this.dateInfo.fullDate = now.toLocaleDateString('fr-FR', options); this.dateInfo.fullDate = this.dateInfo.fullDate.charAt(0).toUpperCase() + this.dateInfo.fullDate.slice(1);
-                    const start = new Date(now.getFullYear(), 0, 0); const diff = now - start; this.dateInfo.dayOfYear = Math.floor(diff / 86400000);
-                    const nextYear = new Date(now.getFullYear() + 1, 0, 1); this.dateInfo.daysUntilNewYear = Math.ceil((nextYear - now) / 86400000);
-                    const monthDay = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`; this.todayFeast = this.feasts[monthDay] || '';
+                    const now = new Date();
+                    const options = { weekday: 'long', day: 'numeric', month: 'long' };
+                    this.dateInfo.fullDate = now.toLocaleDateString('fr-FR', options);
+                    this.dateInfo.fullDate = this.dateInfo.fullDate.charAt(0).toUpperCase() + this.dateInfo.fullDate.slice(1);
+
+                    const start = new Date(now.getFullYear(), 0, 0);
+                    const diff = now - start;
+                    this.dateInfo.dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+                    const nextYear = new Date(now.getFullYear() + 1, 0, 1);
+                    this.dateInfo.daysUntilNewYear = Math.ceil((nextYear - now) / (1000 * 60 * 60 * 24));
+
+                    const monthDay = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+                    this.todayFeast = this.feasts[monthDay] || '';
                 },
+
                 updateMoonPhase() {
-                    const moonAge = (new Date() - new Date(2000, 0, 6)) / 86400000 % 29.53058867;
-                    if (moonAge < 1.84) { this.moonPhase = { name: 'Nouvelle lune', icon: '🌑' }; } else if (moonAge < 5.53) { this.moonPhase = { name: 'Premier croissant', icon: '🌒' }; } else if (moonAge < 9.22) { this.moonPhase = { name: 'Premier quartier', icon: '🌓' }; } else if (moonAge < 12.91) { this.moonPhase = { name: 'Gibbeuse croissante', icon: '🌔' }; } else if (moonAge < 16.61) { this.moonPhase = { name: 'Pleine lune', icon: '🌕' }; } else if (moonAge < 20.30) { this.moonPhase = { name: 'Gibbeuse décroissante', icon: '🌖' }; } else if (moonAge < 23.99) { this.moonPhase = { name: 'Dernier quartier', icon: '🌗' }; } else { this.moonPhase = { name: 'Dernier croissant', icon: '🌘' }; }
+                    const now = new Date();
+                    const refNewMoon = new Date(2000, 0, 6);
+                    const lunarCycle = 29.53058867;
+
+                    const daysSinceRef = (now - refNewMoon) / (1000 * 60 * 60 * 24);
+                    const moonAge = daysSinceRef % lunarCycle;
+
+                    if (moonAge < 1.84566) {
+                        this.moonPhase.name = 'Nouvelle lune';
+                        this.moonPhase.icon = '🌑';
+                    } else if (moonAge < 5.53699) {
+                        this.moonPhase.name = 'Premier croissant';
+                        this.moonPhase.icon = '🌒';
+                    } else if (moonAge < 9.22831) {
+                        this.moonPhase.name = 'Premier quartier';
+                        this.moonPhase.icon = '🌓';
+                    } else if (moonAge < 12.91963) {
+                        this.moonPhase.name = 'Gibbeuse croissante';
+                        this.moonPhase.icon = '🌔';
+                    } else if (moonAge < 16.61096) {
+                        this.moonPhase.name = 'Pleine lune';
+                        this.moonPhase.icon = '🌕';
+                    } else if (moonAge < 20.30228) {
+                        this.moonPhase.name = 'Gibbeuse décroissante';
+                        this.moonPhase.icon = '🌖';
+                    } else if (moonAge < 23.99361) {
+                        this.moonPhase.name = 'Dernier quartier';
+                        this.moonPhase.icon = '🌗';
+                    } else {
+                        this.moonPhase.name = 'Dernier croissant';
+                        this.moonPhase.icon = '🌘';
+                    }
                 },
+
                 async getWeather() {
                     try {
-                        const pos = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 }));
-                        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}¤t_weather=true&timezone=auto`);
-                        const data = await res.json();
-                        this.weather.temperature = Math.round(data.current_weather.temperature);
-                        const code = data.current_weather.weathercode;
-                        if (code === 0) { this.weather.description = 'Ciel dégagé'; this.weather.icon = '☀️'; } else if (code <= 3) { this.weather.description = 'Partiellement nuageux'; this.weather.icon = '⛅'; } else if (code <= 48) { this.weather.description = 'Nuageux'; this.weather.icon = '☁️'; } else if (code <= 67) { this.weather.description = 'Pluie'; this.weather.icon = '🌧️'; } else if (code <= 77) { this.weather.description = 'Neige'; this.weather.icon = '❄️'; } else { this.weather.description = 'Orage'; this.weather.icon = '⛈️'; }
-                    } catch {
+                        const position = await new Promise((resolve, reject) => {
+                            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+                        });
+
+                        const { latitude, longitude } = position.coords;
+
+                        const response = await fetch(
+                            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}¤t_weather=true&timezone=auto`
+                        );
+
+                        const data = await response.json();
+                        const current = data.current_weather;
+
+                        this.weather.temperature = Math.round(current.temperature);
+
+                        const weatherCode = current.weathercode;
+                        if (weatherCode === 0) {
+                            this.weather.description = 'Ciel dégagé';
+                            this.weather.icon = '☀️';
+                        } else if (weatherCode <= 3) {
+                            this.weather.description = 'Partiellement nuageux';
+                            this.weather.icon = '⛅';
+                        } else if (weatherCode <= 48) {
+                            this.weather.description = 'Nuageux';
+                            this.weather.icon = '☁️';
+                        } else if (weatherCode <= 67) {
+                            this.weather.description = 'Pluie';
+                            this.weather.icon = '🌧️';
+                        } else if (weatherCode <= 77) {
+                            this.weather.description = 'Neige';
+                            this.weather.icon = '❄️';
+                        } else if (weatherCode <= 99) {
+                            this.weather.description = 'Orage';
+                            this.weather.icon = '⛈️';
+                        }
+
+                    } catch (error) {
                         try {
-                            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=44.8061&longitude=-0.6306¤t_weather=true&timezone=Europe/Paris');
-                            const data = await res.json();
-                            this.weather.temperature = Math.round(data.current_weather.temperature);
-                            const code = data.current_weather.weathercode; if (code === 0) { this.weather.icon = '☀️'; } else if (code <= 3) { this.weather.icon = '⛅'; } else if (code <= 48) { this.weather.icon = '☁️'; } else if (code <= 67) { this.weather.icon = '🌧️'; } else if (code <= 77) { this.weather.icon = '❄️'; } else { this.weather.icon = '⛈️'; } this.weather.description = 'Pessac';
-                        } catch (e) { console.error('Erreur météo:', e); }
+                            const response = await fetch(
+                                'https://api.open-meteo.com/v1/forecast?latitude=44.8061&longitude=-0.6306¤t_weather=true&timezone=Europe/Paris'
+                            );
+                            const data = await response.json();
+                            const current = data.current_weather;
+
+                            this.weather.temperature = Math.round(current.temperature);
+
+                            const weatherCode = current.weathercode;
+                            if (weatherCode === 0) {
+                                this.weather.icon = '☀️';
+                            } else if (weatherCode <= 3) {
+                                this.weather.icon = '⛅';
+                            } else if (weatherCode <= 48) {
+                                this.weather.icon = '☁️';
+                            } else if (weatherCode <= 67) {
+                                this.weather.icon = '🌧️';
+                            } else if (weatherCode <= 77) {
+                                this.weather.icon = '❄️';
+                            } else {
+                                this.weather.icon = '⛈️';
+                            }
+
+                            this.weather.description = 'Pessac';
+                        } catch (err) {
+                            console.error('Erreur météo:', err);
+                        }
                     }
                 }
-            }
+            };
         }
 
         // ========== APPLICATION PRINCIPALE ==========
