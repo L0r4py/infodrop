@@ -411,10 +411,8 @@
                 </div>
 
                 <!-- NOUVELLE BARRE UTILISATEUR UNIFIÉE -->
-                <div x-show="true" <!-- debug : à remplacer plus tard par ta condition stricte -->
-                    x-transition
-                    class="bg-gray-800/95 border-b border-gray-700 px-4 py-2 text-center text-xs text-gray-400"
-                    >
+                <div x-show="true" x-transition
+                    class="bg-gray-800/95 border-b border-gray-700 px-4 py-2 text-center text-xs text-gray-400">
                     <div
                         class="flex flex-col md:flex-row md:justify-center md:items-center md:gap-4 space-y-1 md:space-y-0">
 
@@ -423,14 +421,12 @@
                             📚 <span class="font-semibold text-white" x-text="totalReadCount"></span>
                             <span x-text="totalReadCount === 1 ? 'article lu' : 'articles lus'"></span>
                         </span>
-                        <span x-show="totalReadCount > 0 && (userInviteData.code || userInviteData.parrainEmail)"
-                            class="hidden md:inline">|</span>
+                        <span x-show="totalReadCount > 0 && userInviteData.code" class="hidden md:inline">|</span>
 
                         <!-- Partie 2 : Infos d'invitation -->
-                        <div x-show="userInviteData.code || userInviteData.parrainEmail"
-                            class="flex flex-col md:flex-row md:gap-4 items-center">
+                        <div x-show="userInviteData.code" class="flex flex-col md:flex-row md:gap-4 items-center">
                             <!-- Code à partager -->
-                            <span x-show="userInviteData.code">
+                            <span>
                                 🎁 Votre code à partager :
                                 <span
                                     class="font-mono bg-gray-800 px-2 py-1 rounded cursor-pointer hover:bg-gray-700 transition"
@@ -440,6 +436,7 @@
                                 <span x-show="copied" class="ml-2 text-green-400 font-semibold transition">Copié
                                     !</span>
                             </span>
+
 
                             <!-- Parrain -->
                             <span x-show="userInviteData.parrainEmail" class="hidden md:inline">|</span>
@@ -457,7 +454,6 @@
                         </div>
                     </div>
                 </div>
-
 
 
             </div>
