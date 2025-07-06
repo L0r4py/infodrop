@@ -430,27 +430,32 @@
                             <!-- Code à partager -->
                             <span>
                                 🎁 Votre code à partager :
-                                <span class="font-semibold text-white" x-text="userInviteData.code"></span>
-                                <span x-show="!userInviteData.is_used" title="Disponible">✅</span>
-                                <span x-show="userInviteData.is_used" title="Utilisé">❌</span>
+                                <span
+                                    class="font-mono bg-gray-800 px-2 py-1 rounded cursor-pointer hover:bg-gray-700 transition"
+                                    @click="navigator.clipboard.writeText(userInviteData.codeToShare); copied = true; setTimeout(() => copied = false, 1500)"
+                                    title="Cliquez pour copier">
+                                    {{ userInviteData.codeToShare }}
+                                </span>
+                                <span x-show="copied" class="ml-2 text-green-400 transition">Copié !</span>
                             </span>
 
                             <!-- Parrain -->
                             <span x-show="userInviteData.parrainEmail" class="hidden md:inline">|</span>
                             <span x-show="userInviteData.parrainEmail">
-                                👆 Invité par : <span class="font-semibold text-white"
+                                👆 Invité par : <span class="font-mono text-white"
                                     x-text="userInviteData.parrainEmail"></span>
                             </span>
 
                             <!-- Filleul -->
                             <span x-show="userInviteData.filleulEmail" class="hidden md:inline">|</span>
                             <span x-show="userInviteData.filleulEmail">
-                                👇 Votre filleul : <span class="font-semibold text-white"
+                                👇 Votre filleul : <span class="font-mono text-white"
                                     x-text="userInviteData.filleulEmail"></span>
                             </span>
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <!-- ========== PANEL ADMIN ========== -->
