@@ -608,7 +608,7 @@
                             </h4>
                             <div class="flex flex-wrap gap-2">
                                 <template x-for="orientation in allOrientations" :key="orientation">
-                                    <button @click="activeFilter = orientation" :class="orientation === 'infodrop' ? 
+                                    <button @click="activeFilter = orientation" :class="orientation === '🧨INFODROP' ? 
                                             (activeFilter === orientation ? 'bg-gray-600 text-white border-2 border-white' : 
                                              hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-white border border-gray-400 hover:bg-gray-600' : 
                                              'bg-gray-800 text-gray-500 border border-gray-600') :
@@ -616,7 +616,7 @@
                                              hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 
                                              'bg-gray-800 text-gray-500 border border-gray-600')"
                                         class="px-3 py-1 rounded-full text-sm font-semibold transition relative"
-                                        :class="orientation === 'infodrop' ? 'font-black' : 'capitalize'"
+                                        :class="orientation === '🧨INFODROP' ? 'font-black' : 'capitalize'"
                                         :title="hasArticlesForOrientation(orientation) ? '' : 'Aucun article ces dernières 24h'">
                                         <span
                                             x-text="orientation === 'gouvernement' ? '🇫🇷 Gouvernement' : orientation.replace('-', ' ')"></span>
@@ -659,8 +659,8 @@
                                         <span
                                             x-text="news.orientation === 'gouvernement' ? '🇫🇷 Gouvernement' : news.orientation.replace('-', ' ')"></span>
                                     </span>
-                                    <template x-if="news.tags && news.tags.filter(tag => tag !== 'infodrop').length">
-                                        <template x-for="tag in news.tags.filter(tag => tag !== 'infodrop')"
+                                    <template x-if="news.tags && news.tags.filter(tag => tag !== '🧨INFODROP').length">
+                                        <template x-for="tag in news.tags.filter(tag => tag !== '🧨INFODROP')"
                                             :key="tag">
                                             <span
                                                 class="ml-1 px-2 py-0.5 rounded-full font-medium text-xs capitalize bg-gray-700 text-gray-300 border border-gray-600"
@@ -1146,24 +1146,24 @@
                 openEditPanel(news) { this.editingNews = { ...JSON.parse(JSON.stringify(news)), tagsText: (news.tags || []).join(', ') }; this.showEditPanel = true; },
                 async updateNews() { const { id, resume, source, url, orientation, tagsText } = this.editingNews; const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : []; try { await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id); const index = this.newsList.findIndex(n => n.id === id); if (index !== -1) { this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; } this.showEditPanel = false; this.updateTagsList(); } catch (e) { alert("La mise à jour a échoué."); } },
                 async deleteNews(id) { if (!confirm("Supprimer ?")) return; this.newsList = this.newsList.filter(n => n.id !== id); try { await supabase.from('actu').delete().eq('id', id); if (this.isAdmin) this.loadStats(); } catch (e) { alert("La suppression a échoué."); this.loadNews(); } },
-                async addManualNews() { this.addingNews = true; try { let tags = ['infodrop']; if (this.newNews.tagsText) { tags.push(...this.newNews.tagsText.split(',').map(t => t.trim()).filter(Boolean).filter(t => t !== 'infodrop')); } await supabase.from('actu').insert({ ...this.newNews, heure: new Date().toISOString(), tags, added_by: this.user.email }); this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' }; this.showAdminPanel = false; this.loadData(); } catch (e) { alert('Erreur.'); } finally { this.addingNews = false; } },
+                async addManualNews() { this.addingNews = true; try { let tags = ['🧨INFODROP']; if (this.newNews.tagsText) { tags.push(...this.newNews.tagsText.split(',').map(t => t.trim()).filter(Boolean).filter(t => t !== '🧨INFODROP')); } await supabase.from('actu').insert({ ...this.newNews, heure: new Date().toISOString(), tags, added_by: this.user.email }); this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' }; this.showAdminPanel = false; this.loadData(); } catch (e) { alert('Erreur.'); } finally { this.addingNews = false; } },
                 async loadData(isInitial = false) { if (isInitial) this.loadingNews = true; await Promise.all([this.loadNews(), this.isAdmin ? this.loadStats() : null]); if (isInitial) this.loadingNews = false; },
                 async loadNews() { try { const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(); const { data } = await supabase.from('actu').select('*').gte('heure', twentyFourHoursAgo).order('heure', { ascending: false }); if (!data) return; const existingIds = new Set(this.newsList.map(n => n.id)); const newArticles = data.filter(n => !existingIds.has(n.id)); if (newArticles.length > 0) { this.newsList = [...newArticles, ...this.newsList]; this.updateTagsList(); } } catch (e) { console.error('Erreur actus:', e); } },
-                updateTagsList() { const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', 'infodrop']; const active = new Set(); const counts = {}; this.newsList.forEach(n => { if (n.orientation) active.add(n.orientation); if (n.tags) { n.tags.forEach(t => { counts[t] = (counts[t] || 0) + 1; if (t === 'infodrop') active.add(t); }); } }); this.allOrientations = pol; this.activeOrientations = [...active]; this.allOtherTags = Object.entries(counts).filter(([t]) => !pol.includes(t)).sort((a, b) => b[1] - a[1]).slice(0, 50).map(([t]) => t); this.allTags = [...pol, ...this.allOtherTags]; },
+                updateTagsList() { const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP']; const active = new Set(); const counts = {}; this.newsList.forEach(n => { if (n.orientation) active.add(n.orientation); if (n.tags) { n.tags.forEach(t => { counts[t] = (counts[t] || 0) + 1; if (t === '🧨INFODROP') active.add(t); }); } }); this.allOrientations = pol; this.activeOrientations = [...active]; this.allOtherTags = Object.entries(counts).filter(([t]) => !pol.includes(t)).sort((a, b) => b[1] - a[1]).slice(0, 50).map(([t]) => t); this.allTags = [...pol, ...this.allOtherTags]; },
                 hasArticlesForOrientation(o) { return this.activeOrientations.includes(o); },
                 getEmptyFilterMessage() { if (this.allOrientations.includes(this.activeFilter)) return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`; return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`; },
                 async loadStats() { try { const { data } = await supabase.from('stats_today').select('*').single(); this.stats = data || { total_articles: 0, total_sources: 0 }; } catch (e) { console.error('Erreur stats:', e); } },
                 markAsRead(id) { if (!this.readArticles[id]) { this.readArticles[id] = new Date().toISOString(); localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles)); this.updateTotalReadCount(); const article = this.newsList.find(n => n.id === id); if (article) this.addToDiversityData(article); if (this.totalReadCount === 100) this.celebrate100Articles(); } },
                 updateTotalReadCount() { this.totalReadCount = Object.keys(this.readArticles).length; },
                 cleanOldDiversityData() { const expiry = Date.now() - 24 * 60 * 60 * 1000; Object.keys(this.diversityData).forEach(t => { if (new Date(t).getTime() < expiry) delete this.diversityData[t]; }); localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); },
-                addToDiversityData(article) { let o = article.orientation || 'neutre'; if (article.tags?.includes('infodrop')) o = 'infodrop'; this.diversityData[new Date().toISOString()] = { orientation: o, source: article.source }; localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); this.calculateDiversityScore(); },
+                addToDiversityData(article) { let o = article.orientation || 'neutre'; if (article.tags?.includes('🧨INFODROP')) o = '🧨INFODROP'; this.diversityData[new Date().toISOString()] = { orientation: o, source: article.source }; localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); this.calculateDiversityScore(); },
                 calculateDiversityScore() {
                     this.cleanOldDiversityData();
                     const reads = Object.values(this.diversityData);
                     if (reads.length === 0) { this.diversityScore = null; this.readOrientations = []; return; }
                     const oSet = new Set(reads.map(r => r.orientation).filter(Boolean)); // <-- CORRECTION TAG VIDE
                     const sSet = new Set(reads.map(r => r.source));
-                    const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', 'infodrop'];
+                    const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
                     this.readOrientations = [...oSet].sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
                     this.diversityScore = Math.round(((oSet.size / 10) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
                     this.showDiversityChecker = this.diversityScore < 100;
