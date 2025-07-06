@@ -1032,23 +1032,59 @@
 
                 async login() {
                     if (this.loading) return;
-                    this.loading = true; this.message = ''; this.messageType = '';
+                    this.loading = true;
+                    this.message = '';
+                    this.messageType = '';
                     try {
-                        const checkRes = await fetch('/api/check-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: this.email }) });
-                        if (!checkRes.ok) { const err = await checkRes.json(); throw new Error(err.error || 'Erreur de communication.'); }
-                        const { exists } = await checkRes.json();
-                        if (!exists) {
-                            if (!this.inviteCode) throw new Error("Code d'invitation requis pour les nouveaux utilisateurs.");
-                            const validateRes = await fetch('/api/validate-invite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: this.inviteCode, email: this.email }) });
-                            const validationResult = await validateRes.json();
-                            if (!validationResult.success) throw new Error(validationResult.error);
+                        // Vérifie si l'email existe déjà (user existant ou non)
+                        const checkRes = await fetch('/api/check-email', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: this.email })
+                        });
+                        if (!checkRes.ok) {
+                            const err = await checkRes.json();
+                            throw new Error(err.error || 'Erreur de communication.');
                         }
-                        const { error: otpError } = await supabase.auth.signInWithOtp({ email: this.email, options: { emailRedirectTo: window.location.origin } });
+                        const { exists } = await checkRes.json();
+
+                        // Si l'utilisateur n'existe pas, il faut un code valide
+                        if (!exists) {
+                            if (!this.inviteCode) {
+                                this.message = "Code d'invitation requis pour les nouveaux utilisateurs.";
+                                this.messageType = 'error';
+                                this.loading = false;
+                                return;
+                            }
+                            const validateRes = await fetch('/api/validate-invite', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ code: this.inviteCode, email: this.email })
+                            });
+                            const validationResult = await validateRes.json();
+                            if (!validationResult.success) {
+                                this.message = validationResult.error;
+                                this.messageType = 'error';
+                                this.loading = false;
+                                return;
+                            }
+                        }
+
+                        // On envoie l'OTP (lien magique) seulement si tout est OK
+                        const { error: otpError } = await supabase.auth.signInWithOtp({
+                            email: this.email,
+                            options: { emailRedirectTo: window.location.origin }
+                        });
                         if (otpError) throw otpError;
-                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.'; this.messageType = 'success';
+
+                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
+                        this.messageType = 'success';
                     } catch (error) {
-                        this.message = error.message || 'Une erreur est survenue.'; this.messageType = 'error';
-                    } finally { this.loading = false; }
+                        this.message = error.message || 'Une erreur est survenue.';
+                        this.messageType = 'error';
+                    } finally {
+                        this.loading = false;
+                    }
                 },
 
                 async loadUserInviteData() {
