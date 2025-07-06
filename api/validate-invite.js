@@ -1,4 +1,4 @@
-// Fichier: /api/validate-invite.js (Version finale et robuste)
+// Fichier: /api/validate-invite.js (version corrigée)
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
@@ -15,25 +15,22 @@ export default async function handler(req, res) {
     if (!code || !email) {
         return res.status(400).json({ error: 'Un code et un email sont requis' });
     }
+    const emailLC = email.toLowerCase(); // Force l'email en minuscules
 
     try {
         // --- Étape A : Vérifier le code d'invitation ---
-        // CORRECTION : On utilise maybeSingle() pour ne pas planter si le code est introuvable.
         const { data: codeData, error: fetchError } = await supabase
             .from('invitation_codes')
             .select('*')
             .eq('code', code)
-            .maybeSingle(); // <-- C'EST LA CORRECTION LA PLUS IMPORTANTE
+            .maybeSingle();
 
-        // S'il y a une vraie erreur de base de données
         if (fetchError) throw fetchError;
 
-        // Si le code n'a pas été trouvé (ou a été mal tapé)
         if (!codeData) {
             return res.status(400).json({ error: 'Ce code d\'invitation est invalide ou n\'existe pas.' });
         }
 
-        // Si le code a déjà été utilisé
         if (codeData.is_used) {
             return res.status(400).json({ error: 'Ce code d\'invitation a déjà été utilisé.' });
         }
@@ -41,7 +38,7 @@ export default async function handler(req, res) {
         // --- Étape B : Marquer le code comme "utilisé" ---
         const { error: updateError } = await supabase
             .from('invitation_codes')
-            .update({ is_used: true, used_by_email: email, used_at: new Date().toISOString() })
+            .update({ is_used: true, used_by_email: emailLC, used_at: new Date().toISOString() })
             .eq('id', codeData.id);
         if (updateError) throw updateError;
 
@@ -51,7 +48,7 @@ export default async function handler(req, res) {
         
         await supabase.from('invitation_codes').insert({
             code: newCodeData,
-            owner_email: email,
+            owner_email: emailLC,
             parent_code_id: codeData.id,
             generation: codeData.generation + 1
         });
