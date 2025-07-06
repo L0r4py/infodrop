@@ -546,8 +546,8 @@
                             <div class="flex flex-wrap gap-2">
                                 <template x-for="orientation in allOrientations" :key="orientation">
                                     <button @click="activeFilter = orientation" :class="orientation === '🧨INFODROP' ? 
-                                            (activeFilter === orientation ? 'bg-red-600 text-white border-red-400' : 
-                                             hasArticlesForOrientation(orientation) ? 'bg-red-900 bg-opacity-30 text-red-400 border border-red-600 hover:bg-red-800 hover:bg-opacity-50' : 
+                                            (activeFilter === orientation ? 'bg-gray-600 text-white border-2 border-white' : 
+                                             hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-white border border-gray-400 hover:bg-gray-600' : 
                                              'bg-gray-800 text-gray-500 border border-gray-600') :
                                             (activeFilter === orientation ? getOrientationClass(orientation) : 
                                              hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 
