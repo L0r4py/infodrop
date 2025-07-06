@@ -189,17 +189,6 @@
         }
     </script>
 
-    <!-- ========== APPLICATION PRINCIPALE ========== -->
-    <div x-data="infodropApp()" x-init="init()" class="w-full">
-
-        <!-- BADGE COPIÉ GLOBAL EN OVERLAY -->
-        <div x-show="copied" x-transition
-            class="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 bg-green-600/95 text-white px-8 py-4 rounded-2xl text-2xl font-bold shadow-2xl flex items-center justify-center"
-            style="pointer-events:none">
-            ✅ Copié&nbsp;!
-        </div>
-
-
         <!-- ========== LOADER ========== -->
         <div x-show="!sessionLoaded" class="min-h-screen flex items-center justify-center bg-gray-900">
             <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
