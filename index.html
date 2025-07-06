@@ -1206,7 +1206,7 @@
                 },
 
                 updateTagsList() {
-                    // Toutes les orientations politiques possibles, dans l'ordre gauche → droite
+                    // Toutes les orientations politiques + INFODROP (toujours affichées)
                     const allPoliticalOrientations = [
                         'extrême-gauche',
                         'gauche',
@@ -1216,10 +1216,11 @@
                         'droite',
                         'extrême-droite',
                         'gouvernement',
-                        'neutre'
+                        'neutre',
+                        '🧨INFODROP' // Ajouté à la fin des orientations
                     ];
 
-                    // Orientations qui ont réellement des articles dans les dernières 24h
+                    // Compter les occurrences
                     const activeOrientationSet = new Set();
                     const tagCounts = {};
 
@@ -1228,25 +1229,30 @@
                         if (news.tags && Array.isArray(news.tags)) {
                             news.tags.forEach(tag => {
                                 tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                                // Si c'est INFODROP, on le traite comme une orientation active
+                                if (tag === '🧨INFODROP') {
+                                    activeOrientationSet.add('🧨INFODROP');
+                                }
                             });
                         }
                     });
 
-                    // TOUJOURS afficher toutes les orientations politiques
+                    // TOUJOURS afficher toutes les orientations (y compris INFODROP)
                     this.allOrientations = allPoliticalOrientations;
-
-                    // Orientations qui ont des articles (pour le style visuel)
                     this.activeOrientations = Array.from(activeOrientationSet);
 
-                    // Tags non-politiques (comme avant)
-                    this.allOtherTags = Object.entries(tagCounts)
+                    // Autres tags (catégories normales)
+                    let otherTags = Object.entries(tagCounts)
                         .filter(([tag, count]) => count >= 1)
+                        .filter(([tag]) => !allPoliticalOrientations.includes(tag))
                         .sort((a, b) => b[1] - a[1])
                         .slice(0, 50)
-                        .map(([tag]) => tag)
-                        .sort();
+                        .map(([tag]) => tag);
 
+                    this.allOtherTags = otherTags;
                     this.allTags = [...this.allOrientations, ...this.allOtherTags];
+
+                    console.log('📊 Tags mis à jour. INFODROP dans orientations:', this.activeOrientations.includes('🧨INFODROP'));
                 },
 
                 // Ajouter cette nouvelle fonction pour vérifier si une orientation a des articles
