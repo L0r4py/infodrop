@@ -538,17 +538,22 @@
                             Tout voir
                         </button>
 
-                        <!-- Section Orientations politiques (TOUJOURS TOUTES AFFICHÉES) -->
+                        <!-- Section Orientations politiques (TOUJOURS TOUTES AFFICHÉES) + INFODROP -->
                         <div class="mb-4">
                             <h4 class="text-xs text-gray-500 uppercase tracking-wider mb-2">
                                 Orientations politiques
                             </h4>
                             <div class="flex flex-wrap gap-2">
                                 <template x-for="orientation in allOrientations" :key="orientation">
-                                    <button @click="activeFilter = orientation"
-                                        :class="activeFilter === orientation ? getOrientationClass(orientation) : 
-               hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 'bg-gray-800 text-gray-500 border border-gray-600'"
-                                        class="px-3 py-1 rounded-full text-sm font-semibold transition capitalize relative"
+                                    <button @click="activeFilter = orientation" :class="orientation === '🧨INFODROP' ? 
+                                            (activeFilter === orientation ? 'bg-red-600 text-white border-red-400' : 
+                                             hasArticlesForOrientation(orientation) ? 'bg-red-900 bg-opacity-30 text-red-400 border border-red-600 hover:bg-red-800 hover:bg-opacity-50' : 
+                                             'bg-gray-800 text-gray-500 border border-gray-600') :
+                                            (activeFilter === orientation ? getOrientationClass(orientation) : 
+                                             hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 
+                                             'bg-gray-800 text-gray-500 border border-gray-600')"
+                                        class="px-3 py-1 rounded-full text-sm font-semibold transition relative"
+                                        :class="orientation === '🧨INFODROP' ? 'font-black' : 'capitalize'"
                                         :title="hasArticlesForOrientation(orientation) ? '' : 'Aucun article ces dernières 24h'">
                                         <span
                                             x-text="orientation === 'gouvernement' ? '🇫🇷 Gouvernement' : orientation.replace('-', ' ')"></span>
@@ -1130,7 +1135,20 @@
                 async addManualNews() {
                     this.addingNews = true;
                     try {
-                        const tags = this.newNews.tagsText ? this.newNews.tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
+                        // Préparer les tags avec le tag spécial INFODROP en premier
+                        let tags = ['🧨INFODROP']; // Tag spécial toujours présent
+
+                        // Ajouter les autres tags s'il y en a
+                        if (this.newNews.tagsText) {
+                            const additionalTags = this.newNews.tagsText
+                                .split(',')
+                                .map(t => t.trim())
+                                .filter(Boolean)
+                                .filter(tag => tag !== '🧨INFODROP'); // Éviter les doublons
+
+                            tags = [...tags, ...additionalTags];
+                        }
+
                         const { error } = await supabase.from('actu').insert({
                             resume: this.newNews.resume,
                             source: this.newNews.source,
@@ -1140,10 +1158,18 @@
                             tags,
                             added_by: this.user.email
                         });
+
                         if (error) throw error;
+
+                        // Reset du formulaire
                         this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
                         this.showAdminPanel = false;
+
+                        // Recharger les données
                         this.loadData();
+
+                        console.log('✅ Actualité INFODROP ajoutée avec le tag spécial');
+
                     } catch (error) {
                         console.error('Erreur ajout:', error);
                         alert('Erreur lors de l\'ajout.');
@@ -1260,13 +1286,18 @@
                     return this.activeOrientations.includes(orientation);
                 },
 
-                // Ajouter cette fonction pour le message d'explication
                 getEmptyFilterMessage() {
+                    // Si c'est le tag spécial INFODROP (maintenant dans les orientations)
+                    if (this.activeFilter === '🧨INFODROP') {
+                        return `Aucun article "🧨INFODROP" publié ces dernières 24h.`;
+                    }
+
                     // Si c'est une orientation politique
                     if (this.allOrientations.includes(this.activeFilter)) {
                         return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié d'article ces dernières 24h.`;
                     }
-                    // Si c'est un tag
+
+                    // Si c'est un autre tag/catégorie
                     return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`;
                 },
 
