@@ -1,34 +1,42 @@
 <!DOCTYPE html>
 <html lang="fr" class="dark">
 
+<!-- ============================================================================ -->
+<!-- 📋 HEAD - MÉTADONNÉES ET CONFIGURATION                                      -->
+<!-- ============================================================================ -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Open Graph pour Facebook, WhatsApp, LinkedIn -->
+    
+    <!-- === OPEN GRAPH ET RÉSEAUX SOCIAUX === -->
     <meta property="og:title" content="INFODROP - L'actualité essentielle" />
     <meta property="og:description" content="L'actualité essentielle. Agrégation multi-sources en temps réel." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://infodrop.live/" />
     <meta property="og:image" content="https://infodrop.live/images/infodrop-share.png" />
 
-    <!-- Twitter Card -->
+    <!-- === TWITTER CARD === -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="INFODROP - L'actualité essentielle">
     <meta name="twitter:description" content="L'actualité essentielle. Agrégation multi-sources en temps réel.">
     <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png">
 
     <title>INFODROP - L'actualité essentielle</title>
-    <!-- ========== FAVICON ========== -->
+    
+    <!-- === FAVICON === -->
     <link rel="icon" type="image/png" href="images/infodrop-favicon.png">
     <link rel="apple-touch-icon" href="images/infodrop-favicon.png">
-    <!-- =========================== -->
+    
+    <!-- === BIBLIOTHÈQUES EXTERNES === -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
-    <!-- ========== STYLES ========== -->
+    <!-- ======================================================================== -->
+    <!-- 🎨 STYLES CSS PERSONNALISÉS                                             -->
+    <!-- ======================================================================== -->
     <style>
-        /* Animations et transitions principales */
+        /* === ANIMATIONS ET TRANSITIONS PRINCIPALES === */
         .news-card {
             transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
         }
@@ -69,7 +77,7 @@
             }
         }
 
-        /* Scrollbar personnalisée */
+        /* === SCROLLBAR PERSONNALISÉE === */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -82,7 +90,7 @@
             background: #4b5563;
         }
 
-        /* Animation confettis */
+        /* === ANIMATION CONFETTIS === */
         .confetti {
             position: fixed;
             width: 10px;
@@ -98,7 +106,7 @@
             }
         }
 
-        /* Animation du bandeau défilant (uniquement pour mobile) */
+        /* === ANIMATION DU BANDEAU DÉFILANT (MOBILE) === */
         .ticker-train {
             display: inline-flex;
             animation: scroll-left 20s linear infinite;
@@ -119,6 +127,7 @@
         }
     </style>
 
+    <!-- === CONFIGURATION TAILWIND === -->
     <script>
         tailwind.config = { darkMode: 'class', theme: { extend: {} } }
     </script>
@@ -126,14 +135,16 @@
 
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
 
-    <!-- ========== CONFIGURATION 100% SÉCURISÉE (SANS FALLBACKS) ========== -->
+    <!-- ======================================================================== -->
+    <!-- 🔐 CONFIGURATION SÉCURISÉE ET INITIALISATION SUPABASE                  -->
+    <!-- ======================================================================== -->
     <script>
-        // Variables globales (AUCUNE valeur par défaut)
+        // === VARIABLES GLOBALES (SANS VALEURS PAR DÉFAUT) ===
         let supabase = null;
         let ADMIN_EMAILS = [];
         let STRIPE_LINK = 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801';
 
-        // Fonction pour initialiser TOUT de manière sécurisée
+        // === FONCTION D'INITIALISATION SÉCURISÉE ===
         async function initializeSupabase() {
             try {
                 console.log('🔐 Récupération de la configuration sécurisée...');
@@ -189,28 +200,36 @@
         }
     </script>
 
-    <!-- ========== APPLICATION PRINCIPALE ========== -->
+    <!-- ======================================================================== -->
+    <!-- 🏗️ STRUCTURE PRINCIPALE DE L'APPLICATION                               -->
+    <!-- ======================================================================== -->
     <div x-data="infodropApp()" x-init="init()" class="w-full">
 
-        <!-- ========== LOADER ========== -->
+        <!-- ================================================================== -->
+        <!-- ⏳ ÉCRAN DE CHARGEMENT                                            -->
+        <!-- ================================================================== -->
         <div x-show="!sessionLoaded" class="min-h-screen flex items-center justify-center bg-gray-900">
             <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
 
-        <!-- ========== PAGE DE CONNEXION ========== -->
+        <!-- ================================================================== -->
+        <!-- 🔑 PAGE DE CONNEXION                                              -->
+        <!-- ================================================================== -->
         <div x-show="sessionLoaded && !user" x-transition
             class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
             <div
                 class="max-w-sm w-full bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-2xl p-8 border border-gray-700">
                 <h1 class="text-3xl font-bold text-center text-white mb-2">📰 INFODROP</h1>
                 <p class="text-gray-400 text-center mb-8">L'actualité essentielle, rien que l'essentiel.</p>
+                
+                <!-- === FORMULAIRE DE CONNEXION === -->
                 <form @submit.prevent="login()" class="space-y-4">
                     <div>
                         <input x-model="email" type="email" required @input="email = email.toLowerCase()"
                             class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-500 text-white"
                             placeholder="votre@email.com">
                     </div>
-                    <!-- NOUVEAU CHAMP POUR LE CODE D'INVITATION -->
+                    <!-- === CHAMP CODE D'INVITATION === -->
                     <div>
                         <input x-model="inviteCode" type="text"
                             class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-500 text-white"
@@ -223,26 +242,33 @@
                     </button>
                 </form>
 
-                <!-- NOUVEAU LIEN D'AIDE -->
+                <!-- === LIEN D'AIDE === -->
                 <p class="text-xs text-center text-gray-500 mt-4">
                     💡 Pas de code ? Suivez <a href="https://x.com/LOR4_14" target="_blank"
                         class="text-blue-400 hover:underline">nos annonces</a> pour en gagner un !
                 </p>
+                
+                <!-- === MESSAGES DE RETOUR === -->
                 <div x-show="message" class="mt-4 p-3 rounded-lg text-sm"
                     :class="messageType === 'error' ? 'bg-red-900/50 text-red-300 border border-red-700' : 'bg-green-900/50 text-green-300 border border-green-700'"
                     x-text="message"></div>
             </div>
         </div>
 
-        <!-- ========== APPLICATION (USER CONNECTÉ) ========== -->
+        <!-- ================================================================== -->
+        <!-- 🏠 APPLICATION PRINCIPALE (UTILISATEUR CONNECTÉ)                  -->
+        <!-- ================================================================== -->
         <div x-show="sessionLoaded && user" x-transition.opacity class="min-h-screen flex flex-col">
 
-            <!-- ========== HEADER UNIFIÉ AVEC BANDEAU ========== -->
+            <!-- ============================================================== -->
+            <!-- 📱 HEADER UNIFIÉ AVEC NAVIGATION ET BANDEAUX                -->
+            <!-- ============================================================== -->
             <div class="sticky top-0 z-40 transition-shadow duration-300" id="stickyHeader">
-                <!-- HEADER PRINCIPAL -->
+                
+                <!-- === HEADER PRINCIPAL === -->
                 <header class="relative z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
                     <div class="max-w-4xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
-                        <!-- LOGO -->
+                        <!-- === LOGO === -->
                         <div class="justify-self-start">
                             <a href="/index.html"
                                 class="flex items-center gap-2 text-xl font-bold text-white hover:text-blue-400 transition whitespace-nowrap"
@@ -260,7 +286,7 @@
 
                         <div class="justify-self-center"></div>
 
-                        <!-- MENU HAMBURGER -->
+                        <!-- === MENU HAMBURGER === -->
                         <div class="justify-self-end relative" x-data="{ showMenu: false }">
                             <button @click="showMenu = !showMenu" class="p-2 rounded-full hover:bg-gray-700 transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
@@ -270,23 +296,28 @@
                                         clip-rule="evenodd" />
                                 </svg>
                             </button>
-                            <!-- DROPDOWN MENU -->
+                            
+                            <!-- === DROPDOWN MENU === -->
                             <div x-show="showMenu" @click.away="showMenu = false" x-transition
                                 class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-[100]"
                                 style="display: none;">
-                                <!-- ANALYSES 360° -->
+                                
+                                <!-- === ANALYSES 360° === -->
                                 <div class="px-4 py-2 border-b border-gray-700">
                                     <a href="/infodrop360.html"
                                         class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">🌐
                                         Analyses 360°</a>
                                 </div>
-                                <!-- MENU ITEMS -->
+                                
+                                <!-- === ITEMS DE MENU === -->
                                 <a @click="showAboutPanel = true; showMenu = false" href="#"
                                     class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">ℹ️
                                     À propos</a>
                                 <a :href="STRIPE_LINK" target="_blank"
                                     class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-700">❤️
                                     Soutenir</a>
+                                
+                                <!-- === MENU ADMIN === -->
                                 <template x-if="isAdmin">
                                     <div>
                                         <div class="border-t border-gray-700 my-1"></div>
@@ -295,6 +326,8 @@
                                             Panneau admin</a>
                                     </div>
                                 </template>
+                                
+                                <!-- === DÉCONNEXION === -->
                                 <div class="border-t border-gray-700 my-1"></div>
                                 <a @click="logout()" href="#"
                                     class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">🚪
@@ -304,13 +337,15 @@
                     </div>
                 </header>
 
-                <!-- BANDEAU CONTEXTUEL - VERSION RESPONSIVE CORRIGÉE -->
+                <!-- ========================================================== -->
+                <!-- 📰 BANDEAU CONTEXTUEL (DATE, MÉTÉO, PHASE LUNAIRE...)    -->
+                <!-- ========================================================== -->
                 <div x-data="contextTicker()" x-init="initTicker()" class="bg-gray-800/95 border-b border-gray-700 h-8">
 
-                    <!-- ===== VERSION MOBILE (Défilante) ===== -->
+                    <!-- === VERSION MOBILE (Défilante) === -->
                     <div class="md:hidden h-full overflow-hidden relative">
                         <div class="ticker-train absolute flex items-center h-full" style="width: max-content;">
-                            <!-- COPIE 1 -->
+                            <!-- === COPIE 1 === -->
                             <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
                                 <span class="flex items-center gap-1">
                                     <span class="text-yellow-400">📅</span>
@@ -342,7 +377,7 @@
                                 <span class="text-gray-600 mx-4">•</span>
                             </div>
 
-                            <!-- COPIE 2 (IDENTIQUE) -->
+                            <!-- === COPIE 2 (IDENTIQUE POUR L'ANIMATION) === -->
                             <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
                                 <span class="flex items-center gap-1">
                                     <span class="text-yellow-400">📅</span>
@@ -376,7 +411,7 @@
                         </div>
                     </div>
 
-                    <!-- ===== VERSION DESKTOP (Statique) ===== -->
+                    <!-- === VERSION DESKTOP (Statique) === -->
                     <div class="hidden md:flex items-center justify-center h-full">
                         <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
                             <span class="flex items-center gap-1">
@@ -410,22 +445,24 @@
                     </div>
                 </div>
 
-                <!-- NOUVELLE BARRE UTILISATEUR UNIFIÉE -->
+                <!-- ========================================================== -->
+                <!-- 👤 BARRE UTILISATEUR (STATS LECTURES ET INVITATIONS)     -->
+                <!-- ========================================================== -->
                 <div x-show="true" x-transition
                     class="bg-gray-800/95 border-b border-gray-700 px-4 py-2 text-center text-xs text-gray-400">
                     <div
                         class="flex flex-col md:flex-row md:justify-center md:items-center md:gap-4 space-y-1 md:space-y-0">
 
-                        <!-- Partie 1 : Compteur d'articles lus -->
+                        <!-- === COMPTEUR D'ARTICLES LUS === -->
                         <span x-show="totalReadCount > 0">
                             📚 <span class="font-semibold text-white" x-text="totalReadCount"></span>
                             <span x-text="totalReadCount === 1 ? 'article lu' : 'articles lus'"></span>
                         </span>
                         <span x-show="totalReadCount > 0 && userInviteData.code" class="hidden md:inline">|</span>
 
-                        <!-- Partie 2 : Infos d'invitation -->
+                        <!-- === INFOS D'INVITATION === -->
                         <div x-show="userInviteData.code" class="flex flex-col md:flex-row md:gap-4 items-center">
-                            <!-- Code à partager -->
+                            <!-- === CODE À PARTAGER === -->
                             <span>
                                 🎁 Votre code à partager :
                                 <span
@@ -437,15 +474,14 @@
                                     !</span>
                             </span>
 
-
-                            <!-- Parrain -->
+                            <!-- === PARRAIN === -->
                             <span x-show="userInviteData.parrainEmail" class="hidden md:inline">|</span>
                             <span x-show="userInviteData.parrainEmail">
                                 👆 Invité par : <span class="font-mono text-white"
                                     x-text="userInviteData.parrainEmail"></span>
                             </span>
 
-                            <!-- Filleul -->
+                            <!-- === FILLEUL === -->
                             <span x-show="userInviteData.filleulEmail" class="hidden md:inline">|</span>
                             <span x-show="userInviteData.filleulEmail">
                                 👇 Votre filleul : <span class="font-mono text-white"
@@ -454,23 +490,28 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
 
-            <!-- ========== PANEL ADMIN ========== -->
+            <!-- ============================================================== -->
+            <!-- ⚙️ PANNEAU ADMINISTRATION                                     -->
+            <!-- ============================================================== -->
             <div x-show="showAdminPanel && isAdmin" x-transition class="bg-gray-950/50 border-b border-gray-800">
                 <div class="max-w-4xl mx-auto p-4">
                     <h2 class="text-lg font-bold text-white mb-3">🧨 Ajouter une actualité</h2>
+                    
+                    <!-- === FORMULAIRE D'AJOUT D'ACTUALITÉ === -->
                     <form @submit.prevent="addManualNews()" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div class="md:col-span-3"><input x-model="newNews.resume" type="text" placeholder="Résumé"
+                        <div class="md:col-span-3">
+                            <input x-model="newNews.resume" type="text" placeholder="Résumé"
                                 maxlength="180" required
                                 class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
                         </div>
-                        <div><input x-model="newNews.source" type="text" placeholder="Source" required
+                        <div>
+                            <input x-model="newNews.source" type="text" placeholder="Source" required
                                 class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
                         </div>
-                        <div><input x-model="newNews.url" type="url" placeholder="URL de l'article" required
+                        <div>
+                            <input x-model="newNews.url" type="url" placeholder="URL de l'article" required
                                 class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
                         </div>
                         <div>
@@ -491,10 +532,11 @@
                             <input x-model="newNews.tagsText" type="text" placeholder="Tags (séparés par des virgules)"
                                 class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
                         </div>
-                        <div class="md:col-span-3"><button type="submit" :disabled="addingNews"
+                        <div class="md:col-span-3">
+                            <button type="submit" :disabled="addingNews"
                                 class="bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 transition disabled:opacity-50">Publier</button>
 
-                            <!-- NOUVEAU BOUTON ADMIN POUR GÉNÉRER DES CODES -->
+                            <!-- === GÉNÉRATION DE CODES D'INVITATION === -->
                             <div class="md:col-span-3 border-t border-gray-700 pt-3 mt-3">
                                 <h3 class="text-base font-bold text-white mb-2">🎁 Générer un code d'invitation</h3>
                                 <button type="button" @click="generateInviteCode()"
@@ -511,10 +553,14 @@
                 </div>
             </div>
 
-            <!-- ========== CONTENU PRINCIPAL ========== -->
+            <!-- ============================================================== -->
+            <!-- 📊 CONTENU PRINCIPAL                                          -->
+            <!-- ============================================================== -->
             <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full">
 
-                <!-- STATS ADMIN -->
+                <!-- ========================================================== -->
+                <!-- 📈 STATISTIQUES ADMINISTRATEUR                            -->
+                <!-- ========================================================== -->
                 <div x-show="isAdmin" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6 text-center">
                     <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
                         <div class="text-2xl font-bold text-white" x-text="stats.total_articles">0</div>
@@ -531,7 +577,9 @@
                     </div>
                 </div>
 
-                <!-- DIVERSITY CHECKER -->
+                <!-- ========================================================== -->
+                <!-- 🌈 CHECKER DE DIVERSITÉ DES LECTURES                     -->
+                <!-- ========================================================== -->
                 <div x-show="!loadingNews && diversityScore !== null" x-transition
                     class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
                     <button @click="showDiversityChecker = !showDiversityChecker"
@@ -544,6 +592,8 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </button>
+                    
+                    <!-- === CONTENU DU DIVERSITY CHECKER === -->
                     <div x-show="showDiversityChecker" x-transition class="p-4 border-t border-gray-700">
                         <div class="flex items-center justify-between mb-4">
                             <div>
@@ -562,7 +612,8 @@
                                    }" x-text="getDiversityMessage()"></p>
                             </div>
                         </div>
-                        <!-- Barre de progression -->
+                        
+                        <!-- === BARRE DE PROGRESSION === -->
                         <div class="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
                             <div class="h-full rounded-full transition-all duration-1000" :class="{
                                      'bg-red-400': diversityScore < 30,
@@ -570,7 +621,8 @@
                                      'bg-green-400': diversityScore >= 70
                                  }" :style="`width: ${diversityScore}%`"></div>
                         </div>
-                        <!-- Orientations lues -->
+                        
+                        <!-- === ORIENTATIONS LUES === -->
                         <div class="mt-3 flex flex-wrap gap-2" x-show="readOrientations.length > 0">
                             <template x-for="orientation in readOrientations" :key="orientation">
                                 <span class="text-xs px-2 py-1 rounded-full" :class="getOrientationClass(orientation)">
@@ -582,7 +634,9 @@
                     </div>
                 </div>
 
-                <!-- FILTRES -->
+                <!-- ========================================================== -->
+                <!-- 🔍 SYSTÈME DE FILTRES                                     -->
+                <!-- ========================================================== -->
                 <div x-show="!loadingNews" x-transition class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
                     <button @click="showFilters = !showFilters" class="w-full flex items-center justify-between p-4">
                         <h3 class="font-semibold text-gray-300">Filtrer</h3>
@@ -593,15 +647,17 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </button>
+                    
+                    <!-- === CONTENU DES FILTRES === -->
                     <div x-show="showFilters" x-transition class="p-4 border-t border-gray-700">
-                        <!-- Bouton Tout voir -->
+                        <!-- === BOUTON TOUT VOIR === -->
                         <button @click="activeFilter = 'all'"
                             :class="{ 'bg-blue-600 text-white': activeFilter === 'all', 'bg-gray-700 text-gray-300': activeFilter !== 'all' }"
                             class="px-3 py-1 rounded-full text-sm font-semibold transition mb-3">
                             Tout voir
                         </button>
 
-                        <!-- Section Orientations politiques (TOUJOURS TOUTES AFFICHÉES) + INFODROP -->
+                        <!-- === SECTION ORIENTATIONS POLITIQUES === -->
                         <div class="mb-4">
                             <h4 class="text-xs text-gray-500 uppercase tracking-wider mb-2">
                                 Orientations politiques
@@ -628,7 +684,7 @@
                             </p>
                         </div>
 
-                        <!-- Section Autres tags -->
+                        <!-- === SECTION AUTRES TAGS === -->
                         <div x-show="allOtherTags.length > 0">
                             <h4 class="text-xs text-gray-500 uppercase tracking-wider mb-2">Catégories</h4>
                             <div class="flex flex-wrap gap-2">
@@ -643,11 +699,15 @@
                     </div>
                 </div>
 
-                <!-- LISTE DES NEWS -->
+                <!-- ========================================================== -->
+                <!-- 📰 LISTE DES ACTUALITÉS                                   -->
+                <!-- ========================================================== -->
                 <div class="space-y-3">
                     <template x-for="news in filteredNews" :key="news.id">
                         <div
                             class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
+                            
+                            <!-- === CONTENU DE L'ARTICLE === -->
                             <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="flex-grow">
                                 <p class="text-base text-white mb-2" x-text="news.resume"></p>
                                 <div class="flex items-center flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400">
@@ -670,7 +730,7 @@
                                 </div>
                             </a>
 
-                            <!-- BOUTONS ADMIN -->
+                            <!-- === BOUTONS ADMIN === -->
                             <button x-show="isAdmin" @click.prevent="openEditPanel(news)"
                                 class="flex-shrink-0 p-2 rounded-full hover:bg-blue-900/50 transition"
                                 title="Éditer">✏️</button>
@@ -680,7 +740,9 @@
                         </div>
                     </template>
 
-                    <!-- MESSAGES D'ÉTAT AMÉLIORÉS -->
+                    <!-- ========================================================== -->
+                    <!-- 📭 MESSAGES D'ÉTAT                                        -->
+                    <!-- ========================================================== -->
                     <div x-show="filteredNews.length === 0 && !loadingNews" class="text-center py-12">
                         <div x-show="activeFilter === 'all'" class="text-gray-500">
                             <p>Aucune actualité pour le moment.</p>
@@ -697,6 +759,7 @@
                         </div>
                     </div>
 
+                    <!-- === LOADER === -->
                     <div x-show="loadingNews && filteredNews.length === 0" class="text-center py-12">
                         <div
                             class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin">
@@ -705,9 +768,11 @@
                 </div>
             </main>
 
-            <!-- ========== MODALS ========== -->
+            <!-- ============================================================== -->
+            <!-- 🎭 MODALS ET FENÊTRES POPUP                                   -->
+            <!-- ============================================================== -->
 
-            <!-- MODAL EDIT -->
+            <!-- === MODAL D'ÉDITION === -->
             <div x-show="showEditPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
                 x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
@@ -755,7 +820,7 @@
                 </div>
             </div>
 
-            <!-- MODAL ABOUT -->
+            <!-- === MODAL À PROPOS === -->
             <div x-show="showAboutPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
                 x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
@@ -787,7 +852,9 @@
                 </div>
             </div>
 
-            <!-- FOOTER -->
+            <!-- ============================================================== -->
+            <!-- 🦶 FOOTER                                                     -->
+            <!-- ============================================================== -->
             <footer class="text-center py-8 text-xs text-gray-500">
                 <p>© 2025 INFODROP. Tous droits réservés.</p>
                 <p class="mt-1">Un projet 3C - EM&LPy</p>
@@ -795,7 +862,9 @@
         </div>
     </div>
 
-    <!-- ========== BOUTON SCROLL TO TOP ========== -->
+    <!-- ======================================================================== -->
+    <!-- 🔝 BOUTON SCROLL TO TOP                                                 -->
+    <!-- ======================================================================== -->
     <button x-data="{ show: false }" x-show="show" x-transition @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
         x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
         class="fixed bottom-6 right-6 z-40 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110 border border-gray-700"
@@ -807,11 +876,16 @@
         </svg>
     </button>
 
-    <!-- ========== JAVASCRIPT ========== -->
+    <!-- ======================================================================== -->
+    <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER                                          -->
+    <!-- ======================================================================== -->
     <script>
-        // ========== FONCTION BANDEAU CONTEXTUEL ==========
+        // ====================================================================
+        // 📅 FONCTION BANDEAU CONTEXTUEL (DATE, MÉTÉO, LUNE...)
+        // ====================================================================
         function contextTicker() {
             return {
+                // === DONNÉES DE BASE ===
                 dateInfo: {
                     fullDate: '',
                     dayOfYear: 0,
@@ -828,6 +902,7 @@
                     icon: '🌙'
                 },
 
+                // === DICTIONNAIRE DES FÊTES ===
                 feasts: {
                     '01-01': 'Jour de l\'an',
                     '01-06': 'Épiphanie',
@@ -847,6 +922,7 @@
                     '12-31': 'Saint-Sylvestre'
                 },
 
+                // === INITIALISATION DU TICKER ===
                 async initTicker() {
                     this.updateDateInfo();
                     this.updateMoonPhase();
@@ -870,6 +946,7 @@
                     setInterval(() => this.getWeather(), 600000);
                 },
 
+                // === MISE À JOUR DES INFORMATIONS DE DATE ===
                 updateDateInfo() {
                     const now = new Date();
                     const options = { weekday: 'long', day: 'numeric', month: 'long' };
@@ -887,6 +964,7 @@
                     this.todayFeast = this.feasts[monthDay] || '';
                 },
 
+                // === CALCUL DE LA PHASE LUNAIRE ===
                 updateMoonPhase() {
                     const now = new Date();
                     const refNewMoon = new Date(2000, 0, 6);
@@ -922,6 +1000,7 @@
                     }
                 },
 
+                // === RÉCUPÉRATION DES DONNÉES MÉTÉO ===
                 async getWeather() {
                     try {
                         const position = await new Promise((resolve, reject) => {
@@ -933,7 +1012,6 @@
                         const response = await fetch(
                             `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&timezone=auto`
                         )
-
 
                         const data = await response.json();
                         const current = data.current_weather;
@@ -995,26 +1073,128 @@
             };
         }
 
-        // ========== APPLICATION PRINCIPALE ==========
+        // ====================================================================
+        // 🏗️ APPLICATION PRINCIPALE - GESTION DE L'ÉTAT ET LOGIQUE MÉTIER
+        // ====================================================================
         function infodropApp() {
+            // === CONSTANTES DES ORIENTATIONS POLITIQUES ===
             const ORIENTATION_DATA = {
-                'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000' }, 'gauche': { class: 'bg-[#D42A2A] text-white', color: '#D42A2A' }, 'centre-gauche': { class: 'bg-[#AA5555] text-white', color: '#AA5555' }, 'centre': { class: 'bg-[#808080] text-white', color: '#808080' }, 'centre-droit': { class: 'bg-[#5555AA] text-white', color: '#5555AA' }, 'droite': { class: 'bg-[#2A2AD4] text-white', color: '#2A2AD4' }, 'extrême-droite': { class: 'bg-[#0000FF] text-white', color: '#0000FF' }, 'gouvernement': { class: 'bg-blue-800 text-blue-100', color: '#1e40af' }, 'neutre': { class: 'bg-green-700 text-green-100', color: '#16a34a' }
+                'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000' }, 
+                'gauche': { class: 'bg-[#D42A2A] text-white', color: '#D42A2A' }, 
+                'centre-gauche': { class: 'bg-[#AA5555] text-white', color: '#AA5555' }, 
+                'centre': { class: 'bg-[#808080] text-white', color: '#808080' }, 
+                'centre-droit': { class: 'bg-[#5555AA] text-white', color: '#5555AA' }, 
+                'droite': { class: 'bg-[#2A2AD4] text-white', color: '#2A2AD4' }, 
+                'extrême-droite': { class: 'bg-[#0000FF] text-white', color: '#0000FF' }, 
+                'gouvernement': { class: 'bg-blue-800 text-blue-100', color: '#1e40af' }, 
+                'neutre': { class: 'bg-green-700 text-green-100', color: '#16a34a' }
             };
+            
             return {
-                copied: false, sessionLoaded: false, user: null, email: '', loading: false, message: '', messageType: '', inviteCode: '',
-                newsList: [], loadingNews: true, updateInterval: null,
-                isAdmin: false, showAdminPanel: false, addingNews: false, newNews: { resume: '', source: '', url: '', orientation: '', tagsText: '' }, stats: { total_articles: 0, total_sources: 0 }, lastGeneratedCode: null,
-                userInviteData: { code: null, is_used: false, parrainEmail: null, filleulEmail: null },
-                connectedUsers: 0, realtimeChannel: null, showEditPanel: false, editingNews: { id: null, resume: '', source: '', url: '', orientation: '', tags: [], tagsText: '' }, showAboutPanel: false, showFilters: false, activeFilter: 'all', allTags: [], allOrientations: [], allOtherTags: [], activeOrientations: [],
-                readArticles: {}, totalReadCount: 0, diversityScore: null, readOrientations: [], showDiversityChecker: true, diversityData: JSON.parse(localStorage.getItem('infodrop_diversity') || '{}'),
-                get filteredNews() { if (this.activeFilter === 'all') return this.newsList; return this.newsList.filter(news => (news.tags && news.tags.includes(this.activeFilter)) || news.orientation === this.activeFilter); },
+                // ============================================================
+                // 📊 ÉTAT DE L'APPLICATION - VARIABLES RÉACTIVES
+                // ============================================================
+                
+                // === INTERFACE UTILISATEUR ===
+                copied: false, 
+                sessionLoaded: false, 
+                user: null, 
+                email: '', 
+                loading: false, 
+                message: '', 
+                messageType: '', 
+                inviteCode: '',
+                
+                // === GESTION DES ACTUALITÉS ===
+                newsList: [], 
+                loadingNews: true, 
+                updateInterval: null,
+                
+                // === ADMINISTRATION ===
+                isAdmin: false, 
+                showAdminPanel: false, 
+                addingNews: false, 
+                newNews: { 
+                    resume: '', 
+                    source: '', 
+                    url: '', 
+                    orientation: '', 
+                    tagsText: '' 
+                }, 
+                stats: { 
+                    total_articles: 0, 
+                    total_sources: 0 
+                }, 
+                lastGeneratedCode: null,
+                
+                // === SYSTÈME D'INVITATIONS ===
+                userInviteData: { 
+                    code: null, 
+                    is_used: false, 
+                    parrainEmail: null, 
+                    filleulEmail: null 
+                },
+                
+                // === TEMPS RÉEL ET ÉDITION ===
+                connectedUsers: 0, 
+                realtimeChannel: null, 
+                showEditPanel: false, 
+                editingNews: { 
+                    id: null, 
+                    resume: '', 
+                    source: '', 
+                    url: '', 
+                    orientation: '', 
+                    tags: [], 
+                    tagsText: '' 
+                }, 
+                showAboutPanel: false, 
+                
+                // === FILTRES ET TAGS ===
+                showFilters: false, 
+                activeFilter: 'all', 
+                allTags: [], 
+                allOrientations: [], 
+                allOtherTags: [], 
+                activeOrientations: [],
+                
+                // === SYSTÈME DE LECTURES ET DIVERSITÉ ===
+                readArticles: {}, 
+                totalReadCount: 0, 
+                diversityScore: null, 
+                readOrientations: [], 
+                showDiversityChecker: true, 
+                diversityData: JSON.parse(localStorage.getItem('infodrop_diversity') || '{}'),
+                
+                // ============================================================
+                // 🔧 GETTERS ET PROPRIÉTÉS CALCULÉES
+                // ============================================================
+                
+                // === FILTRAGE DES ACTUALITÉS ===
+                get filteredNews() { 
+                    if (this.activeFilter === 'all') return this.newsList; 
+                    return this.newsList.filter(news => 
+                        (news.tags && news.tags.includes(this.activeFilter)) || 
+                        news.orientation === this.activeFilter
+                    ); 
+                },
+                
+                // === HELPERS POUR LES ORIENTATIONS ===
                 getOrientationColor(o) { return ORIENTATION_DATA[o]?.color || '#808080'; },
                 getOrientationClass(o) { return ORIENTATION_DATA[o]?.class || 'bg-gray-700 text-gray-200'; },
 
+                // ============================================================
+                // 🚀 INITIALISATION DE L'APPLICATION
+                // ============================================================
                 async init() {
                     console.log('🚀 Initialisation de l\'application...');
                     const supabaseReady = await initializeSupabase();
-                    if (!supabaseReady) { this.sessionLoaded = true; return; }
+                    if (!supabaseReady) { 
+                        this.sessionLoaded = true; 
+                        return; 
+                    }
+                    
+                    // === GESTION DES ÉVÉNEMENTS D'AUTHENTIFICATION ===
                     supabase.auth.onAuthStateChange((event, session) => {
                         this.user = session?.user || null;
                         this.sessionLoaded = true;
@@ -1023,18 +1203,41 @@
                             this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
                             const userReadData = localStorage.getItem('infodrop_read_' + this.user.id) || '{}';
                             this.readArticles = JSON.parse(userReadData);
-                            this.loadData(true); this.startAutoUpdate(); this.setupRealtime(session); this.updateTotalReadCount(); this.calculateDiversityScore(); this.loadUserInviteData();
+                            this.loadData(true); 
+                            this.startAutoUpdate(); 
+                            this.setupRealtime(session); 
+                            this.updateTotalReadCount(); 
+                            this.calculateDiversityScore(); 
+                            this.loadUserInviteData();
                         }
                         if (event === 'SIGNED_OUT') {
                             this.stopAutoUpdate();
-                            if (this.realtimeChannel) { supabase.removeChannel(this.realtimeChannel); this.realtimeChannel = null; }
-                            this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null };
+                            if (this.realtimeChannel) { 
+                                supabase.removeChannel(this.realtimeChannel); 
+                                this.realtimeChannel = null; 
+                            }
+                            this.userInviteData = { 
+                                code: null, 
+                                is_used: false, 
+                                parrainEmail: null, 
+                                filleulEmail: null 
+                            };
                         }
                     });
-                    window.addEventListener('scroll', () => { document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10); });
+                    
+                    // === GESTION DE L'INTERFACE ===
+                    window.addEventListener('scroll', () => { 
+                        document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10); 
+                    });
+                    
                     this.cleanOldDiversityData();
                 },
 
+                // ============================================================
+                // 🔐 SYSTÈME D'AUTHENTIFICATION ET INVITATIONS
+                // ============================================================
+                
+                // === PROCESSUS DE CONNEXION ===
                 async login() {
                     if (this.loading) return;
                     this.loading = true;
@@ -1092,6 +1295,7 @@
                     }
                 },
 
+                // === CHARGEMENT DES DONNÉES D'INVITATION ===
                 async loadUserInviteData() {
                     if (!this.user) return;
                     try {
@@ -1132,35 +1336,230 @@
                     }
                 },
 
+                // === GÉNÉRATION DE CODES D'INVITATION (ADMIN) ===
                 async generateInviteCode() {
                     if (!this.isAdmin) return;
                     try {
-                        const { data: { session } } = await supabase.auth.getSession(); if (!session) throw new Error("Session introuvable.");
-                        const res = await fetch('/api/generate-invite', { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}` } });
-                        const data = await res.json(); if (!data.success) throw new Error(data.error);
-                        this.lastGeneratedCode = data.code; navigator.clipboard.writeText(data.code);
-                    } catch (error) { alert('Erreur: ' + error.message); }
+                        const { data: { session } } = await supabase.auth.getSession(); 
+                        if (!session) throw new Error("Session introuvable.");
+                        const res = await fetch('/api/generate-invite', { 
+                            method: 'POST', 
+                            headers: { 'Authorization': `Bearer ${session.access_token}` } 
+                        });
+                        const data = await res.json(); 
+                        if (!data.success) throw new Error(data.error);
+                        this.lastGeneratedCode = data.code; 
+                        navigator.clipboard.writeText(data.code);
+                    } catch (error) { 
+                        alert('Erreur: ' + error.message); 
+                    }
                 },
 
-                setupRealtime(session) { this.realtimeChannel = supabase.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } }); this.realtimeChannel.on('presence', { event: 'sync' }, () => { this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length; }).subscribe(async (status) => { if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); } }); },
-                openEditPanel(news) { this.editingNews = { ...JSON.parse(JSON.stringify(news)), tagsText: (news.tags || []).join(', ') }; this.showEditPanel = true; },
-                async updateNews() { const { id, resume, source, url, orientation, tagsText } = this.editingNews; const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : []; try { await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id); const index = this.newsList.findIndex(n => n.id === id); if (index !== -1) { this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; } this.showEditPanel = false; this.updateTagsList(); } catch (e) { alert("La mise à jour a échoué."); } },
-                async deleteNews(id) { if (!confirm("Supprimer ?")) return; this.newsList = this.newsList.filter(n => n.id !== id); try { await supabase.from('actu').delete().eq('id', id); if (this.isAdmin) this.loadStats(); } catch (e) { alert("La suppression a échoué."); this.loadNews(); } },
-                async addManualNews() { this.addingNews = true; try { let tags = ['🧨INFODROP']; if (this.newNews.tagsText) { tags.push(...this.newNews.tagsText.split(',').map(t => t.trim()).filter(Boolean).filter(t => t !== '🧨INFODROP')); } await supabase.from('actu').insert({ ...this.newNews, heure: new Date().toISOString(), tags, added_by: this.user.email }); this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' }; this.showAdminPanel = false; this.loadData(); } catch (e) { alert('Erreur.'); } finally { this.addingNews = false; } },
-                async loadData(isInitial = false) { if (isInitial) this.loadingNews = true; await Promise.all([this.loadNews(), this.isAdmin ? this.loadStats() : null]); if (isInitial) this.loadingNews = false; },
-                async loadNews() { try { const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(); const { data } = await supabase.from('actu').select('*').gte('heure', twentyFourHoursAgo).order('heure', { ascending: false }); if (!data) return; const existingIds = new Set(this.newsList.map(n => n.id)); const newArticles = data.filter(n => !existingIds.has(n.id)); if (newArticles.length > 0) { this.newsList = [...newArticles, ...this.newsList]; this.updateTagsList(); } } catch (e) { console.error('Erreur actus:', e); } },
-                updateTagsList() { const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP']; const active = new Set(); const counts = {}; this.newsList.forEach(n => { if (n.orientation) active.add(n.orientation); if (n.tags) { n.tags.forEach(t => { counts[t] = (counts[t] || 0) + 1; if (t === '🧨INFODROP') active.add(t); }); } }); this.allOrientations = pol; this.activeOrientations = [...active]; this.allOtherTags = Object.entries(counts).filter(([t]) => !pol.includes(t)).sort((a, b) => b[1] - a[1]).slice(0, 50).map(([t]) => t); this.allTags = [...pol, ...this.allOtherTags]; },
-                hasArticlesForOrientation(o) { return this.activeOrientations.includes(o); },
-                getEmptyFilterMessage() { if (this.allOrientations.includes(this.activeFilter)) return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`; return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`; },
-                async loadStats() { try { const { data } = await supabase.from('stats_today').select('*').single(); this.stats = data || { total_articles: 0, total_sources: 0 }; } catch (e) { console.error('Erreur stats:', e); } },
-                markAsRead(id) { if (!this.readArticles[id]) { this.readArticles[id] = new Date().toISOString(); localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles)); this.updateTotalReadCount(); const article = this.newsList.find(n => n.id === id); if (article) this.addToDiversityData(article); if (this.totalReadCount === 100) this.celebrate100Articles(); } },
-                updateTotalReadCount() { this.totalReadCount = Object.keys(this.readArticles).length; },
-                cleanOldDiversityData() { const expiry = Date.now() - 24 * 60 * 60 * 1000; Object.keys(this.diversityData).forEach(t => { if (new Date(t).getTime() < expiry) delete this.diversityData[t]; }); localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); },
-                addToDiversityData(article) { let o = article.orientation || 'neutre'; if (article.tags?.includes('🧨INFODROP')) o = '🧨INFODROP'; this.diversityData[new Date().toISOString()] = { orientation: o, source: article.source }; localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); this.calculateDiversityScore(); },
+                // ============================================================
+                // 🔄 GESTION DES DONNÉES ET TEMPS RÉEL
+                // ============================================================
+                
+                // === CONFIGURATION DU TEMPS RÉEL ===
+                setupRealtime(session) { 
+                    this.realtimeChannel = supabase.channel('infodrop-online-users', { 
+                        config: { presence: { key: session.user.id } } 
+                    }); 
+                    this.realtimeChannel.on('presence', { event: 'sync' }, () => { 
+                        this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length; 
+                    }).subscribe(async (status) => { 
+                        if (status === 'SUBSCRIBED') { 
+                            await this.realtimeChannel.track({ online_at: new Date().toISOString() }); 
+                        } 
+                    }); 
+                },
+                
+                // === GESTION DE L'ÉDITION D'ARTICLES ===
+                openEditPanel(news) { 
+                    this.editingNews = { 
+                        ...JSON.parse(JSON.stringify(news)), 
+                        tagsText: (news.tags || []).join(', ') 
+                    }; 
+                    this.showEditPanel = true; 
+                },
+                
+                // === MISE À JOUR D'UN ARTICLE ===
+                async updateNews() { 
+                    const { id, resume, source, url, orientation, tagsText } = this.editingNews; 
+                    const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : []; 
+                    try { 
+                        await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id); 
+                        const index = this.newsList.findIndex(n => n.id === id); 
+                        if (index !== -1) { 
+                            this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; 
+                        } 
+                        this.showEditPanel = false; 
+                        this.updateTagsList(); 
+                    } catch (e) { 
+                        alert("La mise à jour a échoué."); 
+                    } 
+                },
+                
+                // === SUPPRESSION D'UN ARTICLE ===
+                async deleteNews(id) { 
+                    if (!confirm("Supprimer ?")) return; 
+                    this.newsList = this.newsList.filter(n => n.id !== id); 
+                    try { 
+                        await supabase.from('actu').delete().eq('id', id); 
+                        if (this.isAdmin) this.loadStats(); 
+                    } catch (e) { 
+                        alert("La suppression a échoué."); 
+                        this.loadNews(); 
+                    } 
+                },
+                
+                // === AJOUT MANUEL D'ACTUALITÉ (ADMIN) ===
+                async addManualNews() { 
+                    this.addingNews = true; 
+                    try { 
+                        let tags = ['🧨INFODROP']; 
+                        if (this.newNews.tagsText) { 
+                            tags.push(...this.newNews.tagsText.split(',').map(t => t.trim()).filter(Boolean).filter(t => t !== '🧨INFODROP')); 
+                        } 
+                        await supabase.from('actu').insert({ 
+                            ...this.newNews, 
+                            heure: new Date().toISOString(), 
+                            tags, 
+                            added_by: this.user.email 
+                        }); 
+                        this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' }; 
+                        this.showAdminPanel = false; 
+                        this.loadData(); 
+                    } catch (e) { 
+                        alert('Erreur.'); 
+                    } finally { 
+                        this.addingNews = false; 
+                    } 
+                },
+                
+                // === CHARGEMENT DES DONNÉES GÉNÉRALES ===
+                async loadData(isInitial = false) { 
+                    if (isInitial) this.loadingNews = true; 
+                    await Promise.all([
+                        this.loadNews(), 
+                        this.isAdmin ? this.loadStats() : null
+                    ]); 
+                    if (isInitial) this.loadingNews = false; 
+                },
+                
+                // === CHARGEMENT DES ACTUALITÉS ===
+                async loadNews() { 
+                    try { 
+                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(); 
+                        const { data } = await supabase.from('actu').select('*').gte('heure', twentyFourHoursAgo).order('heure', { ascending: false }); 
+                        if (!data) return; 
+                        const existingIds = new Set(this.newsList.map(n => n.id)); 
+                        const newArticles = data.filter(n => !existingIds.has(n.id)); 
+                        if (newArticles.length > 0) { 
+                            this.newsList = [...newArticles, ...this.newsList]; 
+                            this.updateTagsList(); 
+                        } 
+                    } catch (e) { 
+                        console.error('Erreur actus:', e); 
+                    } 
+                },
+                
+                // ============================================================
+                // 🏷️ GESTION DES TAGS ET FILTRES
+                // ============================================================
+                
+                // === MISE À JOUR DE LA LISTE DES TAGS ===
+                updateTagsList() { 
+                    const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP']; 
+                    const active = new Set(); 
+                    const counts = {}; 
+                    this.newsList.forEach(n => { 
+                        if (n.orientation) active.add(n.orientation); 
+                        if (n.tags) { 
+                            n.tags.forEach(t => { 
+                                counts[t] = (counts[t] || 0) + 1; 
+                                if (t === '🧨INFODROP') active.add(t); 
+                            }); 
+                        } 
+                    }); 
+                    this.allOrientations = pol; 
+                    this.activeOrientations = [...active]; 
+                    this.allOtherTags = Object.entries(counts).filter(([t]) => !pol.includes(t)).sort((a, b) => b[1] - a[1]).slice(0, 50).map(([t]) => t); 
+                    this.allTags = [...pol, ...this.allOtherTags]; 
+                },
+                
+                // === VÉRIFICATION DES ARTICLES POUR UNE ORIENTATION ===
+                hasArticlesForOrientation(o) { 
+                    return this.activeOrientations.includes(o); 
+                },
+                
+                // === MESSAGE POUR LES FILTRES VIDES ===
+                getEmptyFilterMessage() { 
+                    if (this.allOrientations.includes(this.activeFilter)) 
+                        return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`; 
+                    return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`; 
+                },
+                
+                // === CHARGEMENT DES STATISTIQUES (ADMIN) ===
+                async loadStats() { 
+                    try { 
+                        const { data } = await supabase.from('stats_today').select('*').single(); 
+                        this.stats = data || { total_articles: 0, total_sources: 0 }; 
+                    } catch (e) { 
+                        console.error('Erreur stats:', e); 
+                    } 
+                },
+
+                // ============================================================
+                // 📚 SYSTÈME DE LECTURES ET DIVERSITÉ
+                // ============================================================
+                
+                // === MARQUER UN ARTICLE COMME LU ===
+                markAsRead(id) { 
+                    if (!this.readArticles[id]) { 
+                        this.readArticles[id] = new Date().toISOString(); 
+                        localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles)); 
+                        this.updateTotalReadCount(); 
+                        const article = this.newsList.find(n => n.id === id); 
+                        if (article) this.addToDiversityData(article); 
+                        if (this.totalReadCount === 100) this.celebrate100Articles(); 
+                    } 
+                },
+                
+                // === MISE À JOUR DU COMPTEUR TOTAL ===
+                updateTotalReadCount() { 
+                    this.totalReadCount = Object.keys(this.readArticles).length; 
+                },
+                
+                // === NETTOYAGE DES ANCIENNES DONNÉES DE DIVERSITÉ ===
+                cleanOldDiversityData() { 
+                    const expiry = Date.now() - 24 * 60 * 60 * 1000; 
+                    Object.keys(this.diversityData).forEach(t => { 
+                        if (new Date(t).getTime() < expiry) delete this.diversityData[t]; 
+                    }); 
+                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); 
+                },
+                
+                // === AJOUT AUX DONNÉES DE DIVERSITÉ ===
+                addToDiversityData(article) { 
+                    let o = article.orientation || 'neutre'; 
+                    if (article.tags?.includes('🧨INFODROP')) o = '🧨INFODROP'; 
+                    this.diversityData[new Date().toISOString()] = { 
+                        orientation: o, 
+                        source: article.source 
+                    }; 
+                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); 
+                    this.calculateDiversityScore(); 
+                },
+                
+                // === CALCUL DU SCORE DE DIVERSITÉ ===
                 calculateDiversityScore() {
                     this.cleanOldDiversityData();
                     const reads = Object.values(this.diversityData);
-                    if (reads.length === 0) { this.diversityScore = null; this.readOrientations = []; return; }
+                    if (reads.length === 0) { 
+                        this.diversityScore = null; 
+                        this.readOrientations = []; 
+                        return; 
+                    }
                     const oSet = new Set(reads.map(r => r.orientation).filter(Boolean)); // <-- CORRECTION TAG VIDE
                     const sSet = new Set(reads.map(r => r.source));
                     const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
@@ -1168,12 +1567,60 @@
                     this.diversityScore = Math.round(((oSet.size / 10) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
                     this.showDiversityChecker = this.diversityScore < 100;
                 },
-                getDiversityMessage() { if (this.diversityScore < 30) return "Bulle de filtre détectée"; if (this.diversityScore < 70) return "Diversité correcte"; return "Excellente diversité !"; },
-                celebrate100Articles() { const cont = document.createElement('div'); cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;'; document.body.appendChild(cont); const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7']; for (let i = 0; i < 50; i++) { const conf = document.createElement('div'); conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;`; cont.appendChild(conf); } const msg = document.createElement('div'); msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce'; msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">🎉 Félicitations ! 🎉</h2><p class="text-lg">100 articles lus !</p>`; document.body.appendChild(msg); setTimeout(() => { cont.remove(); msg.classList.add('opacity-0', 'transition-opacity', 'duration-500'); setTimeout(() => msg.remove(), 500); }, 5000); },
-                async logout() { if (this.realtimeChannel) await this.realtimeChannel.untrack(); await supabase.auth.signOut(); },
-                startAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); this.updateInterval = setInterval(() => this.loadData(), 30000); },
-                stopAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); },
-                formatTime(t) { return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); }
+                
+                // === MESSAGE DU SCORE DE DIVERSITÉ ===
+                getDiversityMessage() { 
+                    if (this.diversityScore < 30) return "Bulle de filtre détectée"; 
+                    if (this.diversityScore < 70) return "Diversité correcte"; 
+                    return "Excellente diversité !"; 
+                },
+                
+                // === CÉLÉBRATION DES 100 ARTICLES ===
+                celebrate100Articles() { 
+                    const cont = document.createElement('div'); 
+                    cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;'; 
+                    document.body.appendChild(cont); 
+                    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7']; 
+                    for (let i = 0; i < 50; i++) { 
+                        const conf = document.createElement('div'); 
+                        conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;`; 
+                        cont.appendChild(conf); 
+                    } 
+                    const msg = document.createElement('div'); 
+                    msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce'; 
+                    msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">🎉 Félicitations ! 🎉</h2><p class="text-lg">100 articles lus !</p>`; 
+                    document.body.appendChild(msg); 
+                    setTimeout(() => { 
+                        cont.remove(); 
+                        msg.classList.add('opacity-0', 'transition-opacity', 'duration-500'); 
+                        setTimeout(() => msg.remove(), 500); 
+                    }, 5000); 
+                },
+
+                // ============================================================
+                // 🔧 UTILITAIRES ET HELPERS
+                // ============================================================
+                
+                // === DÉCONNEXION ===
+                async logout() { 
+                    if (this.realtimeChannel) await this.realtimeChannel.untrack(); 
+                    await supabase.auth.signOut(); 
+                },
+                
+                // === GESTION DES MISES À JOUR AUTOMATIQUES ===
+                startAutoUpdate() { 
+                    if (this.updateInterval) clearInterval(this.updateInterval); 
+                    this.updateInterval = setInterval(() => this.loadData(), 30000); 
+                },
+                
+                stopAutoUpdate() { 
+                    if (this.updateInterval) clearInterval(this.updateInterval); 
+                },
+                
+                // === FORMATAGE DE L'HEURE ===
+                formatTime(t) { 
+                    return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); 
+                }
             };
         }
     </script>
