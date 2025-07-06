@@ -1,51 +1,60 @@
-// Fichier: /api/check-email.js
-// Rôle: Vérifie si un email existe déjà dans la base de données d'authentification.
-
+// Fichier: /api/check-email.js (Version de débogage)
 import { createClient } from '@supabase/supabase-js';
 
-// On crée un client Supabase qui a les droits "admin" pour pouvoir
-// consulter la liste des utilisateurs de manière sécurisée.
-const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_KEY // La clé secrète qui donne les droits !
-);
-
 export default async function handler(req, res) {
-    // 1. On accepte uniquement les requêtes de type POST (bonne pratique de sécurité)
+    console.log('[check-email] API appelée.');
+
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Méthode non autorisée' });
     }
 
+    // --- Étape 1: Vérifier le corps de la requête ---
+    if (!req.body) {
+        console.error('[check-email] Erreur: req.body est vide ou non parsé.');
+        return res.status(400).json({ error: 'Corps de la requête manquant.' });
+    }
+    console.log('[check-email] req.body reçu:', req.body);
+    
     const { email } = req.body;
 
-    // 2. On vérifie que l'email est bien présent et ressemble à un email
+    // --- Étape 2: Valider l'email ---
     if (!email || !email.includes('@')) {
-        return res.status(400).json({ error: 'Format d\'email invalide' });
+        console.error('[check-email] Erreur: Email invalide ou manquant.', { email });
+        return res.status(400).json({ error: 'Format d\'email invalide.' });
+    }
+    console.log('[check-email] Email à vérifier:', email);
+
+    // --- Étape 3: Initialiser Supabase ---
+    let supabase;
+    try {
+        supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+        console.log('[check-email] Client Supabase initialisé avec succès.');
+    } catch (e) {
+        console.error('[check-email] Erreur fatale lors de l\'initialisation de Supabase:', e.message);
+        return res.status(500).json({ error: 'Erreur configuration serveur.' });
     }
 
+    // --- Étape 4: Appeler la méthode Supabase ---
     try {
-        // 3. On demande à Supabase de chercher UN SEUL utilisateur par son email.
-        // C'est beaucoup plus rapide que de charger toute la liste des utilisateurs.
+        console.log('[check-email] Appel de supabase.auth.admin.getUserByEmail...');
         const { data: user, error } = await supabase.auth.admin.getUserByEmail(email.toLowerCase());
-        
-        // Si Supabase renvoie une erreur "User not found", ce n'est pas une vraie erreur pour nous.
-        // Cela signifie simplement que l'utilisateur n'existe pas.
+        console.log('[check-email] Réponse de Supabase reçue.');
+
         if (error && error.status === 404) {
-             // L'utilisateur n'existe pas, c'est ce qu'on voulait savoir.
+            console.log('[check-email] Utilisateur non trouvé. Réponse: { exists: false }');
             return res.status(200).json({ exists: false });
         }
         
-        // S'il y a une autre sorte d'erreur, c'est un vrai problème.
         if (error) {
-            console.error('Erreur Supabase lors de la vérification de l\'email:', error);
-            return res.status(500).json({ error: 'Erreur serveur' });
+            console.error('[check-email] Erreur API Supabase:', error);
+            return res.status(500).json({ error: 'Erreur serveur lors de la vérification.', details: error.message });
         }
 
-        // 4. Si on arrive ici sans erreur, ça veut dire que l'utilisateur a été trouvé.
-        res.status(200).json({ exists: true });
+        console.log('[check-email] Utilisateur trouvé. Réponse: { exists: true }');
+        return res.status(200).json({ exists: true });
 
     } catch (error) {
-        console.error('Erreur inattendue dans check-email:', error);
-        res.status(500).json({ error: 'Erreur serveur inattendue' });
+        console.error('[check-email] Erreur dans le bloc try/catch principal:', error);
+        return res.status(500).json({ error: 'Erreur serveur inattendue.', details: error.message });
     }
 }
