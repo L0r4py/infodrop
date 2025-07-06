@@ -4,10 +4,11 @@
 <!-- ============================================================================ -->
 <!-- 📋 HEAD - MÉTADONNÉES ET CONFIGURATION                                      -->
 <!-- ============================================================================ -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- === OPEN GRAPH ET RÉSEAUX SOCIAUX === -->
     <meta property="og:title" content="INFODROP - L'actualité essentielle" />
     <meta property="og:description" content="L'actualité essentielle. Agrégation multi-sources en temps réel." />
@@ -22,11 +23,11 @@
     <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png">
 
     <title>INFODROP - L'actualité essentielle</title>
-    
+
     <!-- === FAVICON === -->
     <link rel="icon" type="image/png" href="images/infodrop-favicon.png">
     <link rel="apple-touch-icon" href="images/infodrop-favicon.png">
-    
+
     <!-- === BIBLIOTHÈQUES EXTERNES === -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -221,7 +222,7 @@
                 class="max-w-sm w-full bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-2xl p-8 border border-gray-700">
                 <h1 class="text-3xl font-bold text-center text-white mb-2">📰 INFODROP</h1>
                 <p class="text-gray-400 text-center mb-8">L'actualité essentielle, rien que l'essentiel.</p>
-                
+
                 <!-- === FORMULAIRE DE CONNEXION === -->
                 <form @submit.prevent="login()" class="space-y-4">
                     <div>
@@ -247,7 +248,7 @@
                     💡 Pas de code ? Suivez <a href="https://x.com/LOR4_14" target="_blank"
                         class="text-blue-400 hover:underline">nos annonces</a> pour en gagner un !
                 </p>
-                
+
                 <!-- === MESSAGES DE RETOUR === -->
                 <div x-show="message" class="mt-4 p-3 rounded-lg text-sm"
                     :class="messageType === 'error' ? 'bg-red-900/50 text-red-300 border border-red-700' : 'bg-green-900/50 text-green-300 border border-green-700'"
@@ -264,7 +265,7 @@
             <!-- 📱 HEADER UNIFIÉ AVEC NAVIGATION ET BANDEAUX                -->
             <!-- ============================================================== -->
             <div class="sticky top-0 z-40 transition-shadow duration-300" id="stickyHeader">
-                
+
                 <!-- === HEADER PRINCIPAL === -->
                 <header class="relative z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
                     <div class="max-w-4xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
@@ -296,19 +297,19 @@
                                         clip-rule="evenodd" />
                                 </svg>
                             </button>
-                            
+
                             <!-- === DROPDOWN MENU === -->
                             <div x-show="showMenu" @click.away="showMenu = false" x-transition
                                 class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-[100]"
                                 style="display: none;">
-                                
+
                                 <!-- === ANALYSES 360° === -->
                                 <div class="px-4 py-2 border-b border-gray-700">
                                     <a href="/infodrop360.html"
                                         class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">🌐
                                         Analyses 360°</a>
                                 </div>
-                                
+
                                 <!-- === ITEMS DE MENU === -->
                                 <a @click="showAboutPanel = true; showMenu = false" href="#"
                                     class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">ℹ️
@@ -316,7 +317,7 @@
                                 <a :href="STRIPE_LINK" target="_blank"
                                     class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-700">❤️
                                     Soutenir</a>
-                                
+
                                 <!-- === MENU ADMIN === -->
                                 <template x-if="isAdmin">
                                     <div>
@@ -326,7 +327,7 @@
                                             Panneau admin</a>
                                     </div>
                                 </template>
-                                
+
                                 <!-- === DÉCONNEXION === -->
                                 <div class="border-t border-gray-700 my-1"></div>
                                 <a @click="logout()" href="#"
@@ -498,12 +499,11 @@
             <div x-show="showAdminPanel && isAdmin" x-transition class="bg-gray-950/50 border-b border-gray-800">
                 <div class="max-w-4xl mx-auto p-4">
                     <h2 class="text-lg font-bold text-white mb-3">🧨 Ajouter une actualité</h2>
-                    
+
                     <!-- === FORMULAIRE D'AJOUT D'ACTUALITÉ === -->
                     <form @submit.prevent="addManualNews()" class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div class="md:col-span-3">
-                            <input x-model="newNews.resume" type="text" placeholder="Résumé"
-                                maxlength="180" required
+                            <input x-model="newNews.resume" type="text" placeholder="Résumé" maxlength="180" required
                                 class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
                         </div>
                         <div>
@@ -592,7 +592,7 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </button>
-                    
+
                     <!-- === CONTENU DU DIVERSITY CHECKER === -->
                     <div x-show="showDiversityChecker" x-transition class="p-4 border-t border-gray-700">
                         <div class="flex items-center justify-between mb-4">
@@ -612,7 +612,7 @@
                                    }" x-text="getDiversityMessage()"></p>
                             </div>
                         </div>
-                        
+
                         <!-- === BARRE DE PROGRESSION === -->
                         <div class="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
                             <div class="h-full rounded-full transition-all duration-1000" :class="{
@@ -621,7 +621,7 @@
                                      'bg-green-400': diversityScore >= 70
                                  }" :style="`width: ${diversityScore}%`"></div>
                         </div>
-                        
+
                         <!-- === ORIENTATIONS LUES === -->
                         <div class="mt-3 flex flex-wrap gap-2" x-show="readOrientations.length > 0">
                             <template x-for="orientation in readOrientations" :key="orientation">
@@ -647,7 +647,7 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </button>
-                    
+
                     <!-- === CONTENU DES FILTRES === -->
                     <div x-show="showFilters" x-transition class="p-4 border-t border-gray-700">
                         <!-- === BOUTON TOUT VOIR === -->
@@ -706,7 +706,7 @@
                     <template x-for="news in filteredNews" :key="news.id">
                         <div
                             class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
-                            
+
                             <!-- === CONTENU DE L'ARTICLE === -->
                             <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="flex-grow">
                                 <p class="text-base text-white mb-2" x-text="news.resume"></p>
@@ -1079,106 +1079,106 @@
         function infodropApp() {
             // === CONSTANTES DES ORIENTATIONS POLITIQUES ===
             const ORIENTATION_DATA = {
-                'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000' }, 
-                'gauche': { class: 'bg-[#D42A2A] text-white', color: '#D42A2A' }, 
-                'centre-gauche': { class: 'bg-[#AA5555] text-white', color: '#AA5555' }, 
-                'centre': { class: 'bg-[#808080] text-white', color: '#808080' }, 
-                'centre-droit': { class: 'bg-[#5555AA] text-white', color: '#5555AA' }, 
-                'droite': { class: 'bg-[#2A2AD4] text-white', color: '#2A2AD4' }, 
-                'extrême-droite': { class: 'bg-[#0000FF] text-white', color: '#0000FF' }, 
-                'gouvernement': { class: 'bg-blue-800 text-blue-100', color: '#1e40af' }, 
+                'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000' },
+                'gauche': { class: 'bg-[#D42A2A] text-white', color: '#D42A2A' },
+                'centre-gauche': { class: 'bg-[#AA5555] text-white', color: '#AA5555' },
+                'centre': { class: 'bg-[#808080] text-white', color: '#808080' },
+                'centre-droit': { class: 'bg-[#5555AA] text-white', color: '#5555AA' },
+                'droite': { class: 'bg-[#2A2AD4] text-white', color: '#2A2AD4' },
+                'extrême-droite': { class: 'bg-[#0000FF] text-white', color: '#0000FF' },
+                'gouvernement': { class: 'bg-blue-800 text-blue-100', color: '#1e40af' },
                 'neutre': { class: 'bg-green-700 text-green-100', color: '#16a34a' }
             };
-            
+
             return {
                 // ============================================================
                 // 📊 ÉTAT DE L'APPLICATION - VARIABLES RÉACTIVES
                 // ============================================================
-                
+
                 // === INTERFACE UTILISATEUR ===
-                copied: false, 
-                sessionLoaded: false, 
-                user: null, 
-                email: '', 
-                loading: false, 
-                message: '', 
-                messageType: '', 
+                copied: false,
+                sessionLoaded: false,
+                user: null,
+                email: '',
+                loading: false,
+                message: '',
+                messageType: '',
                 inviteCode: '',
-                
+
                 // === GESTION DES ACTUALITÉS ===
-                newsList: [], 
-                loadingNews: true, 
+                newsList: [],
+                loadingNews: true,
                 updateInterval: null,
-                
+
                 // === ADMINISTRATION ===
-                isAdmin: false, 
-                showAdminPanel: false, 
-                addingNews: false, 
-                newNews: { 
-                    resume: '', 
-                    source: '', 
-                    url: '', 
-                    orientation: '', 
-                    tagsText: '' 
-                }, 
-                stats: { 
-                    total_articles: 0, 
-                    total_sources: 0 
-                }, 
-                lastGeneratedCode: null,
-                
-                // === SYSTÈME D'INVITATIONS ===
-                userInviteData: { 
-                    code: null, 
-                    is_used: false, 
-                    parrainEmail: null, 
-                    filleulEmail: null 
+                isAdmin: false,
+                showAdminPanel: false,
+                addingNews: false,
+                newNews: {
+                    resume: '',
+                    source: '',
+                    url: '',
+                    orientation: '',
+                    tagsText: ''
                 },
-                
+                stats: {
+                    total_articles: 0,
+                    total_sources: 0
+                },
+                lastGeneratedCode: null,
+
+                // === SYSTÈME D'INVITATIONS ===
+                userInviteData: {
+                    code: null,
+                    is_used: false,
+                    parrainEmail: null,
+                    filleulEmail: null
+                },
+
                 // === TEMPS RÉEL ET ÉDITION ===
-                connectedUsers: 0, 
-                realtimeChannel: null, 
-                showEditPanel: false, 
-                editingNews: { 
-                    id: null, 
-                    resume: '', 
-                    source: '', 
-                    url: '', 
-                    orientation: '', 
-                    tags: [], 
-                    tagsText: '' 
-                }, 
-                showAboutPanel: false, 
-                
+                connectedUsers: 0,
+                realtimeChannel: null,
+                showEditPanel: false,
+                editingNews: {
+                    id: null,
+                    resume: '',
+                    source: '',
+                    url: '',
+                    orientation: '',
+                    tags: [],
+                    tagsText: ''
+                },
+                showAboutPanel: false,
+
                 // === FILTRES ET TAGS ===
-                showFilters: false, 
-                activeFilter: 'all', 
-                allTags: [], 
-                allOrientations: [], 
-                allOtherTags: [], 
+                showFilters: false,
+                activeFilter: 'all',
+                allTags: [],
+                allOrientations: [],
+                allOtherTags: [],
                 activeOrientations: [],
-                
+
                 // === SYSTÈME DE LECTURES ET DIVERSITÉ ===
-                readArticles: {}, 
-                totalReadCount: 0, 
-                diversityScore: null, 
-                readOrientations: [], 
-                showDiversityChecker: true, 
+                readArticles: {},
+                totalReadCount: 0,
+                diversityScore: null,
+                readOrientations: [],
+                showDiversityChecker: true,
                 diversityData: JSON.parse(localStorage.getItem('infodrop_diversity') || '{}'),
-                
+
                 // ============================================================
                 // 🔧 GETTERS ET PROPRIÉTÉS CALCULÉES
                 // ============================================================
-                
+
                 // === FILTRAGE DES ACTUALITÉS ===
-                get filteredNews() { 
-                    if (this.activeFilter === 'all') return this.newsList; 
-                    return this.newsList.filter(news => 
-                        (news.tags && news.tags.includes(this.activeFilter)) || 
+                get filteredNews() {
+                    if (this.activeFilter === 'all') return this.newsList;
+                    return this.newsList.filter(news =>
+                        (news.tags && news.tags.includes(this.activeFilter)) ||
                         news.orientation === this.activeFilter
-                    ); 
+                    );
                 },
-                
+
                 // === HELPERS POUR LES ORIENTATIONS ===
                 getOrientationColor(o) { return ORIENTATION_DATA[o]?.color || '#808080'; },
                 getOrientationClass(o) { return ORIENTATION_DATA[o]?.class || 'bg-gray-700 text-gray-200'; },
@@ -1189,11 +1189,11 @@
                 async init() {
                     console.log('🚀 Initialisation de l\'application...');
                     const supabaseReady = await initializeSupabase();
-                    if (!supabaseReady) { 
-                        this.sessionLoaded = true; 
-                        return; 
+                    if (!supabaseReady) {
+                        this.sessionLoaded = true;
+                        return;
                     }
-                    
+
                     // === GESTION DES ÉVÉNEMENTS D'AUTHENTIFICATION ===
                     supabase.auth.onAuthStateChange((event, session) => {
                         this.user = session?.user || null;
@@ -1203,40 +1203,40 @@
                             this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
                             const userReadData = localStorage.getItem('infodrop_read_' + this.user.id) || '{}';
                             this.readArticles = JSON.parse(userReadData);
-                            this.loadData(true); 
-                            this.startAutoUpdate(); 
-                            this.setupRealtime(session); 
-                            this.updateTotalReadCount(); 
-                            this.calculateDiversityScore(); 
+                            this.loadData(true);
+                            this.startAutoUpdate();
+                            this.setupRealtime(session);
+                            this.updateTotalReadCount();
+                            this.calculateDiversityScore();
                             this.loadUserInviteData();
                         }
                         if (event === 'SIGNED_OUT') {
                             this.stopAutoUpdate();
-                            if (this.realtimeChannel) { 
-                                supabase.removeChannel(this.realtimeChannel); 
-                                this.realtimeChannel = null; 
+                            if (this.realtimeChannel) {
+                                supabase.removeChannel(this.realtimeChannel);
+                                this.realtimeChannel = null;
                             }
-                            this.userInviteData = { 
-                                code: null, 
-                                is_used: false, 
-                                parrainEmail: null, 
-                                filleulEmail: null 
+                            this.userInviteData = {
+                                code: null,
+                                is_used: false,
+                                parrainEmail: null,
+                                filleulEmail: null
                             };
                         }
                     });
-                    
+
                     // === GESTION DE L'INTERFACE ===
-                    window.addEventListener('scroll', () => { 
-                        document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10); 
+                    window.addEventListener('scroll', () => {
+                        document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
                     });
-                    
+
                     this.cleanOldDiversityData();
                 },
 
                 // ============================================================
                 // 🔐 SYSTÈME D'AUTHENTIFICATION ET INVITATIONS
                 // ============================================================
-                
+
                 // === PROCESSUS DE CONNEXION ===
                 async login() {
                     if (this.loading) return;
@@ -1296,269 +1296,310 @@
                 },
 
                 // === CHARGEMENT DES DONNÉES D'INVITATION ===
+                // ============================================================
+                // 🔧 FONCTION CORRIGÉE : loadUserInviteData
+                // ============================================================
+
                 async loadUserInviteData() {
-                    if (!this.user) return;
+                    // Vérification de sécurité : utilisateur connecté
+                    if (!this.user || !this.user.email) {
+                        console.log('❌ Pas d\'utilisateur connecté pour charger les données d\'invitation');
+                        return;
+                    }
+
                     try {
-                        // Récupère le code d'invitation du compte connecté (en insensible à la casse)
+                        console.log('🔄 Chargement des données d\'invitation pour:', this.user.email);
+
+                        // === ÉTAPE 1 : Récupérer le code d'invitation du compte connecté ===
                         const { data: ownCode, error: ownCodeError } = await supabase
                             .from('invitation_codes')
                             .select('*')
                             .ilike('owner_email', this.user.email.toLowerCase())
                             .maybeSingle();
-                        if (ownCodeError) throw ownCodeError;
-                        this.userInviteData.code = ownCode?.code || null;
-                        this.userInviteData.is_used = ownCode?.is_used || false;
-                        if (ownCode?.is_used && ownCode.used_by_email) {
-                            this.userInviteData.filleulEmail = ownCode.used_by_email;
+
+                        // Gestion de l'erreur pour ownCode
+                        if (ownCodeError) {
+                            console.error('❌ Erreur récupération code proprio:', ownCodeError);
+                            // Ne pas faire throw, juste log l'erreur et continuer
                         } else {
-                            this.userInviteData.filleulEmail = null;
+                            console.log('✅ Code proprio récupéré:', ownCode);
+
+                            // Mise à jour sécurisée des données
+                            this.userInviteData.code = ownCode?.code || null;
+                            this.userInviteData.is_used = ownCode?.is_used || false;
+
+                            if (ownCode?.is_used && ownCode.used_by_email) {
+                                this.userInviteData.filleulEmail = ownCode.used_by_email;
+                            } else {
+                                this.userInviteData.filleulEmail = null;
+                            }
                         }
 
-                        // Récupère le parrain (en insensible à la casse aussi)
+                        // === ÉTAPE 2 : Récupérer le parrain (qui a invité cet utilisateur) ===
                         const { data: usedCode, error: usedCodeError } = await supabase
                             .from('invitation_codes')
                             .select('owner_email')
                             .ilike('used_by_email', this.user.email.toLowerCase())
                             .maybeSingle();
-                        if (usedCodeError) throw usedCodeError;
-                        if (usedCode) {
-                            this.userInviteData.parrainEmail = usedCode.owner_email;
+
+                        // Gestion de l'erreur pour usedCode
+                        if (usedCodeError) {
+                            console.error('❌ Erreur récupération parrain:', usedCodeError);
+                            // Ne pas faire throw, juste log l'erreur
                         } else {
-                            this.userInviteData.parrainEmail = null;
+                            console.log('✅ Parrain récupéré:', usedCode);
+
+                            if (usedCode && usedCode.owner_email) {
+                                this.userInviteData.parrainEmail = usedCode.owner_email;
+                            } else {
+                                this.userInviteData.parrainEmail = null;
+                            }
                         }
 
-                        // Debug facultatif
-                        console.log('loadUserInviteData - ownCode:', ownCode, 'user:', this.user.email);
-                        console.log("User email:", this.user.email, "OwnCode:", ownCode);
+                        // === ÉTAPE 3 : Log du résultat final ===
+                        console.log('✅ Données d\'invitation finales:', {
+                            code: this.userInviteData.code,
+                            is_used: this.userInviteData.is_used,
+                            filleulEmail: this.userInviteData.filleulEmail,
+                            parrainEmail: this.userInviteData.parrainEmail
+                        });
 
                     } catch (error) {
-                        console.error("Erreur chargement données invitation:", error);
+                        // Gestion globale des erreurs
+                        console.error("❌ Erreur générale lors du chargement des données d'invitation:", error);
+
+                        // Réinitialiser les données en cas d'erreur
+                        this.userInviteData = {
+                            code: null,
+                            is_used: false,
+                            parrainEmail: null,
+                            filleulEmail: null
+                        };
                     }
                 },
-
                 // === GÉNÉRATION DE CODES D'INVITATION (ADMIN) ===
                 async generateInviteCode() {
                     if (!this.isAdmin) return;
                     try {
-                        const { data: { session } } = await supabase.auth.getSession(); 
+                        const { data: { session } } = await supabase.auth.getSession();
                         if (!session) throw new Error("Session introuvable.");
-                        const res = await fetch('/api/generate-invite', { 
-                            method: 'POST', 
-                            headers: { 'Authorization': `Bearer ${session.access_token}` } 
+                        const res = await fetch('/api/generate-invite', {
+                            method: 'POST',
+                            headers: { 'Authorization': `Bearer ${session.access_token}` }
                         });
-                        const data = await res.json(); 
+                        const data = await res.json();
                         if (!data.success) throw new Error(data.error);
-                        this.lastGeneratedCode = data.code; 
+                        this.lastGeneratedCode = data.code;
                         navigator.clipboard.writeText(data.code);
-                    } catch (error) { 
-                        alert('Erreur: ' + error.message); 
+                    } catch (error) {
+                        alert('Erreur: ' + error.message);
                     }
                 },
 
                 // ============================================================
                 // 🔄 GESTION DES DONNÉES ET TEMPS RÉEL
                 // ============================================================
-                
+
                 // === CONFIGURATION DU TEMPS RÉEL ===
-                setupRealtime(session) { 
-                    this.realtimeChannel = supabase.channel('infodrop-online-users', { 
-                        config: { presence: { key: session.user.id } } 
-                    }); 
-                    this.realtimeChannel.on('presence', { event: 'sync' }, () => { 
-                        this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length; 
-                    }).subscribe(async (status) => { 
-                        if (status === 'SUBSCRIBED') { 
-                            await this.realtimeChannel.track({ online_at: new Date().toISOString() }); 
-                        } 
-                    }); 
+                setupRealtime(session) {
+                    this.realtimeChannel = supabase.channel('infodrop-online-users', {
+                        config: { presence: { key: session.user.id } }
+                    });
+                    this.realtimeChannel.on('presence', { event: 'sync' }, () => {
+                        this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
+                    }).subscribe(async (status) => {
+                        if (status === 'SUBSCRIBED') {
+                            await this.realtimeChannel.track({ online_at: new Date().toISOString() });
+                        }
+                    });
                 },
-                
+
                 // === GESTION DE L'ÉDITION D'ARTICLES ===
-                openEditPanel(news) { 
-                    this.editingNews = { 
-                        ...JSON.parse(JSON.stringify(news)), 
-                        tagsText: (news.tags || []).join(', ') 
-                    }; 
-                    this.showEditPanel = true; 
+                openEditPanel(news) {
+                    this.editingNews = {
+                        ...JSON.parse(JSON.stringify(news)),
+                        tagsText: (news.tags || []).join(', ')
+                    };
+                    this.showEditPanel = true;
                 },
-                
+
                 // === MISE À JOUR D'UN ARTICLE ===
-                async updateNews() { 
-                    const { id, resume, source, url, orientation, tagsText } = this.editingNews; 
-                    const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : []; 
-                    try { 
-                        await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id); 
-                        const index = this.newsList.findIndex(n => n.id === id); 
-                        if (index !== -1) { 
-                            this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; 
-                        } 
-                        this.showEditPanel = false; 
-                        this.updateTagsList(); 
-                    } catch (e) { 
-                        alert("La mise à jour a échoué."); 
-                    } 
+                async updateNews() {
+                    const { id, resume, source, url, orientation, tagsText } = this.editingNews;
+                    const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
+                    try {
+                        await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id);
+                        const index = this.newsList.findIndex(n => n.id === id);
+                        if (index !== -1) {
+                            this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags };
+                        }
+                        this.showEditPanel = false;
+                        this.updateTagsList();
+                    } catch (e) {
+                        alert("La mise à jour a échoué.");
+                    }
                 },
-                
+
                 // === SUPPRESSION D'UN ARTICLE ===
-                async deleteNews(id) { 
-                    if (!confirm("Supprimer ?")) return; 
-                    this.newsList = this.newsList.filter(n => n.id !== id); 
-                    try { 
-                        await supabase.from('actu').delete().eq('id', id); 
-                        if (this.isAdmin) this.loadStats(); 
-                    } catch (e) { 
-                        alert("La suppression a échoué."); 
-                        this.loadNews(); 
-                    } 
+                async deleteNews(id) {
+                    if (!confirm("Supprimer ?")) return;
+                    this.newsList = this.newsList.filter(n => n.id !== id);
+                    try {
+                        await supabase.from('actu').delete().eq('id', id);
+                        if (this.isAdmin) this.loadStats();
+                    } catch (e) {
+                        alert("La suppression a échoué.");
+                        this.loadNews();
+                    }
                 },
-                
+
                 // === AJOUT MANUEL D'ACTUALITÉ (ADMIN) ===
-                async addManualNews() { 
-                    this.addingNews = true; 
-                    try { 
-                        let tags = ['🧨INFODROP']; 
-                        if (this.newNews.tagsText) { 
-                            tags.push(...this.newNews.tagsText.split(',').map(t => t.trim()).filter(Boolean).filter(t => t !== '🧨INFODROP')); 
-                        } 
-                        await supabase.from('actu').insert({ 
-                            ...this.newNews, 
-                            heure: new Date().toISOString(), 
-                            tags, 
-                            added_by: this.user.email 
-                        }); 
-                        this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' }; 
-                        this.showAdminPanel = false; 
-                        this.loadData(); 
-                    } catch (e) { 
-                        alert('Erreur.'); 
-                    } finally { 
-                        this.addingNews = false; 
-                    } 
+                async addManualNews() {
+                    this.addingNews = true;
+                    try {
+                        let tags = ['🧨INFODROP'];
+                        if (this.newNews.tagsText) {
+                            tags.push(...this.newNews.tagsText.split(',').map(t => t.trim()).filter(Boolean).filter(t => t !== '🧨INFODROP'));
+                        }
+                        await supabase.from('actu').insert({
+                            ...this.newNews,
+                            heure: new Date().toISOString(),
+                            tags,
+                            added_by: this.user.email
+                        });
+                        this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
+                        this.showAdminPanel = false;
+                        this.loadData();
+                    } catch (e) {
+                        alert('Erreur.');
+                    } finally {
+                        this.addingNews = false;
+                    }
                 },
-                
+
                 // === CHARGEMENT DES DONNÉES GÉNÉRALES ===
-                async loadData(isInitial = false) { 
-                    if (isInitial) this.loadingNews = true; 
+                async loadData(isInitial = false) {
+                    if (isInitial) this.loadingNews = true;
                     await Promise.all([
-                        this.loadNews(), 
+                        this.loadNews(),
                         this.isAdmin ? this.loadStats() : null
-                    ]); 
-                    if (isInitial) this.loadingNews = false; 
+                    ]);
+                    if (isInitial) this.loadingNews = false;
                 },
-                
+
                 // === CHARGEMENT DES ACTUALITÉS ===
-                async loadNews() { 
-                    try { 
-                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(); 
-                        const { data } = await supabase.from('actu').select('*').gte('heure', twentyFourHoursAgo).order('heure', { ascending: false }); 
-                        if (!data) return; 
-                        const existingIds = new Set(this.newsList.map(n => n.id)); 
-                        const newArticles = data.filter(n => !existingIds.has(n.id)); 
-                        if (newArticles.length > 0) { 
-                            this.newsList = [...newArticles, ...this.newsList]; 
-                            this.updateTagsList(); 
-                        } 
-                    } catch (e) { 
-                        console.error('Erreur actus:', e); 
-                    } 
+                async loadNews() {
+                    try {
+                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+                        const { data } = await supabase.from('actu').select('*').gte('heure', twentyFourHoursAgo).order('heure', { ascending: false });
+                        if (!data) return;
+                        const existingIds = new Set(this.newsList.map(n => n.id));
+                        const newArticles = data.filter(n => !existingIds.has(n.id));
+                        if (newArticles.length > 0) {
+                            this.newsList = [...newArticles, ...this.newsList];
+                            this.updateTagsList();
+                        }
+                    } catch (e) {
+                        console.error('Erreur actus:', e);
+                    }
                 },
-                
+
                 // ============================================================
                 // 🏷️ GESTION DES TAGS ET FILTRES
                 // ============================================================
-                
+
                 // === MISE À JOUR DE LA LISTE DES TAGS ===
-                updateTagsList() { 
-                    const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP']; 
-                    const active = new Set(); 
-                    const counts = {}; 
-                    this.newsList.forEach(n => { 
-                        if (n.orientation) active.add(n.orientation); 
-                        if (n.tags) { 
-                            n.tags.forEach(t => { 
-                                counts[t] = (counts[t] || 0) + 1; 
-                                if (t === '🧨INFODROP') active.add(t); 
-                            }); 
-                        } 
-                    }); 
-                    this.allOrientations = pol; 
-                    this.activeOrientations = [...active]; 
-                    this.allOtherTags = Object.entries(counts).filter(([t]) => !pol.includes(t)).sort((a, b) => b[1] - a[1]).slice(0, 50).map(([t]) => t); 
-                    this.allTags = [...pol, ...this.allOtherTags]; 
+                updateTagsList() {
+                    const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
+                    const active = new Set();
+                    const counts = {};
+                    this.newsList.forEach(n => {
+                        if (n.orientation) active.add(n.orientation);
+                        if (n.tags) {
+                            n.tags.forEach(t => {
+                                counts[t] = (counts[t] || 0) + 1;
+                                if (t === '🧨INFODROP') active.add(t);
+                            });
+                        }
+                    });
+                    this.allOrientations = pol;
+                    this.activeOrientations = [...active];
+                    this.allOtherTags = Object.entries(counts).filter(([t]) => !pol.includes(t)).sort((a, b) => b[1] - a[1]).slice(0, 50).map(([t]) => t);
+                    this.allTags = [...pol, ...this.allOtherTags];
                 },
-                
+
                 // === VÉRIFICATION DES ARTICLES POUR UNE ORIENTATION ===
-                hasArticlesForOrientation(o) { 
-                    return this.activeOrientations.includes(o); 
+                hasArticlesForOrientation(o) {
+                    return this.activeOrientations.includes(o);
                 },
-                
+
                 // === MESSAGE POUR LES FILTRES VIDES ===
-                getEmptyFilterMessage() { 
-                    if (this.allOrientations.includes(this.activeFilter)) 
-                        return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`; 
-                    return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`; 
+                getEmptyFilterMessage() {
+                    if (this.allOrientations.includes(this.activeFilter))
+                        return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`;
+                    return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`;
                 },
-                
+
                 // === CHARGEMENT DES STATISTIQUES (ADMIN) ===
-                async loadStats() { 
-                    try { 
-                        const { data } = await supabase.from('stats_today').select('*').single(); 
-                        this.stats = data || { total_articles: 0, total_sources: 0 }; 
-                    } catch (e) { 
-                        console.error('Erreur stats:', e); 
-                    } 
+                async loadStats() {
+                    try {
+                        const { data } = await supabase.from('stats_today').select('*').single();
+                        this.stats = data || { total_articles: 0, total_sources: 0 };
+                    } catch (e) {
+                        console.error('Erreur stats:', e);
+                    }
                 },
 
                 // ============================================================
                 // 📚 SYSTÈME DE LECTURES ET DIVERSITÉ
                 // ============================================================
-                
+
                 // === MARQUER UN ARTICLE COMME LU ===
-                markAsRead(id) { 
-                    if (!this.readArticles[id]) { 
-                        this.readArticles[id] = new Date().toISOString(); 
-                        localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles)); 
-                        this.updateTotalReadCount(); 
-                        const article = this.newsList.find(n => n.id === id); 
-                        if (article) this.addToDiversityData(article); 
-                        if (this.totalReadCount === 100) this.celebrate100Articles(); 
-                    } 
+                markAsRead(id) {
+                    if (!this.readArticles[id]) {
+                        this.readArticles[id] = new Date().toISOString();
+                        localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
+                        this.updateTotalReadCount();
+                        const article = this.newsList.find(n => n.id === id);
+                        if (article) this.addToDiversityData(article);
+                        if (this.totalReadCount === 100) this.celebrate100Articles();
+                    }
                 },
-                
+
                 // === MISE À JOUR DU COMPTEUR TOTAL ===
-                updateTotalReadCount() { 
-                    this.totalReadCount = Object.keys(this.readArticles).length; 
+                updateTotalReadCount() {
+                    this.totalReadCount = Object.keys(this.readArticles).length;
                 },
-                
+
                 // === NETTOYAGE DES ANCIENNES DONNÉES DE DIVERSITÉ ===
-                cleanOldDiversityData() { 
-                    const expiry = Date.now() - 24 * 60 * 60 * 1000; 
-                    Object.keys(this.diversityData).forEach(t => { 
-                        if (new Date(t).getTime() < expiry) delete this.diversityData[t]; 
-                    }); 
-                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); 
+                cleanOldDiversityData() {
+                    const expiry = Date.now() - 24 * 60 * 60 * 1000;
+                    Object.keys(this.diversityData).forEach(t => {
+                        if (new Date(t).getTime() < expiry) delete this.diversityData[t];
+                    });
+                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
                 },
-                
+
                 // === AJOUT AUX DONNÉES DE DIVERSITÉ ===
-                addToDiversityData(article) { 
-                    let o = article.orientation || 'neutre'; 
-                    if (article.tags?.includes('🧨INFODROP')) o = '🧨INFODROP'; 
-                    this.diversityData[new Date().toISOString()] = { 
-                        orientation: o, 
-                        source: article.source 
-                    }; 
-                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); 
-                    this.calculateDiversityScore(); 
+                addToDiversityData(article) {
+                    let o = article.orientation || 'neutre';
+                    if (article.tags?.includes('🧨INFODROP')) o = '🧨INFODROP';
+                    this.diversityData[new Date().toISOString()] = {
+                        orientation: o,
+                        source: article.source
+                    };
+                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
+                    this.calculateDiversityScore();
                 },
-                
+
                 // === CALCUL DU SCORE DE DIVERSITÉ ===
                 calculateDiversityScore() {
                     this.cleanOldDiversityData();
                     const reads = Object.values(this.diversityData);
-                    if (reads.length === 0) { 
-                        this.diversityScore = null; 
-                        this.readOrientations = []; 
-                        return; 
+                    if (reads.length === 0) {
+                        this.diversityScore = null;
+                        this.readOrientations = [];
+                        return;
                     }
                     const oSet = new Set(reads.map(r => r.orientation).filter(Boolean)); // <-- CORRECTION TAG VIDE
                     const sSet = new Set(reads.map(r => r.source));
@@ -1567,59 +1608,59 @@
                     this.diversityScore = Math.round(((oSet.size / 10) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
                     this.showDiversityChecker = this.diversityScore < 100;
                 },
-                
+
                 // === MESSAGE DU SCORE DE DIVERSITÉ ===
-                getDiversityMessage() { 
-                    if (this.diversityScore < 30) return "Bulle de filtre détectée"; 
-                    if (this.diversityScore < 70) return "Diversité correcte"; 
-                    return "Excellente diversité !"; 
+                getDiversityMessage() {
+                    if (this.diversityScore < 30) return "Bulle de filtre détectée";
+                    if (this.diversityScore < 70) return "Diversité correcte";
+                    return "Excellente diversité !";
                 },
-                
+
                 // === CÉLÉBRATION DES 100 ARTICLES ===
-                celebrate100Articles() { 
-                    const cont = document.createElement('div'); 
-                    cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;'; 
-                    document.body.appendChild(cont); 
-                    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7']; 
-                    for (let i = 0; i < 50; i++) { 
-                        const conf = document.createElement('div'); 
-                        conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;`; 
-                        cont.appendChild(conf); 
-                    } 
-                    const msg = document.createElement('div'); 
-                    msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce'; 
-                    msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">🎉 Félicitations ! 🎉</h2><p class="text-lg">100 articles lus !</p>`; 
-                    document.body.appendChild(msg); 
-                    setTimeout(() => { 
-                        cont.remove(); 
-                        msg.classList.add('opacity-0', 'transition-opacity', 'duration-500'); 
-                        setTimeout(() => msg.remove(), 500); 
-                    }, 5000); 
+                celebrate100Articles() {
+                    const cont = document.createElement('div');
+                    cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+                    document.body.appendChild(cont);
+                    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7'];
+                    for (let i = 0; i < 50; i++) {
+                        const conf = document.createElement('div');
+                        conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;`;
+                        cont.appendChild(conf);
+                    }
+                    const msg = document.createElement('div');
+                    msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
+                    msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">🎉 Félicitations ! 🎉</h2><p class="text-lg">100 articles lus !</p>`;
+                    document.body.appendChild(msg);
+                    setTimeout(() => {
+                        cont.remove();
+                        msg.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                        setTimeout(() => msg.remove(), 500);
+                    }, 5000);
                 },
 
                 // ============================================================
                 // 🔧 UTILITAIRES ET HELPERS
                 // ============================================================
-                
+
                 // === DÉCONNEXION ===
-                async logout() { 
-                    if (this.realtimeChannel) await this.realtimeChannel.untrack(); 
-                    await supabase.auth.signOut(); 
+                async logout() {
+                    if (this.realtimeChannel) await this.realtimeChannel.untrack();
+                    await supabase.auth.signOut();
                 },
-                
+
                 // === GESTION DES MISES À JOUR AUTOMATIQUES ===
-                startAutoUpdate() { 
-                    if (this.updateInterval) clearInterval(this.updateInterval); 
-                    this.updateInterval = setInterval(() => this.loadData(), 30000); 
+                startAutoUpdate() {
+                    if (this.updateInterval) clearInterval(this.updateInterval);
+                    this.updateInterval = setInterval(() => this.loadData(), 30000);
                 },
-                
-                stopAutoUpdate() { 
-                    if (this.updateInterval) clearInterval(this.updateInterval); 
+
+                stopAutoUpdate() {
+                    if (this.updateInterval) clearInterval(this.updateInterval);
                 },
-                
+
                 // === FORMATAGE DE L'HEURE ===
-                formatTime(t) { 
-                    return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); 
+                formatTime(t) {
+                    return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
                 }
             };
         }
