@@ -1099,7 +1099,7 @@
                         const { data: ownCode, error: ownCodeError } = await supabase
                             .from('invitation_codes')
                             .select('*')
-                            .eq('owner_email', this.user.email)
+                            .ilike('owner_email', this.user.email)
                             .maybeSingle();
                         if (ownCodeError) throw ownCodeError;
                         this.userInviteData.code = ownCode?.code || null;
@@ -1116,7 +1116,7 @@
                         const { data: usedCode, error: usedCodeError } = await supabase
                             .from('invitation_codes')
                             .select('owner_email')
-                            .eq('used_by_email', this.user.email)
+                            .ilike('used_by_email', this.user.email)
                             .maybeSingle();
                         if (usedCodeError) throw usedCodeError;
                         if (usedCode) {
@@ -1129,6 +1129,7 @@
                     }
                 },
 
+                console.log('loadUserInviteData - ownCode:', ownCode, 'user:', this.user.email);
 
                 async generateInviteCode() {
                     if (!this.isAdmin) return;
