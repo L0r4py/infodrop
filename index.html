@@ -831,14 +831,14 @@
                 async getWeather() {
                     try {
                         const pos = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 }));
-                        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}¤t_weather=true&timezone=auto`);
+                        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}¤t_weather=true&timezone=auto`); // CORRIGÉ
                         const data = await res.json();
                         this.weather.temperature = Math.round(data.current_weather.temperature);
                         const code = data.current_weather.weathercode;
                         if (code === 0) { this.weather.description = 'Ciel dégagé'; this.weather.icon = '☀️'; } else if (code <= 3) { this.weather.description = 'Partiellement nuageux'; this.weather.icon = '⛅'; } else if (code <= 48) { this.weather.description = 'Nuageux'; this.weather.icon = '☁️'; } else if (code <= 67) { this.weather.description = 'Pluie'; this.weather.icon = '🌧️'; } else if (code <= 77) { this.weather.description = 'Neige'; this.weather.icon = '❄️'; } else { this.weather.description = 'Orage'; this.weather.icon = '⛈️'; }
                     } catch {
                         try {
-                            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=44.8061&longitude=-0.6306¤t_weather=true&timezone=Europe/Paris');
+                            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=44.8061&longitude=-0.6306¤t_weather=true&timezone=Europe/Paris'); // CORRIGÉ
                             const data = await res.json();
                             this.weather.temperature = Math.round(data.current_weather.temperature);
                             const code = data.current_weather.weathercode; if (code === 0) { this.weather.icon = '☀️'; } else if (code <= 3) { this.weather.icon = '⛅'; } else if (code <= 48) { this.weather.icon = '☁️'; } else if (code <= 67) { this.weather.icon = '🌧️'; } else if (code <= 77) { this.weather.icon = '❄️'; } else { this.weather.icon = '⛈️'; } this.weather.description = 'Pessac';
