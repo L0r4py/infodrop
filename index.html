@@ -626,8 +626,7 @@
                         <div class="mt-3 flex flex-wrap gap-2" x-show="readOrientations.length > 0">
                             <template x-for="orientation in readOrientations" :key="orientation">
                                 <span class="text-xs px-2 py-1 rounded-full" :class="getOrientationClass(orientation)">
-                                    <span
-                                        x-text="orientation === 'gouvernement' ? '🇫🇷 Gouvernement' : orientation.replace('-', ' ')"></span>
+                                    <span x-text="getOrientationDisplayName(orientation)"></span>
                                 </span>
                             </template>
                         </div>
@@ -664,18 +663,17 @@
                             </h4>
                             <div class="flex flex-wrap gap-2">
                                 <template x-for="orientation in allOrientations" :key="orientation">
-                                    <button @click="activeFilter = orientation" :class="orientation === '🧨INFODROP' ? 
-                                            (activeFilter === orientation ? 'bg-gray-600 text-white border-2 border-white' : 
-                                             hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-white border border-gray-400 hover:bg-gray-600' : 
-                                             'bg-gray-800 text-gray-500 border border-gray-600') :
-                                            (activeFilter === orientation ? getOrientationClass(orientation) : 
-                                             hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 
-                                             'bg-gray-800 text-gray-500 border border-gray-600')"
+                                    <button @click="activeFilter = orientation" :class="[orientation === '🧨INFODROP' ? 
+            (activeFilter === orientation ? 'bg-gray-600 text-white border-2 border-white' : 
+             hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-white border border-gray-400 hover:bg-gray-600' : 
+             'bg-gray-800 text-gray-500 border border-gray-600') :
+            (activeFilter === orientation ? getOrientationClass(orientation) : 
+             hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 
+             'bg-gray-800 text-gray-500 border border-gray-600')]"
                                         class="px-3 py-1 rounded-full text-sm font-semibold transition relative"
                                         :class="orientation === '🧨INFODROP' ? 'font-black' : 'capitalize'"
                                         :title="hasArticlesForOrientation(orientation) ? '' : 'Aucun article ces dernières 24h'">
-                                        <span
-                                            x-text="orientation === 'gouvernement' ? '🇫🇷 Gouvernement' : orientation.replace('-', ' ')"></span>
+                                        <span x-text="getOrientationDisplayName(orientation)"></span>
                                     </button>
                                 </template>
                             </div>
@@ -716,8 +714,7 @@
                                     <span x-text="formatTime(news.heure)"></span>
                                     <span x-show="news.orientation" :class="getOrientationClass(news.orientation)"
                                         class="px-2 py-0.5 rounded-full font-semibold text-xs capitalize">
-                                        <span
-                                            x-text="news.orientation === 'gouvernement' ? '🇫🇷 Gouvernement' : news.orientation.replace('-', ' ')"></span>
+                                        <span x-text="getOrientationDisplayName(news.orientation)"></span>
                                     </span>
                                     <template x-if="news.tags && news.tags.filter(tag => tag !== '🧨INFODROP').length">
                                         <template x-for="tag in news.tags.filter(tag => tag !== '🧨INFODROP')"
@@ -1165,6 +1162,19 @@
                 readOrientations: [],
                 showDiversityChecker: true,
                 diversityData: JSON.parse(localStorage.getItem('infodrop_diversity') || '{}'),
+
+                // === HELPER POUR L'AFFICHAGE SÉCURISÉ DES ORIENTATIONS ===
+                getOrientationDisplayName(orientation) {
+                    // Gestion des valeurs null/undefined
+                    if (!orientation) return '';
+
+                    // Cas spéciaux
+                    if (orientation === 'gouvernement') return '🇫🇷 Gouvernement';
+                    if (orientation === '🧨INFODROP') return orientation;
+
+                    // Remplacement sécurisé des tirets
+                    return orientation.replace('-', ' ');
+                },
 
                 // ============================================================
                 // 🔧 GETTERS ET PROPRIÉTÉS CALCULÉES
