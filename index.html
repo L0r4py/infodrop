@@ -126,36 +126,64 @@
 
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
 
-    <!-- ========== CONFIGURATION SUPABASE SÉCURISÉE ========== -->
+    <!-- ========== CONFIGURATION 100% SÉCURISÉE (SANS FALLBACKS) ========== -->
     <script>
-        // Configuration sécurisée - les clés sont récupérées depuis l'API
+        // Variables globales (AUCUNE valeur par défaut)
         let supabase = null;
-        const ADMIN_EMAILS = ['l0r4.py@gmail.com'];
-        const STRIPE_LINK = 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801';
+        let ADMIN_EMAILS = [];
+        let STRIPE_LINK = '';
 
-        // Fonction pour initialiser Supabase de manière sécurisée
+        // Fonction pour initialiser TOUT de manière sécurisée
         async function initializeSupabase() {
             try {
                 console.log('🔐 Récupération de la configuration sécurisée...');
 
-                // Récupérer la configuration depuis l'API sécurisée
+                // Récupérer TOUTE la configuration depuis l'API sécurisée
                 const response = await fetch('/api/config');
 
                 if (!response.ok) {
-                    throw new Error('Impossible de récupérer la configuration');
+                    throw new Error(`Erreur API: ${response.status}`);
                 }
 
                 const config = await response.json();
 
+                // Vérifier que toutes les données sont présentes
+                if (!config.supabaseUrl || !config.supabaseAnonKey) {
+                    throw new Error('Configuration Supabase incomplète');
+                }
+
                 // Initialiser Supabase avec les clés récupérées
                 supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
 
-                console.log('✅ Supabase initialisé de manière sécurisée');
+                // Mettre à jour TOUTES les constantes sécurisées
+                ADMIN_EMAILS = config.adminEmails || [];
+                STRIPE_LINK = config.stripeLink || '';
+
+                console.log('✅ Configuration complète initialisée de manière sécurisée');
+                console.log('📧 Admin emails récupérés:', ADMIN_EMAILS.length + ' email(s)');
+                console.log('💳 Stripe link récupéré: ✓');
+
                 return true;
 
             } catch (error) {
-                console.error('❌ Erreur initialisation Supabase:', error);
-                alert('Erreur de connexion à la base de données. Veuillez recharger la page.');
+                console.error('❌ Erreur initialisation:', error);
+
+                // Affichage d'erreur utilisateur plus informatif
+                const errorDiv = document.createElement('div');
+                errorDiv.innerHTML = `
+                    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: Arial;">
+                        <div style="text-align: center; padding: 2rem;">
+                            <h2>❌ Erreur de configuration</h2>
+                            <p>Impossible de charger la configuration sécurisée.</p>
+                            <p>Veuillez contacter l'administrateur.</p>
+                            <button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3B82F6; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                Recharger la page
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(errorDiv);
+
                 return false;
             }
         }
