@@ -1355,8 +1355,14 @@
 
                 addToDiversityData(article) {
                     const timestamp = new Date().toISOString();
+
+                    let orientationToStore = article.orientation;
+                    if (article.tags && article.tags.includes('🧨INFODROP')) {
+                        orientationToStore = '🧨INFODROP';
+                    }
+
                     this.diversityData[timestamp] = {
-                        orientation: article.orientation,
+                        orientation: orientationToStore,
                         source: article.source
                     };
                     localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
