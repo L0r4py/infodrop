@@ -1595,22 +1595,26 @@
                         this.loading = false;
                     }
                 },
-                // NOUVELLE FONCTION : Charge les données d'invitation de l'utilisateur
+                // VERSION CORRIGÉE AVEC ATTENTE DE SESSION
                 async loadUserInviteData() {
                     if (!this.user) return;
 
-                    // Réinitialiser les données pour éviter d'afficher des infos périmées
-                    this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null };
-
                     try {
-                        // 1. Récupérer le code que l'utilisateur PEUT PARTAGER
-                        const { data: ownCode, error: ownCodeError } = await supabase
+                        // LIGNE MAGIQUE : On s'assure d'avoir une session valide avant de continuer.
+                        const { data: { session } } = await supabase.auth.getSession();
+                        if (!session) {
+                            console.log("Pas de session active, impossible de charger les données d'invitation.");
+                            return;
+                        }
+
+                        // Le reste du code est le même, mais il ne s'exécutera que si la session est confirmée.
+                        this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null };
+
+                        const { data: ownCode } = await supabase
                             .from('invitation_codes')
                             .select('*')
                             .eq('owner_email', this.user.email)
                             .single();
-
-                        if (ownCodeError && ownCodeError.code !== 'PGRST116') console.error(ownCodeError);
 
                         if (ownCode) {
                             this.userInviteData.code = ownCode.code;
@@ -1620,20 +1624,20 @@
                             }
                         }
 
-                        // 2. Récupérer le code que l'utilisateur A UTILISÉ pour s'inscrire (trouver son parrain)
-                        const { data: usedCode, error: usedCodeError } = await supabase
+                        const { data: usedCode } = await supabase
                             .from('invitation_codes')
                             .select('owner_email')
                             .eq('used_by_email', this.user.email)
                             .single();
 
-                        if (usedCodeError && usedCodeError.code !== 'PGRST116') console.error(usedCodeError);
-
                         if (usedCode) {
                             this.userInviteData.parrainEmail = usedCode.owner_email.replace(/(?<=.).*?(?=@)/, '***');
                         }
                     } catch (error) {
-                        console.error("Erreur lors du chargement des données d'invitation:", error);
+                        // On ignore les erreurs "PGRST116" qui sont normales (quand aucune ligne n'est trouvée)
+                        if (error.code !== 'PGRST116') {
+                            console.error("Erreur lors du chargement des données d'invitation:", error);
+                        }
                     }
                 },
 
