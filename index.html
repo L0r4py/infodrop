@@ -1208,10 +1208,7 @@
                             this.setupRealtime(session);
                             this.updateTotalReadCount();
                             this.calculateDiversityScore();
-                            await this.loadUserInviteData();
-                            if (this.isAdmin && !this.userInviteData.code) {
-                                await this.ensureAdminHasInviteCode();
-                            }
+                            this.loadUserInviteData();
                         }
                         if (event === 'SIGNED_OUT') {
                             this.stopAutoUpdate();
