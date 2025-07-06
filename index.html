@@ -1393,7 +1393,8 @@
                         'droite',
                         'extrême-droite',
                         'gouvernement',
-                        'neutre'
+                        'neutre',
+                        '🧨INFODROP'
                     ];
 
                     // Trier les orientations selon l'ordre du spectre
@@ -1401,7 +1402,7 @@
                         return spectrumOrder.indexOf(a) - spectrumOrder.indexOf(b);
                     });
 
-                    const maxOrientations = 9;
+                    const maxOrientations = 10;
                     const orientationScore = (orientations.size / maxOrientations) * 50;
                     const sourceScore = Math.min((sources.size / 5) * 50, 50);
 
