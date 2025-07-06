@@ -13,18 +13,18 @@ export default async function handler(req, res) {
 
     try {
         const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
-        
-        // CORRECTION : On utilise listUsers, qui est la bonne méthode
-        const { data: { users }, error } = await supabase.auth.admin.listUsers({ email: email.toLowerCase() });
+
+        // On liste tous les users (jusqu’à 1000, attention en cas de très grosse base)
+        const { data: { users }, error } = await supabase.auth.admin.listUsers();
 
         if (error) {
             console.error('[check-email] Erreur API Supabase:', error);
             return res.status(500).json({ error: 'Erreur serveur lors de la vérification.', details: error.message });
         }
 
-        // On regarde si la liste contient un utilisateur
-        const userExists = users && users.length > 0;
-        
+        // On vérifie si au moins un utilisateur a le même email
+        const userExists = users && users.some(u => u.email?.toLowerCase() === email.toLowerCase());
+
         console.log(`[check-email] Vérification pour ${email}: ${userExists ? 'trouvé' : 'non trouvé'}.`);
         return res.status(200).json({ exists: userExists });
 
