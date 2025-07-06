@@ -34,6 +34,7 @@ const RSS_FEEDS = [
     { name: "Sud Ouest", url: 'https://www.sudouest.fr/rss.xml', orientation: 'centre-gauche', tags: ['regional'] },
     { name: "La Republique des Pyrenees", url: 'https://www.larepubliquedespyrenees.fr/rss.xml', orientation: 'centre-gauche', tags: ['regional'] },
     { name: 'La Semaine des Pyrénées', url: 'https://www.lasemainedespyrenees.fr/feed', orientation: 'centre', tags: ['regional'] },
+    { name: 'Corse Net Infos', url: 'https://www.corsenetinfos.corsica/xml/syndication.rss', orientation: 'neutre', tags: ['regional'] },
 
     // === LA PRESSE (Canada) ===
     { name: 'La Presse', url: 'https://www.lapresse.ca/actualites/rss', orientation: 'centre', tags: ['canada'] },
