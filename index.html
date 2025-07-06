@@ -416,25 +416,23 @@
                     <div
                         class="flex flex-col md:flex-row md:justify-center md:items-center md:gap-4 space-y-1 md:space-y-0">
 
-                        <!-- Partie 1 : Compteur d'articles lus (ne s'affiche que s'il y en a) -->
+                        <!-- Partie 1 : Compteur d'articles lus -->
                         <span x-show="totalReadCount > 0">
                             📚 <span class="font-semibold text-white" x-text="totalReadCount"></span>
                             <span x-text="totalReadCount === 1 ? 'article lu' : 'articles lus'"></span>
                         </span>
-
-                        <!-- Séparateur qui n'apparait que si les deux parties sont visibles -->
                         <span x-show="totalReadCount > 0 && userInviteData.code" class="hidden md:inline">|</span>
 
-                        <!-- Partie 2 : Infos d'invitation (ne s'affiche que si elles existent) -->
+                        <!-- Partie 2 : Infos d'invitation -->
                         <div x-show="userInviteData.code" class="flex flex-col md:flex-row md:gap-4 items-center">
                             <!-- Code à partager -->
                             <span>
                                 🎁 Votre code à partager :
                                 <span
                                     class="font-mono bg-gray-800 px-2 py-1 rounded cursor-pointer hover:bg-gray-700 transition"
-                                    @click="navigator.clipboard.writeText(userInviteData.codeToShare); copied = true; setTimeout(() => copied = false, 1500)"
+                                    @click="navigator.clipboard.writeText(userInviteData.code); copied = true; setTimeout(() => copied = false, 1500)"
                                     title="Cliquez pour copier">
-                                    {{ userInviteData.codeToShare }}
+                                    {{ userInviteData.code }}
                                 </span>
                                 <span x-show="copied" class="ml-2 text-green-400 transition">Copié !</span>
                             </span>
@@ -455,6 +453,7 @@
                         </div>
                     </div>
                 </div>
+
 
             </div>
 
@@ -1095,17 +1094,40 @@
                 async loadUserInviteData() {
                     if (!this.user) return;
                     try {
-                        const { data: ownCode, error: ownCodeError } = await supabase.from('invitation_codes').select('*').eq('owner_email', this.user.email).maybeSingle();
+                        // Récupère le code d'invitation de l'utilisateur courant
+                        const { data: ownCode, error: ownCodeError } = await supabase
+                            .from('invitation_codes')
+                            .select('*')
+                            .eq('owner_email', this.user.email)
+                            .maybeSingle();
                         if (ownCodeError) throw ownCodeError;
                         this.userInviteData.code = ownCode?.code || null;
                         this.userInviteData.is_used = ownCode?.is_used || false;
-                        if (ownCode?.is_used && ownCode.used_by_email) { this.userInviteData.filleulEmail = ownCode.used_by_email.replace(/(?<=.).*?(?=@)/, '***'); } else { this.userInviteData.filleulEmail = null; }
 
-                        const { data: usedCode, error: usedCodeError } = await supabase.from('invitation_codes').select('owner_email').eq('used_by_email', this.user.email).maybeSingle();
+                        // Filleul : affiche l'email du filleul (en clair, plus de masquage)
+                        if (ownCode?.is_used && ownCode.used_by_email) {
+                            this.userInviteData.filleulEmail = ownCode.used_by_email;
+                        } else {
+                            this.userInviteData.filleulEmail = null;
+                        }
+
+                        // Parrain : affiche l'email du parrain (en clair, plus de masquage)
+                        const { data: usedCode, error: usedCodeError } = await supabase
+                            .from('invitation_codes')
+                            .select('owner_email')
+                            .eq('used_by_email', this.user.email)
+                            .maybeSingle();
                         if (usedCodeError) throw usedCodeError;
-                        if (usedCode) { this.userInviteData.parrainEmail = usedCode.owner_email.replace(/(?<=.).*?(?=@)/, '***'); } else { this.userInviteData.parrainEmail = null; }
-                    } catch (error) { console.error("Erreur chargement données invitation:", error); }
+                        if (usedCode) {
+                            this.userInviteData.parrainEmail = usedCode.owner_email;
+                        } else {
+                            this.userInviteData.parrainEmail = null;
+                        }
+                    } catch (error) {
+                        console.error("Erreur chargement données invitation:", error);
+                    }
                 },
+
 
                 async generateInviteCode() {
                     if (!this.isAdmin) return;
