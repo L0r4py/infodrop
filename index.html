@@ -1095,7 +1095,7 @@
                 async loadUserInviteData() {
                     if (!this.user) return;
                     try {
-                        // Récupère le code d'invitation de l'utilisateur courant
+                        // Récupère le code d'invitation du compte connecté (en insensible à la casse)
                         const { data: ownCode, error: ownCodeError } = await supabase
                             .from('invitation_codes')
                             .select('*')
@@ -1104,15 +1104,13 @@
                         if (ownCodeError) throw ownCodeError;
                         this.userInviteData.code = ownCode?.code || null;
                         this.userInviteData.is_used = ownCode?.is_used || false;
-
-                        // Filleul : affiche l'email du filleul (en clair, plus de masquage)
                         if (ownCode?.is_used && ownCode.used_by_email) {
                             this.userInviteData.filleulEmail = ownCode.used_by_email;
                         } else {
                             this.userInviteData.filleulEmail = null;
                         }
 
-                        // Parrain : affiche l'email du parrain (en clair, plus de masquage)
+                        // Récupère le parrain (en insensible à la casse aussi)
                         const { data: usedCode, error: usedCodeError } = await supabase
                             .from('invitation_codes')
                             .select('owner_email')
@@ -1124,12 +1122,15 @@
                         } else {
                             this.userInviteData.parrainEmail = null;
                         }
+
+                        // Debug facultatif
+                        console.log('loadUserInviteData - ownCode:', ownCode, 'user:', this.user.email);
+
                     } catch (error) {
                         console.error("Erreur chargement données invitation:", error);
                     }
                 },
 
-                console.log('loadUserInviteData - ownCode:', ownCode, 'user:', this.user.email);
 
                 async generateInviteCode() {
                     if (!this.isAdmin) return;
