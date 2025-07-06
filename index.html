@@ -807,891 +807,159 @@
         // ========== FONCTION BANDEAU CONTEXTUEL ==========
         function contextTicker() {
             return {
-                dateInfo: {
-                    fullDate: '',
-                    dayOfYear: 0,
-                    daysUntilNewYear: 0
-                },
+                dateInfo: { fullDate: '', dayOfYear: 0, daysUntilNewYear: 0 },
                 todayFeast: '',
-                weather: {
-                    temperature: null,
-                    description: '',
-                    icon: '🌡️'
-                },
-                moonPhase: {
-                    name: '',
-                    icon: '🌙'
-                },
-
-                feasts: {
-                    '01-01': 'Jour de l\'an',
-                    '01-06': 'Épiphanie',
-                    '02-02': 'Chandeleur',
-                    '02-14': 'Saint-Valentin',
-                    '03-17': 'Saint-Patrick',
-                    '04-01': 'Poisson d\'avril',
-                    '05-01': 'Fête du travail',
-                    '05-08': 'Victoire 1945',
-                    '06-21': 'Fête de la musique',
-                    '07-14': 'Fête nationale',
-                    '08-15': 'Assomption',
-                    '10-31': 'Halloween',
-                    '11-01': 'Toussaint',
-                    '11-11': 'Armistice 1918',
-                    '12-25': 'Noël',
-                    '12-31': 'Saint-Sylvestre'
-                },
-
+                weather: { temperature: null, description: '', icon: '🌡️' },
+                moonPhase: { name: '', icon: '🌙' },
+                feasts: { '01-01': 'Jour de l\'an', '01-06': 'Épiphanie', '02-02': 'Chandeleur', '02-14': 'Saint-Valentin', '03-17': 'Saint-Patrick', '04-01': 'Poisson d\'avril', '05-01': 'Fête du travail', '05-08': 'Victoire 1945', '06-21': 'Fête de la musique', '07-14': 'Fête nationale', '08-15': 'Assomption', '10-31': 'Halloween', '11-01': 'Toussaint', '11-11': 'Armistice 1918', '12-25': 'Noël', '12-31': 'Saint-Sylvestre' },
                 async initTicker() {
-                    this.updateDateInfo();
-                    this.updateMoonPhase();
-                    await this.getWeather();
-
-                    const now = new Date();
-                    const tomorrow = new Date(now);
-                    tomorrow.setDate(tomorrow.getDate() + 1);
-                    tomorrow.setHours(0, 0, 0, 0);
-                    const msUntilMidnight = tomorrow - now;
-
-                    setTimeout(() => {
-                        this.updateDateInfo();
-                        this.updateMoonPhase();
-                        setInterval(() => {
-                            this.updateDateInfo();
-                            this.updateMoonPhase();
-                        }, 86400000);
-                    }, msUntilMidnight);
-
+                    this.updateDateInfo(); this.updateMoonPhase(); await this.getWeather();
+                    const now = new Date(); const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1); tomorrow.setHours(0, 0, 0, 0); const msUntilMidnight = tomorrow - now;
+                    setTimeout(() => { this.updateDateInfo(); this.updateMoonPhase(); setInterval(() => { this.updateDateInfo(); this.updateMoonPhase(); }, 86400000); }, msUntilMidnight);
                     setInterval(() => this.getWeather(), 600000);
                 },
-
                 updateDateInfo() {
-                    const now = new Date();
-                    const options = { weekday: 'long', day: 'numeric', month: 'long' };
-                    this.dateInfo.fullDate = now.toLocaleDateString('fr-FR', options);
-                    this.dateInfo.fullDate = this.dateInfo.fullDate.charAt(0).toUpperCase() + this.dateInfo.fullDate.slice(1);
-
-                    const start = new Date(now.getFullYear(), 0, 0);
-                    const diff = now - start;
-                    this.dateInfo.dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-                    const nextYear = new Date(now.getFullYear() + 1, 0, 1);
-                    this.dateInfo.daysUntilNewYear = Math.ceil((nextYear - now) / (1000 * 60 * 60 * 24));
-
-                    const monthDay = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-                    this.todayFeast = this.feasts[monthDay] || '';
+                    const now = new Date(); const options = { weekday: 'long', day: 'numeric', month: 'long' }; this.dateInfo.fullDate = now.toLocaleDateString('fr-FR', options); this.dateInfo.fullDate = this.dateInfo.fullDate.charAt(0).toUpperCase() + this.dateInfo.fullDate.slice(1);
+                    const start = new Date(now.getFullYear(), 0, 0); const diff = now - start; this.dateInfo.dayOfYear = Math.floor(diff / 86400000);
+                    const nextYear = new Date(now.getFullYear() + 1, 0, 1); this.dateInfo.daysUntilNewYear = Math.ceil((nextYear - now) / 86400000);
+                    const monthDay = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`; this.todayFeast = this.feasts[monthDay] || '';
                 },
-
                 updateMoonPhase() {
-                    const now = new Date();
-                    const refNewMoon = new Date(2000, 0, 6);
-                    const lunarCycle = 29.53058867;
-
-                    const daysSinceRef = (now - refNewMoon) / (1000 * 60 * 60 * 24);
-                    const moonAge = daysSinceRef % lunarCycle;
-
-                    if (moonAge < 1.84566) {
-                        this.moonPhase.name = 'Nouvelle lune';
-                        this.moonPhase.icon = '🌑';
-                    } else if (moonAge < 5.53699) {
-                        this.moonPhase.name = 'Premier croissant';
-                        this.moonPhase.icon = '🌒';
-                    } else if (moonAge < 9.22831) {
-                        this.moonPhase.name = 'Premier quartier';
-                        this.moonPhase.icon = '🌓';
-                    } else if (moonAge < 12.91963) {
-                        this.moonPhase.name = 'Gibbeuse croissante';
-                        this.moonPhase.icon = '🌔';
-                    } else if (moonAge < 16.61096) {
-                        this.moonPhase.name = 'Pleine lune';
-                        this.moonPhase.icon = '🌕';
-                    } else if (moonAge < 20.30228) {
-                        this.moonPhase.name = 'Gibbeuse décroissante';
-                        this.moonPhase.icon = '🌖';
-                    } else if (moonAge < 23.99361) {
-                        this.moonPhase.name = 'Dernier quartier';
-                        this.moonPhase.icon = '🌗';
-                    } else {
-                        this.moonPhase.name = 'Dernier croissant';
-                        this.moonPhase.icon = '🌘';
-                    }
+                    const moonAge = (new Date() - new Date(2000, 0, 6)) / 86400000 % 29.53058867;
+                    if (moonAge < 1.84) { this.moonPhase = { name: 'Nouvelle lune', icon: '🌑' }; } else if (moonAge < 5.53) { this.moonPhase = { name: 'Premier croissant', icon: '🌒' }; } else if (moonAge < 9.22) { this.moonPhase = { name: 'Premier quartier', icon: '🌓' }; } else if (moonAge < 12.91) { this.moonPhase = { name: 'Gibbeuse croissante', icon: '🌔' }; } else if (moonAge < 16.61) { this.moonPhase = { name: 'Pleine lune', icon: '🌕' }; } else if (moonAge < 20.30) { this.moonPhase = { name: 'Gibbeuse décroissante', icon: '🌖' }; } else if (moonAge < 23.99) { this.moonPhase = { name: 'Dernier quartier', icon: '🌗' }; } else { this.moonPhase = { name: 'Dernier croissant', icon: '🌘' }; }
                 },
-
                 async getWeather() {
                     try {
-                        const position = await new Promise((resolve, reject) => {
-                            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
-                        });
-
-                        const { latitude, longitude } = position.coords;
-
-                        const response = await fetch(
-                            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&timezone=auto`
-                        );
-
-                        const data = await response.json();
-                        const current = data.current_weather;
-
-                        this.weather.temperature = Math.round(current.temperature);
-
-                        const weatherCode = current.weathercode;
-                        if (weatherCode === 0) {
-                            this.weather.description = 'Ciel dégagé';
-                            this.weather.icon = '☀️';
-                        } else if (weatherCode <= 3) {
-                            this.weather.description = 'Partiellement nuageux';
-                            this.weather.icon = '⛅';
-                        } else if (weatherCode <= 48) {
-                            this.weather.description = 'Nuageux';
-                            this.weather.icon = '☁️';
-                        } else if (weatherCode <= 67) {
-                            this.weather.description = 'Pluie';
-                            this.weather.icon = '🌧️';
-                        } else if (weatherCode <= 77) {
-                            this.weather.description = 'Neige';
-                            this.weather.icon = '❄️';
-                        } else if (weatherCode <= 99) {
-                            this.weather.description = 'Orage';
-                            this.weather.icon = '⛈️';
-                        }
-
-                    } catch (error) {
+                        const pos = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 }));
+                        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}¤t_weather=true&timezone=auto`);
+                        const data = await res.json();
+                        this.weather.temperature = Math.round(data.current_weather.temperature);
+                        const code = data.current_weather.weathercode;
+                        if (code === 0) { this.weather.description = 'Ciel dégagé'; this.weather.icon = '☀️'; } else if (code <= 3) { this.weather.description = 'Partiellement nuageux'; this.weather.icon = '⛅'; } else if (code <= 48) { this.weather.description = 'Nuageux'; this.weather.icon = '☁️'; } else if (code <= 67) { this.weather.description = 'Pluie'; this.weather.icon = '🌧️'; } else if (code <= 77) { this.weather.description = 'Neige'; this.weather.icon = '❄️'; } else { this.weather.description = 'Orage'; this.weather.icon = '⛈️'; }
+                    } catch {
                         try {
-                            const response = await fetch(
-                                'https://api.open-meteo.com/v1/forecast?latitude=44.8061&longitude=-0.6306&current_weather=true&timezone=Europe/Paris'
-                            );
-                            const data = await response.json();
-                            const current = data.current_weather;
-
-                            this.weather.temperature = Math.round(current.temperature);
-
-                            const weatherCode = current.weathercode;
-                            if (weatherCode === 0) {
-                                this.weather.icon = '☀️';
-                            } else if (weatherCode <= 3) {
-                                this.weather.icon = '⛅';
-                            } else if (weatherCode <= 48) {
-                                this.weather.icon = '☁️';
-                            } else if (weatherCode <= 67) {
-                                this.weather.icon = '🌧️';
-                            } else if (weatherCode <= 77) {
-                                this.weather.icon = '❄️';
-                            } else {
-                                this.weather.icon = '⛈️';
-                            }
-
-                            this.weather.description = 'Pessac';
-                        } catch (err) {
-                            console.error('Erreur météo:', err);
-                        }
+                            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=44.8061&longitude=-0.6306¤t_weather=true&timezone=Europe/Paris');
+                            const data = await res.json();
+                            this.weather.temperature = Math.round(data.current_weather.temperature);
+                            const code = data.current_weather.weathercode; if (code === 0) { this.weather.icon = '☀️'; } else if (code <= 3) { this.weather.icon = '⛅'; } else if (code <= 48) { this.weather.icon = '☁️'; } else if (code <= 67) { this.weather.icon = '🌧️'; } else if (code <= 77) { this.weather.icon = '❄️'; } else { this.weather.icon = '⛈️'; } this.weather.description = 'Pessac';
+                        } catch (e) { console.error('Erreur météo:', e); }
                     }
                 }
-            };
+            }
         }
 
         // ========== APPLICATION PRINCIPALE ==========
         function infodropApp() {
             const ORIENTATION_DATA = {
-                'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000', percentage: 2 },
-                'gauche': { class: 'bg-[#D42A2A] text-white', color: '#D42A2A', percentage: 16 },
-                'centre-gauche': { class: 'bg-[#AA5555] text-white', color: '#AA5555', percentage: 22 },
-                'centre': { class: 'bg-[#808080] text-white', color: '#808080', percentage: 16 },
-                'centre-droit': { class: 'bg-[#5555AA] text-white', color: '#5555AA', percentage: 14 },
-                'droite': { class: 'bg-[#2A2AD4] text-white', color: '#2A2AD4', percentage: 4 },
-                'extrême-droite': { class: 'bg-[#0000FF] text-white', color: '#0000FF', percentage: 8 },
-                'gouvernement': { class: 'bg-blue-800 text-blue-100', color: '#1e40af', percentage: 5 },
-                'neutre': { class: 'bg-green-700 text-green-100', color: '#16a34a', percentage: 12 }
+                'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000' }, 'gauche': { class: 'bg-[#D42A2A] text-white', color: '#D42A2A' }, 'centre-gauche': { class: 'bg-[#AA5555] text-white', color: '#AA5555' }, 'centre': { class: 'bg-[#808080] text-white', color: '#808080' }, 'centre-droit': { class: 'bg-[#5555AA] text-white', color: '#5555AA' }, 'droite': { class: 'bg-[#2A2AD4] text-white', color: '#2A2AD4' }, 'extrême-droite': { class: 'bg-[#0000FF] text-white', color: '#0000FF' }, 'gouvernement': { class: 'bg-blue-800 text-blue-100', color: '#1e40af' }, 'neutre': { class: 'bg-green-700 text-green-100', color: '#16a34a' }
             };
-
             return {
-                // État de session
-                sessionLoaded: false,
-                user: null,
-                email: '',
-                inviteCode: '',
-                loading: false,
-                message: '',
-                messageType: '',
-
-                // Données principales
-                newsList: [],
-                loadingNews: true,
-                updateInterval: null,
-
-                // Admin
-                isAdmin: false,
-                showAdminPanel: false,
-                addingNews: false,
-                newNews: { resume: '', source: '', url: '', orientation: '', tagsText: '' },
-                stats: { total_articles: 0, total_sources: 0 },
-
-                // Temps réel
-                connectedUsers: 0,
-                realtimeChannel: null,
-
-                // Modals et panels
-                showEditPanel: false,
-                editingNews: { id: null, resume: '', source: '', url: '', orientation: '', tags: [], tagsText: '' },
-                showAboutPanel: false,
-
-                // Filtres
-                showFilters: false,
-                activeFilter: 'all',
-                allTags: [],
-                allOrientations: [],
-                allOtherTags: [],
-                activeOrientations: [],
-
-                // NOUVEAU BLOC : Données du système d'invitation
-                userInviteData: {
-                    code: null,         // Le code que l'utilisateur peut partager
-                    is_used: false,     // Si son code a été utilisé
-                    parrainEmail: null, // L'email de son parrain
-                    filleulEmail: null  // L'email de son filleul
-                },
-                lastGeneratedCode: null, // Pour afficher le dernier code généré par l'admin
-
-                // Nouvelles fonctionnalités
-                readArticles: {},
-                totalReadCount: 0,
-                diversityScore: null,
-                readOrientations: [],
-                showDiversityChecker: true,
-                diversityData: JSON.parse(localStorage.getItem('infodrop_diversity') || '{}'),
-
-                // Getters
-                get filteredNews() {
-                    if (this.activeFilter === 'all') return this.newsList;
-                    return this.newsList.filter(news =>
-                        (news.tags && news.tags.includes(this.activeFilter)) ||
-                        news.orientation === this.activeFilter
-                    );
-                },
-
-                getOrientationColor(orientation) {
-                    return ORIENTATION_DATA[orientation]?.color || '#808080';
-                },
-
-                getOrientationClass(orientation) {
-                    return ORIENTATION_DATA[orientation]?.class || 'bg-gray-700 text-gray-200';
-                },
+                sessionLoaded: false, user: null, email: '', loading: false, message: '', messageType: '', inviteCode: '',
+                newsList: [], loadingNews: true, updateInterval: null,
+                isAdmin: false, showAdminPanel: false, addingNews: false, newNews: { resume: '', source: '', url: '', orientation: '', tagsText: '' }, stats: { total_articles: 0, total_sources: 0 }, lastGeneratedCode: null,
+                userInviteData: { code: null, is_used: false, parrainEmail: null, filleulEmail: null },
+                connectedUsers: 0, realtimeChannel: null, showEditPanel: false, editingNews: { id: null, resume: '', source: '', url: '', orientation: '', tags: [], tagsText: '' }, showAboutPanel: false, showFilters: false, activeFilter: 'all', allTags: [], allOrientations: [], allOtherTags: [], activeOrientations: [],
+                readArticles: {}, totalReadCount: 0, diversityScore: null, readOrientations: [], showDiversityChecker: true, diversityData: JSON.parse(localStorage.getItem('infodrop_diversity') || '{}'),
+                get filteredNews() { if (this.activeFilter === 'all') return this.newsList; return this.newsList.filter(news => (news.tags && news.tags.includes(this.activeFilter)) || news.orientation === this.activeFilter); },
+                getOrientationColor(o) { return ORIENTATION_DATA[o]?.color || '#808080'; },
+                getOrientationClass(o) { return ORIENTATION_DATA[o]?.class || 'bg-gray-700 text-gray-200'; },
 
                 async init() {
-                    // 1. D'abord initialiser Supabase de manière sécurisée
                     console.log('🚀 Initialisation de l\'application...');
                     const supabaseReady = await initializeSupabase();
+                    if (!supabaseReady) { this.sessionLoaded = true; return; }
 
-                    // Vérifier que Supabase est bien initialisé
-                    if (!supabaseReady || !supabase) {
-                        console.error('❌ Supabase non initialisé');
-                        this.sessionLoaded = true; // Pour arrêter le loader
-                        return;
-                    }
-
-                    // 2. Nettoyer les données de diversité si plus de 24h
-                    this.cleanOldDiversityData();
-
-                    // 3. Effet d'ombre sur scroll
-                    window.addEventListener('scroll', () => {
-                        const header = document.getElementById('stickyHeader');
-                        if (header) {
-                            if (window.scrollY > 10) {
-                                header.classList.add('shadow-xl');
-                            } else {
-                                header.classList.remove('shadow-xl');
-                            }
-                        }
-                    });
-
-                    // 4. Gestion des sessions Supabase
-                    supabase.auth.onAuthStateChange((_event, session) => this.handleSession(session));
-                    const { data: { session } } = await supabase.auth.getSession();
-                    this.handleSession(session);
-                    this.sessionLoaded = true;
-                },
-
-                // Gestion de session
-                handleSession(session) {
-                    if (session?.user) {
-                        if (!this.user) {
-                            this.user = session.user;
+                    supabase.auth.onAuthStateChange((event, session) => {
+                        this.user = session?.user || null;
+                        this.sessionLoaded = true;
+                        if (event === 'SIGNED_IN') {
+                            console.log('✅ Événement SIGNED_IN détecté ! Chargement des données...');
+                            this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
                             const userReadData = localStorage.getItem('infodrop_read_' + this.user.id) || '{}';
                             this.readArticles = JSON.parse(userReadData);
-                            this.isAdmin = ADMIN_EMAILS.includes(session.user.email);
-                            this.loadData(true);
-                            this.startAutoUpdate();
-                            this.setupRealtime(session);
-                            this.updateTotalReadCount();
-                            this.calculateDiversityScore();
-                            this.loadUserInviteData(); // NOUVEAU: On charge les données d'invitation
+                            this.loadData(true); this.startAutoUpdate(); this.setupRealtime(session); this.updateTotalReadCount(); this.calculateDiversityScore(); this.loadUserInviteData();
                         }
-                    } else {
-                        this.user = null;
-                        this.stopAutoUpdate();
-                        if (this.realtimeChannel) {
-                            supabase.removeChannel(this.realtimeChannel);
-                            this.realtimeChannel = null;
-                        }
-                    }
-                },
-
-                setupRealtime(session) {
-                    this.realtimeChannel = supabase.channel('infodrop-online-users', {
-                        config: { presence: { key: session.user.id } }
-                    });
-                    this.realtimeChannel.on('presence', { event: 'sync' }, () => {
-                        this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
-                    }).subscribe(async (status) => {
-                        if (status === 'SUBSCRIBED') {
-                            await this.realtimeChannel.track({ online_at: new Date().toISOString() });
+                        if (event === 'SIGNED_OUT') {
+                            this.stopAutoUpdate();
+                            if (this.realtimeChannel) { supabase.removeChannel(this.realtimeChannel); this.realtimeChannel = null; }
+                            this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null };
                         }
                     });
-                },
-
-                // CRUD Operations
-                openEditPanel(news) {
-                    this.editingNews = {
-                        ...JSON.parse(JSON.stringify(news)),
-                        tagsText: (news.tags || []).join(', ')
-                    };
-                    this.showEditPanel = true;
-                },
-
-                async updateNews() {
-                    const { id, resume, source, url, orientation, tagsText } = this.editingNews;
-                    const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
-
-                    try {
-                        const { error } = await supabase.from('actu')
-                            .update({ resume, source, url, orientation, tags })
-                            .eq('id', id);
-
-                        if (error) throw error;
-
-                        const index = this.newsList.findIndex(news => news.id === id);
-
-                        if (index !== -1) {
-
-                            this.newsList[index].resume = resume;
-                            this.newsList[index].source = source;
-                            this.newsList[index].url = url;
-                            this.newsList[index].orientation = orientation;
-                            this.newsList[index].tags = tags;
-                        }
-
-                        this.showEditPanel = false;
-                        this.updateTagsList();
-
-                    } catch (error) {
-                        console.error("Erreur de mise à jour:", error);
-                        alert("La mise à jour a échoué.");
-                    }
-                },
-
-                async deleteNews(newsId) {
-                    if (!confirm("Voulez-vous vraiment supprimer cette actualité ?")) return;
-                    this.newsList = this.newsList.filter(n => n.id !== newsId);
-                    try {
-                        const { error } = await supabase.from('actu').delete().eq('id', newsId);
-                        if (error) { throw error; }
-                        if (this.isAdmin) { this.loadStats(); }
-                    } catch (error) {
-                        console.error("Erreur de suppression:", error);
-                        alert("La suppression a échoué.");
-                        this.loadNews();
-                    }
-                },
-
-                async addManualNews() {
-                    this.addingNews = true;
-                    try {
-                        // Préparer les tags avec le tag spécial INFODROP en premier
-                        let tags = ['🧨INFODROP']; // Tag spécial toujours présent
-
-                        // Ajouter les autres tags s'il y en a
-                        if (this.newNews.tagsText) {
-                            const additionalTags = this.newNews.tagsText
-                                .split(',')
-                                .map(t => t.trim())
-                                .filter(Boolean)
-                                .filter(tag => tag !== '🧨INFODROP'); // Éviter les doublons
-
-                            tags = [...tags, ...additionalTags];
-                        }
-
-                        const { error } = await supabase.from('actu').insert({
-                            resume: this.newNews.resume,
-                            source: this.newNews.source,
-                            url: this.newNews.url,
-                            orientation: this.newNews.orientation,
-                            heure: new Date().toISOString(),
-                            tags,
-                            added_by: this.user.email
-                        });
-
-                        if (error) throw error;
-
-                        // Reset du formulaire
-                        this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
-                        this.showAdminPanel = false;
-
-                        // Recharger les données
-                        this.loadData();
-
-                        console.log('✅ Actualité INFODROP ajoutée avec le tag spécial');
-
-                    } catch (error) {
-                        console.error('Erreur ajout:', error);
-                        alert('Erreur lors de l\'ajout.');
-                    } finally {
-                        this.addingNews = false;
-                    }
-                },
-
-                // Chargement des données - NOUVELLE VERSION
-                async loadData(isInitialLoad = false) {
-                    if (isInitialLoad) {
-                        this.loadingNews = true;
-                    }
-
-                    await Promise.all([
-                        this.loadNews(),
-                        this.isAdmin ? this.loadStats() : Promise.resolve()
-                    ]);
-
-                    if (isInitialLoad) {
-                        this.loadingNews = false;
-                    }
-                },
-
-                // Smart refresh - NOUVELLE VERSION AMÉLIORÉE
-                async loadNews() {
-                    try {
-                        const twentyFourHoursAgo = new Date();
-                        twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
-
-                        const { data: newData, error } = await supabase
-                            .from('actu')
-                            .select('*')
-                            .gte('heure', twentyFourHoursAgo.toISOString())
-                            .order('heure', { ascending: false });
-
-                        if (error) throw error;
-                        if (!newData || newData.length === 0) {
-                            console.log('✓ Pas de nouveau contenu depuis le serveur.');
-                            return;
-                        }
-
-                        const existingIds = new Set(this.newsList.map(news => news.id));
-
-                        const newArticles = newData.filter(news => !existingIds.has(news.id));
-
-                        if (newArticles.length > 0) {
-                            console.log(`📰 ${newArticles.length} nouvelle(s) actualité(s) ajoutée(s).`);
-                            this.newsList = [...newArticles, ...this.newsList];
-                            this.updateTagsList();
-                        } else {
-                            console.log('✓ Pas de nouveau contenu à ajouter.');
-                        }
-
-                        this.updateTotalReadCount();
-
-                    } catch (error) {
-                        console.error('Erreur chargement actus:', error);
-                    }
-                },
-
-                updateTagsList() {
-                    // Toutes les orientations politiques + INFODROP (toujours affichées)
-                    const allPoliticalOrientations = [
-                        'extrême-gauche',
-                        'gauche',
-                        'centre-gauche',
-                        'centre',
-                        'centre-droit',
-                        'droite',
-                        'extrême-droite',
-                        'gouvernement',
-                        'neutre',
-                        '🧨INFODROP' // Ajouté à la fin des orientations
-                    ];
-
-                    // Compter les occurrences
-                    const activeOrientationSet = new Set();
-                    const tagCounts = {};
-
-                    this.newsList.forEach(news => {
-                        if (news.orientation) activeOrientationSet.add(news.orientation);
-                        if (news.tags && Array.isArray(news.tags)) {
-                            news.tags.forEach(tag => {
-                                tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-                                // Si c'est INFODROP, on le traite comme une orientation active
-                                if (tag === '🧨INFODROP') {
-                                    activeOrientationSet.add('🧨INFODROP');
-                                }
-                            });
-                        }
-                    });
-
-                    // TOUJOURS afficher toutes les orientations (y compris INFODROP)
-                    this.allOrientations = allPoliticalOrientations;
-                    this.activeOrientations = Array.from(activeOrientationSet);
-
-                    // Autres tags (catégories normales)
-                    let otherTags = Object.entries(tagCounts)
-                        .filter(([tag, count]) => count >= 1)
-                        .filter(([tag]) => !allPoliticalOrientations.includes(tag))
-                        .sort((a, b) => b[1] - a[1])
-                        .slice(0, 50)
-                        .map(([tag]) => tag);
-
-                    this.allOtherTags = otherTags;
-                    this.allTags = [...this.allOrientations, ...this.allOtherTags];
-
-                    console.log('📊 Tags mis à jour. INFODROP dans orientations:', this.activeOrientations.includes('🧨INFODROP'));
-                },
-
-                // Ajouter cette nouvelle fonction pour vérifier si une orientation a des articles
-                hasArticlesForOrientation(orientation) {
-                    return this.activeOrientations.includes(orientation);
-                },
-
-                getEmptyFilterMessage() {
-                    // Si c'est le tag spécial INFODROP (maintenant dans les orientations)
-                    if (this.activeFilter === '🧨INFODROP') {
-                        return `Aucun article "🧨INFODROP" publié ces dernières 24h.`;
-                    }
-
-                    // Si c'est une orientation politique
-                    if (this.allOrientations.includes(this.activeFilter)) {
-                        return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié d'article ces dernières 24h.`;
-                    }
-
-                    // Si c'est un autre tag/catégorie
-                    return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`;
-                },
-
-                async loadStats() {
-                    try {
-                        const { data, error } = await supabase.from('stats_today').select('*').single();
-                        if (error) throw error;
-                        this.stats = data || { total_articles: 0, total_sources: 0 };
-                    } catch (error) {
-                        console.error('Erreur chargement stats:', error);
-                    }
-                },
-
-                // Gestion des lectures
-                markAsRead(newsId) {
-                    const timestamp = new Date().toISOString();
-
-                    if (!this.readArticles[newsId]) {
-                        this.readArticles[newsId] = timestamp;
-                        localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
-                        this.updateTotalReadCount();
-
-                        // Ajouter aux données de diversité
-                        const article = this.newsList.find(n => n.id === newsId);
-                        if (article) {
-                            this.addToDiversityData(article);
-                        }
-
-                        // 100e article !
-                        if (this.totalReadCount === 100) {
-                            this.celebrate100Articles();
-                        }
-                    }
-                },
-
-                updateTotalReadCount() {
-                    this.totalReadCount = Object.keys(this.readArticles).length;
-                },
-
-                // Gestion de la diversité
-                cleanOldDiversityData() {
-                    const now = new Date().getTime();
-                    const twentyFourHours = 24 * 60 * 60 * 1000;
-
-                    // Nettoyer les lectures de plus de 24h
-                    Object.keys(this.diversityData).forEach(timestamp => {
-                        if (now - new Date(timestamp).getTime() > twentyFourHours) {
-                            delete this.diversityData[timestamp];
-                        }
-                    });
-
-                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
-                },
-
-                addToDiversityData(article) {
-                    const timestamp = new Date().toISOString();
-
-                    let orientationToStore = article.orientation;
-                    if (article.tags && article.tags.includes('🧨INFODROP')) {
-                        orientationToStore = '🧨INFODROP';
-                    }
-
-                    this.diversityData[timestamp] = {
-                        orientation: orientationToStore,
-                        source: article.source
-                    };
-                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
-                    this.calculateDiversityScore();
-                },
-
-                // NOUVELLE VERSION DE calculateDiversityScore
-                calculateDiversityScore() {
+                    window.addEventListener('scroll', () => { document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10); });
                     this.cleanOldDiversityData();
-
-                    const recentReads = Object.values(this.diversityData);
-
-                    if (recentReads.length === 0) {
-                        this.diversityScore = null;
-                        this.readOrientations = [];
-                        return;
-                    }
-
-                    const orientations = new Set();
-                    const sources = new Set();
-
-                    recentReads.forEach(read => {
-                        if (read.orientation) orientations.add(read.orientation);
-                        if (read.source) sources.add(read.source);
-                    });
-
-                    // Ordre logique du spectre politique
-                    const spectrumOrder = [
-                        'extrême-gauche',
-                        'gauche',
-                        'centre-gauche',
-                        'centre',
-                        'centre-droit',
-                        'droite',
-                        'extrême-droite',
-                        'gouvernement',
-                        'neutre',
-                        '🧨INFODROP'
-                    ];
-
-                    // Trier les orientations selon l'ordre du spectre
-                    this.readOrientations = Array.from(orientations).sort((a, b) => {
-                        return spectrumOrder.indexOf(a) - spectrumOrder.indexOf(b);
-                    });
-
-                    const maxOrientations = 10;
-                    const orientationScore = (orientations.size / maxOrientations) * 50;
-                    const sourceScore = Math.min((sources.size / 5) * 50, 50);
-
-                    this.diversityScore = Math.round(orientationScore + sourceScore);
-                    this.showDiversityChecker = this.diversityScore < 100;
                 },
 
-                getDiversityMessage() {
-                    if (this.diversityScore < 30) return "Bulle de filtre détectée";
-                    if (this.diversityScore < 70) return "Diversité correcte";
-                    return "Excellente diversité !";
-                },
-
-                // Confettis
-                celebrate100Articles() {
-                    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7', '#A29BFE'];
-                    const confettiContainer = document.createElement('div');
-                    confettiContainer.style.position = 'fixed';
-                    confettiContainer.style.top = '0';
-                    confettiContainer.style.left = '0';
-                    confettiContainer.style.width = '100%';
-                    confettiContainer.style.height = '100%';
-                    confettiContainer.style.pointerEvents = 'none';
-                    confettiContainer.style.zIndex = '9999';
-                    document.body.appendChild(confettiContainer);
-
-                    for (let i = 0; i < 50; i++) {
-                        const confetti = document.createElement('div');
-                        confetti.style.position = 'absolute';
-                        confetti.style.width = '10px';
-                        confetti.style.height = '10px';
-                        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                        confetti.style.left = Math.random() * 100 + '%';
-                        confetti.style.top = '-10px';
-                        confetti.style.opacity = Math.random() + 0.5;
-                        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-                        confetti.style.animation = `confetti-fall ${3 + Math.random() * 2}s linear forwards`;
-                        confettiContainer.appendChild(confetti);
-                    }
-
-                    const message = document.createElement('div');
-                    message.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
-                    message.innerHTML = `
-                        <h2 class="text-3xl font-bold mb-2">🎉 Félicitations ! 🎉</h2>
-                        <p class="text-lg">100 articles lus !</p>
-                        <p class="text-sm mt-2 opacity-90">Vous êtes un lecteur assidu</p>
-                    `;
-                    document.body.appendChild(message);
-
-                    setTimeout(() => {
-                        confettiContainer.remove();
-                        message.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-                        setTimeout(() => message.remove(), 500);
-                    }, 5000);
-                },
-
-                // Auth
                 async login() {
                     if (this.loading) return;
-                    this.loading = true;
-                    this.message = '';
-                    this.messageType = '';
-
+                    this.loading = true; this.message = ''; this.messageType = '';
                     try {
-                        // On appelle notre API pour savoir si l'email est déjà connu
-                        const checkRes = await fetch('/api/check-email', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ email: this.email })
-                        });
-
-                        if (!checkRes.ok) { // Gère les erreurs de l'API elle-même
-                            const err = await checkRes.json();
-                            throw new Error(err.error || 'Erreur de communication avec le serveur.');
-                        }
-
+                        const checkRes = await fetch('/api/check-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: this.email }) });
+                        if (!checkRes.ok) { const err = await checkRes.json(); throw new Error(err.error || 'Erreur de communication.'); }
                         const { exists } = await checkRes.json();
-
-                        // CAS 1 : Nouvel utilisateur
                         if (!exists) {
-                            if (!this.inviteCode) {
-                                throw new Error("Un code d'invitation est requis pour les nouveaux utilisateurs.");
-                            }
-                            // On valide le code d'invitation via notre API
-                            const validateRes = await fetch('/api/validate-invite', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ code: this.inviteCode, email: this.email })
-                            });
-
+                            if (!this.inviteCode) throw new Error("Code d'invitation requis pour les nouveaux utilisateurs.");
+                            const validateRes = await fetch('/api/validate-invite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: this.inviteCode, email: this.email }) });
                             const validationResult = await validateRes.json();
-                            if (!validationResult.success) {
-                                throw new Error(validationResult.error);
-                            }
+                            if (!validationResult.success) throw new Error(validationResult.error);
                         }
-
-                        // CAS 2 : Le code est valide OU l'utilisateur existait déjà
-                        // On peut envoyer le lien magique
-                        const { error: otpError } = await supabase.auth.signInWithOtp({
-                            email: this.email,
-                            options: { emailRedirectTo: window.location.origin }
-                        });
-
-                        if (otpError) {
-                            throw otpError;
-                        }
-
-                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
-                        this.messageType = 'success';
-
+                        const { error: otpError } = await supabase.auth.signInWithOtp({ email: this.email, options: { emailRedirectTo: window.location.origin } });
+                        if (otpError) throw otpError;
+                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.'; this.messageType = 'success';
                     } catch (error) {
-                        this.message = error.message || 'Une erreur est survenue.';
-                        this.messageType = 'error';
-                    } finally {
-                        this.loading = false;
-                    }
+                        this.message = error.message || 'Une erreur est survenue.'; this.messageType = 'error';
+                    } finally { this.loading = false; }
                 },
-                // VERSION CORRIGÉE AVEC ATTENTE DE SESSION
+
                 async loadUserInviteData() {
                     if (!this.user) return;
-
                     try {
-                        // LIGNE MAGIQUE : On s'assure d'avoir une session valide avant de continuer.
-                        const { data: { session } } = await supabase.auth.getSession();
-                        if (!session) {
-                            console.log("Pas de session active, impossible de charger les données d'invitation.");
-                            return;
-                        }
+                        const { data: ownCode, error: ownCodeError } = await supabase.from('invitation_codes').select('*').eq('owner_email', this.user.email).maybeSingle();
+                        if (ownCodeError) throw ownCodeError;
+                        this.userInviteData.code = ownCode?.code || null;
+                        this.userInviteData.is_used = ownCode?.is_used || false;
+                        if (ownCode?.is_used && ownCode.used_by_email) { this.userInviteData.filleulEmail = ownCode.used_by_email.replace(/(?<=.).*?(?=@)/, '***'); } else { this.userInviteData.filleulEmail = null; }
 
-                        // Le reste du code est le même, mais il ne s'exécutera que si la session est confirmée.
-                        this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null };
-
-                        const { data: ownCode } = await supabase
-                            .from('invitation_codes')
-                            .select('*')
-                            .eq('owner_email', this.user.email)
-                            .single();
-
-                        if (ownCode) {
-                            this.userInviteData.code = ownCode.code;
-                            this.userInviteData.is_used = ownCode.is_used;
-                            if (ownCode.is_used && ownCode.used_by_email) {
-                                this.userInviteData.filleulEmail = ownCode.used_by_email.replace(/(?<=.).*?(?=@)/, '***');
-                            }
-                        }
-
-                        const { data: usedCode } = await supabase
-                            .from('invitation_codes')
-                            .select('owner_email')
-                            .eq('used_by_email', this.user.email)
-                            .single();
-
-                        if (usedCode) {
-                            this.userInviteData.parrainEmail = usedCode.owner_email.replace(/(?<=.).*?(?=@)/, '***');
-                        }
-                    } catch (error) {
-                        // On ignore les erreurs "PGRST116" qui sont normales (quand aucune ligne n'est trouvée)
-                        if (error.code !== 'PGRST116') {
-                            console.error("Erreur lors du chargement des données d'invitation:", error);
-                        }
-                    }
+                        const { data: usedCode, error: usedCodeError } = await supabase.from('invitation_codes').select('owner_email').eq('used_by_email', this.user.email).maybeSingle();
+                        if (usedCodeError) throw usedCodeError;
+                        if (usedCode) { this.userInviteData.parrainEmail = usedCode.owner_email.replace(/(?<=.).*?(?=@)/, '***'); } else { this.userInviteData.parrainEmail = null; }
+                    } catch (error) { console.error("Erreur chargement données invitation:", error); }
                 },
 
-                // NOUVELLE FONCTION : Pour le bouton admin
                 async generateInviteCode() {
                     if (!this.isAdmin) return;
                     try {
-                        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-                        if (sessionError || !session) throw new Error("Session introuvable.");
-
-                        const token = session.access_token;
-                        const res = await fetch('/api/generate-invite', {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
-                            }
-                        });
-                        const data = await res.json();
-                        if (!data.success) throw new Error(data.error);
-
-                        this.lastGeneratedCode = data.code;
-                        navigator.clipboard.writeText(data.code);
-
-                    } catch (error) {
-                        alert('Erreur: ' + error.message);
-                        this.lastGeneratedCode = null;
-                    }
+                        const { data: { session } } = await supabase.auth.getSession(); if (!session) throw new Error("Session introuvable.");
+                        const res = await fetch('/api/generate-invite', { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}` } });
+                        const data = await res.json(); if (!data.success) throw new Error(data.error);
+                        this.lastGeneratedCode = data.code; navigator.clipboard.writeText(data.code);
+                    } catch (error) { alert('Erreur: ' + error.message); }
                 },
 
-                async logout() {
-                    if (this.realtimeChannel) {
-                        await this.realtimeChannel.untrack();
-                    }
-                    await supabase.auth.signOut();
+                setupRealtime(session) {
+                    this.realtimeChannel = supabase.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } });
+                    this.realtimeChannel.on('presence', { event: 'sync' }, () => { this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length; }).subscribe(async (status) => { if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); } });
                 },
-
-                // Auto-update
-                startAutoUpdate() {
-                    if (this.updateInterval) clearInterval(this.updateInterval);
-                    this.updateInterval = setInterval(() => this.loadData(), 30000);
-                },
-
-                stopAutoUpdate() {
-                    if (this.updateInterval) clearInterval(this.updateInterval);
-                },
-
-                // Utils
-                formatTime(timestamp) {
-                    return new Date(timestamp).toLocaleTimeString('fr-FR', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                }
+                openEditPanel(news) { this.editingNews = { ...JSON.parse(JSON.stringify(news)), tagsText: (news.tags || []).join(', ') }; this.showEditPanel = true; },
+                async updateNews() { const { id, resume, source, url, orientation, tagsText } = this.editingNews; const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : []; try { await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id); const index = this.newsList.findIndex(n => n.id === id); if (index !== -1) { this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; } this.showEditPanel = false; this.updateTagsList(); } catch (e) { alert("La mise à jour a échoué."); } },
+                async deleteNews(id) { if (!confirm("Supprimer ?")) return; this.newsList = this.newsList.filter(n => n.id !== id); try { await supabase.from('actu').delete().eq('id', id); if (this.isAdmin) this.loadStats(); } catch (e) { alert("La suppression a échoué."); this.loadNews(); } },
+                async addManualNews() { this.addingNews = true; try { let tags = ['🧨INFODROP']; if (this.newNews.tagsText) { tags.push(...this.newNews.tagsText.split(',').map(t => t.trim()).filter(Boolean).filter(t => t !== '🧨INFODROP')); } await supabase.from('actu').insert({ ...this.newNews, heure: new Date().toISOString(), tags, added_by: this.user.email }); this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' }; this.showAdminPanel = false; this.loadData(); } catch (e) { alert('Erreur.'); } finally { this.addingNews = false; } },
+                async loadData(isInitial = false) { if (isInitial) this.loadingNews = true; await Promise.all([this.loadNews(), this.isAdmin ? this.loadStats() : null]); if (isInitial) this.loadingNews = false; },
+                async loadNews() { try { const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(); const { data } = await supabase.from('actu').select('*').gte('heure', twentyFourHoursAgo).order('heure', { ascending: false }); if (!data) return; const existingIds = new Set(this.newsList.map(n => n.id)); const newArticles = data.filter(n => !existingIds.has(n.id)); if (newArticles.length > 0) { this.newsList = [...newArticles, ...this.newsList]; this.updateTagsList(); } } catch (e) { console.error('Erreur actus:', e); } },
+                updateTagsList() { const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP']; const active = new Set(); const counts = {}; this.newsList.forEach(n => { if (n.orientation) active.add(n.orientation); if (n.tags) { n.tags.forEach(t => { counts[t] = (counts[t] || 0) + 1; if (t === '🧨INFODROP') active.add(t); }); } }); this.allOrientations = pol; this.activeOrientations = [...active]; this.allOtherTags = Object.entries(counts).filter(([t]) => !pol.includes(t)).sort((a, b) => b[1] - a[1]).slice(0, 50).map(([t]) => t); this.allTags = [...pol, ...this.allOtherTags]; },
+                hasArticlesForOrientation(o) { return this.activeOrientations.includes(o); },
+                getEmptyFilterMessage() { if (this.allOrientations.includes(this.activeFilter)) return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`; return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`; },
+                async loadStats() { try { const { data } = await supabase.from('stats_today').select('*').single(); this.stats = data || { total_articles: 0, total_sources: 0 }; } catch (e) { console.error('Erreur stats:', e); } },
+                markAsRead(id) { if (!this.readArticles[id]) { this.readArticles[id] = new Date().toISOString(); localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles)); this.updateTotalReadCount(); const article = this.newsList.find(n => n.id === id); if (article) this.addToDiversityData(article); if (this.totalReadCount === 100) this.celebrate100Articles(); } },
+                updateTotalReadCount() { this.totalReadCount = Object.keys(this.readArticles).length; },
+                cleanOldDiversityData() { const expiry = Date.now() - 24 * 60 * 60 * 1000; Object.keys(this.diversityData).forEach(t => { if (new Date(t).getTime() < expiry) delete this.diversityData[t]; }); localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); },
+                addToDiversityData(article) { let o = article.orientation || 'neutre'; if (article.tags?.includes('🧨INFODROP')) o = '🧨INFODROP'; this.diversityData[new Date().toISOString()] = { orientation: o, source: article.source }; localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData)); this.calculateDiversityScore(); },
+                calculateDiversityScore() { this.cleanOldDiversityData(); const reads = Object.values(this.diversityData); if (reads.length === 0) { this.diversityScore = null; this.readOrientations = []; return; } const oSet = new Set(reads.map(r => r.orientation)); const sSet = new Set(reads.map(r => r.source)); const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP']; this.readOrientations = [...oSet].sort((a, b) => spec.indexOf(a) - spec.indexOf(b)); this.diversityScore = Math.round(((oSet.size / 10) * 50) + (Math.min((sSet.size / 5) * 50, 50))); this.showDiversityChecker = this.diversityScore < 100; },
+                getDiversityMessage() { if (this.diversityScore < 30) return "Bulle de filtre détectée"; if (this.diversityScore < 70) return "Diversité correcte"; return "Excellente diversité !"; },
+                celebrate100Articles() { const cont = document.createElement('div'); cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;'; document.body.appendChild(cont); const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7']; for (let i = 0; i < 50; i++) { const conf = document.createElement('div'); conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;`; cont.appendChild(conf); } const msg = document.createElement('div'); msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce'; msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">🎉 Félicitations ! 🎉</h2><p class="text-lg">100 articles lus !</p>`; document.body.appendChild(msg); setTimeout(() => { cont.remove(); msg.classList.add('opacity-0', 'transition-opacity', 'duration-500'); setTimeout(() => msg.remove(), 500); }, 5000); },
+                async logout() { if (this.realtimeChannel) await this.realtimeChannel.untrack(); await supabase.auth.signOut(); },
+                startAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); this.updateInterval = setInterval(() => this.loadData(), 30000); },
+                stopAutoUpdate() { if (this.updateInterval) clearInterval(this.updateInterval); },
+                formatTime(t) { return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); }
             }
         }
     </script>
