@@ -693,7 +693,7 @@
             (activeFilter === orientation ? getOrientationClass(orientation) : 
              hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 
              'bg-gray-800 text-gray-500 border border-gray-600')]"
-                                        class="px-3 py-1 rounded-full text-sm font-semibold transition relative"
+                                        class="px-2 py-0.5 rounded-full text-xs font-medium transition relative"
                                         :class="orientation === '🧨INFODROP' ? 'font-black' : 'capitalize'"
                                         :title="hasArticlesForOrientation(orientation) ? '' : 'Aucun article ces dernières 24h'">
                                         <span x-text="getOrientationDisplayName(orientation)"></span>
@@ -712,7 +712,7 @@
                                 <template x-for="tag in allOtherTags" :key="tag">
                                     <button @click="activeFilter = tag"
                                         :class="{ 'bg-blue-600 text-white': activeFilter === tag, 'bg-gray-700 text-gray-300': activeFilter !== tag }"
-                                        class="px-3 py-1 rounded-full text-sm font-semibold transition capitalize"
+                                        class="px-2 py-0.5 rounded-full text-xs font-medium transition capitalize"
                                         x-text="tag"></button>
                                 </template>
                             </div>
