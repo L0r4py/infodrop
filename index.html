@@ -889,7 +889,7 @@
                 class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 overflow-y-auto"
                 style="display: none;">
                 <div @click.away="showAboutPanel = false"
-                    class="bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-700">
+                    class="bg-gray-800 rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-gray-700">
 
                     <!-- Header -->
                     <div class="p-6 border-b border-gray-700">
@@ -900,104 +900,395 @@
                     <!-- Contenu -->
                     <div class="p-6 space-y-6">
 
-                        <!-- === CARTE DÉCOUVREZ INFODROP === -->
+                        <!-- === CARTE LE FLUX 24H === -->
                         <div class="bg-gray-900/50 border border-gray-600 rounded-lg p-5">
-                            <div class="text-center mb-6">
+                            <div class="text-center mb-4">
                                 <h4 class="text-lg font-bold text-white mb-2">
-                                    <span class="text-xl mr-2">ℹ️</span>Découvrez INFODROP
+                                    <span class="text-xl mr-2">📰</span>Le Flux 24h
                                 </h4>
-                                <p class="text-gray-400">L'alternative intelligente au bruit médiatique</p>
+                                <p class="text-gray-400">Agrégation pure et minimaliste</p>
                             </div>
 
-                            <div class="space-y-4">
-                                <!-- Le Flux 24h -->
-                                <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-4 text-center">
-                                    <div class="text-2xl mb-2">📰</div>
-                                    <div class="font-semibold text-white mb-2">Le Flux 24h</div>
-                                    <div class="text-sm text-gray-300 leading-relaxed">
-                                        Seuls les articles des <strong class="text-white">dernières 24h</strong> sont
-                                        affichés. Un fil toujours frais, sans pollution du passé.
+                            <div class="space-y-3 text-sm text-gray-300">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-blue-400">📡</span>
+                                    <span><strong class="text-white">Flux RSS publics & privés</strong> des médias
+                                        francophones</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-green-400">🔗</span>
+                                    <span><strong class="text-white">Redirection directe</strong> vers l'article
+                                        original du média</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-yellow-400">📝</span>
+                                    <span><strong class="text-white">Titres et liens uniquement</strong> - Pas de
+                                        contenu dupliqué</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-purple-400">⏰</span>
+                                    <span><strong class="text-white">24h glissantes</strong> - Toujours frais, jamais
+                                        périmé</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-red-400">🌍</span>
+                                    <span><strong class="text-white">Sources francophones</strong> - France, Belgique,
+                                        Suisse, Canada, Afrique</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 bg-blue-900/20 border border-blue-700/30 rounded-lg p-3">
+                                <p class="text-blue-300 text-center text-sm">
+                                    🏠 <strong>Accès :</strong>
+                                    <a href="/index.html"
+                                        class="text-blue-400 hover:text-blue-300 underline font-medium">Page
+                                        d'accueil</a>
+                                    (vous y êtes actuellement)
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- === CARTE INFODROP 360° === -->
+                        <div class="bg-gray-900/50 border border-gray-600 rounded-lg p-5">
+                            <div class="text-center mb-4">
+                                <h4 class="text-lg font-bold text-white mb-2">
+                                    <span class="text-xl mr-2">🌍</span>INFODROP 360°
+                                </h4>
+                                <p class="text-gray-400">Multi-perspectives en temps réel</p>
+                            </div>
+
+                            <!-- Concept -->
+                            <div class="mb-4">
+                                <h5 class="font-semibold text-blue-400 mb-3 flex items-center gap-2">
+                                    <span>🎯</span> Le concept
+                                </h5>
+                                <div class="space-y-2 text-sm text-gray-300 ml-6">
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-green-400">•</span>
+                                        <span><strong class="text-white">Un sujet = Toutes les voix</strong>
+                                            médiatiques</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-green-400">•</span>
+                                        <span><strong class="text-white">Fin des bulles de filtre</strong>
+                                            informationnelles</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-green-400">•</span>
+                                        <span><strong class="text-white">Vision complète</strong> d'un événement</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-green-400">•</span>
+                                        <span><strong class="text-white">Identification claire des biais</strong>
+                                            médiatiques</span>
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- INFODROP 360° -->
-                                <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-4 text-center">
-                                    <div class="text-2xl mb-2">🌍</div>
-                                    <div class="font-semibold text-blue-400 mb-2">INFODROP 360°</div>
-                                    <div class="text-sm text-gray-300 leading-relaxed">
-                                        Analyses multi-perspectives accessibles depuis le menu <strong
-                                            class="text-white">☰</strong> en haut à droite.
+                            <!-- Fonctionnalités -->
+                            <div class="mb-4">
+                                <h5 class="font-semibold text-blue-400 mb-3 flex items-center gap-2">
+                                    <span>⚡</span> Fonctionnalités clés
+                                </h5>
+                                <div class="space-y-2 text-sm text-gray-300 ml-6">
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-yellow-400">📊</span>
+                                        <span><strong class="text-white">Consensus meter :</strong> Accord entre médias
+                                            visualisé</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-red-400">🎯</span>
+                                        <span><strong class="text-white">Bias indicator :</strong> Position politique
+                                            claire</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-green-400">✅</span>
+                                        <span><strong class="text-white">Fact-checking intégré :</strong> Vérification
+                                            automatique</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-purple-400">🤖</span>
+                                        <span><strong class="text-white">Synthèse IA :</strong> Points communs vs
+                                            divergences</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-blue-400">⏰</span>
+                                        <span><strong class="text-white">Timeline de vérité :</strong> Évolution heure
+                                            par heure</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-orange-400">🏆</span>
+                                        <span><strong class="text-white">Score de fiabilité :</strong> Basé sur sources
+                                            et corrections</span>
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- Navigation -->
-                                <div class="bg-blue-900/20 border border-blue-700/30 rounded-lg p-3">
-                                    <p class="text-sm text-blue-300 text-center">
-                                        <strong>Navigation :</strong> Retournez au flux en cliquant sur le logo 📰
-                                        INFODROP
+                            <!-- Accès et Démo -->
+                            <div class="space-y-3">
+                                <div class="bg-purple-900/20 border border-purple-700/30 rounded-lg p-3">
+                                    <p class="text-purple-300 text-center text-sm">
+                                        🚀 <strong>Accès :</strong>
+                                        <a href="/infodrop360.html"
+                                            class="text-purple-400 hover:text-purple-300 underline font-medium">Page
+                                            Analyses
+                                            360°</a>
+                                        (Menu ☰ → Analyses 360°)
+                                    </p>
+                                </div>
+                                <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-lg p-3">
+                                    <p class="text-yellow-300 text-center text-sm">
+                                        🧪 <strong>Démo disponible :</strong>
+                                        <a href="/DEMO-crise-eau-mayotte.html"
+                                            class="text-yellow-400 hover:text-yellow-300 underline font-medium">Crise de
+                                            l'eau à
+                                            Mayotte</a>
+                                        <br><span class="text-xs">(Fonctionnalité en cours d'amélioration)</span>
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- === CARTE LES CODES DU CLUB === -->
-                        <div class="bg-gray-900/50 border border-gray-600 rounded-lg p-5">
-                            <div class="text-center mb-6">
+                        <!-- === CARTE VOTRE CODE DE PARRAINAGE === -->
+                        <div x-show="userInviteData.code" class="bg-gray-900/50 border border-gray-600 rounded-lg p-5">
+                            <div class="text-center mb-4">
                                 <h4 class="text-lg font-bold text-white mb-2">
-                                    <span class="text-xl mr-2">🏆</span>Les codes du Club
+                                    <span class="text-xl mr-2">🎁</span>Votre code de parrainage
                                 </h4>
-                                <p class="text-gray-400">Une communauté d'exception</p>
+                                <p class="text-gray-400">Partagez l'accès avec une personne de confiance</p>
                             </div>
 
+                            <!-- Code à partager -->
+                            <div class="text-center mb-4">
+                                <p class="text-gray-300 text-sm mb-3">Votre code personnel :</p>
+                                <div class="bg-gray-800/70 border border-gray-600 rounded-lg p-4 mb-4">
+                                    <div class="font-mono text-2xl font-bold text-white bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-3 rounded-lg cursor-pointer hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 border-2 border-white/20 inline-block"
+                                        @click="copyInviteMessage(userInviteData.code)"
+                                        title="Cliquer pour copier le message complet" x-text="userInviteData.code">
+                                    </div>
+                                    <div x-show="copied" class="text-green-400 font-semibold mt-2 animate-pulse">
+                                        ✅ Message complet copié dans le presse-papier !
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Instructions d'utilisation -->
                             <div class="space-y-4">
-                                <!-- Accès par invitation -->
-                                <div class="flex items-start gap-4">
-                                    <div class="bg-blue-600 rounded-lg p-2 flex-shrink-0">
-                                        <span class="text-white text-lg">🔑</span>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold text-white mb-1">Accès par invitation uniquement</div>
-                                        <div class="text-sm text-gray-300 leading-relaxed">
-                                            Chaque membre parraine personnellement un passionné d'info. Un code unique,
-                                            une entrée exclusive.
+                                <div class="bg-blue-900/20 border border-blue-700/30 rounded-lg p-4">
+                                    <h5 class="font-semibold text-blue-300 mb-3 flex items-center gap-2">
+                                        <span>📍</span> Où trouver votre code ?
+                                    </h5>
+                                    <div class="text-sm text-gray-300 space-y-2">
+                                        <div class="flex items-start gap-3">
+                                            <span class="text-blue-400">1️⃣</span>
+                                            <span><strong class="text-white">En haut de votre flux</strong> - Dans la
+                                                barre
+                                                utilisateur sous le header</span>
+                                        </div>
+                                        <div class="flex items-start gap-3">
+                                            <span class="text-blue-400">2️⃣</span>
+                                            <span><strong class="text-white">Dans cette section</strong> - Ici même dans
+                                                "À
+                                                propos"</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Zéro bruit -->
-                                <div class="flex items-start gap-4">
-                                    <div class="bg-blue-600 rounded-lg p-2 flex-shrink-0">
-                                        <span class="text-white text-lg">🛡️</span>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold text-white mb-1">Zéro bruit, zéro troll</div>
-                                        <div class="text-sm text-gray-300 leading-relaxed">
-                                            Codes nominatifs et uniques. Impossible pour les robots ou perturbateurs
-                                            d'infiltrer la communauté.
+                                <div class="bg-green-900/20 border border-green-700/30 rounded-lg p-4">
+                                    <h5 class="font-semibold text-green-300 mb-3 flex items-center gap-2">
+                                        <span>🚀</span> Comment partager ?
+                                    </h5>
+                                    <div class="text-sm text-gray-300 space-y-2">
+                                        <div class="flex items-start gap-3">
+                                            <span class="text-green-400">👆</span>
+                                            <span><strong class="text-white">Cliquez sur votre code</strong> ci-dessus
+                                                ou dans
+                                                le flux</span>
+                                        </div>
+                                        <div class="flex items-start gap-3">
+                                            <span class="text-green-400">📋</span>
+                                            <span><strong class="text-white">Un message complet est copié</strong> avec
+                                                le lien
+                                                + votre code</span>
+                                        </div>
+                                        <div class="flex items-start gap-3">
+                                            <span class="text-green-400">📱</span>
+                                            <span><strong class="text-white">Collez directement</strong> dans SMS,
+                                                email,
+                                                WhatsApp, Instagram, etc.</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Communauté confidentielle -->
-                                <div class="flex items-start gap-4">
-                                    <div class="bg-blue-600 rounded-lg p-2 flex-shrink-0">
-                                        <span class="text-white text-lg">🤝</span>
+                                <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-lg p-4">
+                                    <h5 class="font-semibold text-yellow-300 mb-2 flex items-center gap-2">
+                                        <span>💬</span> Aperçu du message copié
+                                    </h5>
+                                    <div
+                                        class="bg-gray-800/50 border border-gray-600 rounded p-3 text-xs text-gray-300 font-mono">
+                                        "Vous avez été invité à rejoindre le club privé INFODROP !<br>
+                                        Accédez à l'actu essentielle sur : https://infodrop.live<br>
+                                        Utilisez ce code lors de votre inscription : <span class="text-yellow-400"
+                                            x-text="userInviteData.code"></span>"
                                     </div>
-                                    <div>
-                                        <div class="font-semibold text-white mb-1">Communauté confidentielle</div>
-                                        <div class="text-sm text-gray-300 leading-relaxed">
-                                            Discrétion, bienveillance et curiosité sont nos valeurs. Qualité du regard,
-                                            pas des statistiques.
+                                </div>
+
+                                <div class="bg-red-900/20 border border-red-700/30 rounded-lg p-4">
+                                    <h5 class="font-semibold text-red-300 mb-2 flex items-center gap-2">
+                                        <span>⚠️</span> Important à retenir
+                                    </h5>
+                                    <div class="text-sm text-gray-300 space-y-1">
+                                        <div class="flex items-start gap-2">
+                                            <span class="text-red-400">•</span>
+                                            <span><strong class="text-white">Usage unique :</strong> Une fois utilisé,
+                                                ce code
+                                                ne peut plus servir</span>
+                                        </div>
+                                        <div class="flex items-start gap-2">
+                                            <span class="text-red-400">•</span>
+                                            <span><strong class="text-white">Choisissez bien :</strong> Privilégiez
+                                                quelqu'un de
+                                                passionné par l'actualité</span>
+                                        </div>
+                                        <div class="flex items-start gap-2">
+                                            <span class="text-red-400">•</span>
+                                            <span><strong class="text-white">Pas de limite de temps :</strong> Gardez-le
+                                                pour la
+                                                bonne occasion</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- === CARTE SYSTÈME DE COOPTATION === -->
+                        <div class="bg-gray-900/50 border border-gray-600 rounded-lg p-5">
+                            <div class="text-center mb-4">
+                                <h4 class="text-lg font-bold text-white mb-2">
+                                    <span class="text-xl mr-2">🤝</span>Système de cooptation
+                                </h4>
+                                <p class="text-gray-400">Fonctionnement du club privé</p>
+                            </div>
+
+                            <!-- Comment rejoindre -->
+                            <div class="mb-6">
+                                <h5 class="font-semibold text-green-400 mb-3 flex items-center gap-2">
+                                    <span>🚪</span> Comment rejoindre le club
+                                </h5>
+                                <div class="space-y-3 ml-6">
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="bg-green-600 rounded-lg px-2 py-1 text-white text-xs font-bold min-w-[24px] text-center">
+                                            1</div>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-white">Récupérez un code unique</strong> auprès d'un
+                                            membre déjà
+                                            inscrit
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="bg-green-600 rounded-lg px-2 py-1 text-white text-xs font-bold min-w-[24px] text-center">
+                                            2</div>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-white">Inscrivez-vous</strong> avec votre email + le
+                                            code à usage
+                                            unique
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="bg-green-600 rounded-lg px-2 py-1 text-white text-xs font-bold min-w-[24px] text-center">
+                                            3</div>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-white">Cliquez sur le lien</strong> dans l'email de
+                                            connexion reçu
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="bg-green-600 rounded-lg px-2 py-1 text-white text-xs font-bold min-w-[24px] text-center">
+                                            ✓</div>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-white">Vous êtes connecté !</strong> Plus besoin du
+                                            code, il
+                                            devient votre "clé d'entrée" définitive
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Message de bienvenue -->
-                            <div class="mt-6 bg-blue-900/30 border border-blue-600 rounded-lg p-4">
-                                <p class="text-blue-300 text-center font-medium">
-                                    Bienvenue dans un cercle d'exception où l'actualité se partage avec exigence
-                                </p>
+                            <!-- Comment inviter -->
+                            <div class="mb-6">
+                                <h5 class="font-semibold text-blue-400 mb-3 flex items-center gap-2">
+                                    <span>🎁</span> Comment inviter quelqu'un
+                                </h5>
+                                <div class="space-y-3 ml-6">
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="bg-blue-600 rounded-lg px-2 py-1 text-white text-xs font-bold min-w-[24px] text-center">
+                                            1</div>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-white">Vous recevez automatiquement</strong> votre code
+                                            personnel
+                                            de parrainage
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="bg-blue-600 rounded-lg px-2 py-1 text-white text-xs font-bold min-w-[24px] text-center">
+                                            2</div>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-white">Trouvez-le</strong> en haut de votre flux ou dans
+                                            cette
+                                            section
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="bg-blue-600 rounded-lg px-2 py-1 text-white text-xs font-bold min-w-[24px] text-center">
+                                            3</div>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-white">Cliquez dessus</strong> pour copier le message
+                                            complet avec
+                                            lien + code
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="bg-blue-600 rounded-lg px-2 py-1 text-white text-xs font-bold min-w-[24px] text-center">
+                                            4</div>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-white">Partagez</strong> par SMS, email, réseaux sociaux
+                                            avec la
+                                            personne choisie
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Effet domino -->
+                            <div class="bg-purple-900/20 border border-purple-700/30 rounded-lg p-4">
+                                <h6 class="font-semibold text-purple-300 mb-2 flex items-center gap-2">
+                                    <span>🔄</span> Effet domino
+                                </h6>
+                                <div class="text-sm text-gray-300 space-y-2">
+                                    <div class="flex items-start gap-2">
+                                        <span class="text-purple-400">•</span>
+                                        <span>Votre filleul aura <strong class="text-white">son propre code</strong> à
+                                            transmettre</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <span class="text-purple-400">•</span>
+                                        <span>La communauté grandit par <strong class="text-white">cooptation
+                                                qualitative</strong></span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <span class="text-purple-400">•</span>
+                                        <span>Chaque membre choisit <strong class="text-white">qui il souhaite
+                                                inviter</strong></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -1013,7 +1304,8 @@
                             <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-4">
                                 <div class="text-sm text-gray-300 leading-relaxed text-center">
                                     <strong class="text-white">Suggestions • Idées • Critiques • Demandes d'ajout de
-                                        sources RSS</strong>
+                                        sources
+                                        RSS</strong>
                                     <br><br>
                                     Contactez l'équipe à cette adresse :
                                     <br>
@@ -1022,12 +1314,6 @@
                                         l0r4.py@gmail.com
                                     </a>
                                 </div>
-                            </div>
-
-                            <div class="mt-4 bg-green-900/20 border border-green-700/30 rounded-lg p-3">
-                                <p class="text-sm text-green-300 text-center">
-                                    💡 Toutes les suggestions constructives sont les bienvenues !
-                                </p>
                             </div>
                         </div>
 
