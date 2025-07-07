@@ -1272,13 +1272,37 @@
                     this.cleanOldDiversityData();
 
                     document.addEventListener('visibilitychange', () => {
-                        if (!document.hidden && localStorage.getItem('infodrop_celebration_pending')) {
-                            setTimeout(() => this.showCelebration(), 1000);
+                        if (!document.hidden) {
+                            // Chercher toutes les célébrations en attente
+                            for (let i = 0; i < localStorage.length; i++) {
+                                const key = localStorage.key(i);
+                                if (key && key.startsWith('infodrop_celebration_pending_')) {
+                                    const count = parseInt(key.split('_')[3]);
+                                    setTimeout(() => this.showCelebration(count), 1000);
+                                    break; // Une seule célébration à la fois
+                                }
+                            }
+                            // Compatibilité avec l'ancien système (sans nombre)
+                            if (localStorage.getItem('infodrop_celebration_pending')) {
+                                setTimeout(() => this.showCelebration(100), 1000);
+                                localStorage.removeItem('infodrop_celebration_pending');
+                            }
                         }
                     });
 
+                    // Vérifier au chargement aussi
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key && key.startsWith('infodrop_celebration_pending_')) {
+                            const count = parseInt(key.split('_')[3]);
+                            setTimeout(() => this.showCelebration(count), 2000);
+                            break;
+                        }
+                    }
+                    // Compatibilité avec l'ancien système
                     if (localStorage.getItem('infodrop_celebration_pending')) {
-                        setTimeout(() => this.showCelebration(), 2000);
+                        setTimeout(() => this.showCelebration(100), 2000);
+                        localStorage.removeItem('infodrop_celebration_pending');
                     }
                 },
 
@@ -1784,7 +1808,9 @@
                         this.updateTotalReadCount();
                         const article = this.newsList.find(n => n.id === id);
                         if (article) this.addToDiversityData(article);
-                        if (this.totalReadCount === 100) this.celebrate100Articles();
+                        if (this.totalReadCount % 20 === 0 && this.totalReadCount > 0) {
+                            this.celebrateArticles(this.totalReadCount);
+                        }
                     }
                 },
 
@@ -1839,15 +1865,15 @@
                 },
 
                 // === CÉLÉBRATION DES 100 ARTICLES ===
-                celebrate100Articles() {
+                celebrateArticles(count) {
                     if (document.hidden) {
-                        localStorage.setItem('infodrop_celebration_pending', 'true');
+                        localStorage.setItem(`infodrop_celebration_pending_${count}`, 'true');
                         return;
                     }
-                    this.showCelebration();
+                    this.showCelebration(count);
                 },
 
-                showCelebration() {
+                showCelebration(count = 100) {
                     const cont = document.createElement('div');
                     cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:auto;z-index:9999;background:rgba(0,0,0,0.8);cursor:pointer;';
 
@@ -1855,9 +1881,15 @@
 
                     const msg = document.createElement('div');
                     msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
+
+                    // Messages différenciés selon le nombre
+                    const isSpecial = count === 100 || count % 100 === 0; // 100, 200, 300...
+                    const emoji = isSpecial ? '🏆' : '🎉';
+                    const title = isSpecial ? 'Incroyable !' : 'Bravo !';
+
                     msg.innerHTML = `
-        <h2 class="text-3xl font-bold mb-2">🎉 Félicitations ! 🎉</h2>
-        <p class="text-lg mb-2">100 articles lus !</p>
+        <h2 class="text-3xl font-bold mb-2">${emoji} ${title} ${emoji}</h2>
+        <p class="text-lg mb-2">${count} articles lus !</p>
         <p class="text-sm opacity-80">Cliquez pour continuer</p>
     `;
 
@@ -1867,7 +1899,7 @@
                     const closeAnimation = () => {
                         cont.remove();
                         this.stopConfettiLoop();
-                        localStorage.removeItem('infodrop_celebration_pending');
+                        localStorage.removeItem(`infodrop_celebration_pending_${count}`);
                     };
 
                     cont.addEventListener('click', closeAnimation);
