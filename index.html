@@ -1669,6 +1669,8 @@
                         }
 
                         this.lastGeneratedCode = result.code;
+
+                        // Copier le message complet dans le presse-papier
                         this.copyInviteMessage(result.code);
                         console.log('✅ Code copié dans le presse-papier');
 
@@ -1678,6 +1680,16 @@
                         console.error('❌ Erreur génération code:', error);
                         alert('Erreur lors de la génération du code: ' + error.message);
                     }
+                },
+
+                // === CHARGEMENT DES DONNÉES GÉNÉRALES ===
+                async loadData(isInitial = false) {
+                    if (isInitial) this.loadingNews = true;
+                    await Promise.all([
+                        this.loadNews(),
+                        this.isAdmin ? this.loadStats() : null
+                    ]);
+                    if (isInitial) this.loadingNews = false;
                 },
 
                 // === CHARGEMENT DES ACTUALITÉS ===
