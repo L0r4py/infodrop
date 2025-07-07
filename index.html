@@ -11,7 +11,8 @@
 
     <!-- === OPEN GRAPH ET RÉSEAUX SOCIAUX === -->
     <meta property="og:title" content="INFODROP - Le Club privé de l’actu centralisée " />
-    <meta property="og:description" content="Le Club privé de l’actu centralisée . Agrégation multi-sources en temps réel." />
+    <meta property="og:description"
+        content="Le Club privé de l’actu centralisée . Agrégation multi-sources en temps réel." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://infodrop.live/" />
     <meta property="og:image" content="https://infodrop.live/images/infodrop-share.png" />
@@ -19,7 +20,8 @@
     <!-- === TWITTER CARD === -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="INFODROP - Le Club privé de l’actu centralisée ">
-    <meta name="twitter:description" content="Le Club privé de l’actu centralisée . Agrégation multi-sources en temps réel.">
+    <meta name="twitter:description"
+        content="Le Club privé de l’actu centralisée . Agrégation multi-sources en temps réel.">
     <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png">
 
     <title>INFODROP - Le Club privé de l’actu centralisée</title>
@@ -488,8 +490,8 @@
                                 🎁 Votre code à partager :
                                 <span
                                     class="font-mono bg-gray-800 px-2 py-1 rounded cursor-pointer hover:bg-gray-700 transition"
-                                    @click="navigator.clipboard.writeText(userInviteData.code); copied = true; setTimeout(() => copied = false, 1500)"
-                                    title="Cliquez pour copier" x-text="userInviteData.code">
+                                    @click="copyInviteMessage(userInviteData.code)" title="Cliquez pour copier"
+                                    x-text="userInviteData.code">
                                 </span>
                                 <span x-show="copied" class="ml-2 text-green-400 font-semibold transition">Copié
                                     !</span>
@@ -1866,6 +1868,17 @@
                 // === FORMATAGE DE L'HEURE ===
                 formatTime(t) {
                     return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                },
+
+                // === COPIE DU MESSAGE D'INVITATION COMPLET ===
+                copyInviteMessage(code) {
+                    const message = `Vous avez été invité à rejoindre le club privé INFODROP !
+Accédez à l'actu essentielle sur : https://infodrop.live
+Utilisez ce code lors de votre inscription : ${code}`;
+
+                    navigator.clipboard.writeText(message);
+                    this.copied = true;
+                    setTimeout(() => this.copied = false, 1500);
                 }
             };
         }
