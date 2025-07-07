@@ -469,10 +469,10 @@
                             x-data="{ showParrainage: false }"
                             class="bg-gray-800/50 border border-gray-700 rounded-lg mb-2">
 
-                            <!-- Header pliable avec code -->
+                            <!-- Header pliable avec code CENTRÉ -->
                             <button @click="showParrainage = !showParrainage" class="w-full py-1.5 px-3">
-                                <div class="flex items-center justify-between">
-                                    <!-- Code à partager sur la même ligne -->
+                                <div class="flex items-center justify-center relative">
+                                    <!-- Code à partager CENTRÉ -->
                                     <div x-show="userInviteData.code" class="flex items-center gap-2">
                                         <span class="text-yellow-400 text-xs">🎁</span>
                                         <span class="text-gray-300 text-xs">Code à partager :</span>
@@ -491,9 +491,9 @@
                                         👥 Infos parrainage
                                     </div>
 
-                                    <!-- Icône dépliage -->
+                                    <!-- Icône dépliage (position absolue à droite) -->
                                     <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-3 w-3 transition-transform text-gray-400"
+                                        class="h-3 w-3 transition-transform text-gray-400 absolute right-0"
                                         :class="{ 'rotate-180': showParrainage }" viewBox="0 0 20 20"
                                         fill="currentColor">
                                         <path fill-rule="evenodd"
@@ -525,18 +525,6 @@
                                 </div>
                             </div>
 
-                        </div>
-
-                        <!-- === CARTE ARTICLES LUS === -->
-                        <div x-show="totalReadCount > 0" class="bg-gray-800/50 border border-gray-700 rounded-lg mb-2">
-                            <div class="py-1.5 px-3 text-center">
-                                <div class="flex items-center justify-center gap-2 text-xs">
-                                    <span class="text-blue-400">📚</span>
-                                    <span class="font-semibold text-white" x-text="totalReadCount"></span>
-                                    <span class="text-gray-300"
-                                        x-text="totalReadCount === 1 ? 'article lu' : 'articles lus'"></span>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- === CARTE ADMIN === -->
@@ -644,9 +632,22 @@
                 <div x-show="!loadingNews && diversityScore !== null" x-transition
                     class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
                     <button @click="showDiversityChecker = !showDiversityChecker"
-                        class="w-full flex items-center justify-between py-3 px-4">
+                        class="w-full flex flex-col items-center py-3 px-4 relative">
+
+                        <!-- Articles lus en haut centre -->
+                        <div x-show="totalReadCount > 0" class="flex items-center gap-2 text-xs mb-2">
+                            <span class="text-blue-400">📚</span>
+                            <span class="font-semibold text-white" x-text="totalReadCount"></span>
+                            <span class="text-gray-300"
+                                x-text="totalReadCount === 1 ? 'article lu' : 'articles lus'"></span>
+                        </div>
+
+                        <!-- Titre Score de diversité -->
                         <h3 class="text-sm font-medium text-gray-300">Score de diversité</h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform"
+
+                        <!-- Icône dépliage (position absolue) -->
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4 transition-transform absolute top-1/2 right-4 transform -translate-y-1/2"
                             :class="{ 'rotate-180': showDiversityChecker }" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -662,15 +663,15 @@
                             </div>
                             <div class="text-right">
                                 <div class="text-2xl font-bold" :class="{
-                                         'text-red-400': diversityScore < 30,
-                                         'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
-                                         'text-green-400': diversityScore >= 70
-                                     }" x-text="diversityScore + '%'"></div>
+                         'text-red-400': diversityScore < 30,
+                         'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
+                         'text-green-400': diversityScore >= 70
+                     }" x-text="diversityScore + '%'"></div>
                                 <p class="text-xs" :class="{
-                                       'text-red-400': diversityScore < 30,
-                                       'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
-                                       'text-green-400': diversityScore >= 70
-                                   }" x-text="getDiversityMessage()"></p>
+                       'text-red-400': diversityScore < 30,
+                       'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
+                       'text-green-400': diversityScore >= 70
+                   }" x-text="getDiversityMessage()"></p>
                                 <p class="text-xs text-blue-400 mt-1" x-text="getDiversityTip()"></p>
                             </div>
                         </div>
@@ -678,10 +679,10 @@
                         <!-- === BARRE DE PROGRESSION === -->
                         <div class="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
                             <div class="h-full rounded-full transition-all duration-1000" :class="{
-                                     'bg-red-400': diversityScore < 30,
-                                     'bg-yellow-400': diversityScore >= 30 && diversityScore < 70,
-                                     'bg-green-400': diversityScore >= 70
-                                 }" :style="`width: ${diversityScore}%`"></div>
+                     'bg-red-400': diversityScore < 30,
+                     'bg-yellow-400': diversityScore >= 30 && diversityScore < 70,
+                     'bg-green-400': diversityScore >= 70
+                 }" :style="`width: ${diversityScore}%`"></div>
                         </div>
 
                         <!-- === ORIENTATIONS LUES === -->
