@@ -1,475 +1,509 @@
 <!DOCTYPE html>
 <html lang="fr" class="dark">
 
-<!-- ============================================================================ -->
-<!-- 📋 HEAD - MÉTADONNÉES ET CONFIGURATION                                      -->
-<!-- ============================================================================ -->
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- ✏️ À MODIFIER : Méta-données pour le partage sur les réseaux sociaux -->
-    <meta property="og:title" content="INFODROP 360° - Terres rares en Ukraine : le trésor de guerre" />
-    <meta property="og:description"
-        content="Analyse multi-perspectives sur l'enjeu des ressources minérales critiques dans le conflit ukrainien." />
-    <meta name="twitter:title" content="INFODROP 360° - Terres rares en Ukraine : le trésor de guerre">
-    <meta name="twitter:description"
-        content="Analyse multi-perspectives sur l'enjeu des ressources minérales critiques dans le conflit ukrainien." />
-    <!-- FIN DES MODIFICATIONS -->
-
+    
+    <!-- Open Graph et Réseaux sociaux -->
+    <meta property="og:title" content="INFODROP 360° - Les terres rares en Ukraine" />
+    <meta property="og:description" content="Analyse multi-perspectives des enjeux des ressources minérales dans le conflit ukrainien" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://infodrop.live/analyses/analyse-terres-rares-ukraine.html" />
-    <meta property="og:image" content="https://infodrop.live/images/infodrop-share.png" />
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png">
-
-    <!-- ✏️ À MODIFIER : Titre de la page -->
-    <title>INFODROP 360° - Terres rares en Ukraine : le trésor de guerre</title>
-
-    <!-- === FAVICON ET ICÔNES (NE PAS MODIFIER) === -->
-    <link rel="icon" type="image/png" href="/images/infodrop-favicon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-180x180.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="/images/apple-touch-icon-167x167.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-touch-icon-120x120.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/images/android-chrome-512x512.png">
-
-    <!-- Meta tags PWA -->
-    <meta name="theme-color" content="#111827">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="INFODROP 360°">
-    <meta name="apple-itunes-app" content="app-id=com.infodrop.app">
-    <link rel="alternate" href="app://infodrop.live">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-
-    <!-- === BIBLIOTHÈQUES EXTERNES (NE PAS MODIFIER) === -->
+    
+    <title>INFODROP 360° - Les terres rares en Ukraine : enjeux géopolitiques</title>
+    
+    <!-- Bibliothèques externes -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-    <!-- ======================================================================== -->
-    <!-- 🎨 STYLES CSS PERSONNALISÉS (Identiques aux autres pages 360)         -->
-    <!-- ======================================================================== -->
+    
+    <!-- Styles CSS personnalisés -->
     <style>
-        /* Styles universels pour les pages 360° */
-        .perspective-card { background: linear-gradient(145deg, #1e293b, #334155); border-radius: 16px; transition: all 0.3s ease; position: relative; overflow: hidden; cursor: pointer; border: 1px solid #334155;}
-        .perspective-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--badge-color, #808080); opacity: 0.8;}
-        .perspective-card:hover { transform: translateY(-4px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); border-color: #4f46e5;}
-        .consensus-meter { height: 8px; background: #334155; border-radius: 4px; overflow: hidden; position: relative;}
-        .consensus-fill { height: 100%; background: linear-gradient(90deg, #D42A2A, #f59e0b, #10b981); transition: width 0.5s ease;}
-        .fade-in { animation: fadeIn 0.5s ease-in;}
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); }}
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); }}
-        .slide-in { animation: slideIn 0.5s ease-out forwards;}
-        .fact-badge, .warning-badge, .tag-item { backdrop-filter: blur(10px); }
-        .fact-badge { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); }
-        .warning-badge { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); }
-        .info-card { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); backdrop-filter: blur(10px); }
-        .metric-card { background: linear-gradient(145deg, #1e293b, #2d3748); border: 1px solid #334155; }
-        .badge-gauche { background-color: rgba(212, 42, 42, 0.5); color: #fca5a5; }
-        .badge-extreme-droite, .badge-droite { background-color: rgba(42, 42, 212, 0.5); color: #c7d2fe; }
-        .badge-centre-droit { background-color: rgba(55, 48, 163, 0.5); color: #c7d2fe; }
-        .badge-syndicat { background-color: rgba(239, 68, 68, 0.5); color: #fca5a5; }
-        .badge-neutre, .badge-local, .badge-terrain, .badge-think-tank { background-color: rgba(107, 114, 128, 0.5); color: #e5e7eb; }
-        .badge-international, .badge-public { background-color: rgba(59, 130, 246, 0.5); color: #bfdbfe; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #111827; }
-        ::-webkit-scrollbar-thumb { background: #4b5563; }
-        .ticker-train { display: inline-flex; animation: scroll-left 20s linear infinite; }
-        @keyframes scroll-left { from { transform: translateX(0%); } to { transform: translateX(-50%); } }
-        .ticker-train:hover { animation-play-state: paused; }
+        /* Animations et transitions principales */
+        .perspective-card {
+            background: linear-gradient(145deg, #1e293b, #334155);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .perspective-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+            opacity: 0.8;
+        }
+
+        .perspective-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .consensus-meter {
+            height: 8px;
+            background: #334155;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .consensus-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+            transition: width 0.5s ease;
+        }
+
+        .fact-badge,
+        .warning-badge,
+        .tag-item {
+            backdrop-filter: blur(10px);
+        }
+
+        .fact-badge {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .warning-badge {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .info-card {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .metric-card {
+            background: linear-gradient(145deg, #1e293b, #2d3748);
+            border: 1px solid #334155;
+        }
+
+        .badge-gauche {
+            background-color: rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+        }
+
+        .badge-extreme-gauche {
+            background-color: rgba(185, 28, 28, 0.5);
+            color: #fca5a5;
+        }
+
+        .badge-centre-gauche {
+            background-color: rgba(245, 158, 11, 0.5);
+            color: #fde68a;
+        }
+
+        .badge-centre {
+            background-color: rgba(156, 163, 175, 0.5);
+            color: #e5e7eb;
+        }
+
+        .badge-centre-droit {
+            background-color: rgba(55, 48, 163, 0.5);
+            color: #c7d2fe;
+        }
+
+        .badge-droite {
+            background-color: rgba(29, 78, 216, 0.5);
+            color: #bfdbfe;
+        }
+
+        .badge-extreme-droite {
+            background-color: rgba(30, 58, 138, 0.5);
+            color: #dbeafe;
+        }
+
+        .badge-syndicat,
+        .badge-ong {
+            background-color: rgba(5, 150, 105, 0.5);
+            color: #a7f3d0;
+        }
+
+        .badge-international {
+            background-color: rgba(59, 130, 246, 0.5);
+            color: #bfdbfe;
+        }
+
+        .badge-expert {
+            background-color: rgba(168, 85, 247, 0.5);
+            color: #e9d5ff;
+        }
     </style>
-    <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: {
-            colors: {
-                'badge-think-tank': 'rgba(107, 114, 128, 0.5)'
-            }
-        } } }
-    </script>
 </head>
 
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
-
-    <!-- ======================================================================== -->
-    <!-- 🔐 CONFIGURATION SÉCURISÉE ET INITIALISATION SUPABASE (NE PAS MODIFIER)  -->
-    <!-- ======================================================================== -->
-    <script>
-        let supabase = null;
-        let STRIPE_LINK = 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801';
-        async function initializeSupabase() {
-            try {
-                const response = await fetch('/api/config');
-                if (!response.ok) throw new Error(`Erreur API: ${response.status}`);
-                const config = await response.json();
-                if (!config.supabaseUrl || !config.supabaseAnonKey) throw new Error('Configuration Supabase incomplète');
-                supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
-                STRIPE_LINK = config.stripeLink || '';
-                return true;
-            } catch (error) {
-                console.error('❌ Erreur initialisation:', error);
-                document.body.innerHTML = `<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);color:white;display:flex;align-items:center;justify-content:center;z-index:9999;font-family:Arial;"><div style="text-align:center;padding:2rem;"><h2>❌ Erreur de configuration</h2><p>Impossible de charger la configuration.</p><button onclick="window.location.reload()" style="margin-top:1rem;padding:0.5rem 1rem;background:#3B82F6;color:white;border:none;border-radius:4px;cursor:pointer;">Recharger</button></div></div>`;
-                return false;
-            }
-        }
-    </script>
-
-    <!-- ======================================================================== -->
-    <!-- 🏗️ STRUCTURE PRINCIPALE DE L'APPLICATION (NE PAS MODIFIER)             -->
-    <!-- ======================================================================== -->
-    <div x-data="infodropApp()" x-init="init()" class="w-full">
-        <!-- ÉCRAN DE CHARGEMENT -->
-        <div x-show="!sessionLoaded" class="min-h-screen flex items-center justify-center bg-gray-900">
-            <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- Note de contexte -->
+        <div class="info-card rounded-lg p-4 mb-6 text-center">
+            <p class="text-sm"><span class="font-bold">Analyse 360° :</span> Cette analyse présente différentes perspectives médiatiques sur la question des terres rares ukrainiennes dans le contexte du conflit actuel.</p>
         </div>
 
-        <!-- PAGE DE CONNEXION -->
-        <div x-show="sessionLoaded && !user" x-transition class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
-            <div class="max-w-sm w-full bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-2xl p-8 border border-gray-700">
-                <h1 class="text-3xl font-bold text-center text-white mb-2">📰 INFODROP</h1>
-                <p class="text-gray-400 text-center mb-8">Le Club privé de l'actu centralisée</p>
-                <form @submit.prevent="login()" class="space-y-4">
-                    <div><input x-model="email" type="email" required @input="email = email.toLowerCase()" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-500 text-white" placeholder="votre@email.com"></div>
-                    <div><input x-model="inviteCode" type="text" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-500 text-white" placeholder="Code d'invitation (si nouveau)"></div>
-                    <button type="submit" :disabled="loading" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span x-show="!loading">Recevoir le lien magique</span>
-                        <span x-show="loading">Envoi en cours...</span>
-                    </button>
-                </form>
-                <p class="text-xs text-center text-gray-500 mt-4">💡 Pas de code ? Suivez <a href="https://x.com/LOR4_14" target="_blank" class="text-blue-400 hover:underline">nos annonces</a> pour en gagner un !</p>
-                <div x-show="message" class="mt-4 p-3 rounded-lg text-sm" :class="messageType === 'error' ? 'bg-red-900/50 text-red-300 border border-red-700' : 'bg-green-900/50 text-green-300 border border-green-700'" x-text="message"></div>
+        <!-- Sujet principal -->
+        <section class="mb-8">
+            <div class="bg-gray-800 rounded-2xl p-6 mb-6 border border-gray-700">
+                <div class="flex items-start justify-between gap-4 mb-4">
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-bold mb-2">⚡ Les terres rares en Ukraine : un enjeu caché du conflit ?</h1>
+                        <p class="text-gray-400 text-sm">Analyse multi-perspectives • 9 sources • Mise à jour : 7 juillet 2025</p>
+                    </div>
+                    <span class="hidden sm:inline-flex items-center gap-2 px-3 py-1 bg-red-900 bg-opacity-30 text-red-400 rounded-full text-sm font-semibold whitespace-nowrap">🔥 Débat intense</span>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="metric-card rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-blue-400">5%</div>
+                        <div class="text-xs text-gray-400">Réserves mondiales</div>
+                    </div>
+                    <div class="metric-card rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-red-400">40%</div>
+                        <div class="text-xs text-gray-400">Sous contrôle russe</div>
+                    </div>
+                    <div class="metric-card rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-yellow-400">10-15 ans</div>
+                        <div class="text-xs text-gray-400">Pour exploitation</div>
+                    </div>
+                    <div class="metric-card rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-green-400">$15 Mds</div>
+                        <div class="text-xs text-gray-400">Valeur estimée</div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex justify-between items-center text-sm text-gray-400 mb-2">
+                        <span>Consensus sur l'importance stratégique des ressources</span>
+                        <span class="font-semibold">35% - Forte divergence</span>
+                    </div>
+                    <div class="consensus-meter">
+                        <div class="consensus-fill" style="width: 35%"></div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-2">
+                    <span class="fact-badge px-3 py-1 rounded-full text-xs">✅ Ressources confirmées</span>
+                    <span class="warning-badge px-3 py-1 rounded-full text-xs">⚠️ Exploitation complexe</span>
+                    <span class="tag-item text-xs px-3 py-1 bg-gray-700 rounded-full">#TerresRares</span>
+                    <span class="tag-item text-xs px-3 py-1 bg-gray-700 rounded-full">#Ukraine</span>
+                    <span class="tag-item text-xs px-3 py-1 bg-gray-700 rounded-full">#Géopolitique</span>
+                    <span class="tag-item text-xs px-3 py-1 bg-gray-700 rounded-full">#Trump</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alerte divergence -->
+        <div class="info-card rounded-lg p-4 mb-6 flex items-center gap-3">
+            <span class="text-2xl">🔍</span>
+            <div>
+                <div class="font-bold">Divergences majeures détectées</div>
+                <div class="text-sm text-gray-300">Les médias présentent des visions très différentes du rôle des ressources minérales dans le conflit</div>
             </div>
         </div>
 
-        <!-- APPLICATION PRINCIPALE -->
-        <div x-show="sessionLoaded && user" x-transition.opacity class="min-h-screen flex flex-col">
-            <!-- HEADER UNIFIÉ -->
-            <div class="sticky top-0 z-40 transition-shadow duration-300" id="stickyHeader">
-                <header class="relative z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
-                    <div class="max-w-7xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
-                        <div class="justify-self-start">
-                            <a href="/index.html" class="flex items-center gap-2 text-xl font-bold text-white hover:text-blue-400 transition whitespace-nowrap" style="line-height:1;">
-                                <span class="text-lg md:text-xl" style="display:inline-block;vertical-align:middle;">📰</span>
-                                <span class="tracking-tight" style="display:inline-block;vertical-align:middle;">INFODROP</span>
-                                <span class="text-blue-400 font-bold" style="display:inline-block;vertical-align:middle;margin-left:0.2em;">360°</span>
-                                <span class="ml-2 text-xs font-medium text-gray-400 bg-slate-700 px-2 py-0.5 rounded-full">3.0.0-beta</span>
-                            </a>
-                        </div>
-                        <div class="justify-self-center"></div>
-                        <div class="justify-self-end relative" x-data="{ showMenu: false }">
-                            <button @click="showMenu = !showMenu" class="p-2 rounded-full hover:bg-gray-700 transition"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg></button>
-                            <div x-show="showMenu" @click.away="showMenu = false" x-transition class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-[100]" style="display: none;">
-                                <div class="px-4 py-2 border-b border-gray-700"><a href="/infodrop360.html" class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">🌐 Analyses 360°</a></div>
-                                <div class="px-4 py-2 border-b border-gray-700"><a href="/index.html" class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">📰 Le Flux 24h</a></div>
-                                <a href="/apropos.html" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">ℹ️ À propos</a>
-                                <a :href="STRIPE_LINK" target="_blank" class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-700">❤️ Soutenir</a>
-                                <div class="border-t border-gray-700 my-1"></div>
-                                <a @click="logout()" href="#" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">🚪 Déconnexion</a>
-                            </div>
-                        </div>
+        <!-- Perspectives multiples -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- 1. Reporterre (Gauche écologique) -->
+            <article class="perspective-card p-6" onclick="window.open('https://reporterre.net/Un-enjeu-cache-de-la-guerre-en-Ukraine-les-matieres-premieres', '_blank')">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">Reporterre</h3>
+                        <span class="text-xs text-gray-400">Média écologique</span>
                     </div>
-                </header>
-                <div x-data="contextTicker()" x-init="initTicker()" class="bg-gray-800/95 border-b border-gray-700 h-8">
-                    <!-- Ticker mobile -->
-                    <div class="md:hidden h-full overflow-hidden relative"><div class="ticker-train absolute flex items-center h-full" style="width: max-content;"><div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4"><span class="flex items-center gap-1"><span class="text-yellow-400">📅</span><span x-text="dateInfo.fullDate"></span></span><span class="flex items-center gap-1"><span class="text-blue-400">📊</span>Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365</span><span x-show="todayFeast" class="flex items-center gap-1"><span class="text-red-400">🎉</span><span class="font-semibold text-white" x-text="todayFeast"></span></span><span x-show="weather.temperature !== null" class="flex items-center gap-1"><span x-text="weather.icon"></span><span class="font-semibold text-white"><span x-text="weather.temperature"></span>°C</span><span class="text-gray-400" x-text="weather.description"></span></span><span class="flex items-center gap-1"><span x-text="moonPhase.icon"></span><span x-text="moonPhase.name"></span></span><span class="flex items-center gap-1"><span class="text-green-400">⏳</span><span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span> jours avant 2026</span><span class="text-gray-600 mx-4">•</span></div><div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4"><span class="flex items-center gap-1"><span class="text-yellow-400">📅</span><span x-text="dateInfo.fullDate"></span></span><span class="flex items-center gap-1"><span class="text-blue-400">📊</span>Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365</span><span x-show="todayFeast" class="flex items-center gap-1"><span class="text-red-400">🎉</span><span class="font-semibold text-white" x-text="todayFeast"></span></span><span x-show="weather.temperature !== null" class="flex items-center gap-1"><span x-text="weather.icon"></span><span class="font-semibold text-white"><span x-text="weather.temperature"></span>°C</span><span class="text-gray-400" x-text="weather.description"></span></span><span class="flex items-center gap-1"><span x-text="moonPhase.icon"></span><span x-text="moonPhase.name"></span></span><span class="flex items-center gap-1"><span class="text-green-400">⏳</span><span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span> jours avant 2026</span><span class="text-gray-600 mx-4">•</span></div></div></div>
-                    <!-- Ticker desktop -->
-                    <div class="hidden md:flex items-center justify-center h-full"><div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4"><span class="flex items-center gap-1"><span class="text-yellow-400">📅</span><span x-text="dateInfo.fullDate"></span></span><span class="flex items-center gap-1"><span class="text-blue-400">📊</span>Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365</span><span x-show="todayFeast" class="flex items-center gap-1"><span class="text-red-400">🎉</span><span class="font-semibold text-white" x-text="todayFeast"></span></span><span x-show="weather.temperature !== null" class="flex items-center gap-1"><span x-text="weather.icon"></span><span class="font-semibold text-white"><span x-text="weather.temperature"></span>°C</span><span class="text-gray-400" x-text="weather.description"></span></span><span class="flex items-center gap-1"><span x-text="moonPhase.icon"></span><span x-text="moonPhase.name"></span></span><span class="flex items-center gap-1"><span class="text-green-400">⏳</span><span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span> jours avant 2026</span></div></div>
+                    <span class="badge-gauche text-xs px-2 py-1 rounded">Gauche</span>
                 </div>
-                <div x-show="userInviteData.code || userInviteData.parrainEmail || userInviteData.filleulEmail" x-transition class="bg-gray-800/95 border-b border-gray-700 px-4 py-3 flex items-center">
-                    <div class="max-w-7xl mx-auto w-full">
-                        <div x-data="{ showParrainage: false }" class="bg-gray-800/50 border border-gray-700 rounded-lg my-1">
-                            <button @click="showParrainage = !showParrainage" class="w-full py-1.5 px-3"><div class="flex items-center justify-center relative"><div x-show="userInviteData.code" class="flex items-center gap-2"><span class="text-yellow-400 text-xs">🎁</span><span class="text-gray-300 text-xs">Code à partager :</span><span class="font-mono bg-gray-900 px-1.5 py-0.5 rounded cursor-pointer hover:bg-gray-700 transition text-white text-xs border border-gray-600" @click.stop="copyInviteMessage(userInviteData.code)" title="Cliquez pour copier" x-text="userInviteData.code"></span><span x-show="copied" class="text-green-400 font-semibold transition bg-green-900/20 px-1.5 py-0.5 rounded text-xs">Copié !</span></div><div x-show="!userInviteData.code" class="text-xs text-gray-400">👥 Infos parrainage</div><svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 transition-transform text-gray-400 absolute right-0" :class="{ 'rotate-180': showParrainage }" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg></div></button>
-                            <div x-show="showParrainage" x-transition x-show="userInviteData.parrainEmail || userInviteData.filleulEmail" class="px-3 pb-2 space-y-2 text-center border-t border-gray-700 pt-2">
-                                <div x-show="userInviteData.parrainEmail" class="flex items-center justify-center gap-2 text-xs"><span class="text-green-400">👆</span><span class="text-gray-400">Invité par :</span><span class="font-mono text-white" x-text="userInviteData.parrainEmail"></span></div>
-                                <div x-show="userInviteData.filleulEmail" class="flex items-center justify-center gap-2 text-xs"><span class="text-purple-400">👇</span><span class="text-gray-400">Votre filleul :</span><span class="font-mono text-white" x-text="userInviteData.filleulEmail"></span></div>
-                            </div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"L'accaparement des matières premières enfouies sous le sol ukrainien est à la racine d'un conflit où les voix des puissances nationales et industrielles priment sur celles des Ukrainiens."</blockquote>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-red-400">🎯</span><span class="text-gray-400">Focus : Impérialisme économique</span></div>
+                    <div class="flex items-center gap-2"><span class="text-red-400">🌍</span><span class="text-gray-400">Ton : Critique anticapitaliste</span></div>
+                    <div class="flex items-center gap-2"><span class="text-red-400">🏭</span><span class="text-gray-400">Contexte : Pollution minière</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• Valeur estimée : 7 500 milliards $</li>
+                        <li>• Opposition locale à l'exploitation</li>
+                        <li>• Risques environnementaux majeurs</li>
+                        <li>• Wagner présent en Afrique pour minerais</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 2. France Info (Service public) -->
+            <article class="perspective-card p-6" onclick="window.open('https://www.franceinfo.fr/monde/europe/manifestations-en-ukraine/en-ukraine-l-exploitation-des-minerais-et-terres-rares-au-c-ur-des-negociations-entre-donald-trump-et-volodymyr-zelensky_7068212.html', '_blank')">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">France Info</h3>
+                        <span class="text-xs text-gray-400">Service public</span>
+                    </div>
+                    <span class="badge-centre-gauche text-xs px-2 py-1 rounded">Centre-gauche</span>
+                </div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"Washington veut conditionner l'aide militaire apportée à Kiev à l'obtention de contrats d'exploitation des ressources naturelles ukrainiennes. Le président ukrainien n'a rien contre."</blockquote>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-orange-400">🎯</span><span class="text-gray-400">Focus : Négociations diplomatiques</span></div>
+                    <div class="flex items-center gap-2"><span class="text-orange-400">📊</span><span class="text-gray-400">Ton : Factuel, équilibré</span></div>
+                    <div class="flex items-center gap-2"><span class="text-orange-400">🏛️</span><span class="text-gray-400">Contexte : Approche institutionnelle</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• Deal : aide contre accès minerais</li>
+                        <li>• Ukraine possède <1% terres rares mondiales</li>
+                        <li>• 10-15 ans pour exploitation effective</li>
+                        <li>• Titane déjà exploité, privatisé en 2023</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 3. Le Monde/France 24 (Centre) -->
+            <article class="perspective-card p-6" onclick="window.open('https://www.france24.com/fr/europe/20250225-ukraine-richesses-mini%C3%A8res-convoit%C3%A9es-donald-trump-terres-rares-mati%C3%A8res-premi%C3%A8res-critiques-russie', '_blank')">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">France 24</h3>
+                        <span class="text-xs text-gray-400">Média international</span>
+                    </div>
+                    <span class="badge-centre text-xs px-2 py-1 rounded">Centre</span>
+                </div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"L'Ukraine estime que des ressources naturelles 'critiques' d'une valeur de 350 milliards de dollars se trouvent dans les territoires occupés par la Russie."</blockquote>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-gray-400">🎯</span><span class="text-gray-400">Focus : Analyse géostratégique</span></div>
+                    <div class="flex items-center gap-2"><span class="text-gray-400">🌐</span><span class="text-gray-400">Ton : Neutre, informatif</span></div>
+                    <div class="flex items-center gap-2"><span class="text-gray-400">📍</span><span class="text-gray-400">Contexte : Dimension internationale</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• 350 Mds $ en territoires occupés</li>
+                        <li>• Ukraine : 6e producteur mondial titane</li>
+                        <li>• Pas vraiment de terres rares exploitables</li>
+                        <li>• Chine contrôle 70% production mondiale</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 4. Le Figaro (Centre-droit) -->
+            <article class="perspective-card p-6" onclick="window.open('https://www.revueconflits.com/carte-les-ressources-de-lukraine-en-minerais-strategiques/', '_blank')">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">Revue Conflits</h3>
+                        <span class="text-xs text-gray-400">Géopolitique</span>
+                    </div>
+                    <span class="badge-centre-droit text-xs px-2 py-1 rounded">Centre-droit</span>
+                </div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"Le contrôle de ces ressources par la Russie vise à renforcer son autonomie industrielle et à priver l'Europe de matières premières cruciales."</blockquote>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-purple-400">🎯</span><span class="text-gray-400">Focus : Enjeux stratégiques</span></div>
+                    <div class="flex items-center gap-2"><span class="text-purple-400">🗺️</span><span class="text-gray-400">Ton : Analytique</span></div>
+                    <div class="flex items-center gap-2"><span class="text-purple-400">⚔️</span><span class="text-gray-400">Contexte : Guerre économique</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• 7% réserves mondiales graphite</li>
+                        <li>• 20% réserves européennes titane</li>
+                        <li>• Russie vise autonomie industrielle</li>
+                        <li>• UE cherche partenariats miniers</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 5. RTBF (International neutre) -->
+            <article class="perspective-card p-6" onclick="window.open('https://www.rtbf.be/article/au-c-ur-des-negociations-sur-la-paix-en-ukraine-le-dossier-des-terres-rares-11507050', '_blank')">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">RTBF</h3>
+                        <span class="text-xs text-gray-400">Belgique</span>
+                    </div>
+                    <span class="badge-international text-xs px-2 py-1 rounded">International</span>
+                </div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"Trump veut des terres rares parce que l'économie américaine dépend fortement des ressources chinoises, et cela représente un risque économique et de sécurité."</blockquote>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-blue-400">🎯</span><span class="text-gray-400">Focus : Enjeux globaux</span></div>
+                    <div class="flex items-center gap-2"><span class="text-blue-400">🤝</span><span class="text-gray-400">Ton : Pédagogique</span></div>
+                    <div class="flex items-center gap-2"><span class="text-blue-400">🌍</span><span class="text-gray-400">Contexte : Rivalité USA-Chine</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• USA cherchent indépendance vs Chine</li>
+                        <li>• Terres rares pas si rares, mais extraction complexe</li>
+                        <li>• Ressources en zones contrôlées par Russie</li>
+                        <li>• Zelensky refuse accord sans garanties</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 6. Pravda FR (Perspective russe) -->
+            <article class="perspective-card p-6" onclick="window.open('https://francais.news-pravda.com/world/2025/02/04/340269.html', '_blank')">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">Pravda FR</h3>
+                        <span class="text-xs text-gray-400">Média russe</span>
+                    </div>
+                    <span class="badge-extreme-droite text-xs px-2 py-1 rounded">Pro-russe</span>
+                </div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"L'Ukraine perd les réserves de terres rares promises à Trump par Zelensky. 70% du montant provient de la RPD, de la RPL et de la région de Dniepropetrovsk."</blockquote>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-blue-800">🎯</span><span class="text-gray-400">Focus : Victoire territoriale russe</span></div>
+                    <div class="flex items-center gap-2"><span class="text-blue-800">🚩</span><span class="text-gray-400">Ton : Propagandiste</span></div>
+                    <div class="flex items-center gap-2"><span class="text-blue-800">💰</span><span class="text-gray-400">Contexte : Pillage occidental</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• 15 000 milliards $ de ressources</li>
+                        <li>• 70% en territoires pro-russes</li>
+                        <li>• Zelensky "brade" l'Ukraine</li>
+                        <li>• Trump manipule Kiev</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 7. ONU Info (Organisation internationale) -->
+            <article class="perspective-card p-6" onclick="window.open('https://unric.org/fr/terres-rares-et-mineraux-strategiques-en-ukraine/', '_blank')">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">ONU Info</h3>
+                        <span class="text-xs text-gray-400">Organisation internationale</span>
+                    </div>
+                    <span class="badge-ong text-xs px-2 py-1 rounded">ONG/ONU</span>
+                </div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"Les gisements ukrainiens de 21 éléments représentent environ 5% des réserves mondiales. Ces matériaux sont essentiels à la production d'appareils destinés à l'énergie verte."</blockquote>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-green-400">🎯</span><span class="text-gray-400">Focus : Transition énergétique</span></div>
+                    <div class="flex items-center gap-2"><span class="text-green-400">🌱</span><span class="text-gray-400">Ton : Institutionnel</span></div>
+                    <div class="flex items-center gap-2"><span class="text-green-400">📈</span><span class="text-gray-400">Contexte : Besoins mondiaux</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• 5% matières premières critiques mondiales</li>
+                        <li>• Demande cuivre +40% d'ici 2050</li>
+                        <li>• Lithium +90% pour transition verte</li>
+                        <li>• Zelensky refuse 50% aux USA</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 8. Radio-Canada (Perspective canadienne) -->
+            <article class="perspective-card p-6" onclick="window.open('https://ici.radio-canada.ca/nouvelle/2143588/trump-ukraine-mineraux-strategiques-fillion', '_blank')">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">Radio-Canada</h3>
+                        <span class="text-xs text-gray-400">Canada</span>
+                    </div>
+                    <span class="badge-international text-xs px-2 py-1 rounded">International</span>
+                </div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"Ce n'est pas tant l'Ukraine que le président américain vise avec sa volonté de conclure une entente sur les minéraux critiques, mais plutôt la Chine."</blockquote>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-blue-400">🎯</span><span class="text-gray-400">Focus : Rivalité USA-Chine</span></div>
+                    <div class="flex items-center gap-2"><span class="text-blue-400">🌏</span><span class="text-gray-400">Ton : Analyse distanciée</span></div>
+                    <div class="flex items-center gap-2"><span class="text-blue-400">⚖️</span><span class="text-gray-400">Contexte : Souveraineté économique</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• USA ont perdu industrie minière</li>
+                        <li>• Chine domine production mondiale</li>
+                        <li>• 40% métaux Ukraine sous contrôle russe</li>
+                        <li>• Enjeu sécurité nationale USA</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 9. IRIS/Experts (Think tank) -->
+            <article class="perspective-card p-6" onclick="window.open('https://vert.eco/articles/quelles-sont-ces-terres-rares-au-coeur-des-difficiles-negociations-de-paix-en-ukraine', '_blank')">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="font-bold text-lg">IRIS/Vert</h3>
+                        <span class="text-xs text-gray-400">Analyse experte</span>
+                    </div>
+                    <span class="badge-expert text-xs px-2 py-1 rounded">Expert</span>
+                </div>
+                <blockquote class="text-gray-300 mb-4 italic text-sm">"Ces deals intéressent davantage les États-Unis pour développer le lithium, l'uranium et le graphite, plutôt que les terres rares. Trump ne verra aucune production avant la fin de son mandat."</blockquote>
+                <div class="text-sm space-y-2">
+                    <div class="flex items-center gap-2"><span class="text-purple-400">🎯</span><span class="text-gray-400">Focus : Réalité technique</span></div>
+                    <div class="flex items-center gap-2"><span class="text-purple-400">🔬</span><span class="text-gray-400">Ton : Scientifique</span></div>
+                    <div class="flex items-center gap-2"><span class="text-purple-400">⏱️</span><span class="text-gray-400">Contexte : Faisabilité long terme</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <div class="text-xs text-gray-500">Points clés :</div>
+                    <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                        <li>• Ukraine : <1% terres rares mondiales</li>
+                        <li>• 40% lithium en zones russes</li>
+                        <li>• 10+ ans pour développer mines</li>
+                        <li>• Risques environnementaux majeurs</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+
+        <!-- Synthèse IA -->
+        <section class="mt-8 bg-gray-800 rounded-2xl p-6 border border-gray-700">
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">🤖 Analyse INFODROP 360°</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div>
+                    <h4 class="font-bold mb-3 text-green-400">✅ Faits établis</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li>• Ukraine possède ~5% ressources critiques mondiales</li>
+                        <li>• 40% des gisements sous contrôle russe</li>
+                        <li>• Accord USA-Ukraine signé en avril 2025</li>
+                        <li>• 10-15 ans minimum pour exploitation</li>
+                        <li>• Chine domine 70% production terres rares</li>
+                        <li>• Trump a explicitement lié aide/ressources</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-orange-400">⚡ Points de divergence</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li>• <b>Valeur :</b> 350 Mds à 15 000 Mds $</li>
+                        <li>• <b>Importance :</b> "Marginale" vs "Guerre des ressources"</li>
+                        <li>• <b>Trump :</b> "Visionnaire" vs "Prédateur"</li>
+                        <li>• <b>Ukraine :</b> "Opportunité" vs "Bradage"</li>
+                        <li>• <b>Faisabilité :</b> "Possible" vs "Irréaliste"</li>
+                        <li>• <b>Écologie :</b> Absent vs Central</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-blue-400">📊 Analyse des biais</h4>
+                    <div class="space-y-3 text-sm">
+                        <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                            <div class="font-semibold text-red-400">Médias occidentaux</div>
+                            <div class="text-xs">Focus géopolitique USA-Chine, minimisation aspects russes</div>
+                        </div>
+                        <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                            <div class="font-semibold text-blue-400">Médias russes</div>
+                            <div class="text-xs">Victimisation Ukraine, diabolisation Occident</div>
+                        </div>
+                        <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                            <div class="font-semibold text-green-400">Experts/ONG</div>
+                            <div class="text-xs">Prudence technique, focus environnement</div>
+                        </div>
+                        <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                            <div class="font-semibold text-yellow-400">Angle manquant</div>
+                            <div class="text-xs">Voix populations locales, impact écologique réel</div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="mt-6 p-4 bg-gray-900 bg-opacity-50 rounded-lg border border-gray-700">
+                <p class="text-sm mb-2"><span class="font-bold text-yellow-400">⚠️ Alerte :</span> Le traitement médiatique révèle une instrumentalisation du sujet selon les agendas géopolitiques. Les médias pro-occidentaux minimisent les difficultés techniques, tandis que les médias pro-russes exagèrent la valeur des ressources.</p>
+                <p class="text-sm text-gray-400">💡 <b>Recommandation :</b> Privilégier les analyses d'experts indépendants pour la faisabilité technique. Croiser les sources pour les aspects géopolitiques. Rester vigilant sur l'absence de voix ukrainiennes locales dans le débat.</p>
+            </div>
+        </section>
 
-            <!-- ============================================================== -->
-            <!-- 📊 CONTENU PRINCIPAL - À PERSONNALISER                        -->
-            <!-- ============================================================== -->
-            <main class="flex-grow w-full">
-                <div class="max-w-7xl mx-auto px-4 mt-6">
-                    <div class="info-card rounded-lg p-4 text-center text-sm sm:text-base">
-                        <!-- ✏️ À MODIFIER : Note de contexte optionnelle -->
-                        <p><span class="font-bold">Note :</span> Cette analyse explore le rôle des ressources minérales comme enjeu stratégique majeur, et souvent sous-estimé, du conflit en Ukraine.</p>
-                    </div>
-                </div>
-
-                <div class="max-w-7xl mx-auto px-4 py-6">
-                    <section class="mb-8">
-                        <div class="bg-gray-800 rounded-2xl p-6 mb-6 border border-gray-700">
-                            <div class="flex items-start justify-between gap-4 mb-4">
-                                <div>
-                                    <!-- ✏️ À MODIFIER : Titre principal et sous-titre -->
-                                    <h2 class="text-xl sm:text-2xl font-bold mb-2">💎 Terres rares en Ukraine : le trésor de guerre caché du conflit</h2>
-                                    <p class="text-gray-400 text-xs sm:text-sm">Analyse multi-perspectives • 6 sources • Dernière mise à jour : 5 juillet 2025</p>
-                                </div>
-                                <span class="hidden sm:inline-flex items-center gap-2 px-3 py-1 bg-yellow-900 bg-opacity-30 text-yellow-400 rounded-full text-sm font-semibold whitespace-nowrap">🤫 Sujet sensible</span>
-                            </div>
-
-                            <!-- ✏️ À MODIFIER : Métriques clés (4 max) -->
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                                <div class="metric-card rounded-lg p-3 text-center"><div class="text-xl sm:text-2xl font-bold text-blue-400">~12T $</div><div class="text-xs text-gray-400">Valeur estimée</div></div>
-                                <div class="metric-card rounded-lg p-3 text-center"><div class="text-xl sm:text-2xl font-bold text-red-400">Lithium</div><div class="text-xs text-gray-400">Ressource clé (EV)</div></div>
-                                <div class="metric-card rounded-lg p-3 text-center"><div class="text-xl sm:text-2xl font-bold text-yellow-400">Titane</div><div class="text-xs text-gray-400">Aéronautique/Défense</div></div>
-                                <div class="metric-card rounded-lg p-3 text-center"><div class="text-xl sm:text-2xl font-bold text-green-400">65%</div><div class="text-xs text-gray-400">Consensus média</div></div>
-                            </div>
-
-                            <!-- ✏️ À MODIFIER : Consensus -->
-                            <div class="mb-4">
-                                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-400 mb-2">
-                                    <span>Consensus sur l'importance stratégique des ressources</span>
-                                    <span class="font-semibold text-right">65% - Divergence modérée</span>
-                                </div>
-                                <div class="consensus-meter"><div class="consensus-fill" style="width: 65%"></div></div>
-                            </div>
-
-                            <!-- ✏️ À MODIFIER : Badges et tags -->
-                            <div class="flex flex-wrap gap-2">
-                                <span class="fact-badge px-3 py-1 rounded-full text-xs sm:text-sm">✅ Déclaration de Trump</span>
-                                <span class="warning-badge px-3 py-1 rounded-full text-xs sm:text-sm">⚠️ Facteur aggravant du conflit</span>
-                                <span class="tag-item text-xs sm:text-sm px-3 py-1 bg-gray-700 rounded-full">#TerresRares</span>
-								<span class="tag-item text-xs sm:text-sm px-3 py-1 bg-gray-700 rounded-full">#GuerreDesRessources</span>
-                                <span class="tag-item text-xs sm:text-sm px-3 py-1 bg-gray-700 rounded-full">#Geopolitique</span>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- ✏️ À MODIFIER : Alerte sur la divergence (si nécessaire) -->
-                    <div class="info-card rounded-lg p-4 mb-6 flex items-center gap-3">
-                        <span class="text-2xl">🔍</span>
-                        <div>
-                            <div class="font-bold">Divergence d'analyse détectée</div>
-                            <div class="text-sm text-gray-300">Les sources s'accordent sur la valeur des ressources, mais divergent sur leur rôle : cause première du conflit ou objectif secondaire opportuniste pour la Russie ?</div>
-                        </div>
-                    </div>
-
-                    <!-- ✏️ À MODIFIER : Remplir chaque carte de perspective -->
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- PERSPECTIVE 1 -->
-                        <article class="perspective-card p-6" style="--badge-color: #2A2AD4;" onclick="window.open('https://www.newsweek.com/donald-trump-details-plan-ukraine-repay-us-aid-1911639', '_blank')">
-                            <div class="flex items-center justify-between mb-3">
-                                <div><h3 class="font-bold text-lg">Newsweek</h3><span class="text-xs text-gray-400">Presse US</span></div>
-                                <span class="badge-droite text-xs px-2 py-1 rounded">Droite</span>
-                            </div>
-                            <blockquote class="text-gray-300 mb-4 italic">"Ils ont d'énormes ressources minérales... nous devrions leur prêter de l'argent et ils nous remboursent avec ces ressources." - D. Trump. L'idée de lier l'aide à l'accès aux minerais ukrainiens est désormais publiquement sur la table.</blockquote>
-                            <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus : Déclaration de Trump</span></div>
-                                <div class="flex items-center gap-2"><span>💬</span><span class="text-gray-400">Ton : Reportage factuel</span></div>
-                                <div class="flex items-center gap-2"><span>🇺🇸</span><span class="text-gray-400">Vision transactionnelle de l'aide</span></div>
-                            </div>
-                            <div class="mt-4 pt-4 border-t border-gray-600">
-                                <div class="text-xs text-gray-500">Points clés :</div>
-                                <ul class="text-xs text-gray-400 mt-1 space-y-1">
-                                    <li>• Trump propose un prêt au lieu d'un don.</li>
-                                    <li>• Remboursement via les ressources minérales.</li>
-                                    <li>• Met en lumière la valeur stratégique du sous-sol ukrainien.</li>
-                                    <li>• Mentionne un potentiel "deal" très profitable.</li>
-                                </ul>
-                            </div>
-                        </article>
-
-                        <!-- PERSPECTIVE 2 -->
-                        <article class="perspective-card p-6" style="--badge-color: #808080;" onclick="window.open('https://theconversation.com/lukraine-regorge-de-terres-rares-et-de-lithium-un-tresor-convoite-par-la-russie-200155', '_blank')">
-                            <div class="flex items-center justify-between mb-3">
-                                <div><h3 class="font-bold text-lg">The Conversation</h3><span class="text-xs text-gray-400">Analyse Académique</span></div>
-                                <span class="badge-neutre text-xs px-2 py-1 rounded">Neutre</span>
-                            </div>
-                            <blockquote class="text-gray-300 mb-4 italic">"L'Ukraine possède des gisements de lithium dont les réserves seraient les plus importantes d'Europe. Ces ressources sont vitales pour la transition énergétique et l'indépendance stratégique de l'UE, et donc une cible de choix pour la Russie."</blockquote>
-                            <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus : Enjeux pour l'Europe</span></div>
-                                <div class="flex items-center gap-2"><span>🎓</span><span class="text-gray-400">Ton : Pédagogique, analytique</span></div>
-                                <div class="flex items-center gap-2"><span>🔋</span><span class="text-gray-400">Lien avec la transition verte</span></div>
-                            </div>
-                            <div class="mt-4 pt-4 border-t border-gray-600">
-                                <div class="text-xs text-gray-500">Points clés :</div>
-                                <ul class="text-xs text-gray-400 mt-1 space-y-1">
-                                    <li>• 117 des 120 minéraux les plus utilisés au monde présents.</li>
-                                    <li>• Gisement de lithium de Shevchenkivske (Donetsk) majeur.</li>
-                                    <li>• La Russie cherche à capter ces ressources et priver l'Europe.</li>
-                                    <li>• La reconstruction sera financée par ces minerais.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        
-                        <!-- PERSPECTIVE 3 -->
-                        <article class="perspective-card p-6" style="--badge-color: #3b82f6;" onclick="window.open('https://www.france24.com/fr/%C3%A9co-tech/20220914-terres-rares-lithium-gaz-la-guerre-en-ukraine-est-aussi-une-guerre-des-ressources', '_blank')">
-                            <div class="flex items-center justify-between mb-3">
-                                <div><h3 class="font-bold text-lg">France 24</h3><span class="text-xs text-gray-400">Média International</span></div>
-                                <span class="badge-public text-xs px-2 py-1 rounded">Public</span>
-                            </div>
-                            <blockquote class="text-gray-300 mb-4 italic">"Une grande partie de cet 'eldorado' de minerais se trouve dans l'est du pays, au cœur des combats. La Russie contrôle déjà une part significative de ce trésor, estimé à plusieurs milliers de milliards de dollars."</blockquote>
-                            <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus : Occupation et contrôle</span></div>
-                                <div class="flex items-center gap-2"><span>🗺️</span><span class="text-gray-400">Ton : Informatif, factuel</span></div>
-                                <div class="flex items-center gap-2"><span>💰</span><span class="text-gray-400">Quantification de la perte</span></div>
-                            </div>
-                            <div class="mt-4 pt-4 border-t border-gray-600">
-                                <div class="text-xs text-gray-500">Points clés :</div>
-                                <ul class="text-xs text-gray-400 mt-1 space-y-1">
-                                    <li>• La Russie occupe 63% des gisements de charbon ukrainiens.</li>
-                                    <li>• 42% des gisements de métaux sont en zone occupée.</li>
-                                    <li>• L'Ukraine perd au moins 12 400 milliards de dollars de ressources.</li>
-                                    <li>• La région de Dnipro, riche en titane, est une cible.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        
-                        <!-- PERSPECTIVE 4 -->
-                        <article class="perspective-card p-6" style="--badge-color: #10b981;" onclick="window.open('https://reporterre.net/Guerre-en-Ukraine-le-petrole-le-gaz-et-le-ble-au-coeur-du-conflit', '_blank')">
-                            <div class="flex items-center justify-between mb-3">
-                                <div><h3 class="font-bold text-lg">Reporterre</h3><span class="text-xs text-gray-400">Presse Écologiste</span></div>
-                                <span class="badge-gauche text-xs px-2 py-1 rounded">Gauche</span>
-                            </div>
-                            <blockquote class="text-gray-300 mb-4 italic">"Au-delà des discours, la guerre en Ukraine est avant tout une guerre pour l'appropriation des ressources. Les enjeux fossiles et miniers sont le moteur d'un conflit qui révèle la brutalité du capitalisme extractiviste."</blockquote>
-                            <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus : Critique du modèle extractiviste</span></div>
-                                <div class="flex items-center gap-2"><span>✊</span><span class="text-gray-400">Ton : Engagé, dénonciateur</span></div>
-                                <div class="flex items-center gap-2"><span>🌍</span><span class="text-gray-400">Analyse systémique</span></div>
-                            </div>
-                            <div class="mt-4 pt-4 border-t border-gray-600">
-                                <div class="text-xs text-gray-500">Points clés :</div>
-                                <ul class="text-xs text-gray-400 mt-1 space-y-1">
-                                    <li>• Le conflit est une "guerre des ressources".</li>
-                                    <li>• Focus sur les hydrocarbures et les terres arables.</li>
-                                    <li>• Les "terres rares" sont un enjeu pour les technologies futures.</li>
-                                    <li>• Dénonce l'hypocrisie des discours géopolitiques.</li>
-                                </ul>
-                            </div>
-                        </article>
-
-                        <!-- PERSPECTIVE 5 -->
-                        <article class="perspective-card p-6" style="--badge-color: #6b7280;" onclick="window.open('https://www.atlanticcouncil.org/blogs/eurasia-center/putins-illegal-war-is-a-bid-to-conquer-ukraines-vast-natural-resources/', '_blank')">
-                            <div class="flex items-center justify-between mb-3">
-                                <div><h3 class="font-bold text-lg">Atlantic Council</h3><span class="text-xs text-gray-400">Think Tank US</span></div>
-                                <span class="badge-think-tank text-xs px-2 py-1 rounded">Think Tank</span>
-                            </div>
-                            <blockquote class="text-gray-300 mb-4 italic">"L'objectif de la Russie n'est pas seulement de s'emparer des ressources ukrainiennes pour son propre profit, mais surtout d'en priver les puissances occidentales, maintenant ainsi une arme stratégique dans le domaine des chaînes d'approvisionnement."</blockquote>
-                            <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus : Stratégie de déni d'accès</span></div>
-                                <div class="flex items-center gap-2"><span>🧠</span><span class="text-gray-400">Ton : Géostratégique</span></div>
-                                <div class="flex items-center gap-2"><span>🔗</span><span class="text-gray-400">Guerre des chaînes de valeur</span></div>
-                            </div>
-                            <div class="mt-4 pt-4 border-t border-gray-600">
-                                <div class="text-xs text-gray-500">Points clés :</div>
-                                <ul class="text-xs text-gray-400 mt-1 space-y-1">
-                                    <li>• L'invasion est un "pillage de ressources" stratégique.</li>
-                                    <li>• Objectif : étrangler l'économie ukrainienne future.</li>
-                                    <li>• Maintenir l'Europe dépendante de la Chine et de la Russie.</li>
-                                    <li>• Contrôler les ressources de l'ère post-carbone.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        
-                        <!-- PERSPECTIVE 6 -->
-                        <article class="perspective-card p-6" style="--badge-color: #5555AA;" onclick="window.open('https://foreignpolicy.com/2022/08/10/russia-ukraine-war-rare-earths-lithium-minerals-energy-resources/', '_blank')">
-                            <div class="flex items-center justify-between mb-3">
-                                <div><h3 class="font-bold text-lg">Foreign Policy</h3><span class="text-xs text-gray-400">Presse Spécialisée</span></div>
-                                <span class="badge-centre-droit text-xs px-2 py-1 rounded">Centre-Droit</span>
-                            </div>
-                            <blockquote class="text-gray-300 mb-4 italic">"Moscou a joué un jeu à long terme. En annexant des territoires riches en minerais, il parie sur le fait que le monde aura désespérément besoin de ces matériaux, ce qui lui donnera un levier économique et politique majeur pour les décennies à venir."</blockquote>
-                            <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus : Levier géopolitique à long terme</span></div>
-                                <div class="flex items-center gap-2"><span>⏳</span><span class="text-gray-400">Ton : Prospective, stratégique</span></div>
-                                <div class="flex items-center gap-2"><span>♟️</span><span class="text-gray-400">Calcul stratégique russe</span></div>
-                            </div>
-                            <div class="mt-4 pt-4 border-t border-gray-600">
-                                <div class="text-xs text-gray-500">Points clés :</div>
-                                <ul class="text-xs text-gray-400 mt-1 space-y-1">
-                                    <li>• La guerre est un investissement stratégique pour la Russie.</li>
-                                    <li>• Le contrôle des minerais ukrainiens affaiblit l'autonomie européenne.</li>
-                                    <li>• Consolide l'axe sino-russe sur les matières premières critiques.</li>
-                                    <li>• Moscou comprend que le futur pouvoir dépendra de ces ressources.</li>
-                                </ul>
-                            </div>
-                        </article>
-                    </div>
-
-                    <!-- ✏️ À MODIFIER : Synthèse de l'IA -->
-                    <section class="mt-8 bg-gray-800 rounded-2xl p-6 border border-gray-700">
-                        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">🤖 Analyse INFODROP IA</h3>
-                        <div class="grid md:grid-cols-3 gap-6">
-                            <div>
-                                <h4 class="font-bold mb-3 text-green-400">✅ Faits établis</h4>
-                                <ul class="space-y-2 text-sm">
-                                    <li>• L'Ukraine possède des réserves de minerais critiques (lithium, titane, terres rares) estimées à des milliers de milliards de dollars.</li>
-                                    <li>• La majorité de ces gisements se trouve dans l'Est et le Sud, zones de combats intenses et d'occupation russe.</li>
-                                    <li>• Donald Trump a publiquement lié l'aide US à un remboursement via ces ressources.</li>
-                                    <li>• L'Europe est très dépendante de la Chine pour son approvisionnement en terres rares.</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 class="font-bold mb-3 text-orange-400">⚡ Points de divergence</h4>
-                                <ul class="space-y-2 text-sm">
-                                    <li>• <b>Cause ou Conséquence :</b> Les ressources sont-elles une cause majeure de l'invasion ou un "bonus" opportuniste ?</li>
-                                    <li>• <b>Objectif Russe :</b> S'enrichir (pillage économique) ou affaiblir l'Occident (déni stratégique de ressources) ?</li>
-                                    <li>• <b>Importance Relative :</b> Cet enjeu est-il plus ou moins important que les facteurs idéologiques (OTAN, "monde russe") ?</li>
-                                    <li>• <b>Rôle de l'Occident :</b> L'intérêt occidental pour ces ressources est-il un facteur qui alimente le conflit ?</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 class="font-bold mb-3 text-blue-400">📊 Analyse des biais</h4>
-                                <div class="space-y-3 text-sm">
-                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded"><div class="font-semibold text-blue-400">Presse économique/géopolitique</div><div class="text-xs">Tendance à voir la rationalité stratégique et économique comme le moteur principal des actions de la Russie.</div></div>
-                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded"><div class="font-semibold text-green-400">Presse engagée (gauche/écolo)</div><div class="text-xs">Analyse le conflit à travers le prisme de la critique du capitalisme et de l'extractivisme.</div></div>
-                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded"><div class="font-semibold text-yellow-400">Angle manquant</div><div class="text-xs">La position et la communication officielles de la Russie sur cet enjeu précis sont rarement rapportées directement.</div></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-6 p-4 bg-gray-900 bg-opacity-50 rounded-lg border border-gray-700">
-                            <p class="text-sm mb-2"><span class="font-bold text-yellow-400">⚠️ Alerte :</span> La dimension "guerre des ressources" est un prisme d'analyse essentiel pour comprendre la vision à long terme du conflit. Elle dépasse la simple question territoriale pour toucher au contrôle des chaînes de valeur technologiques du XXIe siècle.</p>
-                            <p class="text-sm text-gray-400">💡 <b>Recommandation :</b> Analysez les cartes des combats en les superposant à celles des gisements miniers pour mieux saisir les objectifs stratégiques russes sur le terrain.</p>
-                        </div>
-                    </section>
-                </div>
-            </main>
-
-            <!-- FOOTER (NE PAS MODIFIER)-->
-            <footer class="text-center py-8 text-xs text-gray-500">
-                <p>© 2025 INFODROP. Tous droits réservés.</p>
-                <p class="mt-1">Un projet 3C - EM&LPy</p>
-            </footer>
+        <!-- Conclusion -->
+        <div class="mt-6 text-center text-xs text-gray-500">
+            <p>Cette analyse 360° révèle comment la question des terres rares est devenue un enjeu de communication dans le conflit ukrainien,</p>
+            <p>avec des narratifs divergents selon les intérêts géopolitiques de chaque acteur médiatique.</p>
         </div>
-
-        <!-- BOUTON SCROLL TO TOP (NE PAS MODIFIER) -->
-        <button x-data="{ show: false }" x-show="show" x-transition @click="window.scrollTo({ top: 0, behavior: 'smooth' })" x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })" class="fixed bottom-6 right-6 z-40 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110 border border-gray-700" style="display: none;"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg></button>
     </div>
-
-    <!-- ======================================================================== -->
-    <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER (NE PAS MODIFIER)                        -->
-    <!-- ======================================================================== -->
-    <script>
-        function contextTicker() {
-            return {
-                dateInfo:{fullDate:'',dayOfYear:0,daysUntilNewYear:0},todayFeast:'',weather:{temperature:null,description:'',icon:'🌡️'},moonPhase:{name:'',icon:'🌙'},
-                feasts:{'01-01':'Jour de l\'an','01-06':'Épiphanie','02-02':'Chandeleur','02-14':'Saint-Valentin','03-17':'Saint-Patrick','04-01':'Poisson d\'avril','05-01':'Fête du travail','05-08':'Victoire 1945','06-21':'Fête de la musique','07-14':'Fête nationale','08-15':'Assomption','10-31':'Halloween','11-01':'Toussaint','11-11':'Armistice 1918','12-25':'Noël','12-31':'Saint-Sylvestre'},
-                async initTicker(){this.updateDateInfo();this.updateMoonPhase();await this.getWeather();const t=new Date,e=new Date(t);e.setDate(e.getDate()+1),e.setHours(0,0,0,0);setTimeout(()=>{this.updateDateInfo(),this.updateMoonPhase(),setInterval(()=>{this.updateDateInfo(),this.updateMoonPhase()},864e5)},e-t),setInterval(()=>this.getWeather(),6e5)},
-                updateDateInfo(){const t=new Date;this.dateInfo.fullDate=(t.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})).replace(/^\w/,c=>c.toUpperCase());const e=new Date(t.getFullYear(),0,0);this.dateInfo.dayOfYear=Math.floor((t-e)/864e5);const a=new Date(t.getFullYear()+1,0,1);this.dateInfo.daysUntilNewYear=Math.ceil((a-t)/864e5);const o=`${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;this.todayFeast=this.feasts[o]||""},
-                updateMoonPhase(){const t=(new Date-new Date(2000,0,6))/864e5%29.53058867;t<1.84566?(this.moonPhase.name="Nouvelle lune",this.moonPhase.icon="🌑"):t<5.53699?(this.moonPhase.name="Premier croissant",this.moonPhase.icon="🌒"):t<9.22831?(this.moonPhase.name="Premier quartier",this.moonPhase.icon="🌓"):t<12.91963?(this.moonPhase.name="Gibbeuse croissante",this.moonPhase.icon="🌔"):t<16.61096?(this.moonPhase.name="Pleine lune",this.moonPhase.icon="🌕"):t<20.30228?(this.moonPhase.name="Gibbeuse décroissante",this.moonPhase.icon="🌖"):t<23.99361?(this.moonPhase.name="Dernier quartier",this.moonPhase.icon="🌗"):(this.moonPhase.name="Dernier croissant",this.moonPhase.icon="🌘")},
-                async getWeather(){try{const{latitude:t,longitude:e}=(await new Promise((t,e)=>{navigator.geolocation.getCurrentPosition(t,e,{timeout:5e3})})).coords,a=await(await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${t}&longitude=${e}¤t_weather=true&timezone=auto`)).json(),o=a.current_weather;this.weather.temperature=Math.round(o.temperature);const n=o.weathercode;n===0?(this.weather.description="Ciel dégagé",this.weather.icon="☀️"):n<=3?(this.weather.description="Partiellement nuageux",this.weather.icon="⛅"):n<=48?(this.weather.description="Nuageux",this.weather.icon="☁️"):n<=67?(this.weather.description="Pluie",this.weather.icon="🌧️"):n<=77?(this.weather.description="Neige",this.weather.icon="❄️"):n<=99&&(this.weather.description="Orage",this.weather.icon="⛈️")}catch(t){try{const t=await(await fetch("https://api.open-meteo.com/v1/forecast?latitude=48.8566&longitude=2.3522¤t_weather=true&timezone=Europe/Paris")).json(),e=t.current_weather;this.weather.temperature=Math.round(e.temperature);const a=e.weathercode;a===0?this.weather.icon="☀️":a<=3?this.weather.icon="⛅":a<=48?this.weather.icon="☁️":a<=67?this.weather.icon="🌧️":a<=77?this.weather.icon="❄️":this.weather.icon="⛈️",this.weather.description="Paris"}catch(t){console.error("Erreur météo:",t)}}}
-            };
-        }
-        function infodropApp() {
-            return {
-                sessionLoaded:!1,user:null,email:"",loading:!1,message:"",messageType:"",inviteCode:"",copied:!1,
-                userInviteData:{code:null,is_used:!1,parrainEmail:null,filleulEmail:null},
-                async init(){const t=await initializeSupabase();t?(supabase.auth.onAuthStateChange(async(t,e)=>{this.user=e?.user||null,this.sessionLoaded=!0,"SIGNED_IN"===t&&(console.log("✅ Utilisateur connecté sur page démo"),this.loadUserInviteData()),"SIGNED_OUT"===t&&(this.userInviteData={code:null,is_used:!1,parrainEmail:null,filleulEmail:null})}),window.addEventListener("scroll",()=>{document.getElementById("stickyHeader")?.classList.toggle("shadow-xl",window.scrollY>10)}),this.initPerspectiveAnimations()):this.sessionLoaded=!0},
-                initPerspectiveAnimations(){setTimeout(()=>{const t=new IntersectionObserver(t=>{t.forEach(t=>{t.isIntersecting&&t.target.classList.add("slide-in")})});document.querySelectorAll(".perspective-card").forEach(e=>{t.observe(e)})},100)},
-                async login(){if(this.loading)return;this.loading=!0,this.message="",this.messageType="";try{const t=await fetch("/api/check-email",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:this.email.toLowerCase()})});if(!t.ok){const e=await t.json();throw new Error(e.error||"Erreur de communication.")}const{exists:e}=await t.json();if(!e){if(!this.inviteCode)return this.message="Code d'invitation requis pour les nouveaux utilisateurs.",this.messageType="error",void(this.loading=!1);const t=await fetch("/api/validate-invite",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code:this.inviteCode,email:this.email})}),a=await t.json();if(!a.success)return this.message=a.error,this.messageType="error",void(this.loading=!1)}const{error:a}=await supabase.auth.signInWithOtp({email:this.email.toLowerCase(),options:{emailRedirectTo:window.location.origin}});if(a)throw a;this.message="Vérifiez vos emails ! Un lien de connexion a été envoyé.",this.messageType="success"}catch(t){this.message=t.message||"Une erreur est survenue.",this.messageType="error"}finally{this.loading=!1}},
-                async loadUserInviteData(){if(!this.user||!this.user.email)return;try{const{data:t,error:e}=await supabase.from("invitation_codes").select("*").ilike("owner_email",this.user.email.toLowerCase()).maybeSingle();e&&"PGRST116"!==e.code?console.error("❌ Erreur récupération code proprio:",e):t&&(this.userInviteData.code=t.code,this.userInviteData.is_used=t.is_used||!1,t.is_used&&t.used_by_email&&(this.userInviteData.filleulEmail=t.used_by_email));const{data:a,error:o}=await supabase.from("invitation_codes").select("owner_email").ilike("used_by_email",this.user.email.toLowerCase()).maybeSingle();o&&"PGRST116"!==o.code?console.error("❌ Erreur récupération parrain:",o):a&&(this.userInviteData.parrainEmail=a.owner_email)}catch(t){console.error("❌ Erreur générale lors du chargement des données d'invitation:",t),this.userInviteData={code:null,is_used:!1,parrainEmail:null,filleulEmail:null}}},
-                async logout(){await supabase.auth.signOut()},
-                copyInviteMessage(t){const e=`Vous avez été invité à rejoindre le club privé INFODROP !\nAccédez à l'actu essentielle sur : https://infodrop.live\nUtilisez ce code lors de votre inscription : ${t}`;navigator.clipboard.writeText(e),this.copied=!0,setTimeout(()=>this.copied=!1,1500)}
-            };
-        }
-    </script>
 </body>
 
 </html>
