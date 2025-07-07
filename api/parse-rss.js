@@ -60,6 +60,11 @@ const RSS_FEEDS = [
     // === ECO & CRYPTO ===
     { name: 'Journal du coin', url: 'https://journalducoin.com/feed/', orientation: 'neutre', tags: ['crypto'] },
     { name: 'Cryptoast', url: 'https://cryptoast.fr/feed/', orientation: 'neutre', tags: ['crypto'] },
+    { name: 'Capital.fr', url: 'https://feed.prismamediadigital.com/v1/cap/rss', orientation: 'centre-droit', tags: ['économie'] },
+
+    // === LES ECHOS ===
+    { name: 'Les Echos', url: 'https://services.lesechos.fr/rss/les-echos-economie.xml', orientation: 'centre-droit', tags: ['économie'] },
+    { name: 'Les Echos', url: 'https://services.lesechos.fr/rss/les-echos-tech-medias.xml', orientation: 'centre-droit', tags: ['tech'] },
 
     // === DÉFENSE / MILITAIRE ===
     { name: 'Cyber.gouv.fr (ANSSI)', url: 'https://cyber.gouv.fr/actualites/feed', orientation: 'gouvernement', tags: ['cyber'] },
@@ -81,7 +86,7 @@ const RSS_FEEDS = [
     { name: 'La Croix', url: 'https://www.la-croix.com/feeds/rss/societe.xml', orientation: 'centre-droit', tags: ['société'] },
     { name: 'La Croix', url: 'https://www.la-croix.com/feeds/rss/politique.xml', orientation: 'centre-droit', tags: ['politique'] },
     { name: 'La Croix', url: 'https://www.la-croix.com/feeds/rss/culture.xml', orientation: 'centre-droit', tags: ['culture'] },
-    { name: "L'Opinion", url: 'https://www.lopinion.fr/index.rss', orientation: 'droite', tags: ['opinion'] },
+    { name: "L'Opinion", url: 'https://feeds.feedburner.com/lopinion', orientation: 'droite', tags: ['opinion'] },
     { name: 'Valeurs Actuelles', url: 'https://www.valeursactuelles.com/feed?post_type=post', orientation: 'extrême-droite', tags: ['opinion'] },
     { name: 'Causeur', url: 'https://www.causeur.fr/feed', orientation: 'extrême-droite', tags: ['opinion'] },
     { name: 'BFMTV', url: 'https://www.bfmtv.com/rss/news-24-7/', orientation: 'centre-droit', tags: ['tv'] },
