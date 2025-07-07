@@ -464,21 +464,10 @@
                 <div x-show="true" x-transition class="bg-gray-800/95 border-b border-gray-700 px-4 py-2">
                     <div class="max-w-4xl mx-auto">
 
-                        <!-- === CARTE ARTICLES LUS === -->
-                        <div x-show="totalReadCount > 0" class="bg-gray-800/50 border border-gray-700 rounded-lg mb-2">
-                            <div class="py-1.5 px-3 text-center">
-                                <div class="flex items-center justify-center gap-2 text-xs">
-                                    <span class="text-blue-400">📚</span>
-                                    <span class="font-semibold text-white" x-text="totalReadCount"></span>
-                                    <span class="text-gray-300"
-                                        x-text="totalReadCount === 1 ? 'article lu' : 'articles lus'"></span>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- === CARTE PARRAINAGE PLIABLE === -->
                         <div x-show="userInviteData.code || userInviteData.parrainEmail || userInviteData.filleulEmail"
-                            x-data="{ showParrainage: false }" class="bg-gray-800/50 border border-gray-700 rounded-lg">
+                            x-data="{ showParrainage: false }"
+                            class="bg-gray-800/50 border border-gray-700 rounded-lg mb-2">
 
                             <!-- Header pliable avec code -->
                             <button @click="showParrainage = !showParrainage" class="w-full py-1.5 px-3">
@@ -486,14 +475,15 @@
                                     <!-- Code à partager sur la même ligne -->
                                     <div x-show="userInviteData.code" class="flex items-center gap-2">
                                         <span class="text-yellow-400 text-xs">🎁</span>
-                                        <span class="text-gray-300 text-xs">Code :</span>
+                                        <span class="text-gray-300 text-xs">Code à partager :</span>
                                         <span
                                             class="font-mono bg-gray-900 px-1.5 py-0.5 rounded cursor-pointer hover:bg-gray-700 transition text-white text-xs border border-gray-600"
                                             @click.stop="copyInviteMessage(userInviteData.code)"
                                             title="Cliquez pour copier" x-text="userInviteData.code">
                                         </span>
                                         <span x-show="copied"
-                                            class="text-green-400 font-semibold transition text-xs">✓</span>
+                                            class="text-green-400 font-semibold transition bg-green-900/20 px-1.5 py-0.5 rounded text-xs">Copié
+                                            !</span>
                                     </div>
 
                                     <!-- Placeholder si pas de code -->
@@ -516,11 +506,11 @@
                             <!-- Contenu dépliable - Relations -->
                             <div x-show="showParrainage" x-transition
                                 x-show="userInviteData.parrainEmail || userInviteData.filleulEmail"
-                                class="px-3 pb-1.5 space-y-1 text-center border-t border-gray-700">
+                                class="px-3 pb-2 space-y-2 text-center border-t border-gray-700 pt-2">
 
                                 <!-- Parrain -->
                                 <div x-show="userInviteData.parrainEmail"
-                                    class="flex items-center justify-center gap-1 text-xs">
+                                    class="flex items-center justify-center gap-2 text-xs">
                                     <span class="text-green-400">👆</span>
                                     <span class="text-gray-400">Invité par :</span>
                                     <span class="font-mono text-white" x-text="userInviteData.parrainEmail"></span>
@@ -528,17 +518,29 @@
 
                                 <!-- Filleul -->
                                 <div x-show="userInviteData.filleulEmail"
-                                    class="flex items-center justify-center gap-1 text-xs">
+                                    class="flex items-center justify-center gap-2 text-xs">
                                     <span class="text-purple-400">👇</span>
-                                    <span class="text-gray-400">Filleul :</span>
+                                    <span class="text-gray-400">Votre filleul :</span>
                                     <span class="font-mono text-white" x-text="userInviteData.filleulEmail"></span>
                                 </div>
                             </div>
 
                         </div>
 
+                        <!-- === CARTE ARTICLES LUS === -->
+                        <div x-show="totalReadCount > 0" class="bg-gray-800/50 border border-gray-700 rounded-lg mb-2">
+                            <div class="py-1.5 px-3 text-center">
+                                <div class="flex items-center justify-center gap-2 text-xs">
+                                    <span class="text-blue-400">📚</span>
+                                    <span class="font-semibold text-white" x-text="totalReadCount"></span>
+                                    <span class="text-gray-300"
+                                        x-text="totalReadCount === 1 ? 'article lu' : 'articles lus'"></span>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- === CARTE ADMIN === -->
-                        <div x-show="isAdmin" class="bg-gray-800/50 border border-gray-700 rounded-lg mt-2">
+                        <div x-show="isAdmin" class="bg-gray-800/50 border border-gray-700 rounded-lg">
                             <div class="py-1.5 px-3 text-center">
                                 <button @click="showAdminPanel = !showAdminPanel"
                                     class="flex items-center justify-center gap-1 w-full text-orange-400 hover:text-white transition">
