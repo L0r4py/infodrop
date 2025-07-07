@@ -605,9 +605,9 @@
                 <div x-show="!loadingNews && diversityScore !== null" x-transition
                     class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
                     <button @click="showDiversityChecker = !showDiversityChecker"
-                        class="w-full flex items-center justify-between p-4">
-                        <h3 class="font-semibold text-gray-300">Score de diversité</h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform"
+                        class="w-full flex items-center justify-between py-3 px-4">
+                        <h3 class="text-sm font-medium text-gray-300">Score de diversité</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform"
                             :class="{ 'rotate-180': showDiversityChecker }" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -661,9 +661,10 @@
                 <!-- 🔍 SYSTÈME DE FILTRES                                     -->
                 <!-- ========================================================== -->
                 <div x-show="!loadingNews" x-transition class="bg-gray-800/50 border border-gray-700 rounded-lg mb-6">
-                    <button @click="showFilters = !showFilters" class="w-full flex items-center justify-between p-4">
-                        <h3 class="font-semibold text-gray-300">Filtrer</h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform"
+                    <button @click="showFilters = !showFilters"
+                        class="w-full flex items-center justify-between py-3 px-4">
+                        <h3 class="text-sm font-medium text-gray-300">Filtrer</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform"
                             :class="{ 'rotate-180': showFilters }" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
