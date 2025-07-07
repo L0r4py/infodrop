@@ -1621,9 +1621,7 @@
                         if (!this.newNews.resume || !this.newNews.resume.trim()) {
                             throw new Error('Le résumé est obligatoire');
                         }
-                        if (!this.newNews.source || !this.newNews.source.trim()) {
-                            throw new Error('La source est obligatoire');
-                        }
+
                         if (!this.newNews.url || !this.newNews.url.trim()) {
                             throw new Error('L\'URL est obligatoire');
                         }
@@ -1641,13 +1639,13 @@
                             tags = tags.concat(additionalTags);
                         }
 
-                        // === OBJET FINAL POUR LA DB (COLONNES EXACTES) ===
+                        // === OBJET FINAL POUR LA DB ===
                         const articleData = {
                             resume: this.newNews.resume.trim(),
-                            source: this.newNews.source.trim(),
+                            source: '🧨INFODROP',
                             url: this.newNews.url.trim(),
                             heure: new Date().toISOString(),
-                            tags: tags, // Array de strings
+                            tags: tags,
                             added_by: this.user.email
                         };
 
