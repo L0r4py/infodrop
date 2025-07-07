@@ -548,58 +548,45 @@
             <!-- ============================================================== -->
             <div x-show="showAdminPanel && isAdmin" x-transition class="bg-gray-950/50 border-b border-gray-800">
                 <div class="max-w-4xl mx-auto p-4">
-                    <h2 class="text-lg font-bold text-white mb-3">🧨 Ajouter une actualité</h2>
+                    <h2 class="text-sm font-medium text-white mb-3">🧨 Ajouter une actualité</h2>
 
-                    <!-- === FORMULAIRE D'AJOUT D'ACTUALITÉ === -->
-                    <form @submit.prevent="addManualNews()" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div class="md:col-span-3">
+                    <!-- === FORMULAIRE D'AJOUT D'ACTUALITÉ SIMPLIFIÉ === -->
+                    <form @submit.prevent="addManualNews()" class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <div class="md:col-span-2">
                             <input x-model="newNews.resume" type="text" placeholder="Résumé" maxlength="180" required
-                                class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
+                                class="w-full px-2 py-1.5 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500 text-sm">
                         </div>
                         <div>
                             <input x-model="newNews.source" type="text" placeholder="Source" required
-                                class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
+                                class="w-full px-2 py-1.5 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500 text-sm">
                         </div>
                         <div>
                             <input x-model="newNews.url" type="url" placeholder="URL de l'article" required
-                                class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
-                        </div>
-                        <div>
-                            <select x-model="newNews.orientation"
-                                class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white h-full">
-                                <option value="">Orientation...</option>
-                                <option value="extrême-gauche">Extrême gauche</option>
-                                <option value="gauche">Gauche</option>
-                                <option value="centre-gauche">Centre gauche</option>
-                                <option value="centre">Centre</option>
-                                <option value="centre-droit">Centre droit</option>
-                                <option value="droite">Droite</option>
-                                <option value="extrême-droite">Extrême droite</option>
-                                <option value="neutre">Neutre</option>
-                            </select>
+                                class="w-full px-2 py-1.5 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500 text-sm">
                         </div>
                         <div class="md:col-span-2">
-                            <input x-model="newNews.tagsText" type="text" placeholder="Tags (séparés par des virgules)"
-                                class="w-full px-3 py-2 bg-gray-800 rounded border border-gray-700 text-white placeholder-gray-500">
-                        </div>
-                        <div class="md:col-span-3">
                             <button type="submit" :disabled="addingNews"
-                                class="bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 transition disabled:opacity-50">Publier</button>
-
-                            <!-- === GÉNÉRATION DE CODES D'INVITATION === -->
-                            <div class="md:col-span-3 border-t border-gray-700 pt-3 mt-3">
-                                <h3 class="text-base font-bold text-white mb-2">🎁 Générer un code d'invitation</h3>
-                                <button type="button" @click="generateInviteCode()"
-                                    class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition">
-                                    Générer un code
-                                </button>
-                                <span x-show="lastGeneratedCode"
-                                    class="ml-4 font-mono bg-gray-700 text-white p-2 rounded">
-                                    Code généré : <strong x-text="lastGeneratedCode"></strong> (copié !)
-                                </span>
-                            </div>
+                                class="bg-red-600 text-white px-3 py-1.5 rounded hover:bg-red-700 transition disabled:opacity-50 text-sm">
+                                Publier
+                            </button>
                         </div>
                     </form>
+
+                    <!-- === GÉNÉRATION DE CODES D'INVITATION === -->
+                    <div class="border-t border-gray-700 pt-3 mt-3">
+                        <div class="flex items-center gap-3">
+                            <h3 class="text-sm font-medium text-white">Générer un code d'invitation</h3>
+                            <button type="button" @click="generateInviteCode()"
+                                class="bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition text-sm flex items-center gap-1">
+                                🎁 Générer
+                            </button>
+                            <span x-show="lastGeneratedCode"
+                                class="font-mono bg-gray-700 text-white px-2 py-1 rounded text-xs">
+                                <span x-text="lastGeneratedCode"></span> <span class="text-green-400">(copié !)</span>
+                            </span>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
