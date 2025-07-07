@@ -28,6 +28,7 @@ const RSS_FEEDS = [
     { name: "France24", url: 'https://www.france24.com/fr/france/rss', orientation: 'centre-gauche', tags: ['national'] },
     { name: "L'Obs", url: 'https://www.nouvelobs.com/rss.xml', orientation: 'centre-gauche', tags: ['national'] },
     { name: "France Info", url: 'https://www.francetvinfo.fr/titres.rss', orientation: 'centre', tags: ['national'] },
+    { name: 'Euronews', url: 'https://fr.euronews.com/rss', orientation: 'centre', tags: ['international'] },
 
     // === RÉGIONALES ===
     { name: "La Depeche", url: 'https://www.ladepeche.fr/rss.xml', orientation: 'centre-gauche', tags: ['regional'] },
