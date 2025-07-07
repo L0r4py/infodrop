@@ -61,10 +61,6 @@ const RSS_FEEDS = [
     { name: 'Journal du coin', url: 'https://journalducoin.com/feed/', orientation: 'neutre', tags: ['crypto'] },
     { name: 'Cryptoast', url: 'https://cryptoast.fr/feed/', orientation: 'neutre', tags: ['crypto'] },
     { name: 'Capital.fr', url: 'https://feed.prismamediadigital.com/v1/cap/rss', orientation: 'centre-droit', tags: ['économie'] },
-
-    // === LES ECHOS ===
-    { name: 'Les Echos', url: 'https://services.lesechos.fr/rss/les-echos-economie.xml', orientation: 'centre-droit', tags: ['économie'] },
-    { name: 'Les Echos', url: 'https://services.lesechos.fr/rss/les-echos-tech-medias.xml', orientation: 'centre-droit', tags: ['tech'] },
     
     // === SPORT ===
     { name: "L'Équipe", url: "https://dwh.lequipe.fr/api/edito/rss?path=/Tous%20sports", orientation: "centre", tags: ["sport"] },
