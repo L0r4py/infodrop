@@ -632,6 +632,7 @@
                                        'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
                                        'text-green-400': diversityScore >= 70
                                    }" x-text="getDiversityMessage()"></p>
+                                <p class="text-xs text-blue-400 mt-1" x-text="getDiversityTip()"></p>
                             </div>
                         </div>
 
@@ -1859,9 +1860,22 @@
 
                 // === MESSAGE DU SCORE DE DIVERSITÉ ===
                 getDiversityMessage() {
-                    if (this.diversityScore < 30) return "Bulle de filtre détectée";
-                    if (this.diversityScore < 70) return "Diversité correcte";
-                    return "Excellente diversité !";
+                    if (this.diversityScore < 30) return "🔴 Bulle de filtre ! Explorez d'autres horizons";
+                    if (this.diversityScore < 50) return "🟡 Bon début ! Continuez à diversifier";
+                    if (this.diversityScore < 70) return "🟠 Bien ! Quelques perspectives en plus ?";
+                    if (this.diversityScore < 85) return "🟢 Très bien ! Vous êtes sur la bonne voie";
+                    return "🏆 Champion de la diversité !";
+                },
+
+                getDiversityTip() {
+                    const missing = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre']
+                        .filter(orientation => !this.readOrientations.includes(orientation));
+
+                    if (missing.length === 0) return "🎉 Toutes les orientations explorées !";
+                    if (missing.length > 6) return "💡 Essayez de lire des perspectives variées";
+
+                    const suggestion = missing[Math.floor(Math.random() * missing.length)];
+                    return `💡 Essayez de lire du "${suggestion.replace('-', ' ')}"`;
                 },
 
                 // === CÉLÉBRATION DES 100 ARTICLES ===
