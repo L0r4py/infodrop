@@ -889,12 +889,12 @@
                 class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 overflow-y-auto"
                 style="display: none;">
                 <div @click.away="showAboutPanel = false"
-                    class="bg-gray-800 rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-gray-700">
+                    class="bg-gray-800 rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-gray-700 my-8">
 
                     <!-- Header -->
-                    <div class="p-6 border-b border-gray-700">
-                        <h3 class="text-xl font-bold text-center text-white mb-2">À propos d'INFODROP</h3>
-                        <p class="text-center text-blue-400">Le Club privé de l'actu centralisée</p>
+                    <div class="p-8 pb-6 border-b border-gray-700">
+                        <h3 class="text-2xl font-bold text-center text-white mb-3">À propos d'INFODROP</h3>
+                        <p class="text-center text-blue-400 text-lg">Le Club privé de l'actu centralisée</p>
                     </div>
 
                     <!-- Contenu -->
@@ -1241,53 +1241,18 @@
                                             2</div>
                                         <div class="text-sm text-gray-300">
                                             <strong class="text-white">Trouvez-le</strong> en haut de votre flux ou dans
-                                            cette
-                                            section
+                                            la section dédiée ci-dessus
                                         </div>
                                     </div>
-
-                                    <!-- === CARTE CODE INTERACTIF === -->
-                                    <div x-show="userInviteData.code"
-                                        class="bg-gray-800/70 border border-gray-600 rounded-lg p-4 ml-8">
-                                        <div class="text-center">
-                                            <p class="text-gray-400 text-xs mb-2">👆 Votre code de parrainage :</p>
-                                            <div class="font-mono text-lg font-bold text-white bg-gradient-to-r from-blue-500 to-purple-600 px-3 py-2 rounded-lg cursor-pointer hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 border border-white/20 inline-block"
-                                                @click="copyInviteMessage(userInviteData.code)"
-                                                title="Cliquer pour copier le message complet"
-                                                x-text="userInviteData.code">
-                                            </div>
-                                            <div x-show="copied"
-                                                class="text-green-400 font-semibold mt-2 text-xs animate-pulse">
-                                                ✅ Message copié !
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <div class="flex items-start gap-3">
                                         <div
                                             class="bg-blue-600 rounded-lg px-2 py-1 text-white text-xs font-bold min-w-[24px] text-center">
                                             3</div>
                                         <div class="text-sm text-gray-300">
-                                            <strong class="text-white">Cliquez dessus</strong> pour copier le message
-                                            complet avec
-                                            lien + code
+                                            <strong class="text-white">Cliquez dessus</strong> pour copier
+                                            automatiquement le message complet
                                         </div>
                                     </div>
-
-                                    <!-- === APERÇU DU MESSAGE COPIÉ === -->
-                                    <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-lg p-3 ml-8">
-                                        <h6 class="text-yellow-300 text-xs font-semibold mb-2 flex items-center gap-1">
-                                            <span>📋</span> Vous obtiendrez :
-                                        </h6>
-                                        <div
-                                            class="bg-gray-800/50 border border-gray-600 rounded p-2 text-xs text-gray-300 font-mono leading-relaxed">
-                                            "Vous avez été invité à rejoindre le club privé INFODROP !<br>
-                                            Accédez à l'actu essentielle sur : https://infodrop.live<br>
-                                            Utilisez ce code lors de votre inscription : <span class="text-yellow-400"
-                                                x-text="userInviteData.code || 'VOTRE-CODE'"></span>"
-                                        </div>
-                                    </div>
-
                                     <div class="flex items-start gap-3">
                                         <div
                                             class="bg-blue-600 rounded-lg px-2 py-1 text-white text-xs font-bold min-w-[24px] text-center">
