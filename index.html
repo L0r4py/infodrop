@@ -933,7 +933,7 @@
                                 <div class="flex items-start gap-3">
                                     <span class="text-red-400">🌍</span>
                                     <span><strong class="text-white">Sources francophones</strong> - France, Belgique,
-                                        Suisse, Canada, Afrique</span>
+                                        Corse, Canada</span>
                                 </div>
                             </div>
 
@@ -943,7 +943,6 @@
                                     <a href="/index.html"
                                         class="text-blue-400 hover:text-blue-300 underline font-medium">Page
                                         d'accueil</a>
-                                    (vous y êtes actuellement)
                                 </p>
                             </div>
                         </div>
@@ -1039,7 +1038,7 @@
                                 <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-lg p-3">
                                     <p class="text-yellow-300 text-center text-sm">
                                         🧪 <strong>Démo disponible :</strong>
-                                        <a href="/DEMO-crise-eau-mayotte.html"
+                                        <a href="infodrop360.html"
                                             class="text-yellow-400 hover:text-yellow-300 underline font-medium">Crise de
                                             l'eau à
                                             Mayotte</a>
@@ -1244,6 +1243,24 @@
                                             section
                                         </div>
                                     </div>
+
+                                    <!-- === CARTE CODE INTERACTIF === -->
+                                    <div x-show="userInviteData.code"
+                                        class="bg-gray-800/70 border border-gray-600 rounded-lg p-4 ml-8">
+                                        <div class="text-center">
+                                            <p class="text-gray-400 text-xs mb-2">👆 Votre code de parrainage :</p>
+                                            <div class="font-mono text-lg font-bold text-white bg-gradient-to-r from-blue-500 to-purple-600 px-3 py-2 rounded-lg cursor-pointer hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 border border-white/20 inline-block"
+                                                @click="copyInviteMessage(userInviteData.code)"
+                                                title="Cliquer pour copier le message complet"
+                                                x-text="userInviteData.code">
+                                            </div>
+                                            <div x-show="copied"
+                                                class="text-green-400 font-semibold mt-2 text-xs animate-pulse">
+                                                ✅ Message copié !
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="flex items-start gap-3">
                                         <div
                                             class="bg-blue-600 rounded-lg px-2 py-1 text-white text-xs font-bold min-w-[24px] text-center">
@@ -1254,6 +1271,21 @@
                                             lien + code
                                         </div>
                                     </div>
+
+                                    <!-- === APERÇU DU MESSAGE COPIÉ === -->
+                                    <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-lg p-3 ml-8">
+                                        <h6 class="text-yellow-300 text-xs font-semibold mb-2 flex items-center gap-1">
+                                            <span>📋</span> Vous obtiendrez :
+                                        </h6>
+                                        <div
+                                            class="bg-gray-800/50 border border-gray-600 rounded p-2 text-xs text-gray-300 font-mono leading-relaxed">
+                                            "Vous avez été invité à rejoindre le club privé INFODROP !<br>
+                                            Accédez à l'actu essentielle sur : https://infodrop.live<br>
+                                            Utilisez ce code lors de votre inscription : <span class="text-yellow-400"
+                                                x-text="userInviteData.code || 'VOTRE-CODE'"></span>"
+                                        </div>
+                                    </div>
+
                                     <div class="flex items-start gap-3">
                                         <div
                                             class="bg-blue-600 rounded-lg px-2 py-1 text-white text-xs font-bold min-w-[24px] text-center">
