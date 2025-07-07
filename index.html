@@ -690,12 +690,12 @@
                             <div class="flex flex-wrap gap-2 mb-3">
                                 <template x-for="orientation in allOrientations" :key="orientation">
                                     <button @click="activeFilter = orientation" :class="[orientation === '🧨INFODROP' ? 
-        (activeFilter === orientation ? 'bg-gray-600 text-white border-2 border-white' : 
-         hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-white border border-gray-400 hover:bg-gray-600' : 
-         'bg-gray-800 text-gray-500 border border-gray-600') :
-        (activeFilter === orientation ? getOrientationClass(orientation) : 
-         hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 
-         'bg-gray-800 text-gray-500 border border-gray-600')]"
+            (activeFilter === orientation ? 'bg-gray-600 text-white border-2 border-white' : 
+             hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-white border border-gray-400 hover:bg-gray-600' : 
+             'bg-gray-800 text-gray-500 border border-gray-600') :
+            (activeFilter === orientation ? getOrientationClass(orientation) : 
+             hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 
+             'bg-gray-800 text-gray-500 border border-gray-600')]"
                                         class="px-2 py-0.5 rounded-full text-xs font-medium transition relative"
                                         :class="orientation === '🧨INFODROP' ? 'font-black' : 'capitalize'"
                                         :title="hasArticlesForOrientation(orientation) ? '' : 'Aucun article ces dernières 24h'">
@@ -731,74 +731,74 @@
                         </div>
 
                     </div>
+                </div>
 
-                    <!-- ========================================================== -->
-                    <!-- 📰 LISTE DES ACTUALITÉS                                   -->
-                    <!-- ========================================================== -->
-                    <div class="space-y-3">
-                        <template x-for="news in filteredNews" :key="news.id">
-                            <div
-                                class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
+                <!-- ========================================================== -->
+                <!-- 📰 LISTE DES ACTUALITÉS                                   -->
+                <!-- ========================================================== -->
+                <div class="space-y-3">
+                    <template x-for="news in filteredNews" :key="news.id">
+                        <div
+                            class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
 
-                                <!-- === CONTENU DE L'ARTICLE === -->
-                                <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="flex-grow">
-                                    <p class="text-base text-white mb-2" x-text="news.resume"></p>
-                                    <div class="flex items-center flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400">
-                                        <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
-                                        <span x-show="!news.added_by" x-text="news.source"></span>
-                                        <span x-text="formatTime(news.heure)"></span>
-                                        <span x-show="news.orientation" :class="getOrientationClass(news.orientation)"
-                                            class="px-2 py-0.5 rounded-full font-semibold text-xs capitalize">
-                                            <span x-text="getOrientationDisplayName(news.orientation)"></span>
-                                        </span>
-                                        <template
-                                            x-if="news.tags && news.tags.filter(tag => tag !== '🧨INFODROP').length">
-                                            <template x-for="tag in news.tags.filter(tag => tag !== '🧨INFODROP')"
-                                                :key="tag">
-                                                <span
-                                                    class="ml-1 px-2 py-0.5 rounded-full font-medium text-xs capitalize bg-gray-700 text-gray-300 border border-gray-600"
-                                                    x-text="tag"></span>
-                                            </template>
+                            <!-- === CONTENU DE L'ARTICLE === -->
+                            <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="flex-grow">
+                                <p class="text-base text-white mb-2" x-text="news.resume"></p>
+                                <div class="flex items-center flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400">
+                                    <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
+                                    <span x-show="!news.added_by" x-text="news.source"></span>
+                                    <span x-text="formatTime(news.heure)"></span>
+                                    <span x-show="news.orientation" :class="getOrientationClass(news.orientation)"
+                                        class="px-2 py-0.5 rounded-full font-semibold text-xs capitalize">
+                                        <span x-text="getOrientationDisplayName(news.orientation)"></span>
+                                    </span>
+                                    <template x-if="news.tags && news.tags.filter(tag => tag !== '🧨INFODROP').length">
+                                        <template x-for="tag in news.tags.filter(tag => tag !== '🧨INFODROP')"
+                                            :key="tag">
+                                            <span
+                                                class="ml-1 px-2 py-0.5 rounded-full font-medium text-xs capitalize bg-gray-700 text-gray-300 border border-gray-600"
+                                                x-text="tag"></span>
                                         </template>
-                                    </div>
-                                </a>
+                                    </template>
+                                </div>
+                            </a>
 
-                                <!-- === BOUTONS ADMIN === -->
-                                <button x-show="isAdmin" @click.prevent="openEditPanel(news)"
-                                    class="flex-shrink-0 p-2 rounded-full hover:bg-blue-900/50 transition"
-                                    title="Éditer">✏️</button>
-                                <button x-show="isAdmin" @click.prevent="deleteNews(news.id)"
-                                    class="flex-shrink-0 p-2 rounded-full hover:bg-red-900/50 transition"
-                                    title="Supprimer">🗑️</button>
-                            </div>
-                        </template>
-
-                        <!-- ========================================================== -->
-                        <!-- 📭 MESSAGES D'ÉTAT                                        -->
-                        <!-- ========================================================== -->
-                        <div x-show="filteredNews.length === 0 && !loadingNews" class="text-center py-12">
-                            <div x-show="activeFilter === 'all'" class="text-gray-500">
-                                <p>Aucune actualité pour le moment.</p>
-                            </div>
-                            <div x-show="activeFilter !== 'all'"
-                                class="bg-gray-800/30 border border-gray-600 rounded-lg p-6 max-w-lg mx-auto">
-                                <div class="text-4xl mb-3">📭</div>
-                                <h3 class="text-lg font-semibold text-white mb-2">Aucun article trouvé</h3>
-                                <p class="text-gray-400 text-sm leading-relaxed" x-text="getEmptyFilterMessage()"></p>
-                                <button @click="activeFilter = 'all'"
-                                    class="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition">
-                                    ← Voir toutes les actualités
-                                </button>
-                            </div>
+                            <!-- === BOUTONS ADMIN === -->
+                            <button x-show="isAdmin" @click.prevent="openEditPanel(news)"
+                                class="flex-shrink-0 p-2 rounded-full hover:bg-blue-900/50 transition"
+                                title="Éditer">✏️</button>
+                            <button x-show="isAdmin" @click.prevent="deleteNews(news.id)"
+                                class="flex-shrink-0 p-2 rounded-full hover:bg-red-900/50 transition"
+                                title="Supprimer">🗑️</button>
                         </div>
+                    </template>
 
-                        <!-- === LOADER === -->
-                        <div x-show="loadingNews && filteredNews.length === 0" class="text-center py-12">
-                            <div
-                                class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin">
-                            </div>
+                    <!-- ========================================================== -->
+                    <!-- 📭 MESSAGES D'ÉTAT                                        -->
+                    <!-- ========================================================== -->
+                    <div x-show="filteredNews.length === 0 && !loadingNews" class="text-center py-12">
+                        <div x-show="activeFilter === 'all'" class="text-gray-500">
+                            <p>Aucune actualité pour le moment.</p>
+                        </div>
+                        <div x-show="activeFilter !== 'all'"
+                            class="bg-gray-800/30 border border-gray-600 rounded-lg p-6 max-w-lg mx-auto">
+                            <div class="text-4xl mb-3">📭</div>
+                            <h3 class="text-lg font-semibold text-white mb-2">Aucun article trouvé</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed" x-text="getEmptyFilterMessage()"></p>
+                            <button @click="activeFilter = 'all'"
+                                class="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition">
+                                ← Voir toutes les actualités
+                            </button>
                         </div>
                     </div>
+
+                    <!-- === LOADER === -->
+                    <div x-show="loadingNews && filteredNews.length === 0" class="text-center py-12">
+                        <div
+                            class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin">
+                        </div>
+                    </div>
+                </div>
             </main>
 
             <!-- ============================================================== -->
