@@ -1263,7 +1263,24 @@
                     });
 
                     this.cleanOldDiversityData();
-                },
+
+                    // === GESTION DE L'INTERFACE ===
+                    window.addEventListener('scroll', () => {
+                        document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
+                    });
+
+                    this.cleanOldDiversityData();
+
+                    document.addEventListener('visibilitychange', () => {
+                        if (!document.hidden && localStorage.getItem('infodrop_celebration_pending')) {
+                            setTimeout(() => this.showCelebration(), 1000);
+                        }
+                    });
+
+                    if (localStorage.getItem('infodrop_celebration_pending')) {
+                        setTimeout(() => this.showCelebration(), 2000);
+                    }
+                },  
 
                 // ============================================================
                 // 🔐 SYSTÈME D'AUTHENTIFICATION ET INVITATIONS
@@ -1271,61 +1288,61 @@
 
                 // === PROCESSUS DE CONNEXION ===
                 async login() {
-                    if (this.loading) return;
-                    this.loading = true;
-                    this.message = '';
-                    this.messageType = '';
-                    try {
-                        // Vérifie si l'email existe déjà (user existant ou non)
-                        const checkRes = await fetch('/api/check-email', {
+                if (this.loading) return;
+                this.loading = true;
+                this.message = '';
+                this.messageType = '';
+                try {
+                    // Vérifie si l'email existe déjà (user existant ou non)
+                    const checkRes = await fetch('/api/check-email', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: this.email.toLowerCase() })
+                    });
+                    if (!checkRes.ok) {
+                        const err = await checkRes.json();
+                        throw new Error(err.error || 'Erreur de communication.');
+                    }
+                    const { exists } = await checkRes.json();
+
+                    // Si l'utilisateur n'existe pas, il faut un code valide
+                    if (!exists) {
+                        if (!this.inviteCode) {
+                            this.message = "Code d'invitation requis pour les nouveaux utilisateurs.";
+                            this.messageType = 'error';
+                            this.loading = false;
+                            return;
+                        }
+                        const validateRes = await fetch('/api/validate-invite', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ email: this.email.toLowerCase() })
+                            body: JSON.stringify({ code: this.inviteCode, email: this.email })
                         });
-                        if (!checkRes.ok) {
-                            const err = await checkRes.json();
-                            throw new Error(err.error || 'Erreur de communication.');
+                        const validationResult = await validateRes.json();
+                        if (!validationResult.success) {
+                            this.message = validationResult.error;
+                            this.messageType = 'error';
+                            this.loading = false;
+                            return;
                         }
-                        const { exists } = await checkRes.json();
-
-                        // Si l'utilisateur n'existe pas, il faut un code valide
-                        if (!exists) {
-                            if (!this.inviteCode) {
-                                this.message = "Code d'invitation requis pour les nouveaux utilisateurs.";
-                                this.messageType = 'error';
-                                this.loading = false;
-                                return;
-                            }
-                            const validateRes = await fetch('/api/validate-invite', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ code: this.inviteCode, email: this.email })
-                            });
-                            const validationResult = await validateRes.json();
-                            if (!validationResult.success) {
-                                this.message = validationResult.error;
-                                this.messageType = 'error';
-                                this.loading = false;
-                                return;
-                            }
-                        }
-
-                        // On envoie l'OTP (lien magique) seulement si tout est OK
-                        const { error: otpError } = await supabase.auth.signInWithOtp({
-                            email: this.email.toLowerCase(),
-                            options: { emailRedirectTo: window.location.origin }
-                        });
-                        if (otpError) throw otpError;
-
-                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
-                        this.messageType = 'success';
-                    } catch (error) {
-                        this.message = error.message || 'Une erreur est survenue.';
-                        this.messageType = 'error';
-                    } finally {
-                        this.loading = false;
                     }
-                },
+
+                    // On envoie l'OTP (lien magique) seulement si tout est OK
+                    const { error: otpError } = await supabase.auth.signInWithOtp({
+                        email: this.email.toLowerCase(),
+                        options: { emailRedirectTo: window.location.origin }
+                    });
+                    if (otpError) throw otpError;
+
+                    this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
+                    this.messageType = 'success';
+                } catch (error) {
+                    this.message = error.message || 'Une erreur est survenue.';
+                    this.messageType = 'error';
+                } finally {
+                    this.loading = false;
+                }
+            },
 
                 // === CHARGEMENT DES DONNÉES D'INVITATION ===
                 // ============================================================
@@ -1333,515 +1350,550 @@
                 // ============================================================
 
                 async loadUserInviteData() {
-                    // Vérification de sécurité : utilisateur connecté
-                    if (!this.user || !this.user.email) {
-                        console.log('❌ Pas d\'utilisateur connecté pour charger les données d\'invitation');
-                        return;
-                    }
+                // Vérification de sécurité : utilisateur connecté
+                if (!this.user || !this.user.email) {
+                    console.log('❌ Pas d\'utilisateur connecté pour charger les données d\'invitation');
+                    return;
+                }
 
-                    // === VÉRIFICATION ADMIN ===
-                    if (this.isAdmin) {
-                        console.log('👑 Utilisateur admin détecté, traitement spécial...');
+                // === VÉRIFICATION ADMIN ===
+                if (this.isAdmin) {
+                    console.log('👑 Utilisateur admin détecté, traitement spécial...');
 
-                        try {
-                            // Pour un admin, on vérifie s'il a déjà un code d'invitation
-                            const { data: adminCode, error: adminError } = await supabase
-                                .from('invitation_codes')
-                                .select('*')
-                                .ilike('owner_email', this.user.email.toLowerCase())
-                                .maybeSingle();
-
-                            if (adminError && adminError.code !== 'PGRST116') {
-                                console.error('❌ Erreur requête admin:', adminError);
-                                return;
-                            }
-
-                            if (adminCode) {
-                                // L'admin a déjà un code
-                                console.log('✅ Code admin existant trouvé:', adminCode.code);
-                                this.userInviteData.code = adminCode.code;
-                                this.userInviteData.is_used = adminCode.is_used || false;
-
-                                if (adminCode.is_used && adminCode.used_by_email) {
-                                    this.userInviteData.filleulEmail = adminCode.used_by_email;
-                                }
-                            } else {
-                                // L'admin n'a pas de code, on peut en créer un automatiquement
-                                console.log('ℹ️ Aucun code d\'invitation pour l\'admin, c\'est normal');
-                                this.userInviteData.code = null;
-                            }
-
-                            // Un admin n'a jamais de parrain
-                            this.userInviteData.parrainEmail = null;
-
-                            console.log('✅ Données admin configurées:', this.userInviteData);
-                            return;
-
-                        } catch (error) {
-                            console.error('❌ Erreur traitement admin:', error);
-                            return;
-                        }
-                    }
-
-                    // === TRAITEMENT POUR UTILISATEURS NORMAUX ===
                     try {
-                        console.log('🔄 Chargement des données d\'invitation pour utilisateur normal:', this.user.email);
-
-                        // Récupérer le code d'invitation du compte connecté
-                        const { data: ownCode, error: ownCodeError } = await supabase
+                        // Pour un admin, on vérifie s'il a déjà un code d'invitation
+                        const { data: adminCode, error: adminError } = await supabase
                             .from('invitation_codes')
                             .select('*')
                             .ilike('owner_email', this.user.email.toLowerCase())
                             .maybeSingle();
 
-                        // Gestion de l'erreur pour ownCode
-                        if (ownCodeError && ownCodeError.code !== 'PGRST116') {
-                            console.error('❌ Erreur récupération code proprio:', ownCodeError);
-                        } else if (ownCode) {
-                            console.log('✅ Code proprio récupéré:', ownCode);
+                        if (adminError && adminError.code !== 'PGRST116') {
+                            console.error('❌ Erreur requête admin:', adminError);
+                            return;
+                        }
 
-                            this.userInviteData.code = ownCode.code;
-                            this.userInviteData.is_used = ownCode.is_used || false;
+                        if (adminCode) {
+                            // L'admin a déjà un code
+                            console.log('✅ Code admin existant trouvé:', adminCode.code);
+                            this.userInviteData.code = adminCode.code;
+                            this.userInviteData.is_used = adminCode.is_used || false;
 
-                            if (ownCode.is_used && ownCode.used_by_email) {
-                                this.userInviteData.filleulEmail = ownCode.used_by_email;
+                            if (adminCode.is_used && adminCode.used_by_email) {
+                                this.userInviteData.filleulEmail = adminCode.used_by_email;
                             }
+                        } else {
+                            // L'admin n'a pas de code, on peut en créer un automatiquement
+                            console.log('ℹ️ Aucun code d\'invitation pour l\'admin, c\'est normal');
+                            this.userInviteData.code = null;
                         }
 
-                        // Récupérer le parrain (qui a invité cet utilisateur)
-                        const { data: usedCode, error: usedCodeError } = await supabase
-                            .from('invitation_codes')
-                            .select('owner_email')
-                            .ilike('used_by_email', this.user.email.toLowerCase())
-                            .maybeSingle();
+                        // Un admin n'a jamais de parrain
+                        this.userInviteData.parrainEmail = null;
 
-                        if (usedCodeError && usedCodeError.code !== 'PGRST116') {
-                            console.error('❌ Erreur récupération parrain:', usedCodeError);
-                        } else if (usedCode) {
-                            console.log('✅ Parrain récupéré:', usedCode);
-                            this.userInviteData.parrainEmail = usedCode.owner_email;
-                        }
-
-                        console.log('✅ Données d\'invitation finales:', this.userInviteData);
+                        console.log('✅ Données admin configurées:', this.userInviteData);
+                        return;
 
                     } catch (error) {
-                        console.error("❌ Erreur générale lors du chargement des données d'invitation:", error);
-
-                        // Réinitialiser les données en cas d'erreur
-                        this.userInviteData = {
-                            code: null,
-                            is_used: false,
-                            parrainEmail: null,
-                            filleulEmail: null
-                        };
+                        console.error('❌ Erreur traitement admin:', error);
+                        return;
                     }
-                },
+                }
+
+                // === TRAITEMENT POUR UTILISATEURS NORMAUX ===
+                try {
+                    console.log('🔄 Chargement des données d\'invitation pour utilisateur normal:', this.user.email);
+
+                    // Récupérer le code d'invitation du compte connecté
+                    const { data: ownCode, error: ownCodeError } = await supabase
+                        .from('invitation_codes')
+                        .select('*')
+                        .ilike('owner_email', this.user.email.toLowerCase())
+                        .maybeSingle();
+
+                    // Gestion de l'erreur pour ownCode
+                    if (ownCodeError && ownCodeError.code !== 'PGRST116') {
+                        console.error('❌ Erreur récupération code proprio:', ownCodeError);
+                    } else if (ownCode) {
+                        console.log('✅ Code proprio récupéré:', ownCode);
+
+                        this.userInviteData.code = ownCode.code;
+                        this.userInviteData.is_used = ownCode.is_used || false;
+
+                        if (ownCode.is_used && ownCode.used_by_email) {
+                            this.userInviteData.filleulEmail = ownCode.used_by_email;
+                        }
+                    }
+
+                    // Récupérer le parrain (qui a invité cet utilisateur)
+                    const { data: usedCode, error: usedCodeError } = await supabase
+                        .from('invitation_codes')
+                        .select('owner_email')
+                        .ilike('used_by_email', this.user.email.toLowerCase())
+                        .maybeSingle();
+
+                    if (usedCodeError && usedCodeError.code !== 'PGRST116') {
+                        console.error('❌ Erreur récupération parrain:', usedCodeError);
+                    } else if (usedCode) {
+                        console.log('✅ Parrain récupéré:', usedCode);
+                        this.userInviteData.parrainEmail = usedCode.owner_email;
+                    }
+
+                    console.log('✅ Données d\'invitation finales:', this.userInviteData);
+
+                } catch (error) {
+                    console.error("❌ Erreur générale lors du chargement des données d'invitation:", error);
+
+                    // Réinitialiser les données en cas d'erreur
+                    this.userInviteData = {
+                        code: null,
+                        is_used: false,
+                        parrainEmail: null,
+                        filleulEmail: null
+                    };
+                }
+            },
 
                 // ============================================================
                 // 🆕 FONCTION BONUS : Créer un code pour l'admin si besoin
                 // ============================================================
 
                 async ensureAdminHasInviteCode() {
-                    if (!this.isAdmin || this.userInviteData.code) {
-                        return; // Pas admin ou a déjà un code
-                    }
+                if (!this.isAdmin || this.userInviteData.code) {
+                    return; // Pas admin ou a déjà un code
+                }
 
-                    try {
-                        console.log('🎁 Création d\'un code d\'invitation pour l\'admin...');
+                try {
+                    console.log('🎁 Création d\'un code d\'invitation pour l\'admin...');
 
-                        // Générer un code automatiquement pour l'admin
-                        const response = await fetch('/api/generate-invite', {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session.access_token}`
-                            }
-                        });
-
-                        const result = await response.json();
-
-                        if (result.success) {
-                            console.log('✅ Code admin créé:', result.code);
-                            this.userInviteData.code = result.code;
-                        }
-
-                    } catch (error) {
-                        console.log('ℹ️ Impossible de créer un code admin automatiquement:', error.message);
-                    }
-                },
-
-                // ============================================================
-                // 🔄 GESTION DES DONNÉES ET TEMPS RÉEL
-                // ============================================================
-
-                // === CONFIGURATION DU TEMPS RÉEL ===
-                setupRealtime(session) {
-                    this.realtimeChannel = supabase.channel('infodrop-online-users', {
-                        config: { presence: { key: session.user.id } }
-                    });
-                    this.realtimeChannel.on('presence', { event: 'sync' }, () => {
-                        this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
-                    }).subscribe(async (status) => {
-                        if (status === 'SUBSCRIBED') {
-                            await this.realtimeChannel.track({ online_at: new Date().toISOString() });
+                    // Générer un code automatiquement pour l'admin
+                    const response = await fetch('/api/generate-invite', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session.access_token}`
                         }
                     });
-                },
 
-                // === GESTION DE L'ÉDITION D'ARTICLES ===
-                openEditPanel(news) {
-                    this.editingNews = {
-                        ...JSON.parse(JSON.stringify(news)),
-                        tagsText: (news.tags || []).join(', ')
-                    };
-                    this.showEditPanel = true;
-                },
+                    const result = await response.json();
+
+                    if (result.success) {
+                        console.log('✅ Code admin créé:', result.code);
+                        this.userInviteData.code = result.code;
+                    }
+
+                } catch (error) {
+                    console.log('ℹ️ Impossible de créer un code admin automatiquement:', error.message);
+                }
+            },
+
+            // ============================================================
+            // 🔄 GESTION DES DONNÉES ET TEMPS RÉEL
+            // ============================================================
+
+            // === CONFIGURATION DU TEMPS RÉEL ===
+            setupRealtime(session) {
+                this.realtimeChannel = supabase.channel('infodrop-online-users', {
+                    config: { presence: { key: session.user.id } }
+                });
+                this.realtimeChannel.on('presence', { event: 'sync' }, () => {
+                    this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
+                }).subscribe(async (status) => {
+                    if (status === 'SUBSCRIBED') {
+                        await this.realtimeChannel.track({ online_at: new Date().toISOString() });
+                    }
+                });
+            },
+
+            // === GESTION DE L'ÉDITION D'ARTICLES ===
+            openEditPanel(news) {
+                this.editingNews = {
+                    ...JSON.parse(JSON.stringify(news)),
+                    tagsText: (news.tags || []).join(', ')
+                };
+                this.showEditPanel = true;
+            },
 
                 // === MISE À JOUR D'UN ARTICLE ===
                 async updateNews() {
-                    const { id, resume, source, url, orientation, tagsText } = this.editingNews;
-                    const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
-                    try {
-                        await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id);
-                        const index = this.newsList.findIndex(n => n.id === id);
-                        if (index !== -1) {
-                            this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags };
-                        }
-                        this.showEditPanel = false;
-                        this.updateTagsList();
-                    } catch (e) {
-                        alert("La mise à jour a échoué.");
+                const { id, resume, source, url, orientation, tagsText } = this.editingNews;
+                const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
+                try {
+                    await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id);
+                    const index = this.newsList.findIndex(n => n.id === id);
+                    if (index !== -1) {
+                        this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags };
                     }
-                },
+                    this.showEditPanel = false;
+                    this.updateTagsList();
+                } catch (e) {
+                    alert("La mise à jour a échoué.");
+                }
+            },
 
                 // === SUPPRESSION D'UN ARTICLE ===
                 async deleteNews(id) {
-                    if (!confirm("Supprimer ?")) return;
-                    this.newsList = this.newsList.filter(n => n.id !== id);
-                    try {
-                        await supabase.from('actu').delete().eq('id', id);
-                        if (this.isAdmin) this.loadStats();
-                    } catch (e) {
-                        alert("La suppression a échoué.");
-                        this.loadNews();
-                    }
-                },
+                if (!confirm("Supprimer ?")) return;
+                this.newsList = this.newsList.filter(n => n.id !== id);
+                try {
+                    await supabase.from('actu').delete().eq('id', id);
+                    if (this.isAdmin) this.loadStats();
+                } catch (e) {
+                    alert("La suppression a échoué.");
+                    this.loadNews();
+                }
+            },
 
                 // === AJOUT MANUEL D'ACTUALITÉ (ADMIN) ===
                 async addManualNews() {
-                    this.addingNews = true;
-                    try {
-                        console.log('🔄 Début ajout article...');
-                        console.log('📝 Données du formulaire:', this.newNews);
+                this.addingNews = true;
+                try {
+                    console.log('🔄 Début ajout article...');
+                    console.log('📝 Données du formulaire:', this.newNews);
 
-                        // === VALIDATION DES CHAMPS OBLIGATOIRES ===
-                        if (!this.newNews.resume || !this.newNews.resume.trim()) {
-                            throw new Error('Le résumé est obligatoire');
-                        }
-                        if (!this.newNews.source || !this.newNews.source.trim()) {
-                            throw new Error('La source est obligatoire');
-                        }
-                        if (!this.newNews.url || !this.newNews.url.trim()) {
-                            throw new Error('L\'URL est obligatoire');
-                        }
-
-                        // === PRÉPARATION DES TAGS (ARRAY DE STRINGS) ===
-                        let tags = ['🧨INFODROP'];
-
-                        if (this.newNews.tagsText && this.newNews.tagsText.trim()) {
-                            const additionalTags = this.newNews.tagsText
-                                .split(',')
-                                .map(tag => tag.trim())
-                                .filter(tag => tag.length > 0)
-                                .filter(tag => tag !== '🧨INFODROP'); // Éviter doublons
-
-                            tags = tags.concat(additionalTags);
-                        }
-
-                        // === OBJET FINAL POUR LA DB (COLONNES EXACTES) ===
-                        const articleData = {
-                            resume: this.newNews.resume.trim(),
-                            source: this.newNews.source.trim(),
-                            url: this.newNews.url.trim(),
-                            heure: new Date().toISOString(),
-                            tags: tags, // Array de strings
-                            added_by: this.user.email
-                        };
-
-                        // === ORIENTATION OPTIONNELLE ===
-                        if (this.newNews.orientation && this.newNews.orientation.trim()) {
-                            articleData.orientation = this.newNews.orientation.trim();
-                        }
-
-                        console.log('📤 Données finales pour Supabase:', articleData);
-                        console.log('🏷️ Tags array:', tags);
-
-                        // === INSERTION AVEC GESTION D'ERREUR DÉTAILLÉE ===
-                        const { data, error } = await supabase
-                            .from('actu')
-                            .insert(articleData)
-                            .select('*');
-
-                        if (error) {
-                            console.error('❌ Erreur Supabase complète:', error);
-                            console.error('❌ Code erreur:', error.code);
-                            console.error('❌ Message:', error.message);
-                            console.error('❌ Détails:', error.details);
-
-                            // Messages d'erreur plus clairs
-                            if (error.code === '23505') {
-                                throw new Error('Cette URL existe déjà dans la base de données');
-                            } else if (error.code === '23502') {
-                                throw new Error('Un champ obligatoire est manquant');
-                            } else if (error.code === '42703') {
-                                throw new Error('Erreur de structure de données');
-                            } else {
-                                throw new Error(`Erreur DB: ${error.message}`);
-                            }
-                        }
-
-                        console.log('✅ Article créé avec succès:', data);
-
-                        // === NETTOYAGE DU FORMULAIRE ===
-                        this.newNews = {
-                            resume: '',
-                            source: '',
-                            url: '',
-                            orientation: '',
-                            tagsText: ''
-                        };
-
-                        // === FERMETURE DU PANEL ET RECHARGEMENT ===
-                        this.showAdminPanel = false;
-                        await this.loadData(); // Recharger les articles
-
-                        console.log('✅ Processus terminé avec succès');
-                        alert('✅ Article ajouté avec succès !');
-
-                    } catch (error) {
-                        console.error('❌ Erreur dans addManualNews:', error);
-
-                        let userMessage = 'Erreur lors de l\'ajout de l\'article: ';
-
-                        if (error.message.includes('obligatoire')) {
-                            userMessage += error.message;
-                        } else if (error.message.includes('existe déjà')) {
-                            userMessage += 'Cette URL est déjà utilisée pour un autre article.';
-                        } else if (error.message.includes('permission')) {
-                            userMessage += 'Vous n\'avez pas les droits pour ajouter un article.';
-                        } else {
-                            userMessage += error.message || 'Erreur inconnue';
-                        }
-
-                        alert(userMessage);
-
-                    } finally {
-                        this.addingNews = false;
+                    // === VALIDATION DES CHAMPS OBLIGATOIRES ===
+                    if (!this.newNews.resume || !this.newNews.resume.trim()) {
+                        throw new Error('Le résumé est obligatoire');
                     }
-                },
+                    if (!this.newNews.source || !this.newNews.source.trim()) {
+                        throw new Error('La source est obligatoire');
+                    }
+                    if (!this.newNews.url || !this.newNews.url.trim()) {
+                        throw new Error('L\'URL est obligatoire');
+                    }
+
+                    // === PRÉPARATION DES TAGS (ARRAY DE STRINGS) ===
+                    let tags = ['🧨INFODROP'];
+
+                    if (this.newNews.tagsText && this.newNews.tagsText.trim()) {
+                        const additionalTags = this.newNews.tagsText
+                            .split(',')
+                            .map(tag => tag.trim())
+                            .filter(tag => tag.length > 0)
+                            .filter(tag => tag !== '🧨INFODROP'); // Éviter doublons
+
+                        tags = tags.concat(additionalTags);
+                    }
+
+                    // === OBJET FINAL POUR LA DB (COLONNES EXACTES) ===
+                    const articleData = {
+                        resume: this.newNews.resume.trim(),
+                        source: this.newNews.source.trim(),
+                        url: this.newNews.url.trim(),
+                        heure: new Date().toISOString(),
+                        tags: tags, // Array de strings
+                        added_by: this.user.email
+                    };
+
+                    // === ORIENTATION OPTIONNELLE ===
+                    if (this.newNews.orientation && this.newNews.orientation.trim()) {
+                        articleData.orientation = this.newNews.orientation.trim();
+                    }
+
+                    console.log('📤 Données finales pour Supabase:', articleData);
+                    console.log('🏷️ Tags array:', tags);
+
+                    // === INSERTION AVEC GESTION D'ERREUR DÉTAILLÉE ===
+                    const { data, error } = await supabase
+                        .from('actu')
+                        .insert(articleData)
+                        .select('*');
+
+                    if (error) {
+                        console.error('❌ Erreur Supabase complète:', error);
+                        console.error('❌ Code erreur:', error.code);
+                        console.error('❌ Message:', error.message);
+                        console.error('❌ Détails:', error.details);
+
+                        // Messages d'erreur plus clairs
+                        if (error.code === '23505') {
+                            throw new Error('Cette URL existe déjà dans la base de données');
+                        } else if (error.code === '23502') {
+                            throw new Error('Un champ obligatoire est manquant');
+                        } else if (error.code === '42703') {
+                            throw new Error('Erreur de structure de données');
+                        } else {
+                            throw new Error(`Erreur DB: ${error.message}`);
+                        }
+                    }
+
+                    console.log('✅ Article créé avec succès:', data);
+
+                    // === NETTOYAGE DU FORMULAIRE ===
+                    this.newNews = {
+                        resume: '',
+                        source: '',
+                        url: '',
+                        orientation: '',
+                        tagsText: ''
+                    };
+
+                    // === FERMETURE DU PANEL ET RECHARGEMENT ===
+                    this.showAdminPanel = false;
+                    await this.loadData(); // Recharger les articles
+
+                    console.log('✅ Processus terminé avec succès');
+                    alert('✅ Article ajouté avec succès !');
+
+                } catch (error) {
+                    console.error('❌ Erreur dans addManualNews:', error);
+
+                    let userMessage = 'Erreur lors de l\'ajout de l\'article: ';
+
+                    if (error.message.includes('obligatoire')) {
+                        userMessage += error.message;
+                    } else if (error.message.includes('existe déjà')) {
+                        userMessage += 'Cette URL est déjà utilisée pour un autre article.';
+                    } else if (error.message.includes('permission')) {
+                        userMessage += 'Vous n\'avez pas les droits pour ajouter un article.';
+                    } else {
+                        userMessage += error.message || 'Erreur inconnue';
+                    }
+
+                    alert(userMessage);
+
+                } finally {
+                    this.addingNews = false;
+                }
+            },
 
                 // ============================================================
                 // 🔧 FONCTION DE GÉNÉRATION DE CODE (CORRIGÉE AUSSI)
                 // ============================================================
 
                 async generateInviteCode() {
-                    if (!this.isAdmin) return;
+                if (!this.isAdmin) return;
 
-                    try {
-                        console.log('🎁 Génération code d\'invitation...');
+                try {
+                    console.log('🎁 Génération code d\'invitation...');
 
-                        const { data: { session } } = await supabase.auth.getSession();
-                        if (!session) {
-                            throw new Error("Session introuvable");
-                        }
-
-                        const response = await fetch('/api/generate-invite', {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${session.access_token}`,
-                                'Content-Type': 'application/json'
-                            }
-                        });
-
-                        const result = await response.json();
-
-                        if (!result.success) {
-                            throw new Error(result.error || 'Erreur lors de la génération');
-                        }
-
-                        this.lastGeneratedCode = result.code;
-
-                        // Copier le message complet dans le presse-papier
-                        this.copyInviteMessage(result.code);
-                        console.log('✅ Code copié dans le presse-papier');
-
-                        console.log('✅ Code généré:', result.code);
-
-                    } catch (error) {
-                        console.error('❌ Erreur génération code:', error);
-                        alert('Erreur lors de la génération du code: ' + error.message);
+                    const { data: { session } } = await supabase.auth.getSession();
+                    if (!session) {
+                        throw new Error("Session introuvable");
                     }
-                },
+
+                    const response = await fetch('/api/generate-invite', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${session.access_token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (!result.success) {
+                        throw new Error(result.error || 'Erreur lors de la génération');
+                    }
+
+                    this.lastGeneratedCode = result.code;
+
+                    // Copier le message complet dans le presse-papier
+                    this.copyInviteMessage(result.code);
+                    console.log('✅ Code copié dans le presse-papier');
+
+                    console.log('✅ Code généré:', result.code);
+
+                } catch (error) {
+                    console.error('❌ Erreur génération code:', error);
+                    alert('Erreur lors de la génération du code: ' + error.message);
+                }
+            },
 
                 // === CHARGEMENT DES DONNÉES GÉNÉRALES ===
                 async loadData(isInitial = false) {
-                    if (isInitial) this.loadingNews = true;
-                    await Promise.all([
-                        this.loadNews(),
-                        this.isAdmin ? this.loadStats() : null
-                    ]);
-                    if (isInitial) this.loadingNews = false;
-                },
+                if (isInitial) this.loadingNews = true;
+                await Promise.all([
+                    this.loadNews(),
+                    this.isAdmin ? this.loadStats() : null
+                ]);
+                if (isInitial) this.loadingNews = false;
+            },
 
                 // === CHARGEMENT DES ACTUALITÉS ===
                 async loadNews() {
-                    try {
-                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-                        const { data } = await supabase.from('actu').select('*').gte('heure', twentyFourHoursAgo).order('heure', { ascending: false });
-                        if (!data) return;
-                        const existingIds = new Set(this.newsList.map(n => n.id));
-                        const newArticles = data.filter(n => !existingIds.has(n.id));
-                        if (newArticles.length > 0) {
-                            this.newsList = [...newArticles, ...this.newsList];
-                            this.updateTagsList();
-                        }
-                    } catch (e) {
-                        console.error('Erreur actus:', e);
+                try {
+                    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+                    const { data } = await supabase.from('actu').select('*').gte('heure', twentyFourHoursAgo).order('heure', { ascending: false });
+                    if (!data) return;
+                    const existingIds = new Set(this.newsList.map(n => n.id));
+                    const newArticles = data.filter(n => !existingIds.has(n.id));
+                    if (newArticles.length > 0) {
+                        this.newsList = [...newArticles, ...this.newsList];
+                        this.updateTagsList();
                     }
-                },
+                } catch (e) {
+                    console.error('Erreur actus:', e);
+                }
+            },
 
-                // ============================================================
-                // 🏷️ GESTION DES TAGS ET FILTRES
-                // ============================================================
+            // ============================================================
+            // 🏷️ GESTION DES TAGS ET FILTRES
+            // ============================================================
 
-                // === MISE À JOUR DE LA LISTE DES TAGS ===
-                updateTagsList() {
-                    const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
-                    const active = new Set();
-                    const counts = {};
-                    this.newsList.forEach(n => {
-                        if (n.orientation) active.add(n.orientation);
-                        if (n.tags) {
-                            n.tags.forEach(t => {
-                                counts[t] = (counts[t] || 0) + 1;
-                                if (t === '🧨INFODROP') active.add(t);
-                            });
-                        }
-                    });
-                    this.allOrientations = pol;
-                    this.activeOrientations = [...active];
-                    this.allOtherTags = Object.entries(counts).filter(([t]) => !pol.includes(t)).sort((a, b) => b[1] - a[1]).slice(0, 50).map(([t]) => t);
-                    this.allTags = [...pol, ...this.allOtherTags];
-                },
+            // === MISE À JOUR DE LA LISTE DES TAGS ===
+            updateTagsList() {
+                const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
+                const active = new Set();
+                const counts = {};
+                this.newsList.forEach(n => {
+                    if (n.orientation) active.add(n.orientation);
+                    if (n.tags) {
+                        n.tags.forEach(t => {
+                            counts[t] = (counts[t] || 0) + 1;
+                            if (t === '🧨INFODROP') active.add(t);
+                        });
+                    }
+                });
+                this.allOrientations = pol;
+                this.activeOrientations = [...active];
+                this.allOtherTags = Object.entries(counts).filter(([t]) => !pol.includes(t)).sort((a, b) => b[1] - a[1]).slice(0, 50).map(([t]) => t);
+                this.allTags = [...pol, ...this.allOtherTags];
+            },
 
-                // === VÉRIFICATION DES ARTICLES POUR UNE ORIENTATION ===
-                hasArticlesForOrientation(o) {
-                    return this.activeOrientations.includes(o);
-                },
+            // === VÉRIFICATION DES ARTICLES POUR UNE ORIENTATION ===
+            hasArticlesForOrientation(o) {
+                return this.activeOrientations.includes(o);
+            },
 
-                // === MESSAGE POUR LES FILTRES VIDES ===
-                getEmptyFilterMessage() {
-                    if (this.allOrientations.includes(this.activeFilter))
-                        return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`;
-                    return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`;
-                },
+            // === MESSAGE POUR LES FILTRES VIDES ===
+            getEmptyFilterMessage() {
+                if (this.allOrientations.includes(this.activeFilter))
+                    return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`;
+                return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`;
+            },
 
                 // === CHARGEMENT DES STATISTIQUES (ADMIN) ===
                 async loadStats() {
-                    try {
-                        const { data } = await supabase.from('stats_today').select('*').single();
-                        this.stats = data || { total_articles: 0, total_sources: 0 };
-                    } catch (e) {
-                        console.error('Erreur stats:', e);
-                    }
-                },
+                try {
+                    const { data } = await supabase.from('stats_today').select('*').single();
+                    this.stats = data || { total_articles: 0, total_sources: 0 };
+                } catch (e) {
+                    console.error('Erreur stats:', e);
+                }
+            },
 
-                // ============================================================
-                // 📚 SYSTÈME DE LECTURES ET DIVERSITÉ
-                // ============================================================
+            // ============================================================
+            // 📚 SYSTÈME DE LECTURES ET DIVERSITÉ
+            // ============================================================
 
-                // === MARQUER UN ARTICLE COMME LU ===
-                markAsRead(id) {
-                    if (!this.readArticles[id]) {
-                        this.readArticles[id] = new Date().toISOString();
-                        localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
-                        this.updateTotalReadCount();
-                        const article = this.newsList.find(n => n.id === id);
-                        if (article) this.addToDiversityData(article);
-                        if (this.totalReadCount === 100) this.celebrate100Articles();
-                    }
-                },
+            // === MARQUER UN ARTICLE COMME LU ===
+            markAsRead(id) {
+                if (!this.readArticles[id]) {
+                    this.readArticles[id] = new Date().toISOString();
+                    localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
+                    this.updateTotalReadCount();
+                    const article = this.newsList.find(n => n.id === id);
+                    if (article) this.addToDiversityData(article);
+                    if (this.totalReadCount === 100) this.celebrate100Articles();
+                }
+            },
 
-                // === MISE À JOUR DU COMPTEUR TOTAL ===
-                updateTotalReadCount() {
-                    this.totalReadCount = Object.keys(this.readArticles).length;
-                },
+            // === MISE À JOUR DU COMPTEUR TOTAL ===
+            updateTotalReadCount() {
+                this.totalReadCount = Object.keys(this.readArticles).length;
+            },
 
-                // === NETTOYAGE DES ANCIENNES DONNÉES DE DIVERSITÉ ===
-                cleanOldDiversityData() {
-                    const expiry = Date.now() - 24 * 60 * 60 * 1000;
-                    Object.keys(this.diversityData).forEach(t => {
-                        if (new Date(t).getTime() < expiry) delete this.diversityData[t];
-                    });
-                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
-                },
+            // === NETTOYAGE DES ANCIENNES DONNÉES DE DIVERSITÉ ===
+            cleanOldDiversityData() {
+                const expiry = Date.now() - 24 * 60 * 60 * 1000;
+                Object.keys(this.diversityData).forEach(t => {
+                    if (new Date(t).getTime() < expiry) delete this.diversityData[t];
+                });
+                localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
+            },
 
-                // === AJOUT AUX DONNÉES DE DIVERSITÉ ===
-                addToDiversityData(article) {
-                    let o = article.orientation || 'neutre';
-                    if (article.tags?.includes('🧨INFODROP')) o = '🧨INFODROP';
-                    this.diversityData[new Date().toISOString()] = {
-                        orientation: o,
-                        source: article.source
-                    };
-                    localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
-                    this.calculateDiversityScore();
-                },
+            // === AJOUT AUX DONNÉES DE DIVERSITÉ ===
+            addToDiversityData(article) {
+                let o = article.orientation || 'neutre';
+                if (article.tags?.includes('🧨INFODROP')) o = '🧨INFODROP';
+                this.diversityData[new Date().toISOString()] = {
+                    orientation: o,
+                    source: article.source
+                };
+                localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
+                this.calculateDiversityScore();
+            },
 
-                // === CALCUL DU SCORE DE DIVERSITÉ ===
-                calculateDiversityScore() {
-                    this.cleanOldDiversityData();
-                    const reads = Object.values(this.diversityData);
-                    if (reads.length === 0) {
-                        this.diversityScore = null;
-                        this.readOrientations = [];
-                        return;
-                    }
-                    const oSet = new Set(reads.map(r => r.orientation).filter(Boolean)); // <-- CORRECTION TAG VIDE
-                    const sSet = new Set(reads.map(r => r.source));
-                    const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
-                    this.readOrientations = [...oSet].sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
-                    this.diversityScore = Math.round(((oSet.size / 10) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
-                    this.showDiversityChecker = this.diversityScore < 100;
-                },
+            // === CALCUL DU SCORE DE DIVERSITÉ ===
+            calculateDiversityScore() {
+                this.cleanOldDiversityData();
+                const reads = Object.values(this.diversityData);
+                if (reads.length === 0) {
+                    this.diversityScore = null;
+                    this.readOrientations = [];
+                    return;
+                }
+                const oSet = new Set(reads.map(r => r.orientation).filter(Boolean)); // <-- CORRECTION TAG VIDE
+                const sSet = new Set(reads.map(r => r.source));
+                const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
+                this.readOrientations = [...oSet].sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
+                this.diversityScore = Math.round(((oSet.size / 10) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
+                this.showDiversityChecker = this.diversityScore < 100;
+            },
 
-                // === MESSAGE DU SCORE DE DIVERSITÉ ===
-                getDiversityMessage() {
-                    if (this.diversityScore < 30) return "Bulle de filtre détectée";
-                    if (this.diversityScore < 70) return "Diversité correcte";
-                    return "Excellente diversité !";
-                },
+            // === MESSAGE DU SCORE DE DIVERSITÉ ===
+            getDiversityMessage() {
+                if (this.diversityScore < 30) return "Bulle de filtre détectée";
+                if (this.diversityScore < 70) return "Diversité correcte";
+                return "Excellente diversité !";
+            },
 
-                // === CÉLÉBRATION DES 100 ARTICLES ===
-                celebrate100Articles() {
-                    const cont = document.createElement('div');
-                    cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
-                    document.body.appendChild(cont);
-                    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7'];
-                    for (let i = 0; i < 50; i++) {
-                        const conf = document.createElement('div');
-                        conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;`;
-                        cont.appendChild(conf);
-                    }
-                    const msg = document.createElement('div');
-                    msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
-                    msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">🎉 Félicitations ! 🎉</h2><p class="text-lg">100 articles lus !</p>`;
-                    document.body.appendChild(msg);
-                    setTimeout(() => {
-                        cont.remove();
-                        msg.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-                        setTimeout(() => msg.remove(), 500);
-                    }, 5000);
-                },
+            // === CÉLÉBRATION DES 100 ARTICLES ===
+            celebrate100Articles() {
+                if (document.hidden) {
+                    localStorage.setItem('infodrop_celebration_pending', 'true');
+                    return;
+                }
+                this.showCelebration();
+            },
+
+            showCelebration() {
+                const cont = document.createElement('div');
+                cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:auto;z-index:9999;background:rgba(0,0,0,0.8);cursor:pointer;';
+
+                this.startConfettiLoop(cont);
+
+                const msg = document.createElement('div');
+                msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
+                msg.innerHTML = `
+        <h2 class="text-3xl font-bold mb-2">🎉 Félicitations ! 🎉</h2>
+        <p class="text-lg mb-2">100 articles lus !</p>
+        <p class="text-sm opacity-80">Cliquez pour continuer</p>
+    `;
+
+                cont.appendChild(msg);
+                document.body.appendChild(cont);
+
+                cont.addEventListener('click', () => {
+                    cont.remove();
+                    this.stopConfettiLoop();
+                    localStorage.removeItem('infodrop_celebration_pending');
+                });
+            },
+
+            startConfettiLoop(container) {
+                this.confettiInterval = setInterval(() => {
+                    this.createConfettiBatch(container);
+                }, 1000);
+            },
+
+            stopConfettiLoop() {
+                if (this.confettiInterval) {
+                    clearInterval(this.confettiInterval);
+                    this.confettiInterval = null;
+                }
+            },
+
+            createConfettiBatch(container) {
+                const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7'];
+                for (let i = 0; i < 10; i++) {
+                    const conf = document.createElement('div');
+                    conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;pointer-events:none;`;
+                    container.appendChild(conf);
+
+                    setTimeout(() => conf.remove(), 5000);
+                }
+            },
 
                 // ============================================================
                 // 🔧 UTILITAIRES ET HELPERS
@@ -1849,36 +1901,36 @@
 
                 // === DÉCONNEXION ===
                 async logout() {
-                    if (this.realtimeChannel) await this.realtimeChannel.untrack();
-                    await supabase.auth.signOut();
-                },
+                if (this.realtimeChannel) await this.realtimeChannel.untrack();
+                await supabase.auth.signOut();
+            },
 
-                // === GESTION DES MISES À JOUR AUTOMATIQUES ===
-                startAutoUpdate() {
-                    if (this.updateInterval) clearInterval(this.updateInterval);
-                    this.updateInterval = setInterval(() => this.loadData(), 30000);
-                },
+            // === GESTION DES MISES À JOUR AUTOMATIQUES ===
+            startAutoUpdate() {
+                if (this.updateInterval) clearInterval(this.updateInterval);
+                this.updateInterval = setInterval(() => this.loadData(), 30000);
+            },
 
-                stopAutoUpdate() {
-                    if (this.updateInterval) clearInterval(this.updateInterval);
-                },
+            stopAutoUpdate() {
+                if (this.updateInterval) clearInterval(this.updateInterval);
+            },
 
-                // === FORMATAGE DE L'HEURE ===
-                formatTime(t) {
-                    return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-                },
+            // === FORMATAGE DE L'HEURE ===
+            formatTime(t) {
+                return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            },
 
-                // === COPIE DU MESSAGE D'INVITATION COMPLET ===
-                copyInviteMessage(code) {
-                    const message = `Vous avez été invité à rejoindre le club privé INFODROP !
+            // === COPIE DU MESSAGE D'INVITATION COMPLET ===
+            copyInviteMessage(code) {
+                const message = `Vous avez été invité à rejoindre le club privé INFODROP !
 Accédez à l'actu essentielle sur : https://infodrop.live
 Utilisez ce code lors de votre inscription : ${code}`;
 
-                    navigator.clipboard.writeText(message);
-                    this.copied = true;
-                    setTimeout(() => this.copied = false, 1500);
-                }
-            };
+                navigator.clipboard.writeText(message);
+                this.copied = true;
+                setTimeout(() => this.copied = false, 1500);
+            }
+        };
         }
     </script>
 </body>
