@@ -648,7 +648,8 @@
                         <!-- === ORIENTATIONS LUES === -->
                         <div class="mt-3 flex flex-wrap gap-2" x-show="readOrientations.length > 0">
                             <template x-for="orientation in readOrientations" :key="orientation">
-                                <span class="text-xs px-2 py-1 rounded-full" :class="getOrientationClass(orientation)">
+                                <span class="text-xs px-1.5 py-0.5 rounded-full"
+                                    :class="getOrientationClass(orientation)">
                                     <span x-text="getOrientationDisplayName(orientation)"></span>
                                 </span>
                             </template>
@@ -1852,9 +1853,9 @@
                     }
                     const oSet = new Set(reads.map(r => r.orientation).filter(Boolean)); // <-- CORRECTION TAG VIDE
                     const sSet = new Set(reads.map(r => r.source));
-                    const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
-                    this.readOrientations = [...oSet].sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
-                    this.diversityScore = Math.round(((oSet.size / 10) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
+                    const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
+                    this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
+                    this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
                     this.showDiversityChecker = this.diversityScore < 100;
                 },
 
@@ -1868,7 +1869,7 @@
                 },
 
                 getDiversityTip() {
-                    const missing = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre']
+                    const missing = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP']
                         .filter(orientation => !this.readOrientations.includes(orientation));
 
                     if (missing.length === 0) return "🎉 Toutes les orientations explorées !";
