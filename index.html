@@ -1238,8 +1238,12 @@
                     if (orientation === 'gouvernement') return '🇫🇷 Gouvernement';
                     if (orientation === '🧨INFODROP') return orientation;
 
-                    // Remplacement sécurisé des tirets
-                    return orientation.replace('-', ' ');
+                    // Formatage avec majuscules et remplacement des tirets
+                    return orientation
+                        .replace('-', ' ')
+                        .split(' ')
+                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(' ');
                 },
 
                 // ============================================================
