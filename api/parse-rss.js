@@ -65,6 +65,9 @@ const RSS_FEEDS = [
     // === LES ECHOS ===
     { name: 'Les Echos', url: 'https://services.lesechos.fr/rss/les-echos-economie.xml', orientation: 'centre-droit', tags: ['économie'] },
     { name: 'Les Echos', url: 'https://services.lesechos.fr/rss/les-echos-tech-medias.xml', orientation: 'centre-droit', tags: ['tech'] },
+    
+    // === SPORT ===
+    { name: "L'Équipe", url: "https://dwh.lequipe.fr/api/edito/rss?path=/Tous%20sports", orientation: "centre", tags: ["sport"] },
 
     // === DÉFENSE / MILITAIRE ===
     { name: 'Cyber.gouv.fr (ANSSI)', url: 'https://cyber.gouv.fr/actualites/feed', orientation: 'gouvernement', tags: ['cyber'] },
