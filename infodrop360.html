@@ -1,34 +1,64 @@
 <!DOCTYPE html>
 <html lang="fr" class="dark">
 
+<!-- ============================================================================ -->
+<!-- 📋 HEAD - MÉTADONNÉES ET CONFIGURATION                                      -->
+<!-- ============================================================================ -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Open Graph pour Facebook, WhatsApp, LinkedIn -->
-    <meta property="og:title" content="INFODROP360 - Le Club privé de l’actu centralisée " />
-    <meta property="og:description" content="Le Club privé de l’actu centralisée . Agrégation multi-sources en temps réel." />
+
+    <!-- === OPEN GRAPH ET RÉSEAUX SOCIAUX === -->
+    <meta property="og:title" content="INFODROP 360° - Analyses multi-perspectives" />
+    <meta property="og:description"
+        content="Analyses approfondies de l'actualité avec toutes les perspectives médiatiques." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://infodrop.live/" />
+    <meta property="og:url" content="https://infodrop.live/infodrop360.html" />
     <meta property="og:image" content="https://infodrop.live/images/infodrop-share.png" />
-    <!-- Twitter Card -->
+
+    <!-- === TWITTER CARD === -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="INFODROP360 - Le Club privé de l’actu centralisée ">
-    <meta name="twitter:description" content="Le Club privé de l’actu centralisée . Agrégation multi-sources en temps réel.">
+    <meta name="twitter:title" content="INFODROP 360° - Analyses multi-perspectives">
+    <meta name="twitter:description"
+        content="Analyses approfondies de l'actualité avec toutes les perspectives médiatiques.">
     <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png">
-    <title>INFODROP 360° - Analyses</title>
-    <!-- ========== FAVICON ========== -->
+
+    <title>INFODROP 360° - Analyses multi-perspectives</title>
+
+    <!-- === FAVICON ET ICÔNES MOBILES HD === -->
     <link rel="icon" type="image/png" href="images/infodrop-favicon.png">
-    <link rel="apple-touch-icon" href="images/infodrop-favicon.png">
-    <!-- =========================== -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="images/apple-touch-icon-167x167.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="images/android-chrome-512x512.png">
+
+    <!-- Meta tags PWA -->
+    <meta name="theme-color" content="#111827">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="INFODROP 360°">
+
+    <!-- === AMÉLIORATION PWA === -->
+    <meta name="apple-itunes-app" content="app-id=com.infodrop.app">
+    <link rel="alternate" href="app://infodrop.live">
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- === URL SCHEME PERSONNALISÉ === -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- === BIBLIOTHÈQUES EXTERNES === -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <style>
-        body {
-            background-color: #0f172a;
-            color: #e2e8f0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-        }
 
+    <!-- ======================================================================== -->
+    <!-- 🎨 STYLES CSS PERSONNALISÉS                                             -->
+    <!-- ======================================================================== -->
+    <style>
+        /* === ANIMATIONS ET TRANSITIONS PRINCIPALES === */
         .topic-card {
             background: linear-gradient(145deg, #1e293b, #334155);
             border-radius: 16px;
@@ -43,170 +73,414 @@
             border-color: #4f46e5;
         }
 
-        /* Fix 100% alignement du logo, aucune coupure mobile */
-        .logo-inline {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.25rem;
-            line-height: 1;
-            font-weight: bold;
-            color: #fff;
-            text-decoration: none;
-            transition: color 0.2s;
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
         }
 
-        .logo-inline .logo-emoji {
-            font-size: 1.35em;
-            margin-right: 0.1em;
-            display: inline-block;
-            vertical-align: middle;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .logo-inline .logo-360 {
-            color: #60a5fa;
-            font-weight: bold;
-            margin-left: 0.2em;
-            font-size: 1em;
-            letter-spacing: -1px;
+        /* === SCROLLBAR PERSONNALISÉE === */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        .logo-inline:hover {
-            color: #60a5fa;
+        ::-webkit-scrollbar-track {
+            background: #111827;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
         }
     </style>
+
+    <!-- === CONFIGURATION TAILWIND === -->
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: {} } }
+    </script>
 </head>
 
-<body class="min-h-screen">
+<body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
 
-    <div class="w-full" x-data="{ showMenu: false, showAboutPanel: false }">
-        <!-- HEADER identique à index.html -->
-        <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-800">
+    <!-- ======================================================================== -->
+    <!-- 🏗️ STRUCTURE PRINCIPALE DE L'APPLICATION                               -->
+    <!-- ======================================================================== -->
+    <div x-data="{ showMenu: false, showAboutPanel: false }" class="w-full min-h-screen flex flex-col">
+
+        <!-- ============================================================== -->
+        <!-- 📱 HEADER UNIFIÉ AVEC NAVIGATION                             -->
+        <!-- ============================================================== -->
+        <header class="relative z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
             <div class="max-w-4xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
-                <!-- Logo 100% aligné, jamais sur 2 lignes -->
+                <!-- === LOGO === -->
                 <div class="justify-self-start">
-                    <!-- NOUVEAU CODE -->
                     <a href="/index.html"
-                        class="flex items-center gap-2 text-xl font-bold text-white hover:text-blue-400 transition"
-                        style="line-height:1;white-space:nowrap;">
-                        <span class="text-lg md:text-xl" style="display:inline-block;vertical-align:middle;">📰</span>
+                        class="flex items-center gap-2 text-xl font-bold text-white hover:text-blue-400 transition whitespace-nowrap"
+                        style="line-height:1;">
+                        <span class="text-lg md:text-xl"
+                            style="display:inline-block;vertical-align:middle;">📰</span>
                         <span class="tracking-tight"
-                            style="display:inline-block;vertical-align:middle;white-space:nowrap;">
-                            INFODROP <span style="color:#3b82f6;display:inline;font-weight:700;">360°</span>
-                        </span>
-
-                        <!-- === VERSION TAG AJOUTÉ ICI === -->
-                        <span class="ml-2 text-xs font-medium text-gray-400 bg-slate-700 px-2 py-0.5 rounded-full">beta
-                            1.1.0</span>
+                            style="display:inline-block;vertical-align:middle;">INFODROP</span>
+                        <span class="text-blue-400 font-bold"
+                            style="display:inline-block;vertical-align:middle;margin-left:0.2em;">360°</span>
+                        <!-- === VERSION TAG === -->
+                        <span
+                            class="ml-2 text-xs font-medium text-gray-400 bg-slate-700 px-2 py-0.5 rounded-full">beta
+                            2.1.0</span>
                     </a>
                 </div>
 
                 <div class="justify-self-center"></div>
+
+                <!-- === MENU HAMBURGER === -->
                 <div class="justify-self-end relative" x-data="{ showMenu: false }">
                     <button @click="showMenu = !showMenu" class="p-2 rounded-full hover:bg-gray-700 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                            fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                                 clip-rule="evenodd" />
                         </svg>
                     </button>
-                    <!-- MENU HAMBURGER (identique à index) -->
+
+                    <!-- === DROPDOWN MENU === -->
                     <div x-show="showMenu" @click.away="showMenu = false" x-transition
-                        class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50"
+                        class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-[100]"
                         style="display: none;">
+
+                        <!-- === FLUX PRINCIPAL === -->
+                        <div class="px-4 py-2 border-b border-gray-700">
+                            <a href="/index.html"
+                                class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">📰
+                                Le Flux 24h</a>
+                        </div>
+
+                        <!-- === ITEMS DE MENU === -->
                         <a @click="showAboutPanel = true; showMenu = false" href="#"
-                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">ℹ️ À
-                            propos</a>
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">ℹ️
+                            À propos</a>
                         <a href="https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801" target="_blank"
                             class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-700">❤️
                             Soutenir</a>
+
+                        <!-- === DÉCONNEXION === -->
                         <div class="border-t border-gray-700 my-1"></div>
-                        <a href="#" @click="alert('Déconnexion désactivée sur cette page.'); showMenu=false;"
+                        <a href="/index.html"
                             class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">🚪
-                            Déconnexion</a>
+                            Retour au Flux</a>
                     </div>
                 </div>
             </div>
         </header>
 
-        <!-- LISTE DES ANALYSES -->
-        <main class="max-w-4xl mx-auto px-4 py-8">
-            <h2 class="text-2xl font-bold mb-6">Analyses Disponibles</h2>
+        <!-- ============================================================== -->
+        <!-- 📊 CONTENU PRINCIPAL                                          -->
+        <!-- ============================================================== -->
+        <main class="max-w-4xl mx-auto px-4 py-8 flex-grow w-full">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-white mb-2">🌍 Analyses 360°</h1>
+                <p class="text-gray-400">Perspectives multi-sources sur les sujets d'actualité</p>
+            </div>
+
+            <!-- === LISTE DES ANALYSES === -->
             <div class="space-y-4">
 
                 <!-- SUJET 1 : Crise de l'eau à Mayotte -->
-                <a href="/analyses/DEMO-crise-eau-mayotte.html" class="block topic-card p-4">
+                <a href="/analyses/DEMO-crise-eau-mayotte.html" class="block topic-card p-6 fade-in">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm text-blue-400 font-semibold mb-1">Crise Sociale</p>
-                            <h3 class="text-base font-medium text-white mb-1">
-                                Crise de l'eau à Mayotte : la République oubliée ? DEMO
+                        <div class="flex-grow">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-sm text-blue-400 font-semibold">Crise Sociale</span>
+                                <span class="text-xs bg-yellow-600 text-yellow-100 px-2 py-0.5 rounded-full">DÉMO</span>
+                            </div>
+                            <h3 class="text-lg font-medium text-white mb-2">
+                                Crise de l'eau à Mayotte : la République oubliée ?
                             </h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                Analyse des différentes perspectives médiatiques sur la crise de l'eau qui frappe Mayotte depuis plusieurs mois.
+                            </p>
                         </div>
-                        <div class="mt-3 sm:mt-0 text-sm text-gray-400 text-left sm:text-right leading-snug">
-                            <div>Publié le 29 juin 2025</div>
+                        <div class="mt-4 sm:mt-0 sm:ml-6 text-sm text-gray-400 text-left sm:text-right leading-snug flex-shrink-0">
+                            <div class="font-medium">29 juin 2025</div>
                             <div>6 sources analysées</div>
+                            <div class="text-blue-400 mt-1">→ Lire l'analyse</div>
                         </div>
                     </div>
                 </a>
 
                 <!-- SUJET 2 : Réforme de l'audiovisuel public -->
-                <a href="/analyses/reforme-audiovisuel-public.html" class="block topic-card p-4">
+                <a href="/analyses/reforme-audiovisuel-public.html" class="block topic-card p-6 fade-in">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm text-red-400 font-semibold mb-1">Politique & Médias</p>
-                            <h3 class="text-base font-medium text-white mb-1">
+                        <div class="flex-grow">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-sm text-red-400 font-semibold">Politique & Médias</span>
+                                <span class="text-xs bg-gray-600 text-gray-300 px-2 py-0.5 rounded-full">BIENTÔT</span>
+                            </div>
+                            <h3 class="text-lg font-medium text-white mb-2">
                                 Réforme de l'audiovisuel public : la création controversée de "France Médias"
                             </h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                Décryptage des positions politiques et médiatiques sur la restructuration de l'audiovisuel public français.
+                            </p>
                         </div>
-                        <div class="mt-3 sm:mt-0 text-sm text-gray-400 text-left sm:text-right leading-snug">
-                            <div>Publié le 30 juin 2025</div>
+                        <div class="mt-4 sm:mt-0 sm:ml-6 text-sm text-gray-400 text-left sm:text-right leading-snug flex-shrink-0">
+                            <div class="font-medium">30 juin 2025</div>
                             <div>6 sources analysées</div>
+                            <div class="text-gray-500 mt-1">En préparation</div>
                         </div>
                     </div>
                 </a>
 
+                <!-- MESSAGE D'INFO -->
+                <div class="bg-blue-900/20 border border-blue-700/30 rounded-lg p-6 text-center">
+                    <div class="text-blue-400 text-lg mb-2">🚀</div>
+                    <h3 class="text-white font-semibold mb-2">Plus d'analyses bientôt disponibles</h3>
+                    <p class="text-gray-400 text-sm">
+                        Nous travaillons sur de nouvelles analyses multi-perspectives pour vous offrir une vision complète de l'actualité.
+                    </p>
+                </div>
+
             </div>
         </main>
 
-
-        <!-- FOOTER -->
-        <footer class="text-center py-8 text-xs text-gray-500 mt-8">
-            <p>© 2025 INFODROP. Tous droits réservés.</p>
-            <p class="mt-1">Un projet 3C - EM&LPy</p>
-        </footer>
-
-        <!-- MODAL À PROPOS -->
+        <!-- ============================================================== -->
+        <!-- 🎭 MODAL À PROPOS                                             -->
+        <!-- ============================================================== -->
         <div x-show="showAboutPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
             x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+            class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 overflow-y-auto"
+            style="display: none;">
             <div @click.away="showAboutPanel = false"
-                class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border border-gray-700">
-                <h3 class="text-xl font-bold mb-4">À propos d'INFODROP</h3>
-                <div class="space-y-4 text-gray-300">
-                    <div>
-                        <h4 class="font-semibold text-white">📰 INFODROP (Le Flux)</h4>
-                        <p class="text-sm">L'objectif initial est simple : fournir un flux d'actualités minimaliste,
-                            rapide et sans fioritures. Il agrège en temps réel les dernières informations des sources
-                            françaises les plus pertinentes pour un aperçu immédiat de ce qui se passe.</p>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-blue-400">🌍 INFODROP 360° (L'Analyse)</h4>
-                        <p class="text-sm">La mission de 360° est plus profonde : lutter contre les bulles de filtres en
-                            contextualisant l'information. Pour un même sujet, il expose les perspectives de médias
-                            d'orientations différentes, analyse les faits, les divergences et les biais. L'objectif
-                            n'est plus seulement de savoir ce qui se passe, mais de comprendre pourquoi on en parle de
-                            différentes manières.</p>
-                    </div>
+                class="bg-gray-800 rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-gray-700 my-8">
+
+                <!-- Header -->
+                <div class="p-8 pb-6 border-b border-gray-700">
+                    <h3 class="text-2xl font-bold text-center text-white mb-3">À propos d'INFODROP</h3>
+                    <p class="text-center text-blue-400 text-lg">Le Club privé de l'actu centralisée</p>
                 </div>
-                <div class="flex justify-end pt-6">
+
+                <!-- Contenu -->
+                <div class="p-6 space-y-6">
+
+                    <!-- === CARTE LE FLUX 24H === -->
+                    <div class="bg-gray-900/50 border border-gray-600 rounded-lg p-5">
+                        <div class="text-center mb-4">
+                            <h4 class="text-lg font-bold text-white mb-2">
+                                <span class="text-xl mr-2">📰</span>INFODROP - Le Flux 24h
+                            </h4>
+                            <p class="text-gray-400">Agrégation pure et minimaliste</p>
+                        </div>
+
+                        <div class="space-y-3 text-sm text-gray-300">
+                            <div class="flex items-start gap-3">
+                                <span class="text-blue-400">📡</span>
+                                <span><strong class="text-white">Flux RSS publics & privés</strong> des médias
+                                    francophones</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="text-green-400">🔗</span>
+                                <span><strong class="text-white">Redirection directe</strong> vers l'article
+                                    original du média</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="text-yellow-400">📝</span>
+                                <span><strong class="text-white">Titres et liens uniquement</strong> - Pas de
+                                    contenu dupliqué</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="text-purple-400">⏰</span>
+                                <span><strong class="text-white">24h glissantes</strong> - Toujours frais, jamais
+                                    périmé</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="text-red-400">🌍</span>
+                                <span><strong class="text-white">Sources francophones</strong> - France, Belgique,
+                                    Suisse, Canada, Afrique</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 bg-blue-900/20 border border-blue-700/30 rounded-lg p-3">
+                            <p class="text-blue-300 text-center text-sm">
+                                🏠 <strong>Accès :</strong>
+                                <a href="/index.html"
+                                    class="text-blue-400 hover:text-blue-300 underline font-medium">Page
+                                    d'accueil</a>
+                                ou cliquez sur le logo <strong class="text-white">📰INFODROP</strong> en haut à
+                                gauche
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- === CARTE INFODROP 360° === -->
+                    <div class="bg-gray-900/50 border border-gray-600 rounded-lg p-5">
+                        <div class="text-center mb-4">
+                            <h4 class="text-lg font-bold text-white mb-2">
+                                <span class="text-xl mr-2">🌍</span>INFODROP 360°
+                            </h4>
+                            <p class="text-gray-400">Multi-perspectives en temps réel</p>
+                        </div>
+
+                        <!-- Concept -->
+                        <div class="mb-4">
+                            <h5 class="font-semibold text-blue-400 mb-3 flex items-center gap-2">
+                                <span>🎯</span> Le concept
+                            </h5>
+                            <div class="space-y-2 text-sm text-gray-300 ml-6">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-green-400">•</span>
+                                    <span><strong class="text-white">Un sujet = Toutes les voix</strong>
+                                        médiatiques</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-green-400">•</span>
+                                    <span><strong class="text-white">Fin des bulles de filtre</strong>
+                                        informationnelles</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-green-400">•</span>
+                                    <span><strong class="text-white">Vision complète</strong> d'un événement</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-green-400">•</span>
+                                    <span><strong class="text-white">Identification claire des biais</strong>
+                                        médiatiques</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fonctionnalités -->
+                        <div class="mb-4">
+                            <h5 class="font-semibold text-blue-400 mb-3 flex items-center gap-2">
+                                <span>⚡</span> Fonctionnalités clés
+                            </h5>
+                            <div class="space-y-2 text-sm text-gray-300 ml-6">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-yellow-400">📊</span>
+                                    <span><strong class="text-white">Consensus meter :</strong> Accord entre médias
+                                        visualisé</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-red-400">🎯</span>
+                                    <span><strong class="text-white">Bias indicator :</strong> Position politique
+                                        claire</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-green-400">✅</span>
+                                    <span><strong class="text-white">Fact-checking intégré :</strong> Vérification
+                                        automatique</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-purple-400">🤖</span>
+                                    <span><strong class="text-white">Synthèse IA :</strong> Points communs vs
+                                        divergences</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-blue-400">⏰</span>
+                                    <span><strong class="text-white">Timeline de vérité :</strong> Évolution heure
+                                        par heure</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-orange-400">🏆</span>
+                                    <span><strong class="text-white">Score de fiabilité :</strong> Basé sur sources
+                                        et corrections</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Accès et Démo -->
+                        <div class="space-y-3">
+                            <div class="bg-purple-900/20 border border-purple-700/30 rounded-lg p-3">
+                                <p class="text-purple-300 text-center text-sm">
+                                    🚀 <strong>Accès :</strong>
+                                    <a href="/infodrop360.html"
+                                        class="text-purple-400 hover:text-purple-300 underline font-medium">Page
+                                        Analyses
+                                        360°</a>
+                                    (vous y êtes actuellement)
+                                </p>
+                            </div>
+                            <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-lg p-3">
+                                <p class="text-yellow-300 text-center text-sm">
+                                    🧪 <strong>Démo disponible :</strong>
+                                    <a href="/analyses/DEMO-crise-eau-mayotte.html"
+                                        class="text-yellow-400 hover:text-yellow-300 underline font-medium">Crise de
+                                        l'eau à
+                                        Mayotte</a>
+                                    <br><span class="text-xs">(Fonctionnalité en cours d'amélioration)</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- === CARTE CONTACT === -->
+                    <div class="bg-gray-900/50 border border-gray-600 rounded-lg p-5">
+                        <div class="text-center mb-4">
+                            <h4 class="text-lg font-bold text-white mb-2">
+                                <span class="text-xl mr-2">📧</span>Contact & Suggestions
+                            </h4>
+                            <p class="text-gray-400">Votre feedback nous aide à améliorer</p>
+                        </div>
+
+                        <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-4">
+                            <div class="text-sm text-gray-300 leading-relaxed text-center">
+                                <strong class="text-white">Suggestions • Idées • Critiques • Demandes d'ajout de
+                                    sources
+                                    RSS</strong>
+                                <br><br>
+                                Contactez l'équipe à cette adresse :
+                                <br>
+                                <a href="mailto:l0r4.py@gmail.com"
+                                    class="text-blue-400 hover:text-blue-300 font-mono underline">
+                                    l0r4.py@gmail.com
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="p-6 border-t border-gray-700 text-center">
                     <button type="button" @click="showAboutPanel = false"
-                        class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">Fermer</button>
+                        class="px-6 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition text-white font-medium">
+                        Fermer
+                    </button>
                 </div>
             </div>
         </div>
+
+        <!-- ============================================================== -->
+        <!-- 🦶 FOOTER                                                     -->
+        <!-- ============================================================== -->
+        <footer class="text-center py-8 text-xs text-gray-500">
+            <p>© 2025 INFODROP. Tous droits réservés.</p>
+            <p class="mt-1">Un projet 3C - EM&LPy</p>
+        </footer>
     </div>
+
+    <!-- ======================================================================== -->
+    <!-- 🔝 BOUTON SCROLL TO TOP                                                 -->
+    <!-- ======================================================================== -->
+    <button x-data="{ show: false }" x-show="show" x-transition @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+        x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
+        class="fixed bottom-6 right-6 z-40 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110 border border-gray-700"
+        style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+                d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
+                clip-rule="evenodd" />
+        </svg>
+    </button>
 
 </body>
 
