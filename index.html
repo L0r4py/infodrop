@@ -286,7 +286,7 @@
             <!-- ============================================================== -->
             <!-- 📱 HEADER UNIFIÉ AVEC NAVIGATION ET BANDEAUX                -->
             <!-- ============================================================== -->
-            <div class="z-40 transition-shadow duration-300" id="stickyHeader">
+            <div class="sticky top-0 z-40 transition-shadow duration-300" id="stickyHeader">
 
                 <!-- === HEADER PRINCIPAL === -->
                 <header class="relative z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
@@ -461,42 +461,28 @@
                 <!-- ========================================================== -->
                 <!-- 👤 BARRE UTILISATEUR (STATS LECTURES ET INVITATIONS)     -->
                 <!-- ========================================================== -->
-                <div x-show="true" x-transition class="bg-gray-800/95 border-b border-gray-700">
+                <div x-show="true" x-transition class="bg-gray-800/95 border-b border-gray-700 px-4 py-3">
                     <div class="max-w-4xl mx-auto">
 
-                        <!-- === HEADER PLIABLE AVEC ARTICLES LUS TOUJOURS VISIBLE === -->
-                        <div class="bg-gray-800/50 border-b border-gray-700">
-                            <button @click="showUserInfo = !showUserInfo" x-data="{ showUserInfo: false }"
-                                class="w-full flex items-center justify-between py-3 px-4">
-
-                                <!-- Articles lus (toujours visible) -->
-                                <div x-show="totalReadCount > 0" class="flex items-center gap-2 text-sm">
+                        <!-- === CARTE ARTICLES LUS === -->
+                        <div x-show="totalReadCount > 0" class="bg-gray-800/50 border border-gray-700 rounded-lg mb-3">
+                            <div class="py-3 px-4 text-center">
+                                <div class="flex items-center justify-center gap-2 text-sm">
                                     <span class="text-blue-400">📚</span>
                                     <span class="font-semibold text-white" x-text="totalReadCount"></span>
                                     <span class="text-gray-300"
                                         x-text="totalReadCount === 1 ? 'article lu' : 'articles lus'"></span>
                                 </div>
+                            </div>
+                        </div>
 
-                                <!-- Placeholder si pas d'articles lus -->
-                                <div x-show="totalReadCount === 0" class="text-sm text-gray-400">
-                                    📚 Aucun article lu
-                                </div>
-
-                                <!-- Icône dépliage -->
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="h-4 w-4 transition-transform text-gray-400"
-                                    :class="{ 'rotate-180': showUserInfo }" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
-
-                            <!-- === CONTENU DÉPLIABLE === -->
-                            <div x-show="showUserInfo" x-transition class="px-4 pb-3 space-y-3">
+                        <!-- === CARTE PARRAINAGE === -->
+                        <div x-show="userInviteData.code || userInviteData.parrainEmail || userInviteData.filleulEmail"
+                            class="bg-gray-800/50 border border-gray-700 rounded-lg">
+                            <div class="py-3 px-4">
 
                                 <!-- Code à partager -->
-                                <div x-show="userInviteData.code" class="text-center">
+                                <div x-show="userInviteData.code" class="text-center mb-3">
                                     <div class="flex items-center justify-center gap-2 mb-2">
                                         <span class="text-yellow-400">🎁</span>
                                         <span class="text-gray-300 text-sm font-medium">Code à partager</span>
@@ -516,9 +502,8 @@
                                 <!-- Relations parrainage -->
                                 <div x-show="userInviteData.parrainEmail || userInviteData.filleulEmail"
                                     class="space-y-2 text-center text-xs">
-
-                                    <!-- Séparateur si code présent -->
-                                    <div x-show="userInviteData.code" class="border-t border-gray-700 pt-3"></div>
+                                    <div x-show="userInviteData.code && (userInviteData.parrainEmail || userInviteData.filleulEmail)"
+                                        class="border-t border-gray-700 pt-3"></div>
 
                                     <!-- Parrain -->
                                     <div x-show="userInviteData.parrainEmail"
@@ -537,15 +522,17 @@
                                     </div>
                                 </div>
 
-                                <!-- Bouton admin -->
-                                <div x-show="isAdmin" class="text-center pt-2 border-t border-gray-700">
-                                    <button @click="showAdminPanel = !showAdminPanel"
-                                        class="flex items-center justify-center gap-2 mx-auto text-orange-400 hover:text-white transition">
-                                        <span>⚙️</span>
-                                        <span class="text-sm font-medium">Panneau admin</span>
-                                    </button>
-                                </div>
+                            </div>
+                        </div>
 
+                        <!-- === CARTE ADMIN === -->
+                        <div x-show="isAdmin" class="bg-gray-800/50 border border-gray-700 rounded-lg">
+                            <div class="py-3 px-4 text-center">
+                                <button @click="showAdminPanel = !showAdminPanel"
+                                    class="flex items-center justify-center gap-2 w-full text-orange-400 hover:text-white transition">
+                                    <span>⚙️</span>
+                                    <span class="text-sm font-medium">Panneau admin</span>
+                                </button>
                             </div>
                         </div>
 
