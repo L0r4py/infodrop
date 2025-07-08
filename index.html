@@ -1136,6 +1136,7 @@
                     newsList: [],
                     loadingNews: true,
                     updateInterval: null,
+                    latestNewsTimestamp: null,
 
                     // === ADMINISTRATION ===
                     isAdmin: false,
@@ -1744,20 +1745,37 @@
                         if (isInitial) this.loadingNews = false;
                     },
 
-                    // === CHARGEMENT DES ACTUALITÉS ===
+                    // === CHARGEMENT DES ACTUALITÉS (VERSION OPTIMISÉE) ===
                     async loadNews() {
                         try {
-                            const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-                            const { data } = await supabase.from('actu').select('*').gte('heure', twentyFourHoursAgo).order('heure', { ascending: false });
-                            if (!data) return;
-                            const existingIds = new Set(this.newsList.map(n => n.id));
-                            const newArticles = data.filter(n => !existingIds.has(n.id));
-                            if (newArticles.length > 0) {
-                                this.newsList = [...newArticles, ...this.newsList];
-                                this.updateTagsList();
+                            let query = supabase
+                                .from('actu')
+                                .select('id, resume, url, heure, source, orientation, tags')
+                                .order('heure', { ascending: false });
+                            if (this.latestNewsTimestamp) {
+                                query = query.gt('heure', this.latestNewsTimestamp);
+                            } else {
+                                query = query.limit(100);
                             }
+
+                            const { data: newArticles, error } = await query;
+
+                            if (error) {
+                                console.error('Erreur chargement actus:', error);
+                                return;
+                            }
+
+                            if (!newArticles || newArticles.length === 0) {
+                                return;
+                            }
+
+                            this.latestNewsTimestamp = newArticles[0].heure;
+                            this.newsList = [...newArticles, ...this.newsList];
+
+                            this.updateTagsList();
+
                         } catch (e) {
-                            console.error('Erreur actus:', e);
+                            console.error('Erreur imprévue dans loadNews:', e);
                         }
                     },
 

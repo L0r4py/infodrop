@@ -64,7 +64,7 @@ const RSS_FEEDS = [
     { name: 'Journal du coin', url: 'https://journalducoin.com/feed/', orientation: 'neutre', tags: ['crypto'] },
     { name: 'Cryptoast', url: 'https://cryptoast.fr/feed/', orientation: 'neutre', tags: ['crypto'] },
     { name: 'Capital.fr', url: 'https://feed.prismamediadigital.com/v1/cap/rss', orientation: 'centre-droit', tags: ['économie'] },
-    
+
     // === SPORT ===
     { name: "L'Équipe", url: "https://dwh.lequipe.fr/api/edito/rss?path=/Tous%20sports", orientation: "centre", tags: ["sport"] },
 
@@ -277,7 +277,7 @@ export default async function handler(req, res) {
 
     // Insertion en base
     if (articlesToInsert.length > 0) {
-        const { error } = await supabase.from('actu').insert(articlesToInsert);
+        const { error } = await supabase.from('actu').upsert(articlesToInsert, { onConflict: 'url' });
         if (error) {
             console.error('Erreur insertion Supabase:', error);
             return res.status(500).json({ success: false, error: error.message });
