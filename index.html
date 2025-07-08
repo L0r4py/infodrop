@@ -1801,22 +1801,8 @@
                     // === MISE À JOUR DE LA LISTE DES TAGS ===
                     updateTagsList() {
                         const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
-                        const counts = {};
-
-                        this.newsList.forEach(n => {
-                            if (n.tags) {
-                                n.tags.forEach(t => {
-                                    counts[t] = (counts[t] || 0) + 1;
-                                });
-                            }
-                        });
-
                         this.allOrientations = pol;
-                        this.allOtherTags = Object.entries(counts)
-                            .filter(([t]) => !pol.includes(t))
-                            .sort((a, b) => b[1] - a[1])
-                            .slice(0, 50)
-                            .map(([t]) => t);
+                        this.allOtherTags = this.activeTags.filter(tag => !pol.includes(tag));
                     },
 
                     // === VÉRIFICATION DES ARTICLES POUR UNE ORIENTATION ===
