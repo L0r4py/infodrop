@@ -226,7 +226,8 @@
     <!-- ======================================================================== -->
     <!-- 🏗️ STRUCTURE PRINCIPALE DE L'APPLICATION                               -->
     <!-- ======================================================================== -->
-    <div x-data="infodropApp()" x-init="init()" class="w-full">
+    <div x-data="infodropApp()" x-init="init(); $watch('activeFilter', (newFilter) => loadNews(newFilter, true))"
+        class="w-full">
 
         <!-- ================================================================== -->
         <!-- ⏳ ÉCRAN DE CHARGEMENT                                            -->
@@ -765,7 +766,7 @@
                 <!-- 📰 LISTE DES ACTUALITÉS                                   -->
                 <!-- ========================================================== -->
                 <div class="space-y-3">
-                    <template x-for="news in filteredNews" :key="news.id">
+                    <template x-for="news in newsList" :key="news.id">
                         <div
                             class="news-card flex items-center gap-2 bg-gray-800/50 hover:bg-gray-800/80 p-4 rounded-lg fade-in border border-gray-700/50 hover:border-gray-700">
 
@@ -1215,15 +1216,6 @@
                     // ============================================================
                     // 🔧 GETTERS ET PROPRIÉTÉS CALCULÉES
                     // ============================================================
-
-                    // === FILTRAGE DES ACTUALITÉS ===
-                    get filteredNews() {
-                        if (this.activeFilter === 'all') return this.newsList;
-                        return this.newsList.filter(news =>
-                            (news.tags && news.tags.includes(this.activeFilter)) ||
-                            news.orientation === this.activeFilter
-                        );
-                    },
 
                     // === HELPERS POUR LES ORIENTATIONS ===
                     getOrientationColor(o) { return ORIENTATION_DATA[o]?.color || '#808080'; },
@@ -1746,39 +1738,51 @@
                     },
 
                     // === CHARGEMENT DES ACTUALITÉS (VERSION OPTIMISÉE) ===
-                    async loadNews() {
+                    async loadNews(filter = null, isNewFilter = false) {
                         try {
+                            // On ne sélectionne QUE les colonnes nécessaires
                             let query = supabase
                                 .from('actu')
                                 .select('id, resume, url, heure, source, orientation, tags')
                                 .order('heure', { ascending: false });
-                            if (this.latestNewsTimestamp) {
+
+                            // === GESTION DES FILTRES CÔTÉ BASE DE DONNÉES ===
+                            if (filter && filter !== 'all') {
+                                query = query.or(`orientation.eq.${filter},tags.cs.{${filter}}`);
+                            }
+
+                            // === GESTION DU CHARGEMENT INCREMENTIEL OU COMPLET ===
+                            if (isNewFilter) {
+                                query = query.limit(100);
+                                this.newsList = [];
+                                this.latestNewsTimestamp = null;
+                            } else if (this.latestNewsTimestamp) {
+
                                 query = query.gt('heure', this.latestNewsTimestamp);
                             } else {
+
                                 query = query.limit(100);
                             }
 
                             const { data: newArticles, error } = await query;
+                            if (error) throw error;
+                            if (!newArticles || newArticles.length === 0) return;
 
-                            if (error) {
-                                console.error('Erreur chargement actus:', error);
-                                return;
+                            if (isNewFilter || !this.latestNewsTimestamp) {
+
+                                this.newsList = newArticles;
+                            } else {
+
+                                this.newsList = [...newArticles, ...this.newsList];
                             }
 
-                            if (!newArticles || newArticles.length === 0) {
-                                return;
-                            }
-
-                            this.latestNewsTimestamp = newArticles[0].heure;
-                            this.newsList = [...newArticles, ...this.newsList];
-
+                            this.latestNewsTimestamp = this.newsList[0].heure;
                             this.updateTagsList();
 
                         } catch (e) {
-                            console.error('Erreur imprévue dans loadNews:', e);
+                            console.error('Erreur dans loadNews:', e);
                         }
                     },
-
                     // ============================================================
                     // 🏷️ GESTION DES TAGS ET FILTRES
                     // ============================================================
