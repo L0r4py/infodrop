@@ -276,23 +276,33 @@ export default async function handler(req, res) {
     }
 
     // Insertion en base
+    let insertedCount = 0;
     if (articlesToInsert.length > 0) {
-        const { error } = await supabase.from('actu').upsert(articlesToInsert, { onConflict: 'url' });
+        const { data, error } = await supabase
+            .from('actu')
+            .upsert(articlesToInsert, { onConflict: 'url' })
+            .select();
+
         if (error) {
             console.error('Erreur insertion Supabase:', error);
-            return res.status(500).json({ success: false, error: error.message });
+        } else {
+            insertedCount = data ? data.length : 0;
         }
     }
 
     const duration = ((Date.now() - start) / 1000).toFixed(2);
-    console.log(`✅ [INFODROP] Parsing terminé en ${duration}s. Flux OK: ${fluxOk}, timeouts: ${fluxTimeout}, erreurs: ${fluxError}. ${articlesToInsert.length} articles trouvés, ${filteredCount} filtrés.`);
 
+    // Le nouveau message de log, beaucoup plus informatif
+    console.log(`✅ [INFODROP] Parsing terminé en ${duration}s. Flux OK: ${fluxOk}, timeouts: ${fluxTimeout}, erreurs: ${fluxError}. ${articlesToInsert.length} articles trouvés, ${insertedCount} insérés, ${filteredCount} filtrés.`);
+
+    // La nouvelle réponse JSON
     res.status(200).json({
         success: true,
         flux_ok: fluxOk,
         flux_timeout: fluxTimeout,
         flux_error: fluxError,
-        new_articles_found: articlesToInsert.length,
+        articles_found: articlesToInsert.length,
+        articles_inserted: insertedCount,
         articles_filtered: filteredCount,
         duration_seconds: duration
     });
