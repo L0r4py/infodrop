@@ -129,24 +129,30 @@
             }
         }
 
-        /* === ANIMATION DU BANDEAU DÉFILANT (MOBILE) === */
-        .ticker-train {
-            display: inline-flex;
-            animation: scroll-left 20s linear infinite;
+        /* === NOUVELLE ANIMATION DU BANDEAU DÉFILANT === */
+        .ticker-track {
+            white-space: nowrap;
+            animation: ticker-scroll 40s linear infinite;
         }
 
-        @keyframes scroll-left {
+        .ticker-track:hover,
+        .ticker-track.paused {
+            animation-play-state: paused;
+            cursor: pointer;
+        }
+
+        .ticker-track span {
+            white-space: nowrap;
+        }
+
+        @keyframes ticker-scroll {
             from {
-                transform: translateX(0%);
+                transform: translateX(0);
             }
 
             to {
                 transform: translateX(-50%);
             }
-        }
-
-        .ticker-train:hover {
-            animation-play-state: paused;
         }
     </style>
 
@@ -157,71 +163,6 @@
 </head>
 
 <body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
-
-    <!-- ======================================================================== -->
-    <!-- 🔐 CONFIGURATION SÉCURISÉE ET INITIALISATION SUPABASE                  -->
-    <!-- ======================================================================== -->
-    <script>
-        // === VARIABLES GLOBALES (SANS VALEURS PAR DÉFAUT) ===
-        let supabase = null;
-        let ADMIN_EMAILS = [];
-        let STRIPE_LINK = 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801';
-
-        // === FONCTION D'INITIALISATION SÉCURISÉE ===
-        async function initializeSupabase() {
-            try {
-                console.log('🔐 Récupération de la configuration sécurisée...');
-
-                // Récupérer TOUTE la configuration depuis l'API sécurisée
-                const response = await fetch('/api/config');
-
-                if (!response.ok) {
-                    throw new Error(`Erreur API: ${response.status}`);
-                }
-
-                const config = await response.json();
-
-                // Vérifier que toutes les données sont présentes
-                if (!config.supabaseUrl || !config.supabaseAnonKey) {
-                    throw new Error('Configuration Supabase incomplète');
-                }
-
-                // Initialiser Supabase avec les clés récupérées
-                supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
-
-                // Mettre à jour TOUTES les constantes sécurisées
-                ADMIN_EMAILS = config.adminEmails || [];
-                STRIPE_LINK = config.stripeLink || '';
-
-                console.log('✅ Configuration complète initialisée de manière sécurisée');
-                console.log('📧 Admin emails récupérés:', ADMIN_EMAILS.length + ' email(s)');
-                console.log('💳 Stripe link récupéré: ✓');
-
-                return true;
-
-            } catch (error) {
-                console.error('❌ Erreur initialisation:', error);
-
-                // Affichage d'erreur utilisateur plus informatif
-                const errorDiv = document.createElement('div');
-                errorDiv.innerHTML = `
-                    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: Arial;">
-                        <div style="text-align: center; padding: 2rem;">
-                            <h2>❌ Erreur de configuration</h2>
-                            <p>Impossible de charger la configuration sécurisée.</p>
-                            <p>Veuillez contacter l'administrateur.</p>
-                            <button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3B82F6; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                Recharger la page
-                            </button>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(errorDiv);
-
-                return false;
-            }
-        }
-    </script>
 
     <!-- ======================================================================== -->
     <!-- 🏗️ STRUCTURE PRINCIPALE DE L'APPLICATION                               -->
@@ -285,14 +226,13 @@
         <div x-show="sessionLoaded && user" x-transition.opacity class="min-h-screen flex flex-col">
 
             <!-- ============================================================== -->
-            <!-- 📱 HEADER UNIFIÉ AVEC NAVIGATION ET BANDEAUX                -->
+            <!-- 📱 HEADER UNIFIÉ (VERSION ASTRO INTÉGRÉE)                     -->
             <!-- ============================================================== -->
             <div class="sticky top-0 z-40 transition-shadow duration-300" id="stickyHeader">
 
                 <!-- === HEADER PRINCIPAL === -->
                 <header class="relative z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
                     <div class="max-w-4xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
-                        <!-- === LOGO === -->
                         <div class="justify-self-start">
                             <a href="/index.html"
                                 class="flex items-center gap-2 text-xl font-bold text-white hover:text-blue-400 transition whitespace-nowrap"
@@ -301,46 +241,46 @@
                                     style="display:inline-block;vertical-align:middle;">📰</span>
                                 <span class="tracking-tight"
                                     style="display:inline-block;vertical-align:middle;">INFODROP</span>
-                                <!-- === VERSION TAG === -->
                                 <span
-                                    class="ml-2 text-xs font-medium text-gray-400 bg-slate-700 px-2 py-0.5 rounded-full">3.0.0-beta</span>
+                                    class="ml-2 text-xs font-medium text-gray-400 bg-slate-700 px-2 py-0.5 rounded-full">4.0.0-beta</span>
                             </a>
                         </div>
-
                         <div class="justify-self-center"></div>
-
-                        <!-- === MENU HAMBURGER === -->
                         <div class="justify-self-end relative" x-data="{ showMenu: false }">
-                            <button @click="showMenu = !showMenu" class="p-2 rounded-full hover:bg-gray-700 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                                        clip-rule="evenodd" />
+                            <button @click="showMenu = !showMenu"
+                                class="p-2 rounded-full hover:bg-gray-700 transition cursor-pointer"
+                                aria-label="Ouvrir le menu">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16">
+                                    </path>
                                 </svg>
                             </button>
-
-                            <!-- === DROPDOWN MENU === -->
+                            <div x-show="showMenu" x-transition:enter="ease-out duration-300"
+                                x-transition:enter-start="opacity-0" x-transition:leave="ease-in duration-200"
+                                x-transition:leave-end="opacity-0"
+                                class="fixed inset-0 bg-black/30 backdrop-blur-[2px] z-40" style="display: none;"
+                                @click="showMenu = false">
+                            </div>
                             <div x-show="showMenu" @click.away="showMenu = false" x-transition
-                                class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-[100]"
+                                class="absolute top-full right-0 mt-2 w-56 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50"
                                 style="display: none;">
-
-                                <!-- === ANALYSES 360° === -->
-                                <div class="px-4 py-2 border-b border-gray-700">
-                                    <a href="/infodrop360.html"
-                                        class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">🌐
-                                        Analyses 360°</a>
+                                <div class="border-b border-gray-700">
+                                    <a href="/index.html"
+                                        class="flex items-center gap-3 px-4 py-2 text-base font-semibold text-white hover:text-blue-400 hover:bg-gray-700 transition">📰
+                                        Flux&nbsp;24H</a>
                                 </div>
-
-                                <!-- === ITEMS DE MENU === -->
+                                <div class="border-b border-gray-700">
+                                    <a href="/infodrop360.html"
+                                        class="flex items-center gap-3 px-4 py-2 text-base font-semibold text-white hover:text-blue-300 hover:bg-gray-700 transition">🌐
+                                        Analyses&nbsp;360°</a>
+                                </div>
                                 <a href="/apropos.html"
                                     class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">ℹ️
-                                    À propos</a>
+                                    À&nbsp;propos</a>
                                 <a :href="STRIPE_LINK" target="_blank"
-                                    class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-700">❤️
+                                    class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">❤️
                                     Soutenir</a>
-
-                                <!-- === DÉCONNEXION === -->
                                 <div class="border-t border-gray-700 my-1"></div>
                                 <a @click="logout()" href="#"
                                     class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">🚪
@@ -351,112 +291,68 @@
                 </header>
 
                 <!-- ========================================================== -->
-                <!-- 📰 BANDEAU CONTEXTUEL (DATE, MÉTÉO, PHASE LUNAIRE...)    -->
+                <!-- 📰 NOUVEAU BANDEAU DÉFILANT (CONTEXT TICKER)              -->
                 <!-- ========================================================== -->
-                <div x-data="contextTicker()" x-init="initTicker()" class="bg-gray-800/95 border-b border-gray-700 h-8">
+                <div x-data="{ date:'', day:0, temp:null, wIcon:'', wText:'', moon:'', left:0, btc:null, eth:null }"
+                    x-init="initTicker($data);
+                          $nextTick(() => {
+                            const track = $el.querySelector('.ticker-track');
+                            if (track) {
+                                track.innerHTML += track.innerHTML;
+                                while (track.offsetWidth < $el.offsetWidth * 2) {
+                                    track.innerHTML += track.innerHTML;
+                                }
+                            }
+                          });"
+                    class="w-full bg-gray-800/60 backdrop-blur-sm text-[15px] border-b border-gray-700 overflow-hidden">
+                    <div class="ticker-track inline-flex gap-x-6 items-center px-4 py-1" x-data="{ paused:false }"
+                        :class="{ 'paused': paused }" @click="paused = !paused">
+                        <!-- Lune -->
+                        <span class="flex items-center gap-1" x-text="moon"></span>
 
-                    <!-- === VERSION MOBILE (Défilante) === -->
-                    <div class="md:hidden h-full overflow-hidden relative">
-                        <div class="ticker-train absolute flex items-center h-full" style="width: max-content;">
-                            <!-- === COPIE 1 === -->
-                            <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
-                                <span class="flex items-center gap-1">
-                                    <span class="text-yellow-400">📅</span>
-                                    <span x-text="dateInfo.fullDate"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span class="text-blue-400">📊</span>
-                                    Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365
-                                </span>
-                                <span x-show="todayFeast" class="flex items-center gap-1">
-                                    <span class="text-red-400">🎉</span>
-                                    <span class="font-semibold text-white" x-text="todayFeast"></span>
-                                </span>
-                                <span x-show="weather.temperature !== null" class="flex items-center gap-1">
-                                    <span x-text="weather.icon"></span>
-                                    <span class="font-semibold text-white"><span
-                                            x-text="weather.temperature"></span>°C</span>
-                                    <span class="text-gray-400" x-text="weather.description"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span x-text="moonPhase.icon"></span>
-                                    <span x-text="moonPhase.name"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span class="text-green-400">⏳</span>
-                                    <span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span>
-                                    jours avant 2026
-                                </span>
-                                <span class="text-gray-600 mx-4">•</span>
-                            </div>
+                        <!-- Jour ordinal -->
+                        <span class="flex items-center gap-1">
+                            📊 Jour <span x-text="day"></span>/365
+                        </span>
 
-                            <!-- === COPIE 2 (IDENTIQUE POUR L'ANIMATION) === -->
-                            <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
-                                <span class="flex items-center gap-1">
-                                    <span class="text-yellow-400">📅</span>
-                                    <span x-text="dateInfo.fullDate"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span class="text-blue-400">📊</span>
-                                    Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365
-                                </span>
-                                <span x-show="todayFeast" class="flex items-center gap-1">
-                                    <span class="text-red-400">🎉</span>
-                                    <span class="font-semibold text-white" x-text="todayFeast"></span>
-                                </span>
-                                <span x-show="weather.temperature !== null" class="flex items-center gap-1">
-                                    <span x-text="weather.icon"></span>
-                                    <span class="font-semibold text-white"><span
-                                            x-text="weather.temperature"></span>°C</span>
-                                    <span class="text-gray-400" x-text="weather.description"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span x-text="moonPhase.icon"></span>
-                                    <span x-text="moonPhase.name"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span class="text-green-400">⏳</span>
-                                    <span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span>
-                                    jours avant 2026
-                                </span>
-                                <span class="text-gray-600 mx-4">•</span>
-                            </div>
-                        </div>
-                    </div>
+                        <!-- Compteur 2026 -->
+                        <span class="flex items-center gap-1">
+                            ⏳ <span x-text="left"></span> jours avant 2026
+                        </span>
 
-                    <!-- === VERSION DESKTOP (Statique) === -->
-                    <div class="hidden md:flex items-center justify-center h-full">
-                        <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
+                        <!-- Crypto BTC/USD -->
+                        <a href="https://www.tradingview.com/chart/?symbol=BINANCE:BTCUSD" target="_blank"
+                            rel="noopener"
+                            class="flex items-center gap-1 no-underline hover:text-blue-400 transition cursor-pointer"
+                            title="Voir le graphique BTC/USD">
+                            <span class="text-lg">🪙</span> BTC&nbsp;/USD&nbsp;
+                            <span x-text="btc !== null ? btc.toLocaleString('fr-FR') + ' $' : '…'"></span>
+                        </a>
+
+                        <!-- Crypto ETH/USD -->
+                        <a href="https://www.tradingview.com/chart/?symbol=BINANCE:ETHUSD" target="_blank"
+                            rel="noopener"
+                            class="flex items-center gap-1 no-underline hover:text-purple-400 transition cursor-pointer"
+                            title="Voir le graphique ETH/USD">
+                            <span class="text-lg">♦️</span> ETH&nbsp;/USD&nbsp;
+                            <span x-text="eth !== null ? eth.toLocaleString('fr-FR') + ' $' : '…'"></span>
+                        </a>
+
+                        <!-- Date complète -->
+                        <span class="flex items-center gap-1">
+                            📅 <span x-text="date"></span>
+                        </span>
+
+                        <!-- Météo -->
+                        <template x-if="temp !== null">
                             <span class="flex items-center gap-1">
-                                <span class="text-yellow-400">📅</span>
-                                <span x-text="dateInfo.fullDate"></span>
+                                <span x-text="wIcon"></span>
+                                <span x-text="temp"></span>°C <span x-text="wText"></span>
                             </span>
-                            <span class="flex items-center gap-1">
-                                <span class="text-blue-400">📊</span>
-                                Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365
-                            </span>
-                            <span x-show="todayFeast" class="flex items-center gap-1">
-                                <span class="text-red-400">🎉</span>
-                                <span class="font-semibold text-white" x-text="todayFeast"></span>
-                            </span>
-                            <span x-show="weather.temperature !== null" class="flex items-center gap-1">
-                                <span x-text="weather.icon"></span>
-                                <span class="font-semibold text-white"><span
-                                        x-text="weather.temperature"></span>°C</span>
-                                <span class="text-gray-400" x-text="weather.description"></span>
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <span x-text="moonPhase.icon"></span>
-                                <span x-text="moonPhase.name"></span>
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <span class="text-green-400">⏳</span>
-                                <span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span> jours
-                                avant 2026
-                            </span>
-                        </div>
+                        </template>
                     </div>
                 </div>
+
 
                 <!-- ========================================================== -->
                 <!-- 👤 BARRE UTILISATEUR (STATS LECTURES ET INVITATIONS)     -->
@@ -882,11 +778,11 @@
             </div>
 
             <!-- ============================================================== -->
-            <!-- 🦶 FOOTER                                                     -->
+            <!-- 🦶 FOOTER (VERSION ASTRO INTÉGRÉE)                            -->
             <!-- ============================================================== -->
-            <footer class="text-center py-8 text-xs text-gray-500">
+            <footer class="text-center py-8 text-xs text-gray-500 mt-auto">
                 <p>© 2025 INFODROP. Tous droits réservés.</p>
-                <p class="mt-1">Un projet 3C - EM&LPy</p>
+                <p class="mt-1">Un projet 3C - By Emile Marclin & L0r4.py [AI]</p>
             </footer>
         </div>
 
@@ -906,201 +802,138 @@
         </button>
 
         <!-- ======================================================================== -->
-        <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER                                          -->
+        <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER (MISE À JOUR)                         -->
         <!-- ======================================================================== -->
         <script>
-            // ====================================================================
-            // 📅 FONCTION BANDEAU CONTEXTUEL (DATE, MÉTÉO, LUNE...)
-            // ====================================================================
-            function contextTicker() {
-                return {
-                    // === DONNÉES DE BASE ===
-                    dateInfo: {
-                        fullDate: '',
-                        dayOfYear: 0,
-                        daysUntilNewYear: 0
-                    },
-                    todayFeast: '',
-                    weather: {
-                        temperature: null,
-                        description: '',
-                        icon: '🌡️'
-                    },
-                    moonPhase: {
-                        name: '',
-                        icon: '🌙'
-                    },
+            /* ───── CONFIG DEBUG ───── */
+            const DEBUG = true;
+            const dlog = (...args) => DEBUG && console.log('[DEBUG]', ...args);
 
-                    // === DICTIONNAIRE DES FÊTES ===
-                    feasts: {
-                        '01-01': 'Jour de l\'an',
-                        '01-06': 'Épiphanie',
-                        '02-02': 'Chandeleur',
-                        '02-14': 'Saint-Valentin',
-                        '03-17': 'Saint-Patrick',
-                        '04-01': 'Poisson d\'avril',
-                        '05-01': 'Fête du travail',
-                        '05-08': 'Victoire 1945',
-                        '06-21': 'Fête de la musique',
-                        '07-14': 'Fête nationale',
-                        '08-15': 'Assomption',
-                        '10-31': 'Halloween',
-                        '11-01': 'Toussaint',
-                        '11-11': 'Armistice 1918',
-                        '12-25': 'Noël',
-                        '12-31': 'Saint-Sylvestre'
-                    },
+            /* ───── Variables globales ───── */
+            let supabase = null;
+            let ADMIN_EMAILS = [];
+            let STRIPE_LINK = '';
 
-                    // === INITIALISATION DU TICKER ===
-                    async initTicker() {
-                        this.updateDateInfo();
-                        this.updateMoonPhase();
-                        await this.getWeather();
+            /* ──────────────────────────────────────────────────────────────────────
+               initializeSupabase — Appel unique au chargement, version propre
+               ─────────────────────────────────────────────────────────────────── */
+            async function initializeSupabase() {
+                dlog('🔐 initializeSupabase() lancé');
+                try {
+                    const res = await fetch('/api/config');
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    const cfg = await res.json();
 
-                        const now = new Date();
-                        const tomorrow = new Date(now);
-                        tomorrow.setDate(tomorrow.getDate() + 1);
-                        tomorrow.setHours(0, 0, 0, 0);
-                        const msUntilMidnight = tomorrow - now;
+                    ADMIN_EMAILS = cfg.adminEmails;
+                    STRIPE_LINK = cfg.stripeLink;
+                    dlog('⚙️  Config récupérée', cfg);
 
-                        setTimeout(() => {
-                            this.updateDateInfo();
-                            this.updateMoonPhase();
-                            setInterval(() => {
-                                this.updateDateInfo();
-                                this.updateMoonPhase();
-                            }, 86400000);
-                        }, msUntilMidnight);
+                    const { createClient } = window.supabase;
+                    supabase = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
 
-                        setInterval(() => this.getWeather(), 600000);
-                    },
-
-                    // === MISE À JOUR DES INFORMATIONS DE DATE ===
-                    updateDateInfo() {
-                        const now = new Date();
-                        const options = { weekday: 'long', day: 'numeric', month: 'long' };
-                        this.dateInfo.fullDate = now.toLocaleDateString('fr-FR', options);
-                        this.dateInfo.fullDate = this.dateInfo.fullDate.charAt(0).toUpperCase() + this.dateInfo.fullDate.slice(1);
-
-                        const start = new Date(now.getFullYear(), 0, 0);
-                        const diff = now - start;
-                        this.dateInfo.dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-                        const nextYear = new Date(now.getFullYear() + 1, 0, 1);
-                        this.dateInfo.daysUntilNewYear = Math.ceil((nextYear - now) / (1000 * 60 * 60 * 24));
-
-                        const monthDay = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-                        this.todayFeast = this.feasts[monthDay] || '';
-                    },
-
-                    // === CALCUL DE LA PHASE LUNAIRE ===
-                    updateMoonPhase() {
-                        const now = new Date();
-                        const refNewMoon = new Date(2000, 0, 6);
-                        const lunarCycle = 29.53058867;
-
-                        const daysSinceRef = (now - refNewMoon) / (1000 * 60 * 60 * 24);
-                        const moonAge = daysSinceRef % lunarCycle;
-
-                        if (moonAge < 1.84566) {
-                            this.moonPhase.name = 'Nouvelle lune';
-                            this.moonPhase.icon = '🌑';
-                        } else if (moonAge < 5.53699) {
-                            this.moonPhase.name = 'Premier croissant';
-                            this.moonPhase.icon = '🌒';
-                        } else if (moonAge < 9.22831) {
-                            this.moonPhase.name = 'Premier quartier';
-                            this.moonPhase.icon = '🌓';
-                        } else if (moonAge < 12.91963) {
-                            this.moonPhase.name = 'Gibbeuse croissante';
-                            this.moonPhase.icon = '🌔';
-                        } else if (moonAge < 16.61096) {
-                            this.moonPhase.name = 'Pleine lune';
-                            this.moonPhase.icon = '🌕';
-                        } else if (moonAge < 20.30228) {
-                            this.moonPhase.name = 'Gibbeuse décroissante';
-                            this.moonPhase.icon = '🌖';
-                        } else if (moonAge < 23.99361) {
-                            this.moonPhase.name = 'Dernier quartier';
-                            this.moonPhase.icon = '🌗';
-                        } else {
-                            this.moonPhase.name = 'Dernier croissant';
-                            this.moonPhase.icon = '🌘';
-                        }
-                    },
-
-                    // === RÉCUPÉRATION DES DONNÉES MÉTÉO ===
-                    async getWeather() {
-                        try {
-                            const position = await new Promise((resolve, reject) => {
-                                navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
-                            });
-
-                            const { latitude, longitude } = position.coords;
-
-                            const response = await fetch(
-                                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&timezone=auto`
-                            )
-
-                            const data = await response.json();
-                            const current = data.current_weather;
-
-                            this.weather.temperature = Math.round(current.temperature);
-
-                            const weatherCode = current.weathercode;
-                            if (weatherCode === 0) {
-                                this.weather.description = 'Ciel dégagé';
-                                this.weather.icon = '☀️';
-                            } else if (weatherCode <= 3) {
-                                this.weather.description = 'Partiellement nuageux';
-                                this.weather.icon = '⛅';
-                            } else if (weatherCode <= 48) {
-                                this.weather.description = 'Nuageux';
-                                this.weather.icon = '☁️';
-                            } else if (weatherCode <= 67) {
-                                this.weather.description = 'Pluie';
-                                this.weather.icon = '🌧️';
-                            } else if (weatherCode <= 77) {
-                                this.weather.description = 'Neige';
-                                this.weather.icon = '❄️';
-                            } else if (weatherCode <= 99) {
-                                this.weather.description = 'Orage';
-                                this.weather.icon = '⛈️';
-                            }
-
-                        } catch (error) {
-                            try {
-                                const response = await fetch(
-                                    'https://api.open-meteo.com/v1/forecast?latitude=48.8566&longitude=2.3522&current_weather=true&timezone=Europe/Paris'
-                                );
-                                const data = await response.json();
-                                const current = data.current_weather;
-
-                                this.weather.temperature = Math.round(current.temperature);
-
-                                const weatherCode = current.weathercode;
-                                if (weatherCode === 0) {
-                                    this.weather.icon = '☀️';
-                                } else if (weatherCode <= 3) {
-                                    this.weather.icon = '⛅';
-                                } else if (weatherCode <= 48) {
-                                    this.weather.icon = '☁️';
-                                } else if (weatherCode <= 67) {
-                                    this.weather.icon = '🌧️';
-                                } else if (weatherCode <= 77) {
-                                    this.weather.icon = '❄️';
-                                } else {
-                                    this.weather.icon = '⛈️';
-                                }
-
-                                this.weather.description = 'Paris';
-                            } catch (err) {
-                                console.error('Erreur météo:', err);
-                            }
-                        }
-                    }
-                };
+                    dlog('✅ Supabase initialisé');
+                    return true;
+                } catch (err) {
+                    console.error('❌ Erreur initialisation:', err);
+                    const errorDiv = document.createElement('div');
+                    errorDiv.innerHTML = `
+                        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: Arial;">
+                            <div style="text-align: center; padding: 2rem;">
+                                <h2>❌ Erreur de configuration</h2>
+                                <p>Impossible de charger la configuration sécurisée.</p>
+                                <p>Veuillez contacter l'administrateur.</p>
+                                <button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3B82F6; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                    Recharger la page
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(errorDiv);
+                    return false;
+                }
             }
+
+
+            /* === LOGIQUE DU NOUVEAU BANDEAU (TICKER) ======================= */
+            const D = (msg, ...rest) => console.debug('[DEBUG]', msg, ...rest);
+
+            async function loadCrypto(scope) {
+                try {
+                    const url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd';
+                    const res = await fetch(url, { cache: 'no-cache' });
+                    const json = await res.json();
+
+                    scope.btc = json.bitcoin.usd;
+                    scope.eth = json.ethereum.usd;
+                    D('🪙 Prix crypto USD ↻', scope.btc, scope.eth);
+                } catch (err) {
+                    console.error('Crypto fetch error', err);
+                }
+                setTimeout(() => loadCrypto(scope), 14_400_000);   // 4 h
+            }
+
+            async function fetchWeather(scope) {
+                try {
+                    const coords = await new Promise((ok, ko) =>
+                        navigator.geolocation.getCurrentPosition(
+                            p => ok(p.coords),
+                            ko,
+                            { maximumAge: 60_000, timeout: 8_000 }
+                        )
+                    );
+                    D('📍 Géoloc OK', coords);
+
+                    const url = `https://api.open-meteo.com/v1/forecast` +
+                        `?latitude=${coords.latitude}&longitude=${coords.longitude}` +
+                        `&current=temperature_2m,is_day,weather_code`;
+                    const res = await fetch(url, { cache: 'no-cache' });
+                    const { current } = await res.json();
+
+                    const map = {
+                        0: ['☀️ Ciel dégagé', '🌙 Ciel clair'], 1: ['🌤️ Peu nuageux', '🌙☁️ Peu nuageux'], 2: ['⛅ Partiellement nuageux', '☁️ Part. nuageux'],
+                        3: ['☁️ Couvert', '☁️ Couvert'], 45: ['🌫️ Brouillard', '🌫️ Brouillard'], 48: ['🌫️ Brouillard givrant', '🌫️ Brouillard givrant'],
+                        51: ['🌦️ Bruine faible', '🌦️ Bruine faible'], 61: ['🌧️ Pluie faible', '🌧️ Pluie faible'], 71: ['🌨️ Neige faible', '🌨️ Neige faible'],
+                        95: ['⛈️ Orage', '⛈️ Orage']
+                    };
+                    const arr = map[current.weather_code] || ['❓', '❓'];
+                    const idx = current.is_day ? 0 : 1;
+
+                    scope.temp = current.temperature_2m.toFixed(0);
+                    const [icon, ...textParts] = arr[idx].split(' ');
+                    scope.wIcon = icon;
+                    scope.wText = textParts.join(' ');
+
+                    D('🌤️  Météo reçue', current);
+                } catch (err) {
+                    console.error('fetchWeather error', err);
+                }
+                setTimeout(() => fetchWeather(scope), 3_600_000);   // 1 h
+            }
+
+            function moonPhase(scope) {
+                const phases = [
+                    '🌑 Nouvelle lune', '🌒 Premier croissant', '🌓 Premier quartier', '🌔 Gibbeuse croissante',
+                    '🌕 Pleine lune', '🌖 Gibbeuse décroissante', '🌗 Dernier quartier', '🌘 Dernier croissant'
+                ];
+                const now = Date.now() / 86_400_000;
+                const idx = Math.floor(((now + 4) % 29.53) / 3.69) % 8;
+                scope.moon = phases[idx];
+            }
+
+            window.initTicker = function initTicker(scope) {
+                loadCrypto(scope);
+                fetchWeather(scope);
+                moonPhase(scope);
+
+                const now = new Date();
+                const y0 = new Date(now.getFullYear(), 0, 0);
+                const diff = now - y0 + (y0.getTimezoneOffset() - now.getTimezoneOffset()) * 6e4;
+                scope.day = Math.floor(diff / 86_400_000) + 1;
+                scope.left = Math.ceil((new Date('2026-01-01') - now) / 86_400_000);
+                scope.date = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+                D('✔️ Ticker refresh', scope);
+            };
 
             // ====================================================================
             // 🏗️ APPLICATION PRINCIPALE - GESTION DE L'ÉTAT ET LOGIQUE MÉTIER
@@ -1759,7 +1592,7 @@
                         try {
                             let query = supabase
                                 .from('actu')
-                                .select('id, resume, url, heure, source, orientation, tags')
+                                .select('id, resume, url, heure, source, orientation, tags, added_by')
                                 .order('heure', { ascending: false });
 
                             if (filter && filter !== 'all') {
@@ -2007,7 +1840,6 @@
                     startAutoUpdate() {
                         if (this.updateInterval) clearInterval(this.updateInterval);
                         this.updateInterval = setInterval(() => {
-
                             this.loadNews(this.activeFilter, false);
                         }, 30000);
                     },
