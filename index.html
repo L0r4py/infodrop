@@ -169,7 +169,7 @@
             background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
             border: 3px solid #D68910;
             border-radius: 50px;
-            padding: 8px 20px;
+            padding: 6px 16px;
             font-weight: 900;
             color: #FFF;
             text-shadow:
@@ -179,10 +179,10 @@
                 0 3px 0 #D68910,
                 0 5px 10px rgba(0, 0, 0, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            font-size: 14px;
+            font-size: 12px;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
 
         /* === BARRE XP CLASH === */
@@ -190,7 +190,7 @@
             background: #0D1929;
             border: 3px solid #1B4F91;
             border-radius: 25px;
-            padding: 4px;
+            padding: 3px;
             box-shadow:
                 inset 0 2px 4px rgba(0, 0, 0, 0.5),
                 0 2px 5px rgba(0, 0, 0, 0.3);
@@ -200,7 +200,7 @@
 
         .xp-bar-fill {
             background: linear-gradient(180deg, #4FC3F7 0%, #29B6F6 50%, #0288D1 100%);
-            height: 20px;
+            height: 16px;
             border-radius: 20px;
             box-shadow:
                 inset 0 -2px 4px rgba(0, 0, 0, 0.2),
@@ -251,12 +251,12 @@
                 0 0 0 3px rgba(74, 158, 255, 0.2);
         }
 
-        /* === STATS CARDS === */
+        /* === STATS CARDS OPTIMISÉES MOBILE === */
         .stat-card {
             background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
             border: 3px solid #1B4F91;
             border-radius: 15px;
-            padding: 15px;
+            padding: 12px;
             text-align: center;
             box-shadow:
                 0 4px 0 #0D47A1,
@@ -264,6 +264,20 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
             position: relative;
             overflow: hidden;
+        }
+
+        @media (max-width: 640px) {
+            .stat-card {
+                padding: 10px;
+            }
+
+            .stat-card .text-3xl {
+                font-size: 1.5rem;
+            }
+
+            .stat-card .text-sm {
+                font-size: 0.75rem;
+            }
         }
 
         .stat-card::before {
@@ -293,15 +307,15 @@
 
         /* === ACHIEVEMENT ICON === */
         .achievement-icon {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(180deg, #FFD700 0%, #F39C12 100%);
             border: 3px solid #D68910;
             border-radius: 10px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
             box-shadow:
                 0 3px 0 #D68910,
                 0 5px 10px rgba(0, 0, 0, 0.3),
@@ -323,12 +337,18 @@
             background: linear-gradient(180deg, #263859 0%, #17223B 100%);
             border: 3px solid #1B4F91;
             border-radius: 15px;
-            padding: 20px;
+            padding: 16px;
             position: relative;
             transition: all 0.2s;
             box-shadow:
                 0 3px 10px rgba(0, 0, 0, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 640px) {
+            .news-card-clash {
+                padding: 14px;
+            }
         }
 
         .news-card-clash:hover {
@@ -400,26 +420,6 @@
             background: linear-gradient(180deg, var(--clash-light-blue) 0%, var(--clash-blue) 100%);
             border-radius: 6px;
             border: 2px solid #0D1929;
-        }
-
-        /* === TICKER === */
-        .ticker-track {
-            white-space: nowrap;
-            animation: ticker-scroll 40s linear infinite;
-        }
-
-        .ticker-track:hover {
-            animation-play-state: paused;
-        }
-
-        @keyframes ticker-scroll {
-            from {
-                transform: translateX(0);
-            }
-
-            to {
-                transform: translateX(-50%);
-            }
         }
 
         /* === LOADING === */
@@ -495,6 +495,26 @@
             }
         }
 
+        /* === MODAL PARTAGE === */
+        .share-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 4px solid var(--clash-gold);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            z-index: 9999;
+            max-width: 90%;
+            width: 400px;
+            box-shadow:
+                0 0 0 5px #D68910,
+                0 10px 40px rgba(0, 0, 0, 0.7),
+                0 0 100px rgba(255, 215, 0, 0.2);
+        }
+
         /* === FADE IN === */
         .fade-in {
             animation: fadeIn 0.5s ease-in;
@@ -509,6 +529,30 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        /* === OPTIMISATIONS MOBILES === */
+        @media (max-width: 640px) {
+            .level-badge {
+                padding: 4px 12px;
+                font-size: 11px;
+            }
+
+            .xp-bar-container {
+                padding: 2px;
+            }
+
+            .xp-bar-fill {
+                height: 12px;
+            }
+
+            .clash-card {
+                border-radius: 15px;
+            }
+
+            .news-card-clash p {
+                font-size: 0.95rem;
             }
         }
     </style>
@@ -600,21 +644,22 @@
                 <header class="bg-gradient-to-b from-gray-900 to-gray-950 border-b-4 border-blue-900">
                     <div class="max-w-6xl mx-auto px-4">
                         <!-- Ligne supérieure avec niveau et XP -->
-                        <div class="py-3 flex items-center justify-between">
-                            <div class="flex items-center gap-4">
+                        <div class="py-2 sm:py-3 flex items-center justify-between">
+                            <div class="flex items-center gap-2 sm:gap-4">
                                 <a href="/index.html" class="flex items-center gap-2 hover:scale-105 transition">
                                     <div
-                                        class="w-12 h-12 bg-gradient-to-b from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                                        <span class="text-2xl">📰</span>
+                                        class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-b from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                                        <span class="text-xl sm:text-2xl">📰</span>
                                     </div>
-                                    <span class="text-xl font-bold text-white">INFODROP</span>
+                                    <span
+                                        class="text-lg sm:text-xl font-bold text-white hidden sm:inline">INFODROP</span>
                                 </a>
                                 <span
                                     class="text-xs bg-blue-900/50 px-2 py-1 rounded-full text-blue-300 font-medium">v3.1.1</span>
                             </div>
 
                             <!-- Stats joueur -->
-                            <div class="flex items-center gap-6">
+                            <div class="flex items-center gap-2 sm:gap-6">
                                 <!-- Niveau -->
                                 <div class="level-badge">
                                     <span class="text-xs">⭐</span>
@@ -625,8 +670,7 @@
                                 <div class="hidden md:flex items-center gap-1">
                                     <template x-for="achievement in unlockedAchievements.slice(0, 3)"
                                         :key="achievement">
-                                        <div class="achievement-icon w-10 h-10 text-lg"
-                                            :title="getAchievementTitle(achievement)">
+                                        <div class="achievement-icon" :title="getAchievementTitle(achievement)">
                                             <span x-text="achievement"></span>
                                         </div>
                                     </template>
@@ -659,6 +703,11 @@
                                             <span>🌐</span>
                                             <span class="font-medium">Analyses 360°</span>
                                         </a>
+                                        <a @click.prevent="showShareModal = true" href="#"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition border-b border-gray-700">
+                                            <span>🎁</span>
+                                            <span class="font-medium">Mon code d'invitation</span>
+                                        </a>
                                         <a href="/apropos.html"
                                             class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition">
                                             <span>ℹ️</span>
@@ -681,8 +730,8 @@
                         </div>
 
                         <!-- Barre XP -->
-                        <div class="pb-3">
-                            <div class="flex items-center gap-3">
+                        <div class="pb-2 sm:pb-3">
+                            <div class="flex items-center gap-2 sm:gap-3">
                                 <span class="text-xs font-bold text-blue-300">XP</span>
                                 <div class="flex-1 xp-bar-container">
                                     <div class="xp-bar-fill" :style="`width: ${(userXP / xpToNextLevel) * 100}%`"></div>
@@ -696,73 +745,15 @@
                 </header>
 
                 <!-- ========================================================== -->
-                <!-- 📰 BANDEAU DÉFILANT                                       -->
-                <!-- ========================================================== -->
-                <div x-data="{ date:'', day:0, temp:null, wIcon:'', wText:'', moon:'', left:0, btc:null, eth:null }"
-                    x-init="initTicker($data);
-                          $nextTick(() => {
-                            const track = $el.querySelector('.ticker-track');
-                            if (track) {
-                                track.innerHTML += track.innerHTML;
-                                while (track.offsetWidth < $el.offsetWidth * 2) {
-                                    track.innerHTML += track.innerHTML;
-                                }
-                            }
-                          });"
-                    class="bg-gradient-to-r from-gray-900 via-blue-950/20 to-gray-900 border-b-2 border-blue-900 overflow-hidden">
-                    <div class="ticker-track inline-flex gap-x-8 items-center px-4 py-2 text-sm">
-                        <!-- Lune -->
-                        <span class="flex items-center gap-1 text-gray-300" x-text="moon"></span>
-
-                        <!-- Jour ordinal -->
-                        <span class="flex items-center gap-1 text-blue-300">
-                            📊 Jour <span x-text="day" class="font-bold"></span>/365
-                        </span>
-
-                        <!-- Compteur 2026 -->
-                        <span class="flex items-center gap-1 text-orange-300">
-                            ⏳ <span x-text="left" class="font-bold"></span> jours avant 2026
-                        </span>
-
-                        <!-- Crypto BTC/USD -->
-                        <a href="https://www.tradingview.com/chart/?symbol=BINANCE:BTCUSD" target="_blank"
-                            class="flex items-center gap-1 hover:text-yellow-400 transition">
-                            <span>🪙</span> BTC <span
-                                x-text="btc !== null ? btc.toLocaleString('fr-FR') + ' $' : '...'"></span>
-                        </a>
-
-                        <!-- Crypto ETH/USD -->
-                        <a href="https://www.tradingview.com/chart/?symbol=BINANCE:ETHUSD" target="_blank"
-                            class="flex items-center gap-1 hover:text-purple-400 transition">
-                            <span>♦️</span> ETH <span
-                                x-text="eth !== null ? eth.toLocaleString('fr-FR') + ' $' : '...'"></span>
-                        </a>
-
-                        <!-- Date complète -->
-                        <span class="flex items-center gap-1 text-gray-300">
-                            📅 <span x-text="date"></span>
-                        </span>
-
-                        <!-- Météo -->
-                        <template x-if="temp !== null">
-                            <span class="flex items-center gap-1 text-gray-300">
-                                <span x-text="wIcon"></span>
-                                <span x-text="temp"></span>°C <span x-text="wText"></span>
-                            </span>
-                        </template>
-                    </div>
-                </div>
-
-                <!-- ========================================================== -->
                 <!-- 👤 BARRE UTILISATEUR                                      -->
                 <!-- ========================================================== -->
                 <div x-show="true" x-transition
-                    class="bg-gradient-to-b from-gray-900/90 to-gray-950/90 backdrop-blur-sm border-b-2 border-blue-900 px-4 py-3">
+                    class="bg-gradient-to-b from-gray-900/90 to-gray-950/90 backdrop-blur-sm border-b-2 border-blue-900 px-4 py-2 sm:py-3">
                     <div class="max-w-6xl mx-auto">
 
                         <!-- Badges et Stats -->
-                        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
-                            <div class="flex items-center gap-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+                            <div class="flex items-center gap-2 sm:gap-4">
                                 <!-- Streak -->
                                 <div
                                     class="flex items-center gap-2 bg-orange-900/30 px-3 py-1 rounded-full border-2 border-orange-600">
@@ -785,62 +776,10 @@
                             <!-- Admin -->
                             <div x-show="isAdmin">
                                 <button @click="showAdminPanel = !showAdminPanel"
-                                    class="clash-btn clash-btn-red px-4 py-2 text-sm flex items-center gap-2">
+                                    class="clash-btn clash-btn-red px-3 py-1 sm:px-4 sm:py-2 text-sm flex items-center gap-2">
                                     <span>⚙️</span>
                                     <span>Admin</span>
                                 </button>
-                            </div>
-                        </div>
-
-                        <!-- === CARTE PARRAINAGE === -->
-                        <div x-show="userInviteData.code || userInviteData.parrainEmail || userInviteData.filleulEmail"
-                            x-data="{ showParrainage: false }" class="clash-card py-2">
-
-                            <button @click="showParrainage = !showParrainage" class="w-full px-4 py-1">
-                                <div class="flex items-center justify-center relative">
-                                    <div x-show="userInviteData.code" class="flex items-center gap-2">
-                                        <span class="text-yellow-400 text-sm">🎁</span>
-                                        <span class="text-gray-300 text-sm">Code à partager :</span>
-                                        <span
-                                            class="font-mono bg-blue-900/50 px-3 py-1 rounded-lg cursor-pointer hover:bg-blue-900/70 transition text-white text-sm border-2 border-blue-600 font-bold"
-                                            @click.stop="copyInviteMessage(userInviteData.code)"
-                                            title="Cliquez pour copier" x-text="userInviteData.code">
-                                        </span>
-                                        <span x-show="copied" class="text-green-400 font-bold text-sm">✓ Copié !</span>
-                                    </div>
-
-                                    <div x-show="!userInviteData.code" class="text-sm text-gray-400">
-                                        👥 Infos parrainage
-                                    </div>
-
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-4 w-4 transition-transform text-gray-400 absolute right-0"
-                                        :class="{ 'rotate-180': showParrainage }" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                            </button>
-
-                            <div x-show="showParrainage" x-transition
-                                class="px-4 pb-2 space-y-2 text-center border-t border-gray-700 pt-2">
-                                <div x-show="userInviteData.parrainEmail"
-                                    class="flex items-center justify-center gap-2 text-sm">
-                                    <span class="text-green-400">👆</span>
-                                    <span class="text-gray-400">Invité par :</span>
-                                    <span class="font-mono text-white font-medium"
-                                        x-text="userInviteData.parrainEmail"></span>
-                                </div>
-
-                                <div x-show="userInviteData.filleulEmail"
-                                    class="flex items-center justify-center gap-2 text-sm">
-                                    <span class="text-purple-400">👇</span>
-                                    <span class="text-gray-400">Votre filleul :</span>
-                                    <span class="font-mono text-white font-medium"
-                                        x-text="userInviteData.filleulEmail"></span>
-                                </div>
                             </div>
                         </div>
 
@@ -889,33 +828,34 @@
             <!-- ============================================================== -->
             <!-- 📊 CONTENU PRINCIPAL                                          -->
             <!-- ============================================================== -->
-            <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+            <main class="max-w-6xl mx-auto px-4 py-4 sm:py-6 flex-grow w-full">
 
                 <!-- ========================================================== -->
                 <!-- 📈 STATISTIQUES GLOBALES                                  -->
                 <!-- ========================================================== -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <div class="stat-card">
                         <div class="relative z-10">
-                            <div class="text-3xl mb-2">📰</div>
-                            <div class="text-3xl font-bold text-white" x-text="stats.total_articles">0</div>
-                            <div class="text-sm text-blue-200">Articles 24H</div>
+                            <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">📰</div>
+                            <div class="text-2xl sm:text-3xl font-bold text-white" x-text="stats.total_articles">0</div>
+                            <div class="text-xs sm:text-sm text-blue-200">Articles 24H</div>
                         </div>
                     </div>
 
                     <div class="stat-card">
                         <div class="relative z-10">
-                            <div class="text-3xl mb-2">📊</div>
-                            <div class="text-3xl font-bold text-white" x-text="stats.total_sources">0</div>
-                            <div class="text-sm text-blue-200">Sources actives</div>
+                            <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">📊</div>
+                            <div class="text-2xl sm:text-3xl font-bold text-white" x-text="stats.total_sources">0</div>
+                            <div class="text-xs sm:text-sm text-blue-200">Sources actives</div>
                         </div>
                     </div>
 
                     <div class="stat-card">
                         <div class="relative z-10">
-                            <div class="text-3xl mb-2 float-animation">👥</div>
-                            <div class="text-3xl font-bold text-white" x-text="connectedUsers + socialBoost">1</div>
-                            <div class="text-sm text-blue-200">En ligne</div>
+                            <div class="text-2xl sm:text-3xl mb-1 sm:mb-2 float-animation">👥</div>
+                            <div class="text-2xl sm:text-3xl font-bold text-white"
+                                x-text="connectedUsers + socialBoost">1</div>
+                            <div class="text-xs sm:text-sm text-blue-200">En ligne</div>
                         </div>
                     </div>
                 </div>
@@ -923,15 +863,15 @@
                 <!-- ========================================================== -->
                 <!-- 🌈 CHECKER DE DIVERSITÉ                                   -->
                 <!-- ========================================================== -->
-                <div x-show="!loadingNews && diversityScore !== null" x-transition class="clash-card mb-6">
+                <div x-show="!loadingNews && diversityScore !== null" x-transition class="clash-card mb-4 sm:mb-6">
                     <button @click="showDiversityChecker = !showDiversityChecker"
-                        class="w-full flex items-center justify-between p-4">
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        class="w-full flex items-center justify-between p-3 sm:p-4">
+                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                             <span>🎯</span>
                             <span>Score de diversité</span>
                         </h3>
                         <div class="flex items-center gap-3">
-                            <div class="text-2xl font-bold" :class="{
+                            <div class="text-xl sm:text-2xl font-bold" :class="{
                                 'text-red-400': diversityScore < 30,
                                 'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
                                 'text-green-400': diversityScore >= 70
@@ -945,8 +885,8 @@
                         </div>
                     </button>
 
-                    <div x-show="showDiversityChecker" x-transition class="p-4 border-t-2 border-gray-700">
-                        <div class="mb-4">
+                    <div x-show="showDiversityChecker" x-transition class="p-3 sm:p-4 border-t-2 border-gray-700">
+                        <div class="mb-3 sm:mb-4">
                             <div class="xp-bar-container">
                                 <div class="xp-bar-fill" :style="`width: ${diversityScore}%`" :class="{
                                          'bg-gradient-to-r from-red-400 to-red-600': diversityScore < 30,
@@ -977,9 +917,10 @@
                 <!-- ========================================================== -->
                 <!-- 🔍 SYSTÈME DE FILTRES                                     -->
                 <!-- ========================================================== -->
-                <div x-show="!loadingNews" x-transition class="clash-card mb-6">
-                    <button @click="showFilters = !showFilters" class="w-full flex items-center justify-between p-4">
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <div x-show="!loadingNews" x-transition class="clash-card mb-4 sm:mb-6">
+                    <button @click="showFilters = !showFilters"
+                        class="w-full flex items-center justify-between p-3 sm:p-4">
+                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                             <span>🔍</span>
                             <span>Filtrer</span>
                         </h3>
@@ -991,7 +932,7 @@
                         </svg>
                     </button>
 
-                    <div x-show="showFilters" x-transition class="p-4 border-t-2 border-gray-700 space-y-4">
+                    <div x-show="showFilters" x-transition class="p-3 sm:p-4 border-t-2 border-gray-700 space-y-4">
                         <button @click="toggleFilter('all')" class="clash-btn px-4 py-2 text-sm text-white"
                             :class="activeFilter === 'all' ? 'clash-btn-green' : ''">
                             🎯 Tout voir
@@ -1033,12 +974,13 @@
                 <!-- ========================================================== -->
                 <!-- 📰 LISTE DES ACTUALITÉS                                   -->
                 <!-- ========================================================== -->
-                <div class="space-y-4">
+                <div class="space-y-3 sm:space-y-4">
                     <template x-for="news in newsList" :key="news.id">
                         <div class="news-card-clash fade-in group">
                             <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="block">
-                                <p class="text-lg text-white mb-3 leading-relaxed" x-text="news.resume"></p>
-                                <div class="flex flex-wrap items-center gap-3 text-sm">
+                                <p class="text-base sm:text-lg text-white mb-3 leading-relaxed" x-text="news.resume">
+                                </p>
+                                <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-sm">
                                     <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
                                     <span x-show="!news.added_by" class="text-gray-400" x-text="news.source"></span>
                                     <span class="text-blue-300">⏰ <span x-text="formatTime(news.heure)"></span></span>
@@ -1079,7 +1021,7 @@
                             <div class="text-6xl mb-4">📭</div>
                             <p class="text-lg">Aucune actualité pour le moment.</p>
                         </div>
-                        <div x-show="activeFilter !== 'all'" class="clash-card p-8 max-w-lg mx-auto text-center">
+                        <div x-show="activeFilter !== 'all'" class="clash-card p-6 sm:p-8 max-w-lg mx-auto text-center">
                             <div class="text-5xl mb-4">🔍</div>
                             <h3 class="text-xl font-bold text-white mb-3">Aucun article trouvé</h3>
                             <p class="text-gray-400 mb-6" x-text="getEmptyFilterMessage()"></p>
@@ -1096,6 +1038,48 @@
                     </div>
                 </div>
             </main>
+
+            <!-- ============================================================== -->
+            <!-- 🎁 MODAL CODE D'INVITATION                                    -->
+            <!-- ============================================================== -->
+            <div x-show="showShareModal" x-transition @click.away="showShareModal = false"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+                <div class="share-modal">
+                    <h3 class="text-2xl font-bold text-white mb-4">🎁 Mon code d'invitation</h3>
+
+                    <div x-show="userInviteData.code" class="mb-6">
+                        <p class="text-gray-300 mb-3">Partagez ce code avec vos proches :</p>
+                        <div class="font-mono bg-blue-900/50 px-4 py-3 rounded-lg cursor-pointer hover:bg-blue-900/70 transition text-white text-xl border-2 border-blue-600 font-bold"
+                            @click="copyInviteMessage(userInviteData.code)" title="Cliquez pour copier">
+                            <span x-text="userInviteData.code"></span>
+                        </div>
+                        <span x-show="copied" class="text-green-400 font-bold text-sm mt-2 inline-block">✓ Copié
+                            !</span>
+                    </div>
+
+                    <div x-show="!userInviteData.code" class="text-gray-400 mb-6">
+                        <p>Aucun code d'invitation disponible.</p>
+                    </div>
+
+                    <div class="space-y-2 text-sm">
+                        <div x-show="userInviteData.parrainEmail" class="flex items-center justify-center gap-2">
+                            <span class="text-green-400">👆</span>
+                            <span class="text-gray-400">Invité par :</span>
+                            <span class="font-mono text-white" x-text="userInviteData.parrainEmail"></span>
+                        </div>
+
+                        <div x-show="userInviteData.filleulEmail" class="flex items-center justify-center gap-2">
+                            <span class="text-purple-400">👇</span>
+                            <span class="text-gray-400">Votre filleul :</span>
+                            <span class="font-mono text-white" x-text="userInviteData.filleulEmail"></span>
+                        </div>
+                    </div>
+
+                    <button @click="showShareModal = false" class="clash-btn px-6 py-2 mt-6 text-white">
+                        Fermer
+                    </button>
+                </div>
+            </div>
 
             <!-- ============================================================== -->
             <!-- 🎭 MODAL D'ÉDITION                                            -->
@@ -1151,7 +1135,7 @@
             <!-- ============================================================== -->
             <!-- 🦶 FOOTER                                                     -->
             <!-- ============================================================== -->
-            <footer class="text-center py-8 text-xs text-gray-500 mt-auto border-t-2 border-gray-800">
+            <footer class="text-center py-6 sm:py-8 text-xs text-gray-500 mt-auto border-t-2 border-gray-800">
                 <p>© 2025 INFODROP. Tous droits réservés.</p>
                 <p class="mt-1">Un projet 3C - By Emile Marclin & L0r4.py [AI]</p>
             </footer>
@@ -1223,88 +1207,6 @@
                 }
             }
 
-
-            /* === LOGIQUE DU NOUVEAU BANDEAU (TICKER) ======================= */
-            const D = (msg, ...rest) => console.debug('[DEBUG]', msg, ...rest);
-
-            async function loadCrypto(scope) {
-                try {
-                    const url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd';
-                    const res = await fetch(url, { cache: 'no-cache' });
-                    const json = await res.json();
-
-                    scope.btc = json.bitcoin.usd;
-                    scope.eth = json.ethereum.usd;
-                    D('🪙 Prix crypto USD ↻', scope.btc, scope.eth);
-                } catch (err) {
-                    console.error('Crypto fetch error', err);
-                }
-                setTimeout(() => loadCrypto(scope), 14_400_000);   // 4 h
-            }
-
-            async function fetchWeather(scope) {
-                try {
-                    const coords = await new Promise((ok, ko) =>
-                        navigator.geolocation.getCurrentPosition(
-                            p => ok(p.coords),
-                            ko,
-                            { maximumAge: 60_000, timeout: 8_000 }
-                        )
-                    );
-                    D('📍 Géoloc OK', coords);
-
-                    const url = `https://api.open-meteo.com/v1/forecast` +
-                        `?latitude=${coords.latitude}&longitude=${coords.longitude}` +
-                        `&current=temperature_2m,is_day,weather_code`;
-                    const res = await fetch(url, { cache: 'no-cache' });
-                    const { current } = await res.json();
-
-                    const map = {
-                        0: ['☀️ Ciel dégagé', '🌙 Ciel clair'], 1: ['🌤️ Peu nuageux', '🌙☁️ Peu nuageux'], 2: ['⛅ Partiellement nuageux', '☁️ Part. nuageux'],
-                        3: ['☁️ Couvert', '☁️ Couvert'], 45: ['🌫️ Brouillard', '🌫️ Brouillard'], 48: ['🌫️ Brouillard givrant', '🌫️ Brouillard givrant'],
-                        51: ['🌦️ Bruine faible', '🌦️ Bruine faible'], 61: ['🌧️ Pluie faible', '🌧️ Pluie faible'], 71: ['🌨️ Neige faible', '🌨️ Neige faible'],
-                        95: ['⛈️ Orage', '⛈️ Orage']
-                    };
-                    const arr = map[current.weather_code] || ['❓', '❓'];
-                    const idx = current.is_day ? 0 : 1;
-
-                    scope.temp = current.temperature_2m.toFixed(0);
-                    const [icon, ...textParts] = arr[idx].split(' ');
-                    scope.wIcon = icon;
-                    scope.wText = textParts.join(' ');
-
-                    D('🌤️  Météo reçue', current);
-                } catch (err) {
-                    console.error('fetchWeather error', err);
-                }
-                setTimeout(() => fetchWeather(scope), 3_600_000);   // 1 h
-            }
-
-            function moonPhase(scope) {
-                const phases = [
-                    '🌑 Nouvelle lune', '🌒 Premier croissant', '🌓 Premier quartier', '🌔 Gibbeuse croissante',
-                    '🌕 Pleine lune', '🌖 Gibbeuse décroissante', '🌗 Dernier quartier', '🌘 Dernier croissant'
-                ];
-                const now = Date.now() / 86_400_000;
-                const idx = Math.floor(((now + 4) % 29.53) / 3.69) % 8;
-                scope.moon = phases[idx];
-            }
-
-            window.initTicker = function initTicker(scope) {
-                loadCrypto(scope);
-                fetchWeather(scope);
-                moonPhase(scope);
-
-                const now = new Date();
-                const y0 = new Date(now.getFullYear(), 0, 0);
-                const diff = now - y0 + (y0.getTimezoneOffset() - now.getTimezoneOffset()) * 6e4;
-                scope.day = Math.floor(diff / 86_400_000) + 1;
-                scope.left = Math.ceil((new Date('2026-01-01') - now) / 86_400_000);
-                scope.date = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-
-                D('✔️ Ticker refresh', scope);
-            };
-
             // ====================================================================
             // 🏗️ APPLICATION PRINCIPALE - GESTION DE L'ÉTAT ET LOGIQUE MÉTIER
             // ====================================================================
@@ -1336,6 +1238,7 @@
                     message: '',
                     messageType: '',
                     inviteCode: '',
+                    showShareModal: false,
 
                     // === GESTION DES ACTUALITÉS ===
                     newsList: [],
@@ -1731,6 +1634,18 @@
                             setTimeout(() => this.showCelebration(100), 2000);
                             localStorage.removeItem('infodrop_celebration_pending');
                         }
+
+                        // Ajout du CSS pour les animations manquantes
+                        const style = document.createElement('style');
+                        style.textContent = `
+                            @keyframes confetti-fall {
+                                to {
+                                    transform: translateY(100vh) rotate(720deg);
+                                    opacity: 0;
+                                }
+                            }
+                        `;
+                        document.head.appendChild(style);
                     },
 
                     // ============================================================
@@ -1898,35 +1813,6 @@
                                 parrainEmail: null,
                                 filleulEmail: null
                             };
-                        }
-                    },
-
-                    // === CRÉATION AUTOMATIQUE DE CODE POUR ADMIN ===
-                    async ensureAdminHasInviteCode() {
-                        if (!this.isAdmin || this.userInviteData.code) {
-                            return; // Pas admin ou a déjà un code
-                        }
-
-                        try {
-                            console.log('🎁 Création d\'un code d\'invitation pour l\'admin...');
-
-                            // Générer un code automatiquement pour l'admin
-                            const response = await fetch('/api/generate-invite', {
-                                method: 'POST',
-                                headers: {
-                                    'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session.access_token}`
-                                }
-                            });
-
-                            const result = await response.json();
-
-                            if (result.success) {
-                                console.log('✅ Code admin créé:', result.code);
-                                this.userInviteData.code = result.code;
-                            }
-
-                        } catch (error) {
-                            console.log('ℹ️ Impossible de créer un code admin automatiquement:', error.message);
                         }
                     },
 
