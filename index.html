@@ -254,39 +254,38 @@
         /* === STATS CARDS OPTIMISÉES MOBILE === */
         .stat-card {
             background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
-            border: 3px solid #1B4F91;
-            border-radius: 15px;
-            padding: 12px;
+            border: 2px solid #1B4F91;
+            border-radius: 10px;
+            padding: 8px 6px;
             text-align: center;
             box-shadow:
-                0 4px 0 #0D47A1,
-                0 6px 10px rgba(0, 0, 0, 0.3),
+                0 2px 0 #0D47A1,
+                0 3px 6px rgba(0, 0, 0, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
             position: relative;
             overflow: hidden;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         @media (max-width: 640px) {
             .stat-card {
-                padding: 10px;
-            }
-
-            .stat-card .text-3xl {
-                font-size: 1.5rem;
-            }
-
-            .stat-card .text-sm {
-                font-size: 0.75rem;
+                padding: 5px 4px;
+                height: 58px;
+                border-radius: 8px;
+                min-width: 85px;
             }
         }
 
         .stat-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
             animation: pulse-stat 4s ease-in-out infinite;
         }
@@ -833,29 +832,31 @@
                 <!-- ========================================================== -->
                 <!-- 📈 STATISTIQUES GLOBALES                                  -->
                 <!-- ========================================================== -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
-                    <div class="stat-card">
+                <div class="flex gap-2 sm:gap-3 mb-3 sm:mb-4 overflow-x-auto">
+                    <div class="stat-card flex-1 min-w-[95px]">
                         <div class="relative z-10">
-                            <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">📰</div>
-                            <div class="text-2xl sm:text-3xl font-bold text-white" x-text="stats.total_articles">0</div>
-                            <div class="text-xs sm:text-sm text-blue-200">Articles 24H</div>
+                            <div class="text-lg sm:text-xl">📰</div>
+                            <div class="text-lg sm:text-xl font-bold text-white leading-tight"
+                                x-text="stats.total_articles">0</div>
+                            <div class="text-xs text-blue-200 leading-tight">Articles 24H</div>
                         </div>
                     </div>
 
-                    <div class="stat-card">
+                    <div class="stat-card flex-1 min-w-[95px]">
                         <div class="relative z-10">
-                            <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">📊</div>
-                            <div class="text-2xl sm:text-3xl font-bold text-white" x-text="stats.total_sources">0</div>
-                            <div class="text-xs sm:text-sm text-blue-200">Sources actives</div>
+                            <div class="text-lg sm:text-xl">📊</div>
+                            <div class="text-lg sm:text-xl font-bold text-white leading-tight"
+                                x-text="stats.total_sources">0</div>
+                            <div class="text-xs text-blue-200 leading-tight">Sources actives</div>
                         </div>
                     </div>
 
-                    <div class="stat-card">
+                    <div class="stat-card flex-1 min-w-[95px]">
                         <div class="relative z-10">
-                            <div class="text-2xl sm:text-3xl mb-1 sm:mb-2 float-animation">👥</div>
-                            <div class="text-2xl sm:text-3xl font-bold text-white"
+                            <div class="text-lg sm:text-xl float-animation">👥</div>
+                            <div class="text-lg sm:text-xl font-bold text-white leading-tight"
                                 x-text="connectedUsers + socialBoost">1</div>
-                            <div class="text-xs sm:text-sm text-blue-200">En ligne</div>
+                            <div class="text-xs text-blue-200 leading-tight">En ligne</div>
                         </div>
                     </div>
                 </div>
