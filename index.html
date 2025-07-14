@@ -357,6 +357,16 @@
             border-color: var(--clash-light-blue);
         }
 
+        /* Articles lus */
+        .news-card-clash.read-article {
+            opacity: 0.6;
+            background: linear-gradient(180deg, #1a2332 0%, #0f1621 100%);
+        }
+
+        .news-card-clash.read-article:hover {
+            opacity: 0.8;
+        }
+
         /* === ORIENTATION TAGS === */
         .orientation-tag {
             padding: 4px 12px;
@@ -763,12 +773,18 @@
                                 </div>
 
                                 <!-- Articles lus -->
-                                <div
-                                    class="flex items-center gap-2 bg-blue-900/30 px-3 py-1 rounded-full border-2 border-blue-600">
+                                <div class="flex items-center gap-2 bg-blue-900/30 px-3 py-1 rounded-full border-2 border-blue-600 cursor-pointer hover:bg-blue-900/50 transition"
+                                    @click="showReadArticles = !showReadArticles">
                                     <span class="text-blue-400">📚</span>
                                     <span class="text-sm font-bold text-blue-300">
                                         <span x-text="totalReadCount"></span> lus
                                     </span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-300"
+                                        :class="{ 'rotate-180': showReadArticles }" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
                                 </div>
                             </div>
 
@@ -1006,9 +1022,58 @@
                 <!-- ========================================================== -->
                 <!-- 📰 LISTE DES ACTUALITÉS                                   -->
                 <!-- ========================================================== -->
+
+                <!-- Section Articles Lus -->
+                <div x-show="showReadArticles" x-transition class="mb-6">
+                    <div class="clash-card p-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                                <span>📚</span>
+                                <span>Articles lus (<span x-text="Object.keys(readArticles).length"></span>)</span>
+                            </h2>
+                            <button @click="showReadArticles = false" class="clash-btn px-3 py-1 text-sm text-white">
+                                ✕ Fermer
+                            </button>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+                                <input type="checkbox" x-model="hideReadFromMain" @change="saveReadPreferences()"
+                                    class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500">
+                                <span>Masquer les articles lus du flux principal</span>
+                            </label>
+                        </div>
+
+                        <div class="space-y-3 max-h-96 overflow-y-auto">
+                            <template x-for="news in getReadArticlesList()" :key="news.id">
+                                <div class="news-card-clash opacity-60 hover:opacity-80 transition">
+                                    <a :href="news.url" target="_blank" class="block">
+                                        <p class="text-base sm:text-lg text-gray-300 mb-3 leading-relaxed"
+                                            x-text="news.resume"></p>
+                                        <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-sm">
+                                            <span class="text-green-400 font-bold">✓ Lu</span>
+                                            <span x-show="news.added_by" class="font-bold text-red-400">🧨
+                                                INFODROP</span>
+                                            <span x-show="!news.added_by" class="text-gray-500"
+                                                x-text="news.source"></span>
+                                            <span class="text-gray-500">⏰ <span
+                                                    x-text="formatTime(news.heure)"></span></span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </template>
+                            <div x-show="Object.keys(readArticles).length === 0" class="text-center py-8 text-gray-500">
+                                <p>Aucun article lu pour le moment</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flux Principal -->
                 <div class="space-y-3 sm:space-y-4">
                     <template x-for="news in filteredNewsList" :key="news.id">
-                        <div class="news-card-clash fade-in group">
+                        <div x-show="!hideReadFromMain || !readArticles[news.id]" class="news-card-clash fade-in group"
+                            :class="{ 'read-article': readArticles[news.id] && !hideReadFromMain }">
                             <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="block">
                                 <p class="text-base sm:text-lg text-white mb-3 leading-relaxed" x-text="news.resume">
                                 </p>
@@ -1366,6 +1431,10 @@
                     showDiversityChecker: true,
                     diversityData: JSON.parse(localStorage.getItem('infodrop_diversity') || '{}'),
 
+                    // === GESTION DES ARTICLES LUS ===
+                    showReadArticles: false,
+                    hideReadFromMain: true,
+
                     // === HELPER POUR L'AFFICHAGE SÉCURISÉ DES ORIENTATIONS ===
                     getOrientationDisplayName(orientation) {
                         // Gestion des valeurs null/undefined
@@ -1668,6 +1737,10 @@
                                 this.updateTotalReadCount();
                                 this.calculateDiversityScore();
                                 this.loadUserInviteData();
+
+                                // Charger les articles lus et préférences depuis la DB
+                                this.loadReadArticlesFromDB();
+                                this.loadReadPreferences();
                             }
                             if (event === 'SIGNED_OUT') {
                                 this.stopAutoUpdate();
@@ -1698,16 +1771,16 @@
                                 if (pendingXP.length > 0) {
                                     // Filtrer les XP trop anciennes (plus de 5 minutes)
                                     const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
-                                    
+
                                     if (recentXP.length > 0) {
                                         // Calculer le total d'XP à afficher
                                         const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
-                                        
+
                                         // Déclencher l'animation après un court délai
                                         setTimeout(() => {
                                             this.showXPAnimation(totalXP);
                                         }, 500);
-                                        
+
                                         // Vider les XP en attente
                                         localStorage.removeItem('infodrop_pending_xp');
                                     }
@@ -2269,6 +2342,9 @@
                             localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
                             this.updateTotalReadCount();
 
+                            // Sauvegarder dans la DB
+                            this.saveReadArticleToDB(id);
+
                             const article = this.newsList.find(n => n.id === id);
                             if (article) {
                                 this.addToDiversityData(article);
@@ -2316,6 +2392,105 @@
                             if (this.totalReadCount % 20 === 0 && this.totalReadCount > 0) {
                                 this.celebrateArticles(this.totalReadCount);
                             }
+                        }
+                    },
+
+                    // === SAUVEGARDER ARTICLE LU DANS LA DB ===
+                    async saveReadArticleToDB(articleId) {
+                        if (!this.user) return;
+
+                        try {
+                            await supabase
+                                .from('user_read_articles')
+                                .upsert({
+                                    user_id: this.user.id,
+                                    article_id: articleId,
+                                    read_at: new Date().toISOString()
+                                }, {
+                                    onConflict: 'user_id,article_id'
+                                });
+                        } catch (error) {
+                            console.error('Erreur sauvegarde article lu:', error);
+                        }
+                    },
+
+                    // === CHARGER ARTICLES LUS DEPUIS LA DB ===
+                    async loadReadArticlesFromDB() {
+                        if (!this.user) return;
+
+                        try {
+                            const { data, error } = await supabase
+                                .from('user_read_articles')
+                                .select('article_id, read_at')
+                                .eq('user_id', this.user.id);
+
+                            if (data) {
+                                const readFromDB = {};
+                                data.forEach(item => {
+                                    readFromDB[item.article_id] = item.read_at;
+                                });
+
+                                // Fusionner avec les données locales
+                                this.readArticles = { ...readFromDB, ...this.readArticles };
+                                localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
+                                this.updateTotalReadCount();
+                            }
+                        } catch (error) {
+                            console.error('Erreur chargement articles lus:', error);
+                        }
+                    },
+
+                    // === OBTENIR LA LISTE DES ARTICLES LUS ===
+                    getReadArticlesList() {
+                        return this.newsList.filter(news => this.readArticles[news.id])
+                            .sort((a, b) => new Date(this.readArticles[b.id]) - new Date(this.readArticles[a.id]));
+                    },
+
+                    // === SAUVEGARDER PRÉFÉRENCES LECTURE ===
+                    async saveReadPreferences() {
+                        if (!this.user) return;
+
+                        localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
+
+                        try {
+                            await supabase
+                                .from('user_preferences')
+                                .upsert({
+                                    user_id: this.user.id,
+                                    hide_read_articles: this.hideReadFromMain,
+                                    updated_at: new Date().toISOString()
+                                }, {
+                                    onConflict: 'user_id'
+                                });
+                        } catch (error) {
+                            console.error('Erreur sauvegarde préférences:', error);
+                        }
+                    },
+
+                    // === CHARGER PRÉFÉRENCES LECTURE ===
+                    async loadReadPreferences() {
+                        if (!this.user) return;
+
+                        // Charger depuis localStorage d'abord
+                        const localPref = localStorage.getItem('infodrop_hide_read_' + this.user.id);
+                        if (localPref !== null) {
+                            this.hideReadFromMain = localPref === 'true';
+                        }
+
+                        // Puis depuis la DB
+                        try {
+                            const { data } = await supabase
+                                .from('user_preferences')
+                                .select('hide_read_articles')
+                                .eq('user_id', this.user.id)
+                                .single();
+
+                            if (data) {
+                                this.hideReadFromMain = data.hide_read_articles;
+                                localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
+                            }
+                        } catch (error) {
+                            // Pas de préférences trouvées, utiliser la valeur par défaut
                         }
                     },
 
