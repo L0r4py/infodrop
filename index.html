@@ -1033,12 +1033,13 @@
                             </a>
 
                             <!-- Boutons admin -->
-                            <div x-show="isAdmin" class="flex gap-2 mt-3">
-                                <button @click.prevent="openEditPanel(news)"
+                            <div x-show="showAdminPanel && isAdmin"
+                                class="flex gap-2 mt-3 pt-3 border-t border-gray-700">
+                                <button @click.prevent.stop="openEditPanel(news)"
                                     class="clash-btn px-3 py-1 text-xs text-white">
                                     ✏️ Éditer
                                 </button>
-                                <button @click.prevent="deleteNews(news.id)"
+                                <button @click.prevent.stop="deleteNews(news.id)"
                                     class="clash-btn clash-btn-red px-3 py-1 text-xs text-white">
                                     🗑️ Supprimer
                                 </button>
