@@ -256,7 +256,7 @@
             background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
             border: 2px solid #1B4F91;
             border-radius: 10px;
-            padding: 8px 6px;
+            padding: 16px 10px;
             text-align: center;
             box-shadow:
                 0 2px 0 #0D47A1,
@@ -264,18 +264,17 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
             position: relative;
             overflow: hidden;
-            height: 68px;
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 100px;
         }
 
         @media (max-width: 640px) {
             .stat-card {
-                padding: 5px 4px;
-                height: 58px;
+                padding: 14px 8px;
                 border-radius: 8px;
-                min-width: 85px;
+                min-height: 90px;
             }
         }
 
