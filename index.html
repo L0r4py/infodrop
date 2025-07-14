@@ -1467,30 +1467,6 @@
                         this.saveGamingData();
                     },
 
-                    // === GAGNER DE L'XP SANS ANIMATION ===
-                    gainXPSilently(amount) {
-                        this.userXP += amount;
-
-                        // Vérifier level up
-                        while (this.userXP >= this.xpToNextLevel) {
-                            this.userXP -= this.xpToNextLevel;
-                            this.userLevel++;
-                            this.updateXPToNextLevel();
-                            this.showLevelUpAnimation();
-
-                            // Achievements de niveau
-                            if (this.userLevel === 5) {
-                                this.unlockAchievement('⭐', 'Apprenti informé - Niveau 5!');
-                            } else if (this.userLevel === 10) {
-                                this.unlockAchievement('💎', 'Expert de l\'actu - Niveau 10!');
-                            } else if (this.userLevel === 25) {
-                                this.unlockAchievement('👑', 'Légende d\'INFODROP - Niveau 25!');
-                            }
-                        }
-
-                        this.saveGamingData();
-                    },
-
                     // === DÉBLOQUER UN ACHIEVEMENT ===
                     unlockAchievement(icon, title) {
                         if (!this.unlockedAchievements.includes(icon)) {
@@ -1693,26 +1669,6 @@
 
                         document.addEventListener('visibilitychange', () => {
                             if (!document.hidden) {
-                                // Gérer les animations XP en attente
-                                const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                                if (pendingXP.length > 0) {
-                                    // Filtrer les XP trop anciennes (plus de 5 minutes)
-                                    const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
-
-                                    if (recentXP.length > 0) {
-                                        // Calculer le total d'XP à afficher
-                                        const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
-
-                                        // Déclencher l'animation après un court délai
-                                        setTimeout(() => {
-                                            this.showXPAnimation(totalXP);
-                                        }, 500);
-
-                                        // Vider les XP en attente
-                                        localStorage.removeItem('infodrop_pending_xp');
-                                    }
-                                }
-
                                 // Chercher toutes les célébrations en attente
                                 for (let i = 0; i < localStorage.length; i++) {
                                     const key = localStorage.key(i);
@@ -1743,19 +1699,6 @@
                         if (localStorage.getItem('infodrop_celebration_pending')) {
                             setTimeout(() => this.showCelebration(100), 2000);
                             localStorage.removeItem('infodrop_celebration_pending');
-                        }
-
-                        // Vérifier les XP en attente au chargement
-                        const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                        if (pendingXP.length > 0) {
-                            const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
-                            if (recentXP.length > 0) {
-                                const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
-                                setTimeout(() => {
-                                    this.showXPAnimation(totalXP);
-                                }, 1500);
-                                localStorage.removeItem('infodrop_pending_xp');
-                            }
                         }
 
                         // Ajout du CSS pour les animations manquantes
@@ -2273,7 +2216,7 @@
                             if (article) {
                                 this.addToDiversityData(article);
 
-                                // GAMIFICATION : Calculer l'XP à gagner
+                                // GAMIFICATION : Gagner de l'XP
                                 let xpGained = 10; // XP de base
 
                                 // Bonus pour diversité
@@ -2286,13 +2229,7 @@
                                     xpGained += 5;
                                 }
 
-                                // Stocker l'XP en attente pour l'animation au retour
-                                const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                                pendingXP.push({ amount: xpGained, timestamp: Date.now() });
-                                localStorage.setItem('infodrop_pending_xp', JSON.stringify(pendingXP));
-
-                                // Gagner l'XP sans animation
-                                this.gainXPSilently(xpGained);
+                                this.gainXP(xpGained, 'Article lu');
 
                                 // Vérifier le streak quotidien
                                 this.checkDailyStreak();
