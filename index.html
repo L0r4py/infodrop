@@ -56,124 +56,169 @@
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
     <!-- === FONT GAMING === -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- ======================================================================== -->
-    <!-- 🎮 STYLES CSS GAMING                                                     -->
+    <!-- 🎮 STYLES CSS CLASH OF CLANS                                             -->
     <!-- ======================================================================== -->
     <style>
-        /* === VARIABLES GAMING === */
+        /* === VARIABLES CLASH === */
         :root {
-            --gaming-blue: #00ffff;
-            --gaming-purple: #9945ff;
-            --gaming-pink: #ff00ff;
-            --gaming-green: #00ff00;
-            --gaming-yellow: #ffff00;
-            --gaming-orange: #ff9500;
-            --gaming-red: #ff0040;
-            --xp-color: #FFD700;
+            --clash-blue: #2E7BE6;
+            --clash-dark-blue: #1B4F91;
+            --clash-light-blue: #4A9EFF;
+            --clash-sky: #87CEEB;
+            --clash-gold: #FFD700;
+            --clash-silver: #C0C0C0;
+            --clash-bronze: #CD7F32;
+            --clash-green: #4CAF50;
+            --clash-red: #F44336;
+            --clash-purple: #9C27B0;
+            --clash-gray: #424242;
+            --clash-light-gray: #616161;
+            --clash-bg: #1a1a2e;
+            --clash-card: #16213e;
         }
 
-        /* === FONT GAMING === */
+        /* === FONT CLASH === */
         body {
-            font-family: 'Orbitron', monospace;
+            font-family: 'Rubik', sans-serif;
+            background: #0f1419;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(46, 123, 230, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(74, 158, 255, 0.1) 0%, transparent 50%);
         }
 
-        .pixel-font {
-            font-family: 'Press Start 2P', cursive;
+        /* === BOUTONS 3D CLASH === */
+        .clash-btn {
+            background: linear-gradient(180deg, var(--clash-light-blue) 0%, var(--clash-blue) 100%);
+            border: 3px solid var(--clash-dark-blue);
+            border-radius: 15px;
+            box-shadow:
+                0 4px 0 var(--clash-dark-blue),
+                0 6px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: translateY(0);
+            transition: all 0.1s;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
-        /* === ANIMATIONS GAMING === */
-        @keyframes neon-glow {
-
-            0%,
-            100% {
-                text-shadow:
-                    0 0 10px var(--gaming-blue),
-                    0 0 20px var(--gaming-blue),
-                    0 0 30px var(--gaming-blue);
-            }
-
-            50% {
-                text-shadow:
-                    0 0 20px var(--gaming-blue),
-                    0 0 30px var(--gaming-blue),
-                    0 0 40px var(--gaming-blue);
-            }
+        .clash-btn:hover {
+            transform: translateY(1px);
+            box-shadow:
+                0 3px 0 var(--clash-dark-blue),
+                0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
-        @keyframes pulse-border {
-
-            0%,
-            100% {
-                border-color: var(--gaming-purple);
-                box-shadow: 0 0 10px var(--gaming-purple);
-            }
-
-            50% {
-                border-color: var(--gaming-pink);
-                box-shadow: 0 0 20px var(--gaming-pink);
-            }
+        .clash-btn:active {
+            transform: translateY(3px);
+            box-shadow:
+                0 1px 0 var(--clash-dark-blue),
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
-        @keyframes xp-gain {
-            0% {
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(-50px) scale(1.5);
-                opacity: 0;
-            }
+        .clash-btn-green {
+            background: linear-gradient(180deg, #5CBF60 0%, var(--clash-green) 100%);
+            border-color: #388E3C;
+            box-shadow:
+                0 4px 0 #388E3C,
+                0 6px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
-        @keyframes level-up {
-            0% {
-                transform: scale(1) rotate(0deg);
-                opacity: 0;
-            }
-
-            50% {
-                transform: scale(1.5) rotate(180deg);
-                opacity: 1;
-            }
-
-            100% {
-                transform: scale(1) rotate(360deg);
-                opacity: 0;
-            }
+        .clash-btn-red {
+            background: linear-gradient(180deg, #FF6B6B 0%, var(--clash-red) 100%);
+            border-color: #C62828;
+            box-shadow:
+                0 4px 0 #C62828,
+                0 6px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
-        /* === BARRE XP === */
-        .xp-bar {
-            background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 100%);
-            border: 2px solid var(--gaming-purple);
+        /* === CARDS CLASH === */
+        .clash-card {
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 3px solid #1B4F91;
             border-radius: 20px;
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
-            height: 30px;
-            box-shadow: 0 0 20px rgba(153, 69, 255, 0.5);
         }
 
-        .xp-fill {
-            background: linear-gradient(90deg, var(--xp-color) 0%, #FFA500 50%, var(--xp-color) 100%);
-            height: 100%;
+        .clash-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+            border-radius: 20px 20px 0 0;
+            pointer-events: none;
+        }
+
+        /* === BADGES NIVEAU === */
+        .level-badge {
+            background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-weight: 900;
+            color: #FFF;
+            text-shadow:
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                0 1px 0 #D68910;
+            box-shadow:
+                0 3px 0 #D68910,
+                0 5px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* === BARRE XP CLASH === */
+        .xp-bar-container {
+            background: #0D1929;
+            border: 3px solid #1B4F91;
+            border-radius: 25px;
+            padding: 4px;
+            box-shadow:
+                inset 0 2px 4px rgba(0, 0, 0, 0.5),
+                0 2px 5px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .xp-bar-fill {
+            background: linear-gradient(180deg, #4FC3F7 0%, #29B6F6 50%, #0288D1 100%);
+            height: 20px;
+            border-radius: 20px;
+            box-shadow:
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
             transition: width 0.5s ease-out;
-            position: relative;
             overflow: hidden;
         }
 
-        .xp-fill::after {
+        .xp-bar-fill::after {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-            animation: xp-shine 2s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: xp-shine 3s infinite;
         }
 
         @keyframes xp-shine {
@@ -186,71 +231,256 @@
             }
         }
 
-        /* === GAMING CARD STYLE === */
-        .gaming-card {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border: 2px solid transparent;
-            border-image: linear-gradient(45deg, var(--gaming-purple), var(--gaming-pink)) 1;
+        /* === INPUT CLASH === */
+        .clash-input {
+            background: #0D1929;
+            border: 3px solid #1B4F91;
+            border-radius: 10px;
+            padding: 10px 15px;
+            color: white;
+            font-weight: 500;
+            transition: all 0.2s;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .clash-input:focus {
+            outline: none;
+            border-color: var(--clash-light-blue);
+            box-shadow:
+                inset 0 2px 4px rgba(0, 0, 0, 0.3),
+                0 0 0 3px rgba(74, 158, 255, 0.2);
+        }
+
+        /* === STATS CARDS === */
+        .stat-card {
+            background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
+            border: 3px solid #1B4F91;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            box-shadow:
+                0 4px 0 #0D47A1,
+                0 6px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
             position: relative;
             overflow: hidden;
         }
 
-        .gaming-card::before {
+        .stat-card::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, var(--gaming-purple), var(--gaming-pink), var(--gaming-blue));
-            z-index: -1;
-            filter: blur(10px);
-            opacity: 0;
-            transition: opacity 0.3s;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+            animation: pulse-stat 4s ease-in-out infinite;
         }
 
-        .gaming-card:hover::before {
-            opacity: 0.7;
-        }
-
-        /* === NIVEAU BADGE === */
-        .level-badge {
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            color: #000;
-            font-weight: 900;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            animation: pulse-glow 2s infinite;
-        }
-
-        @keyframes pulse-glow {
+        @keyframes pulse-stat {
 
             0%,
             100% {
-                box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+                transform: scale(0.8);
+                opacity: 0;
             }
 
             50% {
-                box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* === ACHIEVEMENT ICON === */
+        .achievement-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(180deg, #FFD700 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow:
+                0 3px 0 #D68910,
+                0 5px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .achievement-icon:hover {
+            transform: translateY(-2px) scale(1.1);
+            box-shadow:
+                0 5px 0 #D68910,
+                0 8px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        /* === NEWS CARD CLASH === */
+        .news-card-clash {
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 3px solid #1B4F91;
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            transition: all 0.2s;
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .news-card-clash:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: var(--clash-light-blue);
+        }
+
+        /* === ORIENTATION TAGS === */
+        .orientation-tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 2px solid;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes level-up-clash {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.3) rotate(180deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1) rotate(360deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* === SCROLLBAR CUSTOM === */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0D1929;
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--clash-light-blue) 0%, var(--clash-blue) 100%);
+            border-radius: 6px;
+            border: 2px solid #0D1929;
+        }
+
+        /* === TICKER === */
+        .ticker-track {
+            white-space: nowrap;
+            animation: ticker-scroll 40s linear infinite;
+        }
+
+        .ticker-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes ticker-scroll {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* === LOADING === */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #1B4F91;
+            border-top-color: var(--clash-light-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* === XP POPUP === */
+        .xp-popup {
+            position: fixed;
+            color: var(--clash-gold);
+            font-weight: 900;
+            font-size: 28px;
+            text-shadow:
+                0 2px 4px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(255, 215, 0, 0.5);
+            pointer-events: none;
+            animation: xp-gain 1.5s ease-out forwards;
+            z-index: 9999;
+        }
+
+        @keyframes xp-gain {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-80px) scale(1.5);
+                opacity: 0;
             }
         }
 
         /* === ACHIEVEMENT POPUP === */
-        .achievement-popup {
+        .achievement-popup-clash {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border: 3px solid var(--gaming-yellow);
+            background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
+            border: 4px solid var(--clash-gold);
             border-radius: 20px;
             padding: 30px;
             text-align: center;
             z-index: 9999;
             animation: achievement-appear 0.5s ease-out;
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
+            box-shadow:
+                0 0 0 5px #D68910,
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 100px rgba(255, 215, 0, 0.3);
         }
 
         @keyframes achievement-appear {
@@ -259,87 +489,13 @@
                 opacity: 0;
             }
 
-            50% {
-                transform: translate(-50%, -50%) scale(1.2) rotate(180deg);
-            }
-
             100% {
                 transform: translate(-50%, -50%) scale(1) rotate(360deg);
                 opacity: 1;
             }
         }
 
-        /* === XP ANIMATION === */
-        .xp-popup {
-            position: fixed;
-            color: var(--xp-color);
-            font-weight: bold;
-            font-size: 24px;
-            pointer-events: none;
-            animation: xp-gain 1s ease-out forwards;
-            text-shadow: 0 0 10px var(--xp-color);
-            z-index: 9999;
-        }
-
-        /* === GAMING BUTTONS === */
-        .gaming-btn {
-            background: linear-gradient(135deg, var(--gaming-purple) 0%, var(--gaming-pink) 100%);
-            border: none;
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .gaming-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .gaming-btn:hover::before {
-            left: 100%;
-        }
-
-        .gaming-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(153, 69, 255, 0.5);
-        }
-
-        /* === GAMING INPUTS === */
-        .gaming-input {
-            border-color: var(--gaming-purple);
-            outline: none;
-        }
-
-        .gaming-input:focus {
-            border-color: var(--gaming-blue);
-            box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.2), 0 0 20px rgba(0, 255, 255, 0.3);
-        }
-
-        .gaming-input:hover {
-            border-color: var(--gaming-pink);
-        }
-
-        /* === ANIMATIONS ET TRANSITIONS ORIGINALES === */
-        .news-card {
-            transition: all 0.3s ease-in-out;
-            border-left: 3px solid transparent;
-        }
-
-        .news-card:hover {
-            transform: translateX(5px);
-            border-left-color: var(--gaming-blue);
-            box-shadow: -5px 0 20px rgba(0, 255, 255, 0.3);
-        }
-
+        /* === FADE IN === */
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
@@ -355,112 +511,6 @@
                 transform: translateY(0);
             }
         }
-
-        .loading-pulse {
-            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: .5;
-            }
-        }
-
-        /* === SCROLLBAR GAMING === */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
-            border: 1px solid var(--gaming-purple);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, var(--gaming-purple), var(--gaming-pink));
-            border-radius: 6px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, var(--gaming-pink), var(--gaming-purple));
-        }
-
-        /* === ANIMATION CONFETTIS === */
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            position: absolute;
-            animation: confetti-fall 3s linear forwards;
-        }
-
-        @keyframes confetti-fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* === NOUVELLE ANIMATION DU BANDEAU DÉFILANT === */
-        .ticker-track {
-            white-space: nowrap;
-            animation: ticker-scroll 40s linear infinite;
-        }
-
-        .ticker-track:hover,
-        .ticker-track.paused {
-            animation-play-state: paused;
-            cursor: pointer;
-        }
-
-        .ticker-track span {
-            white-space: nowrap;
-        }
-
-        @keyframes ticker-scroll {
-            from {
-                transform: translateX(0);
-            }
-
-            to {
-                transform: translateX(-50%);
-            }
-        }
-
-        /* === STATS CARDS GAMING === */
-        .stat-card {
-            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
-            border: 2px solid;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            animation: rotate-glow 10s linear infinite;
-        }
-
-        @keyframes rotate-glow {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
     </style>
 
     <!-- === CONFIGURATION TAILWIND === -->
@@ -469,7 +519,7 @@
     </script>
 </head>
 
-<body class="bg-gray-950 text-gray-300 min-h-screen font-sans">
+<body class="text-gray-200 min-h-screen">
 
     <!-- ======================================================================== -->
     <!-- 🏗️ STRUCTURE PRINCIPALE DE L'APPLICATION                               -->
@@ -480,56 +530,59 @@
         <!-- ================================================================== -->
         <!-- ⏳ ÉCRAN DE CHARGEMENT                                            -->
         <!-- ================================================================== -->
-        <div x-show="!sessionLoaded" class="min-h-screen flex items-center justify-center bg-gray-950">
+        <div x-show="!sessionLoaded" class="min-h-screen flex items-center justify-center">
             <div class="text-center">
-                <div class="w-16 h-16 border-4 border-t-transparent rounded-full animate-spin mx-auto mb-4"
-                    style="border-color: var(--gaming-purple); border-top-color: transparent;"></div>
-                <p class="text-xl" style="color: var(--gaming-blue); animation: neon-glow 2s infinite;">LOADING...</p>
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-xl font-bold" style="color: var(--clash-light-blue);">Chargement...</p>
             </div>
         </div>
 
         <!-- ================================================================== -->
         <!-- 🔑 PAGE DE CONNEXION                                              -->
         <!-- ================================================================== -->
-        <div x-show="sessionLoaded && !user" x-transition
-            class="min-h-screen flex items-center justify-center p-4 bg-gray-950">
-            <div class="max-w-sm w-full gaming-card rounded-lg shadow-2xl p-8">
-                <h1 class="text-3xl font-bold text-center mb-2"
-                    style="color: var(--gaming-blue); animation: neon-glow 2s infinite;">
-                    🎮 INFODROP
-                </h1>
-                <p class="text-center mb-8 pixel-font text-xs" style="color: var(--gaming-purple);">PRESS START TO ENTER
-                </p>
+        <div x-show="sessionLoaded && !user" x-transition class="min-h-screen flex items-center justify-center p-4">
+            <div class="max-w-sm w-full clash-card p-8">
+                <div class="text-center mb-8">
+                    <div
+                        class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-b from-blue-400 to-blue-600 rounded-full mb-4 shadow-lg">
+                        <span class="text-4xl">📰</span>
+                    </div>
+                    <h1 class="text-3xl font-bold mb-2 text-white">INFODROP</h1>
+                    <p class="text-gray-400">Le Club privé de l'actu centralisée</p>
+                </div>
 
                 <!-- === FORMULAIRE DE CONNEXION === -->
                 <form @submit.prevent="login()" class="space-y-4">
                     <div>
                         <input x-model="email" type="email" required @input="email = email.toLowerCase()"
-                            class="w-full px-4 py-2 bg-gray-900 border-2 rounded-lg placeholder-gray-500 text-white transition-all duration-300 gaming-input"
-                            placeholder="votre@email.com">
+                            class="w-full clash-input" placeholder="votre@email.com">
                     </div>
                     <!-- === CHAMP CODE D'INVITATION === -->
                     <div>
-                        <input x-model="inviteCode" type="text"
-                            class="w-full px-4 py-2 bg-gray-900 border-2 rounded-lg placeholder-gray-500 text-white transition-all duration-300 gaming-input"
+                        <input x-model="inviteCode" type="text" class="w-full clash-input"
                             placeholder="Code d'invitation (si nouveau)">
                     </div>
                     <button type="submit" :disabled="loading"
-                        class="w-full gaming-btn text-white py-3 rounded-lg font-medium transition disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span x-show="!loading">🚀 RECEVOIR LE LIEN MAGIQUE</span>
-                        <span x-show="loading">⏳ ENVOI EN COURS...</span>
+                        class="w-full clash-btn text-white py-3 px-6 font-bold transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-show="!loading">⚡ Recevoir le lien magique</span>
+                        <span x-show="loading" class="flex items-center justify-center gap-2">
+                            <span
+                                class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                            Envoi en cours...
+                        </span>
                     </button>
                 </form>
 
                 <!-- === LIEN D'AIDE === -->
-                <p class="text-xs text-center mt-4" style="color: var(--gaming-pink);">
-                    💎 Pas de code ? Suivez <a href="https://x.com/LOR4_14" target="_blank" class="hover:underline"
-                        style="color: var(--gaming-yellow);">nos annonces</a> pour en gagner un !
+                <p class="text-xs text-center text-gray-400 mt-6">
+                    🎁 Pas de code ? Suivez <a href="https://x.com/LOR4_14" target="_blank"
+                        class="text-blue-400 hover:text-blue-300 underline">nos annonces</a> pour en gagner un !
                 </p>
 
                 <!-- === MESSAGES DE RETOUR === -->
-                <div x-show="message" class="mt-4 p-3 rounded-lg text-sm gaming-card"
-                    :class="messageType === 'error' ? 'border-red-500' : 'border-green-500'" x-text="message"></div>
+                <div x-show="message" class="mt-4 p-3 rounded-lg text-sm"
+                    :class="messageType === 'error' ? 'bg-red-900/20 border-2 border-red-500 text-red-300' : 'bg-green-900/20 border-2 border-green-500 text-green-300'"
+                    x-text="message"></div>
             </div>
         </div>
 
@@ -539,86 +592,103 @@
         <div x-show="sessionLoaded && user" x-transition.opacity class="min-h-screen flex flex-col">
 
             <!-- ============================================================== -->
-            <!-- 📱 HEADER GAMING                                              -->
+            <!-- 📱 HEADER CLASH OF CLANS                                      -->
             <!-- ============================================================== -->
-            <div class="sticky top-0 z-40 transition-shadow duration-300" id="stickyHeader">
+            <div class="sticky top-0 z-40" id="stickyHeader">
 
                 <!-- === HEADER PRINCIPAL === -->
-                <header class="relative z-50 bg-gray-950/95 backdrop-blur-sm border-b-2"
-                    style="border-color: var(--gaming-purple);">
-                    <div class="max-w-4xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
-                        <div class="justify-self-start">
-                            <a href="/index.html"
-                                class="flex items-center gap-2 text-xl font-bold hover:scale-105 transition whitespace-nowrap"
-                                style="color: var(--gaming-blue); line-height:1;">
-                                <span class="text-2xl" style="display:inline-block;vertical-align:middle;">🎮</span>
-                                <span class="tracking-tight"
-                                    style="display:inline-block;vertical-align:middle;">INFODROP</span>
-                                <span class="ml-2 text-xs font-medium px-2 py-0.5 rounded-full"
-                                    style="background: var(--gaming-purple); color: white;">v3.1.1-GAMING</span>
-                            </a>
-                        </div>
-                        <div class="justify-self-center">
-                            <!-- NIVEAU ET XP -->
-                            <div class="flex items-center gap-3">
-                                <div class="level-badge">
-                                    LVL <span x-text="userLevel"></span>
-                                </div>
-                                <div class="text-xs" style="color: var(--gaming-yellow);">
-                                    <span x-text="userXP"></span> / <span x-text="xpToNextLevel"></span> XP
-                                </div>
+                <header class="bg-gradient-to-b from-gray-900 to-gray-950 border-b-4 border-blue-900">
+                    <div class="max-w-6xl mx-auto px-4">
+                        <!-- Ligne supérieure avec niveau et XP -->
+                        <div class="py-3 flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <a href="/index.html" class="flex items-center gap-2 hover:scale-105 transition">
+                                    <div
+                                        class="w-12 h-12 bg-gradient-to-b from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                                        <span class="text-2xl">📰</span>
+                                    </div>
+                                    <span class="text-xl font-bold text-white">INFODROP</span>
+                                </a>
+                                <span
+                                    class="text-xs bg-blue-900/50 px-2 py-1 rounded-full text-blue-300 font-medium">v3.1.1</span>
                             </div>
-                        </div>
-                        <div class="justify-self-end relative" x-data="{ showMenu: false }">
-                            <button @click="showMenu = !showMenu"
-                                class="p-2 rounded-full hover:bg-gray-800 transition cursor-pointer gaming-btn"
-                                aria-label="Ouvrir le menu">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16">
-                                    </path>
-                                </svg>
-                            </button>
-                            <div x-show="showMenu" x-transition:enter="ease-out duration-300"
-                                x-transition:enter-start="opacity-0" x-transition:leave="ease-in duration-200"
-                                x-transition:leave-end="opacity-0"
-                                class="fixed inset-0 bg-black/30 backdrop-blur-[2px] z-40" style="display: none;"
-                                @click="showMenu = false">
-                            </div>
-                            <div x-show="showMenu" @click.away="showMenu = false" x-transition
-                                class="absolute top-full right-0 mt-2 w-56 gaming-card border-2 rounded-lg shadow-lg z-50"
-                                style="display: none; border-color: var(--gaming-purple);">
-                                <div class="border-b border-gray-700">
-                                    <a href="/index.html"
-                                        class="flex items-center gap-3 px-4 py-2 text-base font-semibold hover:bg-gray-800 transition"
-                                        style="color: var(--gaming-blue);">🎮 Flux&nbsp;24H</a>
-                                </div>
-                                <div class="border-b border-gray-700">
-                                    <a href="/infodrop360.html"
-                                        class="flex items-center gap-3 px-4 py-2 text-base font-semibold hover:bg-gray-800 transition"
-                                        style="color: var(--gaming-green);">🌐 Analyses&nbsp;360°</a>
-                                </div>
-                                <a href="/apropos.html"
-                                    class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">ℹ️
-                                    À&nbsp;propos</a>
-                                <a :href="STRIPE_LINK" target="_blank"
-                                    class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">❤️
-                                    Soutenir</a>
-                                <div class="border-t border-gray-700 my-1"></div>
-                                <a @click="logout()" href="#"
-                                    class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">🚪
-                                    Déconnexion</a>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- === BARRE DE PROGRESSION XP === -->
-                    <div class="px-4 pb-2">
-                        <div class="xp-bar">
-                            <div class="xp-fill" :style="`width: ${(userXP / xpToNextLevel) * 100}%`"></div>
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <span class="text-xs font-bold" style="color: #000; text-shadow: 0 0 5px white;">
-                                    <span x-text="Math.floor((userXP / xpToNextLevel) * 100)"></span>%
+                            <!-- Stats joueur -->
+                            <div class="flex items-center gap-6">
+                                <!-- Niveau -->
+                                <div class="level-badge">
+                                    <span class="text-xs">⭐</span>
+                                    <span>NIV <span x-text="userLevel"></span></span>
+                                </div>
+
+                                <!-- Achievements -->
+                                <div class="hidden md:flex items-center gap-1">
+                                    <template x-for="achievement in unlockedAchievements.slice(0, 3)"
+                                        :key="achievement">
+                                        <div class="achievement-icon w-10 h-10 text-lg"
+                                            :title="getAchievementTitle(achievement)">
+                                            <span x-text="achievement"></span>
+                                        </div>
+                                    </template>
+                                    <span x-show="unlockedAchievements.length > 3"
+                                        class="text-xs bg-gray-800 px-2 py-1 rounded-full text-gray-400">
+                                        +<span x-text="unlockedAchievements.length - 3"></span>
+                                    </span>
+                                </div>
+
+                                <!-- Menu -->
+                                <div class="relative" x-data="{ showMenu: false }">
+                                    <button @click="showMenu = !showMenu"
+                                        class="clash-btn p-2 w-10 h-10 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M4 6h16M4 12h16M4 18h16" />
+                                        </svg>
+                                    </button>
+                                    <div x-show="showMenu" x-transition
+                                        class="absolute top-full right-0 mt-2 w-56 clash-card shadow-xl z-50"
+                                        @click.away="showMenu = false" style="display: none;">
+                                        <a href="/index.html"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition border-b border-gray-700">
+                                            <span>📰</span>
+                                            <span class="font-medium">Flux 24H</span>
+                                        </a>
+                                        <a href="/infodrop360.html"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition border-b border-gray-700">
+                                            <span>🌐</span>
+                                            <span class="font-medium">Analyses 360°</span>
+                                        </a>
+                                        <a href="/apropos.html"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition">
+                                            <span>ℹ️</span>
+                                            <span>À propos</span>
+                                        </a>
+                                        <a :href="STRIPE_LINK" target="_blank"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition">
+                                            <span>❤️</span>
+                                            <span>Soutenir</span>
+                                        </a>
+                                        <div class="border-t border-gray-700"></div>
+                                        <a @click="logout()" href="#"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-red-900/20 transition text-red-400">
+                                            <span>🚪</span>
+                                            <span>Déconnexion</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Barre XP -->
+                        <div class="pb-3">
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-bold text-blue-300">XP</span>
+                                <div class="flex-1 xp-bar-container">
+                                    <div class="xp-bar-fill" :style="`width: ${(userXP / xpToNextLevel) * 100}%`"></div>
+                                </div>
+                                <span class="text-xs font-medium text-gray-400">
+                                    <span x-text="userXP"></span> / <span x-text="xpToNextLevel"></span>
                                 </span>
                             </div>
                         </div>
@@ -626,7 +696,7 @@
                 </header>
 
                 <!-- ========================================================== -->
-                <!-- 📰 NOUVEAU BANDEAU DÉFILANT (CONTEXT TICKER)              -->
+                <!-- 📰 BANDEAU DÉFILANT                                       -->
                 <!-- ========================================================== -->
                 <div x-data="{ date:'', day:0, temp:null, wIcon:'', wText:'', moon:'', left:0, btc:null, eth:null }"
                     x-init="initTicker($data);
@@ -638,49 +708,44 @@
                                     track.innerHTML += track.innerHTML;
                                 }
                             }
-                          });" class="w-full bg-gray-900/80 backdrop-blur-sm text-[15px] border-b-2 overflow-hidden"
-                    style="border-color: var(--gaming-purple);">
-                    <div class="ticker-track inline-flex gap-x-6 items-center px-4 py-1" x-data="{ paused:false }"
-                        :class="{ 'paused': paused }" @click="paused = !paused" style="color: var(--gaming-yellow);">
+                          });"
+                    class="bg-gradient-to-r from-gray-900 via-blue-950/20 to-gray-900 border-b-2 border-blue-900 overflow-hidden">
+                    <div class="ticker-track inline-flex gap-x-8 items-center px-4 py-2 text-sm">
                         <!-- Lune -->
-                        <span class="flex items-center gap-1" x-text="moon"></span>
+                        <span class="flex items-center gap-1 text-gray-300" x-text="moon"></span>
 
                         <!-- Jour ordinal -->
-                        <span class="flex items-center gap-1">
-                            📊 Jour <span x-text="day"></span>/365
+                        <span class="flex items-center gap-1 text-blue-300">
+                            📊 Jour <span x-text="day" class="font-bold"></span>/365
                         </span>
 
                         <!-- Compteur 2026 -->
-                        <span class="flex items-center gap-1">
-                            ⏳ <span x-text="left"></span> jours avant 2026
+                        <span class="flex items-center gap-1 text-orange-300">
+                            ⏳ <span x-text="left" class="font-bold"></span> jours avant 2026
                         </span>
 
                         <!-- Crypto BTC/USD -->
                         <a href="https://www.tradingview.com/chart/?symbol=BINANCE:BTCUSD" target="_blank"
-                            rel="noopener"
-                            class="flex items-center gap-1 no-underline hover:scale-105 transition cursor-pointer"
-                            title="Voir le graphique BTC/USD">
-                            <span class="text-lg">🪙</span> BTC&nbsp;/USD&nbsp;
-                            <span x-text="btc !== null ? btc.toLocaleString('fr-FR') + ' $' : '…'"></span>
+                            class="flex items-center gap-1 hover:text-yellow-400 transition">
+                            <span>🪙</span> BTC <span
+                                x-text="btc !== null ? btc.toLocaleString('fr-FR') + ' $' : '...'"></span>
                         </a>
 
                         <!-- Crypto ETH/USD -->
                         <a href="https://www.tradingview.com/chart/?symbol=BINANCE:ETHUSD" target="_blank"
-                            rel="noopener"
-                            class="flex items-center gap-1 no-underline hover:scale-105 transition cursor-pointer"
-                            title="Voir le graphique ETH/USD">
-                            <span class="text-lg">♦️</span> ETH&nbsp;/USD&nbsp;
-                            <span x-text="eth !== null ? eth.toLocaleString('fr-FR') + ' $' : '…'"></span>
+                            class="flex items-center gap-1 hover:text-purple-400 transition">
+                            <span>♦️</span> ETH <span
+                                x-text="eth !== null ? eth.toLocaleString('fr-FR') + ' $' : '...'"></span>
                         </a>
 
                         <!-- Date complète -->
-                        <span class="flex items-center gap-1">
+                        <span class="flex items-center gap-1 text-gray-300">
                             📅 <span x-text="date"></span>
                         </span>
 
                         <!-- Météo -->
                         <template x-if="temp !== null">
-                            <span class="flex items-center gap-1">
+                            <span class="flex items-center gap-1 text-gray-300">
                                 <span x-text="wIcon"></span>
                                 <span x-text="temp"></span>°C <span x-text="wText"></span>
                             </span>
@@ -689,57 +754,67 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- 👤 BARRE UTILISATEUR GAMING                               -->
+                <!-- 👤 BARRE UTILISATEUR                                      -->
                 <!-- ========================================================== -->
-                <div x-show="true" x-transition class="bg-gray-900/95 border-b-2 px-4 py-3 flex items-center"
-                    style="border-color: var(--gaming-purple);">
-                    <div class="max-w-4xl mx-auto w-full">
+                <div x-show="true" x-transition
+                    class="bg-gradient-to-b from-gray-900/90 to-gray-950/90 backdrop-blur-sm border-b-2 border-blue-900 px-4 py-3">
+                    <div class="max-w-6xl mx-auto">
 
-                        <!-- === BADGES ET ACHIEVEMENTS === -->
-                        <div class="flex items-center justify-between mb-2">
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs" style="color: var(--gaming-green);">🏆 ACHIEVEMENTS:</span>
-                                <template x-for="achievement in unlockedAchievements" :key="achievement">
-                                    <span class="text-lg" :title="getAchievementTitle(achievement)"
-                                        x-text="achievement"></span>
-                                </template>
+                        <!-- Badges et Stats -->
+                        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                            <div class="flex items-center gap-4">
+                                <!-- Streak -->
+                                <div
+                                    class="flex items-center gap-2 bg-orange-900/30 px-3 py-1 rounded-full border-2 border-orange-600">
+                                    <span class="text-orange-400">🔥</span>
+                                    <span class="text-sm font-bold text-orange-300">
+                                        <span x-text="readingStreak"></span> jours
+                                    </span>
+                                </div>
+
+                                <!-- Articles lus -->
+                                <div
+                                    class="flex items-center gap-2 bg-blue-900/30 px-3 py-1 rounded-full border-2 border-blue-600">
+                                    <span class="text-blue-400">📚</span>
+                                    <span class="text-sm font-bold text-blue-300">
+                                        <span x-text="totalReadCount"></span> lus
+                                    </span>
+                                </div>
                             </div>
-                            <div class="text-xs" style="color: var(--gaming-pink);">
-                                🔥 STREAK: <span x-text="readingStreak"></span> JOURS
+
+                            <!-- Admin -->
+                            <div x-show="isAdmin">
+                                <button @click="showAdminPanel = !showAdminPanel"
+                                    class="clash-btn clash-btn-red px-4 py-2 text-sm flex items-center gap-2">
+                                    <span>⚙️</span>
+                                    <span>Admin</span>
+                                </button>
                             </div>
                         </div>
 
-                        <!-- === CARTE PARRAINAGE PLIABLE === -->
+                        <!-- === CARTE PARRAINAGE === -->
                         <div x-show="userInviteData.code || userInviteData.parrainEmail || userInviteData.filleulEmail"
-                            x-data="{ showParrainage: false }" class="gaming-card rounded-lg my-1 p-1">
+                            x-data="{ showParrainage: false }" class="clash-card py-2">
 
-                            <!-- Header pliable avec code CENTRÉ -->
-                            <button @click="showParrainage = !showParrainage" class="w-full py-1.5 px-3">
+                            <button @click="showParrainage = !showParrainage" class="w-full px-4 py-1">
                                 <div class="flex items-center justify-center relative">
-                                    <!-- Code à partager CENTRÉ -->
                                     <div x-show="userInviteData.code" class="flex items-center gap-2">
-                                        <span class="text-yellow-400 text-xs">🎁</span>
-                                        <span class="text-gray-300 text-xs">Code à partager :</span>
+                                        <span class="text-yellow-400 text-sm">🎁</span>
+                                        <span class="text-gray-300 text-sm">Code à partager :</span>
                                         <span
-                                            class="font-mono bg-gray-900 px-1.5 py-0.5 rounded cursor-pointer hover:bg-gray-700 transition text-white text-xs border"
-                                            style="border-color: var(--gaming-yellow);"
+                                            class="font-mono bg-blue-900/50 px-3 py-1 rounded-lg cursor-pointer hover:bg-blue-900/70 transition text-white text-sm border-2 border-blue-600 font-bold"
                                             @click.stop="copyInviteMessage(userInviteData.code)"
                                             title="Cliquez pour copier" x-text="userInviteData.code">
                                         </span>
-                                        <span x-show="copied"
-                                            class="text-green-400 font-semibold transition bg-green-900/20 px-1.5 py-0.5 rounded text-xs">Copié
-                                            !</span>
+                                        <span x-show="copied" class="text-green-400 font-bold text-sm">✓ Copié !</span>
                                     </div>
 
-                                    <!-- Placeholder si pas de code -->
-                                    <div x-show="!userInviteData.code" class="text-xs"
-                                        style="color: var(--gaming-yellow);">
+                                    <div x-show="!userInviteData.code" class="text-sm text-gray-400">
                                         👥 Infos parrainage
                                     </div>
 
-                                    <!-- Icône dépliage (position absolue à droite) -->
                                     <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-3 w-3 transition-transform text-gray-400 absolute right-0"
+                                        class="h-4 w-4 transition-transform text-gray-400 absolute right-0"
                                         :class="{ 'rotate-180': showParrainage }" viewBox="0 0 20 20"
                                         fill="currentColor">
                                         <path fill-rule="evenodd"
@@ -749,39 +824,23 @@
                                 </div>
                             </button>
 
-                            <!-- Contenu dépliable - Relations -->
                             <div x-show="showParrainage" x-transition
-                                x-show="userInviteData.parrainEmail || userInviteData.filleulEmail"
-                                class="px-3 pb-2 space-y-2 text-center border-t border-gray-700 pt-2">
-
-                                <!-- Parrain -->
+                                class="px-4 pb-2 space-y-2 text-center border-t border-gray-700 pt-2">
                                 <div x-show="userInviteData.parrainEmail"
-                                    class="flex items-center justify-center gap-2 text-xs">
+                                    class="flex items-center justify-center gap-2 text-sm">
                                     <span class="text-green-400">👆</span>
                                     <span class="text-gray-400">Invité par :</span>
-                                    <span class="font-mono text-white" x-text="userInviteData.parrainEmail"></span>
+                                    <span class="font-mono text-white font-medium"
+                                        x-text="userInviteData.parrainEmail"></span>
                                 </div>
 
-                                <!-- Filleul -->
                                 <div x-show="userInviteData.filleulEmail"
-                                    class="flex items-center justify-center gap-2 text-xs">
+                                    class="flex items-center justify-center gap-2 text-sm">
                                     <span class="text-purple-400">👇</span>
                                     <span class="text-gray-400">Votre filleul :</span>
-                                    <span class="font-mono text-white" x-text="userInviteData.filleulEmail"></span>
+                                    <span class="font-mono text-white font-medium"
+                                        x-text="userInviteData.filleulEmail"></span>
                                 </div>
-                            </div>
-
-                        </div>
-
-                        <!-- === CARTE ADMIN === -->
-                        <div x-show="isAdmin" class="gaming-card rounded-lg">
-                            <div class="py-1.5 px-3 text-center">
-                                <button @click="showAdminPanel = !showAdminPanel"
-                                    class="flex items-center justify-center gap-1 w-full hover:scale-105 transition"
-                                    style="color: var(--gaming-orange);">
-                                    <span class="text-xs">⚙️</span>
-                                    <span class="text-xs font-medium">ADMIN MODE</span>
-                                </button>
                             </div>
                         </div>
 
@@ -792,139 +851,122 @@
             <!-- ============================================================== -->
             <!-- ⚙️ PANNEAU ADMINISTRATION                                     -->
             <!-- ============================================================== -->
-            <div x-show="showAdminPanel && isAdmin" x-transition class="bg-gray-950/50 border-b-2"
-                style="border-color: var(--gaming-orange);">
-                <div class="max-w-4xl mx-auto p-4">
-                    <h2 class="text-sm font-medium mb-3" style="color: var(--gaming-orange);">🧨 AJOUTER UNE ACTUALITÉ
+            <div x-show="showAdminPanel && isAdmin" x-transition class="bg-red-950/20 border-b-4 border-red-900">
+                <div class="max-w-6xl mx-auto p-4">
+                    <h2 class="text-lg font-bold text-red-400 mb-4 flex items-center gap-2">
+                        <span>🧨</span>
+                        <span>Ajouter une actualité</span>
                     </h2>
 
-                    <!-- === FORMULAIRE D'AJOUT D'ACTUALITÉ ULTRA-SIMPLIFIÉ === -->
-                    <form @submit.prevent="addManualNews()" class="grid grid-cols-1 gap-2">
-                        <div>
-                            <input x-model="newNews.resume" type="text" placeholder="Résumé" maxlength="180" required
-                                class="w-full px-2 py-1.5 bg-gray-800 rounded border-2 text-white placeholder-gray-500 text-sm gaming-input">
-                        </div>
-                        <div>
-                            <input x-model="newNews.url" type="url" placeholder="URL de l'article" required
-                                class="w-full px-2 py-1.5 bg-gray-800 rounded border-2 text-white placeholder-gray-500 text-sm gaming-input">
-                        </div>
-                        <div>
-                            <button type="submit" :disabled="addingNews"
-                                class="gaming-btn text-white px-3 py-1.5 rounded transition disabled:opacity-50 text-sm">
-                                🚀 PUBLIER
-                            </button>
-                        </div>
+                    <form @submit.prevent="addManualNews()" class="grid grid-cols-1 gap-3">
+                        <input x-model="newNews.resume" type="text" placeholder="Résumé" maxlength="180" required
+                            class="clash-input">
+                        <input x-model="newNews.url" type="url" placeholder="URL de l'article" required
+                            class="clash-input">
+                        <button type="submit" :disabled="addingNews"
+                            class="clash-btn clash-btn-green px-6 py-3 text-white font-bold disabled:opacity-50">
+                            <span x-show="!addingNews">🚀 Publier</span>
+                            <span x-show="addingNews">⏳ Publication...</span>
+                        </button>
                     </form>
 
-                    <!-- === GÉNÉRATION DE CODES D'INVITATION === -->
-                    <div class="border-t border-gray-700 pt-3 mt-3">
+                    <div class="border-t border-gray-700 pt-4 mt-4">
                         <div class="flex items-center gap-3">
-                            <h3 class="text-sm font-medium" style="color: var(--gaming-yellow);">Générer un code
-                                d'invitation</h3>
+                            <h3 class="text-sm font-bold text-gray-300">Générer un code d'invitation</h3>
                             <button type="button" @click="generateInviteCode()"
-                                class="gaming-btn text-white px-2 py-1 rounded text-sm flex items-center gap-1">
-                                🎁 GÉNÉRER
+                                class="clash-btn px-4 py-2 text-sm text-white">
+                                🎁 Générer
                             </button>
                             <span x-show="lastGeneratedCode"
-                                class="font-mono bg-gray-700 text-white px-2 py-1 rounded text-xs">
-                                <span x-text="lastGeneratedCode"></span> <span class="text-green-400">(copié !)</span>
+                                class="font-mono bg-gray-800 text-green-400 px-3 py-1 rounded text-sm font-bold">
+                                <span x-text="lastGeneratedCode"></span> (copié !)
                             </span>
                         </div>
                     </div>
-
                 </div>
             </div>
 
             <!-- ============================================================== -->
             <!-- 📊 CONTENU PRINCIPAL                                          -->
             <!-- ============================================================== -->
-            <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full">
+            <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
 
                 <!-- ========================================================== -->
-                <!-- 📈 STATISTIQUES GAMING                                    -->
+                <!-- 📈 STATISTIQUES GLOBALES                                  -->
                 <!-- ========================================================== -->
-                <div class="grid grid-cols-3 gap-2 mb-4">
-                    <div class="stat-card rounded-lg px-3 py-2" style="border-color: var(--gaming-blue);">
-                        <span class="text-xs" style="color: var(--gaming-blue);">📰 ARTICLES 24H</span>
-                        <p class="font-bold text-white text-xl" x-text="stats.total_articles">0</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="stat-card">
+                        <div class="relative z-10">
+                            <div class="text-3xl mb-2">📰</div>
+                            <div class="text-3xl font-bold text-white" x-text="stats.total_articles">0</div>
+                            <div class="text-sm text-blue-200">Articles 24H</div>
+                        </div>
                     </div>
 
-                    <div class="stat-card rounded-lg px-3 py-2" style="border-color: var(--gaming-green);">
-                        <span class="text-xs" style="color: var(--gaming-green);">📊 SOURCES ACTIVES</span>
-                        <p class="font-bold text-white text-xl" x-text="stats.total_sources">0</p>
+                    <div class="stat-card">
+                        <div class="relative z-10">
+                            <div class="text-3xl mb-2">📊</div>
+                            <div class="text-3xl font-bold text-white" x-text="stats.total_sources">0</div>
+                            <div class="text-sm text-blue-200">Sources actives</div>
+                        </div>
                     </div>
 
-                    <div class="stat-card rounded-lg px-3 py-2" style="border-color: var(--gaming-purple);">
-                        <span class="text-xs" style="color: var(--gaming-purple);">👥 JOUEURS EN LIGNE</span>
-                        <p class="font-bold text-white text-xl" x-text="connectedUsers + socialBoost">1</p>
+                    <div class="stat-card">
+                        <div class="relative z-10">
+                            <div class="text-3xl mb-2 float-animation">👥</div>
+                            <div class="text-3xl font-bold text-white" x-text="connectedUsers + socialBoost">1</div>
+                            <div class="text-sm text-blue-200">En ligne</div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- 🌈 CHECKER DE DIVERSITÉ GAMING                            -->
+                <!-- 🌈 CHECKER DE DIVERSITÉ                                   -->
                 <!-- ========================================================== -->
-                <div x-show="!loadingNews && diversityScore !== null" x-transition class="gaming-card rounded-lg mb-6">
+                <div x-show="!loadingNews && diversityScore !== null" x-transition class="clash-card mb-6">
                     <button @click="showDiversityChecker = !showDiversityChecker"
-                        class="w-full flex items-center justify-between py-3 px-4">
-                        <h3 class="text-sm font-medium" style="color: var(--gaming-yellow);">🎯 SCORE DE DIVERSITÉ</h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform"
-                            :class="{ 'rotate-180': showDiversityChecker }" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
-                        </svg>
+                        class="w-full flex items-center justify-between p-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <span>🎯</span>
+                            <span>Score de diversité</span>
+                        </h3>
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl font-bold" :class="{
+                                'text-red-400': diversityScore < 30,
+                                'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
+                                'text-green-400': diversityScore >= 70
+                            }" x-text="diversityScore + '%'"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform text-gray-400"
+                                :class="{ 'rotate-180': showDiversityChecker }" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
                     </button>
 
-                    <!-- === CONTENU DU DIVERSITY CHECKER === -->
-                    <div x-show="showDiversityChecker" x-transition class="p-4 border-t border-gray-700">
-
-                        <!-- === CARTE ARTICLES LUS === -->
-                        <div x-show="totalReadCount > 0" class="gaming-card rounded-lg mb-4">
-                            <div class="py-1.5 px-3 text-center">
-                                <div class="flex items-center justify-center gap-2 text-xs">
-                                    <span style="color: var(--gaming-blue);">📚</span>
-                                    <span class="font-semibold text-white" x-text="totalReadCount"></span>
-                                    <span x-text="totalReadCount === 1 ? 'article lu' : 'articles lus'"
-                                        style="color: var(--gaming-yellow);"></span>
-                                </div>
+                    <div x-show="showDiversityChecker" x-transition class="p-4 border-t-2 border-gray-700">
+                        <div class="mb-4">
+                            <div class="xp-bar-container">
+                                <div class="xp-bar-fill" :style="`width: ${diversityScore}%`" :class="{
+                                         'bg-gradient-to-r from-red-400 to-red-600': diversityScore < 30,
+                                         'bg-gradient-to-r from-yellow-400 to-yellow-600': diversityScore >= 30 && diversityScore < 70,
+                                         'bg-gradient-to-r from-green-400 to-green-600': diversityScore >= 70
+                                     }"></div>
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <p class="text-xs" style="color: var(--gaming-purple);">Basé sur vos dernières lectures
-                                </p>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-bold" :class="{
-                         'text-red-400': diversityScore < 30,
-                         'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
-                         'text-green-400': diversityScore >= 70
-                     }" x-text="diversityScore + '%'"></div>
-                                <p class="text-xs" :class="{
-                       'text-red-400': diversityScore < 30,
-                       'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
-                       'text-green-400': diversityScore >= 70
-                   }" x-text="getDiversityMessage()"></p>
-                                <p class="text-xs mt-1" style="color: var(--gaming-blue);" x-text="getDiversityTip()">
-                                </p>
-                            </div>
-                        </div>
+                        <p class="text-sm text-center mb-3" :class="{
+                            'text-red-300': diversityScore < 30,
+                            'text-yellow-300': diversityScore >= 30 && diversityScore < 70,
+                            'text-green-300': diversityScore >= 70
+                        }" x-text="getDiversityMessage()"></p>
 
-                        <!-- === BARRE DE PROGRESSION === -->
-                        <div class="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
-                            <div class="h-full rounded-full transition-all duration-1000" :class="{
-                     'bg-red-400': diversityScore < 30,
-                     'bg-yellow-400': diversityScore >= 30 && diversityScore < 70,
-                     'bg-green-400': diversityScore >= 70
-                 }" :style="`width: ${diversityScore}%`"></div>
-                        </div>
+                        <p class="text-xs text-center text-blue-300 mb-4" x-text="getDiversityTip()"></p>
 
-                        <!-- === ORIENTATIONS LUES === -->
-                        <div class="mt-3 flex flex-wrap gap-2" x-show="readOrientations.length > 0">
+                        <div class="flex flex-wrap gap-2 justify-center" x-show="readOrientations.length > 0">
                             <template x-for="orientation in readOrientations" :key="orientation">
-                                <span class="text-xs px-1.5 py-0.5 rounded-full"
-                                    :class="getOrientationClass(orientation)">
+                                <span class="orientation-tag" :class="getOrientationClass(orientation)">
                                     <span x-text="getOrientationDisplayName(orientation)"></span>
                                 </span>
                             </template>
@@ -933,13 +975,15 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- 🔍 SYSTÈME DE FILTRES GAMING                              -->
+                <!-- 🔍 SYSTÈME DE FILTRES                                     -->
                 <!-- ========================================================== -->
-                <div x-show="!loadingNews" x-transition class="gaming-card rounded-lg mb-6">
-                    <button @click="showFilters = !showFilters"
-                        class="w-full flex items-center justify-between py-3 px-4">
-                        <h3 class="text-sm font-medium" style="color: var(--gaming-green);">🎮 FILTRER</h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform"
+                <div x-show="!loadingNews" x-transition class="clash-card mb-6">
+                    <button @click="showFilters = !showFilters" class="w-full flex items-center justify-between p-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <span>🔍</span>
+                            <span>Filtrer</span>
+                        </h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform text-gray-400"
                             :class="{ 'rotate-180': showFilters }" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -947,138 +991,108 @@
                         </svg>
                     </button>
 
-                    <!-- === CONTENU DES FILTRES === -->
-                    <div x-show="showFilters" x-transition class="p-4 border-t border-gray-700 space-y-4">
-
-                        <!-- === BOUTON TOUT VOIR === -->
-                        <button @click="toggleFilter('all')"
-                            :class="{ 'bg-blue-600 text-white': activeFilter === 'all', 'bg-gray-700 text-gray-300': activeFilter !== 'all' }"
-                            class="gaming-btn px-2 py-0.5 rounded-full text-xs font-medium transition mb-3">
-                            🎯 TOUT VOIR
+                    <div x-show="showFilters" x-transition class="p-4 border-t-2 border-gray-700 space-y-4">
+                        <button @click="toggleFilter('all')" class="clash-btn px-4 py-2 text-sm text-white"
+                            :class="activeFilter === 'all' ? 'clash-btn-green' : ''">
+                            🎯 Tout voir
                         </button>
 
-                        <!-- === CARTE ORIENTATIONS POLITIQUES === -->
-                        <div class="gaming-card rounded-lg p-4">
-                            <h4 class="text-sm font-semibold mb-3 flex items-center gap-2"
-                                style="color: var(--gaming-yellow);">
-                                🗳️ ORIENTATIONS POLITIQUES
-                            </h4>
-
-                            <div class="flex flex-wrap gap-2 mb-3">
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-300 mb-3">🗳️ Orientations politiques</h4>
+                            <div class="flex flex-wrap gap-2">
                                 <template x-for="orientation in allOrientations" :key="orientation">
-                                    <button @click="toggleFilter(orientation)" :class="[orientation === '🧨INFODROP' ? 
-            (activeFilter === orientation ? 'bg-gray-600 text-white border-2 border-white' : 
-             hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-white border border-gray-400 hover:bg-gray-600' : 
-             'bg-gray-800 text-gray-500 border border-gray-600') :
-            (activeFilter === orientation ? getOrientationClass(orientation) : 
-             hasArticlesForOrientation(orientation) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 
-             'bg-gray-800 text-gray-500 border border-gray-600')]"
-                                        class="px-2 py-0.5 rounded-full text-xs font-medium transition relative hover:scale-105"
-                                        :class="orientation === '🧨INFODROP' ? 'font-black' : 'capitalize'"
+                                    <button @click="toggleFilter(orientation)" :class="[
+                                            'clash-btn px-3 py-1 text-xs',
+                                            activeFilter === orientation ? 'clash-btn-green' : '',
+                                            !hasArticlesForOrientation(orientation) ? 'opacity-50 cursor-not-allowed' : ''
+                                        ]" :disabled="!hasArticlesForOrientation(orientation)"
                                         :title="hasArticlesForOrientation(orientation) ? '' : 'Aucun article ces dernières 24h'">
                                         <span x-text="getOrientationDisplayName(orientation)"></span>
                                     </button>
                                 </template>
                             </div>
-
-                            <!-- === BOÎTE D'INFO === -->
-                            <div class="bg-blue-900/20 border rounded-lg p-2" style="border-color: var(--gaming-blue);">
-                                <p class="text-xs flex items-start gap-1" style="color: var(--gaming-blue);">
-                                    <span class="text-sm">💡</span>
-                                    <span>Les orientations grisées n'ont pas publié ces dernières 24h</span>
-                                </p>
-                            </div>
                         </div>
 
-                        <!-- === CARTE CATÉGORIES === -->
-                        <div x-show="allOtherTags.length > 0" class="gaming-card rounded-lg p-4">
-                            <h4 class="text-sm font-semibold mb-3 flex items-center gap-2"
-                                style="color: var(--gaming-green);">
-                                🏷️ CATÉGORIES
-                            </h4>
-
+                        <div x-show="allOtherTags.length > 0">
+                            <h4 class="text-sm font-bold text-gray-300 mb-3">🏷️ Catégories</h4>
                             <div class="flex flex-wrap gap-2">
                                 <template x-for="tag in allOtherTags" :key="tag">
-                                    <button @click="toggleFilter(tag)"
-                                        :class="activeFilter === tag ? 'bg-blue-600 text-white' : (hasArticlesForTag(tag) ? 'bg-gray-700 text-gray-300 hover:opacity-80' : 'bg-gray-800 text-gray-500 border border-gray-600')"
-                                        class="px-2 py-0.5 rounded-full text-xs font-medium transition capitalize hover:scale-105"
+                                    <button @click="toggleFilter(tag)" :class="[
+                                            'clash-btn px-3 py-1 text-xs',
+                                            activeFilter === tag ? 'clash-btn-green' : '',
+                                            !hasArticlesForTag(tag) ? 'opacity-50 cursor-not-allowed' : ''
+                                        ]" :disabled="!hasArticlesForTag(tag)"
                                         :title="hasArticlesForTag(tag) ? '' : 'Aucun article ces dernières 24h'"
                                         x-text="tag"></button>
                                 </template>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- 📰 LISTE DES ACTUALITÉS GAMING                            -->
+                <!-- 📰 LISTE DES ACTUALITÉS                                   -->
                 <!-- ========================================================== -->
-                <div class="space-y-3">
+                <div class="space-y-4">
                     <template x-for="news in newsList" :key="news.id">
-                        <div class="news-card flex items-center gap-2 gaming-card p-4 rounded-lg fade-in">
-
-                            <!-- === CONTENU DE L'ARTICLE === -->
-                            <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="flex-grow">
-                                <p class="text-base text-white mb-2" x-text="news.resume"></p>
-                                <div class="flex items-center flex-wrap gap-x-4 gap-y-2 text-xs">
-                                    <span x-show="news.added_by" class="font-bold" style="color: var(--gaming-red);">🧨
-                                        INFODROP</span>
-                                    <span x-show="!news.added_by" x-text="news.source"
-                                        style="color: var(--gaming-yellow);"></span>
-                                    <span x-text="formatTime(news.heure)" style="color: var(--gaming-green);"></span>
-                                    <span x-show="news.orientation" :class="getOrientationClass(news.orientation)"
-                                        class="px-1.5 py-0.5 rounded-full font-medium text-xs capitalize">
+                        <div class="news-card-clash fade-in group">
+                            <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="block">
+                                <p class="text-lg text-white mb-3 leading-relaxed" x-text="news.resume"></p>
+                                <div class="flex flex-wrap items-center gap-3 text-sm">
+                                    <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
+                                    <span x-show="!news.added_by" class="text-gray-400" x-text="news.source"></span>
+                                    <span class="text-blue-300">⏰ <span x-text="formatTime(news.heure)"></span></span>
+                                    <span x-show="news.orientation" class="orientation-tag"
+                                        :class="getOrientationClass(news.orientation)">
                                         <span x-text="getOrientationDisplayName(news.orientation)"></span>
                                     </span>
                                     <template x-if="news.tags && news.tags.filter(tag => tag !== '🧨INFODROP').length">
-                                        <template x-for="tag in news.tags.filter(tag => tag !== '🧨INFODROP')"
-                                            :key="tag">
-                                            <span
-                                                class="ml-1 px-1.5 py-0.5 rounded-full font-normal text-xs capitalize border"
-                                                style="background: var(--gaming-purple); color: white; border-color: var(--gaming-pink);"
-                                                x-text="tag"></span>
-                                        </template>
+                                        <div class="flex gap-2">
+                                            <template x-for="tag in news.tags.filter(tag => tag !== '🧨INFODROP')"
+                                                :key="tag">
+                                                <span
+                                                    class="px-3 py-1 bg-gray-700/50 rounded-full text-xs text-gray-300 border border-gray-600"
+                                                    x-text="tag"></span>
+                                            </template>
+                                        </div>
                                     </template>
                                 </div>
                             </a>
 
-                            <!-- === BOUTONS ADMIN === -->
-                            <button x-show="isAdmin" @click.prevent="openEditPanel(news)"
-                                class="flex-shrink-0 p-2 rounded-full hover:bg-blue-900/50 transition"
-                                title="Éditer">✏️</button>
-                            <button x-show="isAdmin" @click.prevent="deleteNews(news.id)"
-                                class="flex-shrink-0 p-2 rounded-full hover:bg-red-900/50 transition"
-                                title="Supprimer">🗑️</button>
+                            <!-- Boutons admin -->
+                            <div x-show="isAdmin" class="flex gap-2 mt-3">
+                                <button @click.prevent="openEditPanel(news)"
+                                    class="clash-btn px-3 py-1 text-xs text-white">
+                                    ✏️ Éditer
+                                </button>
+                                <button @click.prevent="deleteNews(news.id)"
+                                    class="clash-btn clash-btn-red px-3 py-1 text-xs text-white">
+                                    🗑️ Supprimer
+                                </button>
+                            </div>
                         </div>
                     </template>
 
-                    <!-- ========================================================== -->
-                    <!-- 📭 MESSAGES D'ÉTAT                                        -->
-                    <!-- ========================================================== -->
+                    <!-- Messages d'état -->
                     <div x-show="newsList.length === 0 && !loadingNews" class="text-center py-12">
-                        <div x-show="activeFilter === 'all'" style="color: var(--gaming-purple);">
-                            <p>Aucune actualité pour le moment.</p>
+                        <div x-show="activeFilter === 'all'" class="text-gray-500">
+                            <div class="text-6xl mb-4">📭</div>
+                            <p class="text-lg">Aucune actualité pour le moment.</p>
                         </div>
-                        <div x-show="activeFilter !== 'all'" class="gaming-card rounded-lg p-6 max-w-lg mx-auto">
-                            <div class="text-4xl mb-3">📭</div>
-                            <h3 class="text-lg font-semibold mb-2" style="color: var(--gaming-yellow);">AUCUN ARTICLE
-                                TROUVÉ</h3>
-                            <p class="text-sm leading-relaxed" x-text="getEmptyFilterMessage()"
-                                style="color: var(--gaming-purple);"></p>
-                            <button @click="toggleFilter('all')"
-                                class="mt-4 gaming-btn px-4 py-2 text-white rounded-lg text-sm transition">
-                                ← VOIR TOUTES LES ACTUALITÉS
+                        <div x-show="activeFilter !== 'all'" class="clash-card p-8 max-w-lg mx-auto text-center">
+                            <div class="text-5xl mb-4">🔍</div>
+                            <h3 class="text-xl font-bold text-white mb-3">Aucun article trouvé</h3>
+                            <p class="text-gray-400 mb-6" x-text="getEmptyFilterMessage()"></p>
+                            <button @click="toggleFilter('all')" class="clash-btn px-6 py-3 text-white">
+                                ← Voir toutes les actualités
                             </button>
                         </div>
                     </div>
 
-                    <!-- === LOADER === -->
+                    <!-- Loader -->
                     <div x-show="loadingNews && filteredNews.length === 0" class="text-center py-12">
-                        <div class="inline-block w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
-                            style="border-color: var(--gaming-purple); border-top-color: transparent;">
-                        </div>
-                        <p class="mt-4 text-sm" style="color: var(--gaming-yellow);">LOADING...</p>
+                        <div class="loading-spinner mx-auto mb-4"></div>
+                        <p class="text-gray-400">Chargement des actualités...</p>
                     </div>
                 </div>
             </main>
@@ -1086,26 +1100,26 @@
             <!-- ============================================================== -->
             <!-- 🎭 MODAL D'ÉDITION                                            -->
             <!-- ============================================================== -->
-            <div x-show="showEditPanel" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
-                x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
+            <div x-show="showEditPanel" x-transition
                 class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
-                <div @click.away="showEditPanel = false" class="gaming-card rounded-lg shadow-xl w-full max-w-lg p-6">
-                    <h3 class="text-xl font-bold mb-4" style="color: var(--gaming-yellow);">🎮 ÉDITER L'ACTUALITÉ</h3>
+                <div @click.away="showEditPanel = false" class="clash-card w-full max-w-lg p-6">
+                    <h3 class="text-xl font-bold mb-4 text-white">✏️ Éditer l'actualité</h3>
                     <form @submit.prevent="updateNews()" class="space-y-4">
-                        <div><label class="text-sm block mb-1" style="color: var(--gaming-blue);">Résumé</label><input
-                                x-model="editingNews.resume" type="text"
-                                class="w-full px-3 py-2 bg-gray-900 rounded border-2 gaming-input"></div>
-                        <div><label class="text-sm block mb-1" style="color: var(--gaming-blue);">Source</label><input
-                                x-model="editingNews.source" type="text"
-                                class="w-full px-3 py-2 bg-gray-900 rounded border-2 gaming-input"></div>
-                        <div><label class="text-sm block mb-1" style="color: var(--gaming-blue);">URL</label><input
-                                x-model="editingNews.url" type="url"
-                                class="w-full px-3 py-2 bg-gray-900 rounded border-2 gaming-input"></div>
                         <div>
-                            <label class="text-sm block mb-1" style="color: var(--gaming-blue);">Orientation</label>
-                            <select x-model="editingNews.orientation"
-                                class="w-full px-3 py-2 bg-gray-900 rounded border-2 gaming-input">
+                            <label class="text-sm text-gray-400 block mb-1">Résumé</label>
+                            <input x-model="editingNews.resume" type="text" class="w-full clash-input">
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">Source</label>
+                            <input x-model="editingNews.source" type="text" class="w-full clash-input">
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">URL</label>
+                            <input x-model="editingNews.url" type="url" class="w-full clash-input">
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">Orientation</label>
+                            <select x-model="editingNews.orientation" class="w-full clash-input">
                                 <option value="">Non définie</option>
                                 <option value="extrême-gauche">Extrême gauche</option>
                                 <option value="gauche">Gauche</option>
@@ -1118,27 +1132,27 @@
                             </select>
                         </div>
                         <div>
-                            <label class="text-sm block mb-1" style="color: var(--gaming-blue);">Tags (séparés par des
-                                virgules)</label>
-                            <input x-model="editingNews.tagsText" type="text"
-                                class="w-full px-3 py-2 bg-gray-900 rounded border-2 gaming-input"
+                            <label class="text-sm text-gray-400 block mb-1">Tags (séparés par des virgules)</label>
+                            <input x-model="editingNews.tagsText" type="text" class="w-full clash-input"
                                 placeholder="ex: national, crypto, tv">
                         </div>
-                        <div class="flex justify-end gap-4 pt-4">
-                            <button type="button" @click="showEditPanel = false"
-                                class="px-4 py-2 bg-gray-600 rounded-lg hover:bg-gray-500 transition">ANNULER</button>
-                            <button type="submit"
-                                class="gaming-btn px-4 py-2 text-white rounded-lg transition">ENREGISTRER</button>
+                        <div class="flex justify-end gap-3 pt-4">
+                            <button type="button" @click="showEditPanel = false" class="clash-btn px-4 py-2 text-white">
+                                Annuler
+                            </button>
+                            <button type="submit" class="clash-btn clash-btn-green px-4 py-2 text-white">
+                                Enregistrer
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
 
             <!-- ============================================================== -->
-            <!-- 🦶 FOOTER GAMING                                              -->
+            <!-- 🦶 FOOTER                                                     -->
             <!-- ============================================================== -->
-            <footer class="text-center py-8 text-xs mt-auto" style="color: var(--gaming-purple);">
-                <p>© 2025 INFODROP GAMING EDITION. Tous droits réservés.</p>
+            <footer class="text-center py-8 text-xs text-gray-500 mt-auto border-t-2 border-gray-800">
+                <p>© 2025 INFODROP. Tous droits réservés.</p>
                 <p class="mt-1">Un projet 3C - By Emile Marclin & L0r4.py [AI]</p>
             </footer>
         </div>
@@ -1149,8 +1163,7 @@
         <button x-data="{ show: false }" x-show="show" x-transition
             @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
             x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
-            class="fixed bottom-6 right-6 z-40 gaming-btn text-white p-3 rounded-full shadow-lg transition-all hover:scale-110"
-            style="display: none;">
+            class="fixed bottom-6 right-6 z-40 clash-btn p-3 text-white" style="display: none;">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd"
                     d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
@@ -1298,15 +1311,15 @@
             function infodropApp() {
                 // === CONSTANTES DES ORIENTATIONS POLITIQUES ===
                 const ORIENTATION_DATA = {
-                    'extrême-gauche': { class: 'bg-[#FF0000] text-white', color: '#FF0000' },
-                    'gauche': { class: 'bg-[#D42A2A] text-white', color: '#D42A2A' },
-                    'centre-gauche': { class: 'bg-[#AA5555] text-white', color: '#AA5555' },
-                    'centre': { class: 'bg-[#808080] text-white', color: '#808080' },
-                    'centre-droit': { class: 'bg-[#5555AA] text-white', color: '#5555AA' },
-                    'droite': { class: 'bg-[#2A2AD4] text-white', color: '#2A2AD4' },
-                    'extrême-droite': { class: 'bg-[#0000FF] text-white', color: '#0000FF' },
-                    'gouvernement': { class: 'bg-blue-800 text-blue-100', color: '#1e40af' },
-                    'neutre': { class: 'bg-green-700 text-green-100', color: '#16a34a' }
+                    'extrême-gauche': { class: 'bg-[#FF0000] text-white border-[#CC0000]', color: '#FF0000' },
+                    'gauche': { class: 'bg-[#D42A2A] text-white border-[#A82020]', color: '#D42A2A' },
+                    'centre-gauche': { class: 'bg-[#AA5555] text-white border-[#884444]', color: '#AA5555' },
+                    'centre': { class: 'bg-[#808080] text-white border-[#666666]', color: '#808080' },
+                    'centre-droit': { class: 'bg-[#5555AA] text-white border-[#444488]', color: '#5555AA' },
+                    'droite': { class: 'bg-[#2A2AD4] text-white border-[#2020A8]', color: '#2A2AD4' },
+                    'extrême-droite': { class: 'bg-[#0000FF] text-white border-[#0000CC]', color: '#0000FF' },
+                    'gouvernement': { class: 'bg-blue-800 text-blue-100 border-blue-900', color: '#1e40af' },
+                    'neutre': { class: 'bg-green-700 text-green-100 border-green-800', color: '#16a34a' }
                 };
 
                 return {
@@ -1536,9 +1549,9 @@
                         popup.className = 'xp-popup';
                         popup.textContent = `+${amount} XP`;
                         popup.style.left = '50%';
-                        popup.style.top = '100px';
+                        popup.style.top = '200px';
                         document.body.appendChild(popup);
-                        setTimeout(() => popup.remove(), 1000);
+                        setTimeout(() => popup.remove(), 1500);
                     },
 
                     // === ANIMATION LEVEL UP ===
@@ -1551,13 +1564,13 @@
                             transform: translate(-50%, -50%);
                             font-size: 48px;
                             font-weight: bold;
-                            color: var(--gaming-yellow);
-                            text-shadow: 0 0 30px var(--gaming-yellow);
-                            animation: level-up 1.5s ease-out forwards;
+                            color: var(--clash-gold);
+                            text-shadow: 0 0 30px var(--clash-gold);
+                            animation: level-up-clash 1.5s ease-out forwards;
                             z-index: 9999;
                             pointer-events: none;
                         `;
-                        levelUp.textContent = `LEVEL UP! LVL ${this.userLevel}`;
+                        levelUp.textContent = `NIVEAU ${this.userLevel}!`;
                         document.body.appendChild(levelUp);
 
                         // Confettis dorés
@@ -1569,11 +1582,11 @@
                     // === POPUP ACHIEVEMENT ===
                     showAchievementPopup(icon, title) {
                         const popup = document.createElement('div');
-                        popup.className = 'achievement-popup';
+                        popup.className = 'achievement-popup-clash';
                         popup.innerHTML = `
                             <div class="text-6xl mb-3">${icon}</div>
-                            <h3 class="text-xl font-bold mb-2" style="color: var(--gaming-yellow);">ACHIEVEMENT DÉBLOQUÉ!</h3>
-                            <p class="text-sm" style="color: var(--gaming-green);">${title}</p>
+                            <h3 class="text-2xl font-bold mb-2 text-white">SUCCÈS DÉBLOQUÉ!</h3>
+                            <p class="text-lg text-blue-200">${title}</p>
                         `;
                         document.body.appendChild(popup);
 
@@ -1630,7 +1643,7 @@
 
                     // === HELPERS POUR LES ORIENTATIONS ===
                     getOrientationColor(o) { return ORIENTATION_DATA[o]?.color || '#808080'; },
-                    getOrientationClass(o) { return ORIENTATION_DATA[o]?.class || 'bg-gray-700 text-gray-200'; },
+                    getOrientationClass(o) { return ORIENTATION_DATA[o]?.class || 'bg-gray-700 text-gray-200 border-gray-600'; },
 
                     // ============================================================
                     // 🚀 INITIALISATION DE L'APPLICATION
