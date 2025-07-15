@@ -963,17 +963,12 @@
 
                             <!-- Stats joueur -->
                             <div class="flex items-center gap-1 sm:gap-4">
-                                <!-- Niveau -->
-                                <div class="level-badge">
-                                    <span class="text-xs">⭐</span>
+                                <!-- Niveau + Achievement fusionnés -->
+                                <div @click="showAchievementsModal = true"
+                                    class="level-badge cursor-pointer hover:scale-105 transition-transform"
+                                    :title="currentAchievement ? getAchievementTitle(currentAchievement) : 'Mes achievements'">
+                                    <span class="text-xs" x-text="currentAchievement || '⭐'"></span>
                                     <span>NIV <span x-text="userLevel"></span></span>
-                                </div>
-
-                                <!-- Achievement unique -->
-                                <div x-show="currentAchievement" @click="showAchievementsModal = true"
-                                    class="achievement-icon"
-                                    :title="currentAchievement ? getAchievementTitle(currentAchievement) : ''">
-                                    <span x-text="currentAchievement"></span>
                                 </div>
 
                                 <!-- Menu -->
