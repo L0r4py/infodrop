@@ -578,6 +578,168 @@
             background: #4A9EFF;
             border-radius: 4px;
         }
+
+        /* === MENU DROPDOWN CLASH OF CLANS === */
+        .clash-menu-dropdown {
+            background: linear-gradient(180deg, #1E3A5F 0%, #0D1929 100%);
+            border: 4px solid #1B4F91;
+            border-radius: 20px;
+            box-shadow:
+                0 8px 24px rgba(0, 0, 0, 0.5),
+                0 0 0 6px rgba(27, 79, 145, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            animation: menuDrop 0.3s ease-out;
+        }
+
+        @keyframes menuDrop {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-header {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.05) 100%);
+            padding: 12px 16px;
+            border-bottom: 2px solid #1B4F91;
+            text-align: center;
+            position: relative;
+        }
+
+        .menu-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+
+        .menu-items {
+            padding: 8px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin: 4px 0;
+            background: linear-gradient(180deg, rgba(46, 123, 230, 0.15) 0%, rgba(46, 123, 230, 0.05) 100%);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .menu-item:hover {
+            background: linear-gradient(180deg, rgba(46, 123, 230, 0.3) 0%, rgba(46, 123, 230, 0.15) 100%);
+            border-color: #2E7BE6;
+            transform: translateX(4px);
+            box-shadow:
+                0 4px 12px rgba(46, 123, 230, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item:hover::before {
+            left: 100%;
+        }
+
+        .menu-item-icon {
+            font-size: 24px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .menu-item-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .menu-item-title {
+            font-weight: 700;
+            color: white;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-item-desc {
+            font-size: 11px;
+            color: #87CEEB;
+            opacity: 0.8;
+        }
+
+        .menu-item-arrow {
+            font-size: 16px;
+            color: #4A9EFF;
+            transition: transform 0.2s ease;
+        }
+
+        .menu-item:hover .menu-item-arrow {
+            transform: translateX(4px);
+        }
+
+        .menu-separator {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #1B4F91, transparent);
+            margin: 12px 8px;
+        }
+
+        .menu-item-special {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%);
+        }
+
+        .menu-item-special:hover {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.15) 100%);
+            border-color: #FFD700;
+            box-shadow:
+                0 4px 12px rgba(255, 215, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-item-danger {
+            background: linear-gradient(180deg, rgba(244, 67, 54, 0.15) 0%, rgba(244, 67, 54, 0.05) 100%);
+        }
+
+        .menu-item-danger:hover {
+            background: linear-gradient(180deg, rgba(244, 67, 54, 0.3) 0%, rgba(244, 67, 54, 0.15) 100%);
+            border-color: #F44336;
+            box-shadow:
+                0 4px 12px rgba(244, 67, 54, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item-danger .menu-item-title {
+            color: #FF6B6B;
+        }
+
+        .menu-item-danger .menu-item-desc {
+            color: #FF9999;
+        }
     </style>
 
     <!-- === CONFIGURATION TAILWIND === -->
@@ -715,39 +877,72 @@
                                         </svg>
                                     </button>
                                     <div x-show="showMenu" x-transition
-                                        class="absolute top-full right-0 mt-2 w-56 clash-card shadow-xl z-50"
+                                        class="absolute top-full right-0 mt-3 w-64 clash-menu-dropdown z-50"
                                         @click.away="showMenu = false" style="display: none;">
-                                        <a href="/index.html"
-                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition border-b border-gray-700">
-                                            <span>📰</span>
-                                            <span class="font-medium">Flux 24H</span>
-                                        </a>
-                                        <a href="/infodrop360.html"
-                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition border-b border-gray-700">
-                                            <span>🌐</span>
-                                            <span class="font-medium">Analyses 360°</span>
-                                        </a>
-                                        <a @click.prevent="showShareModal = true" href="#"
-                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition border-b border-gray-700">
-                                            <span>🎁</span>
-                                            <span class="font-medium">Mon code d'invitation</span>
-                                        </a>
-                                        <a @click.prevent="showAboutModal = true; showMenu = false" href="#"
-                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition">
-                                            <span>ℹ️</span>
-                                            <span>À propos</span>
-                                        </a>
-                                        <a href="https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801" target="_blank"
-                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition">
-                                            <span>❤️</span>
-                                            <span>Soutenir</span>
-                                        </a>
-                                        <div class="border-t border-gray-700"></div>
-                                        <a @click="logout()" href="#"
-                                            class="flex items-center gap-3 px-4 py-3 hover:bg-red-900/20 transition text-red-400">
-                                            <span>🚪</span>
-                                            <span>Déconnexion</span>
-                                        </a>
+                                        <!-- Header du menu -->
+                                        <div class="menu-header">
+                                            <span class="text-xs font-bold text-yellow-300">⚡ MENU PRINCIPAL</span>
+                                        </div>
+
+                                        <!-- Items du menu -->
+                                        <div class="menu-items">
+                                            <a href="/index.html" class="menu-item">
+                                                <div class="menu-item-icon">📰</div>
+                                                <div class="menu-item-content">
+                                                    <span class="menu-item-title">Flux 24H</span>
+                                                    <span class="menu-item-desc">Actualités temps réel</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                            <a href="/infodrop360.html" class="menu-item">
+                                                <div class="menu-item-icon">🌐</div>
+                                                <div class="menu-item-content">
+                                                    <span class="menu-item-title">Analyses 360°</span>
+                                                    <span class="menu-item-desc">Vision complète</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                            <a @click.prevent="showShareModal = true" href="#" class="menu-item">
+                                                <div class="menu-item-icon">🎁</div>
+                                                <div class="menu-item-content">
+                                                    <span class="menu-item-title">Mon code d'invitation</span>
+                                                    <span class="menu-item-desc">Inviter des amis</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+
+                                            <div class="menu-separator"></div>
+
+                                            <a @click.prevent="showAboutModal = true; showMenu = false" href="#"
+                                                class="menu-item">
+                                                <div class="menu-item-icon">ℹ️</div>
+                                                <div class="menu-item-content">
+                                                    <span class="menu-item-title">À propos</span>
+                                                    <span class="menu-item-desc">En savoir plus</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                            <a href="https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801" target="_blank"
+                                                class="menu-item menu-item-special">
+                                                <div class="menu-item-icon">❤️</div>
+                                                <div class="menu-item-content">
+                                                    <span class="menu-item-title">Soutenir</span>
+                                                    <span class="menu-item-desc">Aidez-nous</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+
+                                            <div class="menu-separator"></div>
+
+                                            <a @click="logout()" href="#" class="menu-item menu-item-danger">
+                                                <div class="menu-item-icon">🚪</div>
+                                                <div class="menu-item-content">
+                                                    <span class="menu-item-title">Déconnexion</span>
+                                                    <span class="menu-item-desc">À bientôt !</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
