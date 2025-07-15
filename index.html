@@ -978,8 +978,14 @@
 
                                 <!-- Menu -->
                                 <div class="relative" x-data="{ showMenu: false }">
+                                    <!-- Overlay flou -->
+                                    <div x-show="showMenu" x-transition.opacity
+                                        class="fixed inset-0 backdrop-blur-sm bg-black/20 z-40"
+                                        @click="showMenu = false">
+                                    </div>
+
                                     <button @click="showMenu = !showMenu"
-                                        class="clash-btn p-2 w-10 h-10 flex items-center justify-center">
+                                        class="clash-btn p-2 w-10 h-10 flex items-center justify-center relative z-50">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -988,7 +994,7 @@
                                     </button>
                                     <div x-show="showMenu" x-transition
                                         class="absolute top-full right-0 mt-3 w-64 clash-menu-dropdown z-50"
-                                        @click.away="showMenu = false" style="display: none;">
+                                        style="display: none;">
                                         <!-- Header du menu -->
                                         <div class="menu-header">
                                             <span class="text-xs font-bold text-yellow-300">⚡ MENU PRINCIPAL</span>
