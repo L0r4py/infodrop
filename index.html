@@ -256,7 +256,7 @@
             background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
             border: 2px solid #1B4F91;
             border-radius: 10px;
-            padding: 16px 10px;
+            padding: 12px 8px;
             text-align: center;
             box-shadow:
                 0 2px 0 #0D47A1,
@@ -267,14 +267,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100px;
+            min-height: 70px;
         }
 
         @media (max-width: 640px) {
             .stat-card {
-                padding: 14px 8px;
+                padding: 6px 3px;
                 border-radius: 8px;
-                min-height: 90px;
+                min-height: 60px;
+                border-width: 1.5px;
+                box-shadow:
+                    0 1px 0 #0D47A1,
+                    0 2px 4px rgba(0, 0, 0, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .stat-card {
+                padding: 5px 2px;
+                min-height: 55px;
             }
         }
 
@@ -287,6 +299,13 @@
             height: 160%;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
             animation: pulse-stat 4s ease-in-out infinite;
+        }
+
+        @media (max-width: 640px) {
+            .stat-card::before {
+                animation: none;
+                opacity: 0.5;
+            }
         }
 
         @keyframes pulse-stat {
@@ -422,6 +441,20 @@
 
             50% {
                 transform: translateY(-10px);
+            }
+        }
+
+        @media (max-width: 640px) {
+            @keyframes float {
+
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+
+                50% {
+                    transform: translateY(-5px);
+                }
             }
         }
 
@@ -911,7 +944,16 @@
 
     <!-- === CONFIGURATION TAILWIND === -->
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: {} } }
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    screens: {
+                        'xs': '475px'
+                    }
+                }
+            }
+        }
     </script>
 </head>
 
@@ -1012,7 +1054,7 @@
                             </div>
 
                             <!-- Stats joueur -->
-                            <div class="flex items-center gap-1 sm:gap-4">
+                            <div class="flex items-center gap-1 sm:gap-3 md:gap-4">
                                 <!-- Niveau + Achievement fusionnés -->
                                 <div @click="showAchievementsModal = true"
                                     class="level-badge cursor-pointer hover:scale-105 transition-transform"
@@ -1182,55 +1224,64 @@
             <!-- ============================================================== -->
             <!-- 📊 CONTENU PRINCIPAL                                          -->
             <!-- ============================================================== -->
-            <main class="max-w-6xl mx-auto px-4 py-4 sm:py-6 flex-grow w-full">
+            <main class="max-w-6xl mx-auto px-2 sm:px-4 py-3 sm:py-4 md:py-6 flex-grow w-full">
 
                 <!-- ========================================================== -->
                 <!-- 📈 STATISTIQUES GLOBALES                                  -->
                 <!-- ========================================================== -->
-                <div class="flex gap-2 sm:gap-3 mb-3 sm:mb-4 overflow-x-auto">
-                    <div class="stat-card flex-1 min-w-[95px]">
+                <div class="grid grid-cols-5 gap-[3px] sm:gap-1 md:gap-2 mb-2 sm:mb-3 md:mb-4">
+                    <div class="stat-card">
                         <div class="relative z-10">
-                            <div class="text-lg sm:text-xl">📰</div>
-                            <div class="text-lg sm:text-xl font-bold text-white leading-tight"
+                            <div class="text-xs sm:text-sm md:text-base lg:text-lg">📰</div>
+                            <div class="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-white leading-tight"
                                 x-text="stats.total_articles">0</div>
-                            <div class="text-xs text-blue-200 leading-tight">Articles 24H</div>
+                            <div
+                                class="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs text-blue-200 leading-tight hidden xs:block">
+                                Articles 24H</div>
+                            <div class="text-[8px] text-blue-200 leading-tight xs:hidden">24H</div>
                         </div>
                     </div>
 
-                    <div class="stat-card flex-1 min-w-[95px]">
+                    <div class="stat-card">
                         <div class="relative z-10">
-                            <div class="text-lg sm:text-xl">📊</div>
-                            <div class="text-lg sm:text-xl font-bold text-white leading-tight"
+                            <div class="text-xs sm:text-sm md:text-base lg:text-lg">📊</div>
+                            <div class="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-white leading-tight"
                                 x-text="stats.total_sources">0</div>
-                            <div class="text-xs text-blue-200 leading-tight">Sources actives</div>
+                            <div class="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs text-blue-200 leading-tight">
+                                Sources</div>
                         </div>
                     </div>
 
-                    <div class="stat-card flex-1 min-w-[95px]">
+                    <div class="stat-card">
                         <div class="relative z-10">
-                            <div class="text-lg sm:text-xl float-animation">👥</div>
-                            <div class="text-lg sm:text-xl font-bold text-white leading-tight"
+                            <div class="text-xs sm:text-sm md:text-base lg:text-lg float-animation">👥</div>
+                            <div class="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-white leading-tight"
                                 x-text="connectedUsers + socialBoost">1</div>
-                            <div class="text-xs text-blue-200 leading-tight">En ligne</div>
+                            <div
+                                class="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs text-blue-200 leading-tight hidden xs:block">
+                                En ligne</div>
+                            <div class="text-[8px] text-blue-200 leading-tight xs:hidden">Live</div>
                         </div>
                     </div>
 
-                    <div class="stat-card flex-1 min-w-[95px]">
+                    <div class="stat-card">
                         <div class="relative z-10">
-                            <div class="text-lg sm:text-xl">🔥</div>
-                            <div class="text-lg sm:text-xl font-bold text-white leading-tight" x-text="readingStreak">0
-                            </div>
-                            <div class="text-xs text-blue-200 leading-tight">Jours de suite</div>
+                            <div class="text-xs sm:text-sm md:text-base lg:text-lg">🔥</div>
+                            <div class="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-white leading-tight"
+                                x-text="readingStreak">0</div>
+                            <div class="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs text-blue-200 leading-tight">
+                                Jours</div>
                         </div>
                     </div>
 
-                    <div class="stat-card flex-1 min-w-[95px] cursor-pointer hover:scale-105 transition-transform"
+                    <div class="stat-card cursor-pointer hover:scale-105 transition-transform"
                         @click="showReadArticles = !showReadArticles">
                         <div class="relative z-10">
-                            <div class="text-lg sm:text-xl">📚</div>
-                            <div class="text-lg sm:text-xl font-bold text-white leading-tight" x-text="totalReadCount">0
-                            </div>
-                            <div class="text-xs text-blue-200 leading-tight">Articles lus</div>
+                            <div class="text-xs sm:text-sm md:text-base lg:text-lg">📚</div>
+                            <div class="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-white leading-tight"
+                                x-text="totalReadCount">0</div>
+                            <div class="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs text-blue-200 leading-tight">
+                                Lus</div>
                         </div>
                     </div>
                 </div>
