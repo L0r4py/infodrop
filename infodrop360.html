@@ -308,9 +308,10 @@
                                 <a href="/apropos.html"
                                     class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">ℹ️
                                     À propos</a>
-                                <a :href="https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801" target="_blank"
-                                    class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-700">❤️
-                                    Soutenir</a>
+                                <a href="https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801" target="_blank"
+                                    class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-700">
+                                    ❤️ Soutenir
+                                </a>
 
                                 <!-- === DÉCONNEXION === -->
                                 <div class="border-t border-gray-700 my-1"></div>
@@ -433,12 +434,13 @@
                 <!-- ========================================================== -->
                 <!-- 👤 BARRE UTILISATEUR (PARRAINAGE SEULEMENT)               -->
                 <!-- ========================================================== -->
-                <div x-show="userInviteData.code || userInviteData.parrainEmail || userInviteData.filleulEmail" 
-                     x-transition class="bg-gray-800/95 border-b border-gray-700 px-4 py-3 flex items-center">
+                <div x-show="userInviteData.code || userInviteData.parrainEmail || userInviteData.filleulEmail"
+                    x-transition class="bg-gray-800/95 border-b border-gray-700 px-4 py-3 flex items-center">
                     <div class="max-w-4xl mx-auto w-full">
 
                         <!-- === CARTE PARRAINAGE PLIABLE === -->
-                        <div x-data="{ showParrainage: false }" class="bg-gray-800/50 border border-gray-700 rounded-lg my-1">
+                        <div x-data="{ showParrainage: false }"
+                            class="bg-gray-800/50 border border-gray-700 rounded-lg my-1">
 
                             <!-- Header pliable avec code CENTRÉ -->
                             <button @click="showParrainage = !showParrainage" class="w-full py-1.5 px-3">
@@ -514,19 +516,21 @@
                 <!-- === LISTE DES ANALYSES === -->
                 <div class="space-y-4">
 
-					<!-- SUJET 3 : Terres rares en Ukraine -->
+                    <!-- SUJET 3 : Terres rares en Ukraine -->
                     <a href="/analyses/les-terres-rares-en-ukraine.html" class="block topic-card p-6 fade-in">
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                             <div class="flex-grow">
                                 <div class="flex items-center gap-2 mb-2">
                                     <span class="text-sm text-yellow-400 font-semibold">Géopolitique & Ressources</span>
-                                    <span class="text-xs bg-green-600 text-green-100 px-2 py-0.5 rounded-full">NOUVEAU</span>
+                                    <span
+                                        class="text-xs bg-green-600 text-green-100 px-2 py-0.5 rounded-full">NOUVEAU</span>
                                 </div>
                                 <h3 class="text-lg font-medium text-white mb-2">
                                     Terres rares en Ukraine : le trésor de guerre caché du conflit
                                 </h3>
                                 <p class="text-sm text-gray-400 leading-relaxed">
-                                    Analyse de l'enjeu des ressources minérales critiques dans le conflit, un facteur souvent sous-estimé mais déterminant pour l'avenir.
+                                    Analyse de l'enjeu des ressources minérales critiques dans le conflit, un facteur
+                                    souvent sous-estimé mais déterminant pour l'avenir.
                                 </p>
                             </div>
                             <div
@@ -544,7 +548,8 @@
                             <div class="flex-grow">
                                 <div class="flex items-center gap-2 mb-2">
                                     <span class="text-sm text-blue-400 font-semibold">Crise Sociale</span>
-                                    <span class="text-xs bg-yellow-600 text-yellow-100 px-2 py-0.5 rounded-full">DÉMO</span>
+                                    <span
+                                        class="text-xs bg-yellow-600 text-yellow-100 px-2 py-0.5 rounded-full">DÉMO</span>
                                 </div>
                                 <h3 class="text-lg font-medium text-white mb-2">
                                     Crise de l'eau à Mayotte : la République oubliée ?
