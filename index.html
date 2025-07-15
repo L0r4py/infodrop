@@ -1512,10 +1512,15 @@
             <!-- ============================================================== -->
             <!-- 🏆 MODAL ACHIEVEMENTS                                         -->
             <!-- ============================================================== -->
-            <div x-show="showAchievementsModal" x-transition @click.away="showAchievementsModal = false"
+            <div x-show="showAchievementsModal" x-transition
+                @click="if($event.target === $el) showAchievementsModal = false"
                 class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
-                <div class="achievements-modal">
-                    <div class="achievements-header">
+                <div class="achievements-modal" @click.stop>
+                    <div class="achievements-header relative">
+                        <button @click="showAchievementsModal = false"
+                            class="absolute top-4 right-4 clash-btn clash-btn-red p-2 w-10 h-10 flex items-center justify-center">
+                            <span class="text-xl">✕</span>
+                        </button>
                         <h2 class="text-2xl font-bold text-white mb-2">🏆 Mes Achievements</h2>
                         <p class="text-sm text-yellow-200">Score de diversité : <span
                                 x-text="diversityScore || 0"></span>%</p>
