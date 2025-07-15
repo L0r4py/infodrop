@@ -256,7 +256,7 @@
             background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
             border: 2px solid #1B4F91;
             border-radius: 10px;
-            padding: 16px 10px;
+            padding: 12px 8px;
             text-align: center;
             box-shadow:
                 0 2px 0 #0D47A1,
@@ -267,14 +267,70 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100px;
+            min-height: 70px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 4px 0 #0D47A1,
+                0 6px 12px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-card.gold-card {
+            background: linear-gradient(180deg, #FFD700 0%, #F39C12 100%);
+            border-color: #D68910;
+            box-shadow:
+                0 2px 0 #D68910,
+                0 3px 6px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .stat-card.gold-card:hover {
+            box-shadow:
+                0 4px 0 #D68910,
+                0 6px 12px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         @media (max-width: 640px) {
             .stat-card {
-                padding: 14px 8px;
+                padding: 10px 6px;
                 border-radius: 8px;
-                min-height: 90px;
+                min-height: 60px;
+            }
+        }
+
+        /* === TOOLTIP STATS === */
+        .stat-tooltip {
+            position: fixed;
+            background: linear-gradient(180deg, #1E3A5F 0%, #0D1929 100%);
+            border: 3px solid #1B4F91;
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 9999;
+            pointer-events: none;
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.5),
+                0 0 0 3px rgba(27, 79, 145, 0.3);
+            animation: tooltipFadeIn 0.2s ease-out;
+        }
+
+        @keyframes tooltipFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
             }
         }
 
@@ -1188,49 +1244,47 @@
                 <!-- 📈 STATISTIQUES GLOBALES                                  -->
                 <!-- ========================================================== -->
                 <div class="flex gap-2 sm:gap-3 mb-3 sm:mb-4 overflow-x-auto">
-                    <div class="stat-card flex-1 min-w-[95px]">
+                    <div class="stat-card flex-1 min-w-[95px]"
+                        @click="showStatTooltip($event, 'Articles des dernières 24H')">
                         <div class="relative z-10">
                             <div class="text-lg sm:text-xl">📰</div>
                             <div class="text-lg sm:text-xl font-bold text-white leading-tight"
                                 x-text="stats.total_articles">0</div>
-                            <div class="text-xs text-blue-200 leading-tight">Articles 24H</div>
                         </div>
                     </div>
 
-                    <div class="stat-card flex-1 min-w-[95px]">
+                    <div class="stat-card flex-1 min-w-[95px]" @click="showStatTooltip($event, 'Sources actives')">
                         <div class="relative z-10">
                             <div class="text-lg sm:text-xl">📊</div>
                             <div class="text-lg sm:text-xl font-bold text-white leading-tight"
                                 x-text="stats.total_sources">0</div>
-                            <div class="text-xs text-blue-200 leading-tight">Sources actives</div>
                         </div>
                     </div>
 
-                    <div class="stat-card flex-1 min-w-[95px]">
+                    <div class="stat-card flex-1 min-w-[95px]"
+                        @click="showStatTooltip($event, 'Utilisateurs en ligne')">
                         <div class="relative z-10">
                             <div class="text-lg sm:text-xl float-animation">👥</div>
                             <div class="text-lg sm:text-xl font-bold text-white leading-tight"
                                 x-text="connectedUsers + socialBoost">1</div>
-                            <div class="text-xs text-blue-200 leading-tight">En ligne</div>
                         </div>
                     </div>
 
-                    <div class="stat-card flex-1 min-w-[95px]">
+                    <div class="stat-card flex-1 min-w-[95px]"
+                        @click="showStatTooltip($event, 'Jours de lecture consécutifs')">
                         <div class="relative z-10">
                             <div class="text-lg sm:text-xl">🔥</div>
                             <div class="text-lg sm:text-xl font-bold text-white leading-tight" x-text="readingStreak">0
                             </div>
-                            <div class="text-xs text-blue-200 leading-tight">Jours de suite</div>
                         </div>
                     </div>
 
-                    <div class="stat-card flex-1 min-w-[95px] cursor-pointer hover:scale-105 transition-transform"
+                    <div class="stat-card gold-card flex-1 min-w-[95px] hover:scale-105 transition-transform"
                         @click="showReadArticles = !showReadArticles">
                         <div class="relative z-10">
                             <div class="text-lg sm:text-xl">📚</div>
                             <div class="text-lg sm:text-xl font-bold text-white leading-tight" x-text="totalReadCount">0
                             </div>
-                            <div class="text-xs text-blue-200 leading-tight">Articles lus</div>
                         </div>
                     </div>
                 </div>
@@ -3356,6 +3410,55 @@
                     // === FORMATAGE DE L'HEURE ===
                     formatTime(t) {
                         return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                    },
+
+                    // === AFFICHER TOOLTIP STATISTIQUE ===
+                    showStatTooltip(event, text) {
+                        event.stopPropagation();
+
+                        // Supprimer tout tooltip existant
+                        const existingTooltip = document.querySelector('.stat-tooltip');
+                        if (existingTooltip) {
+                            existingTooltip.remove();
+                            return;
+                        }
+
+                        // Créer le nouveau tooltip
+                        const tooltip = document.createElement('div');
+                        tooltip.className = 'stat-tooltip';
+                        tooltip.textContent = text;
+                        document.body.appendChild(tooltip);
+
+                        // Positionner le tooltip
+                        const rect = event.currentTarget.getBoundingClientRect();
+                        const tooltipRect = tooltip.getBoundingClientRect();
+
+                        let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+                        let top = rect.top - tooltipRect.height - 10;
+
+                        // Ajuster si déborde de l'écran
+                        if (left < 10) left = 10;
+                        if (left + tooltipRect.width > window.innerWidth - 10) {
+                            left = window.innerWidth - tooltipRect.width - 10;
+                        }
+                        if (top < 10) {
+                            top = rect.bottom + 10;
+                        }
+
+                        tooltip.style.left = left + 'px';
+                        tooltip.style.top = top + 'px';
+
+                        // Auto-suppression après 2 secondes
+                        setTimeout(() => tooltip.remove(), 2000);
+
+                        // Supprimer au clic ailleurs
+                        const removeTooltip = () => {
+                            tooltip.remove();
+                            document.removeEventListener('click', removeTooltip);
+                        };
+                        setTimeout(() => {
+                            document.addEventListener('click', removeTooltip);
+                        }, 100);
                     },
 
                     // === COPIE DU MESSAGE D'INVITATION COMPLET ===
