@@ -320,6 +320,7 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.3);
             position: relative;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         @media (max-width: 640px) {
@@ -754,6 +755,108 @@
         .menu-item-danger .menu-item-desc {
             color: #FF9999;
         }
+
+        /* === MODAL ACHIEVEMENTS === */
+        .achievements-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 4px solid var(--clash-gold);
+            border-radius: 20px;
+            padding: 0;
+            z-index: 9999;
+            max-width: 90%;
+            width: 500px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 5px #D68910,
+                0 10px 40px rgba(0, 0, 0, 0.7),
+                0 0 100px rgba(255, 215, 0, 0.2);
+        }
+
+        .achievements-header {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.1) 100%);
+            padding: 20px;
+            border-bottom: 3px solid #D68910;
+            text-align: center;
+            position: relative;
+        }
+
+        .achievements-content {
+            padding: 20px;
+            max-height: calc(90vh - 100px);
+            overflow-y: auto;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: linear-gradient(180deg, rgba(46, 123, 230, 0.1) 0%, rgba(46, 123, 230, 0.05) 100%);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            transition: all 0.2s;
+        }
+
+        .achievement-item.unlocked {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.1) 100%);
+            border-color: #D68910;
+        }
+
+        .achievement-item.locked {
+            opacity: 0.6;
+            filter: grayscale(0.5);
+        }
+
+        .achievement-icon-modal {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(180deg, #FFD700 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .achievement-item.locked .achievement-icon-modal {
+            background: linear-gradient(180deg, #666 0%, #444 100%);
+            border-color: #333;
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .achievement-desc {
+            font-size: 13px;
+            color: #87CEEB;
+            margin-bottom: 4px;
+        }
+
+        .achievement-progress {
+            font-size: 12px;
+            color: #FFD700;
+            font-weight: 600;
+        }
+
+        .achievement-item.locked .achievement-progress {
+            color: #999;
+        }
     </style>
 
     <!-- === CONFIGURATION TAILWIND === -->
@@ -859,27 +962,18 @@
                             </div>
 
                             <!-- Stats joueur -->
-                            <div class="flex items-center gap-1 sm:gap-6">
+                            <div class="flex items-center gap-1 sm:gap-4">
                                 <!-- Niveau -->
                                 <div class="level-badge">
                                     <span class="text-xs">⭐</span>
                                     <span>NIV <span x-text="userLevel"></span></span>
                                 </div>
 
-                                <!-- Achievements -->
-                                <div class="flex items-center gap-0.5 sm:gap-1">
-                                    <template
-                                        x-for="achievement in unlockedAchievements.slice(0, window.innerWidth < 640 ? 2 : 3)"
-                                        :key="achievement">
-                                        <div class="achievement-icon" :title="getAchievementTitle(achievement)">
-                                            <span x-text="achievement"></span>
-                                        </div>
-                                    </template>
-                                    <span x-show="unlockedAchievements.length > (window.innerWidth < 640 ? 2 : 3)"
-                                        class="text-[10px] sm:text-xs bg-gray-800 px-1 sm:px-2 py-0.5 sm:py-1 rounded-full text-gray-400">
-                                        +<span
-                                            x-text="unlockedAchievements.length - (window.innerWidth < 640 ? 2 : 3)"></span>
-                                    </span>
+                                <!-- Achievement unique -->
+                                <div x-show="currentAchievement" @click="showAchievementsModal = true"
+                                    class="achievement-icon"
+                                    :title="currentAchievement ? getAchievementTitle(currentAchievement) : ''">
+                                    <span x-text="currentAchievement"></span>
                                 </div>
 
                                 <!-- Menu -->
@@ -1416,6 +1510,64 @@
             </div>
 
             <!-- ============================================================== -->
+            <!-- 🏆 MODAL ACHIEVEMENTS                                         -->
+            <!-- ============================================================== -->
+            <div x-show="showAchievementsModal" x-transition @click.away="showAchievementsModal = false"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+                <div class="achievements-modal">
+                    <div class="achievements-header">
+                        <h2 class="text-2xl font-bold text-white mb-2">🏆 Mes Achievements</h2>
+                        <p class="text-sm text-yellow-200">Score de diversité : <span
+                                x-text="diversityScore || 0"></span>%</p>
+                    </div>
+                    <div class="achievements-content modal-content">
+                        <!-- Achievements débloqués -->
+                        <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                            <span>✅</span>
+                            <span>Débloqués</span>
+                        </h3>
+                        <template x-for="achievement in getAllAchievementsData().filter(a => a.unlocked)"
+                            :key="achievement.id">
+                            <div class="achievement-item unlocked">
+                                <div class="achievement-icon-modal">
+                                    <span x-text="achievement.icon"></span>
+                                </div>
+                                <div class="achievement-info">
+                                    <div class="achievement-title" x-text="achievement.title"></div>
+                                    <div class="achievement-desc" x-text="achievement.description"></div>
+                                    <div class="achievement-progress">✓ Complété</div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Achievements verrouillés -->
+                        <h3 class="text-lg font-bold text-white mb-3 mt-6 flex items-center gap-2">
+                            <span>🔒</span>
+                            <span>À débloquer</span>
+                        </h3>
+                        <template x-for="achievement in getAllAchievementsData().filter(a => !a.unlocked)"
+                            :key="achievement.id">
+                            <div class="achievement-item locked">
+                                <div class="achievement-icon-modal">
+                                    <span>🔒</span>
+                                </div>
+                                <div class="achievement-info">
+                                    <div class="achievement-title" x-text="achievement.title"></div>
+                                    <div class="achievement-desc" x-text="achievement.description"></div>
+                                    <div class="achievement-progress" x-text="achievement.progress"></div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="p-4 text-center border-t-2 border-gray-700">
+                        <button @click="showAchievementsModal = false" class="clash-btn px-6 py-2 text-white">
+                            Fermer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
             <!-- 🎭 MODAL D'ÉDITION                                            -->
             <!-- ============================================================== -->
             <div x-show="showEditPanel" x-transition
@@ -1715,6 +1867,20 @@
                     'neutre': { class: 'bg-green-700 text-green-100 border-green-800', color: '#16a34a' }
                 };
 
+                // === HIÉRARCHIE DES ACHIEVEMENTS ===
+                const ACHIEVEMENTS_HIERARCHY = [
+                    '🚪', // Connexion
+                    '🎯', // Premier article
+                    '📚', // 10 articles
+                    '🏆', // 100 articles
+                    '🔥', // Streak 7 jours
+                    '🌟', // Streak 30 jours
+                    '⭐', // Niveau 5
+                    '💎', // Niveau 10
+                    '🌈', // Toutes orientations
+                    '👑'  // Niveau 25
+                ];
+
                 return {
                     // ============================================================
                     // 📊 ÉTAT DE L'APPLICATION - VARIABLES RÉACTIVES
@@ -1794,6 +1960,8 @@
                     readingStreak: 0,
                     unlockedAchievements: [],
                     lastReadDate: null,
+                    currentAchievement: null,
+                    showAchievementsModal: false,
 
                     // === RÉINITIALISATION DE LA RECHERCHE SUR CHANGEMENT DE FILTRE ===
                     toggleFilter(filter) {
@@ -1856,8 +2024,26 @@
                             this.lastReadDate = data.lastReadDate || null;
                         }
 
+                        // Débloquer achievement de connexion
+                        if (!this.unlockedAchievements.includes('🚪')) {
+                            this.unlockAchievement('🚪', 'Bienvenue dans le club!');
+                        }
+
                         this.updateXPToNextLevel();
                         this.checkDailyStreak();
+                        this.updateCurrentAchievement();
+                    },
+
+                    // === MISE À JOUR DU BADGE ACTUEL ===
+                    updateCurrentAchievement() {
+                        // Trouver le badge de plus haut niveau débloqué
+                        for (let i = ACHIEVEMENTS_HIERARCHY.length - 1; i >= 0; i--) {
+                            if (this.unlockedAchievements.includes(ACHIEVEMENTS_HIERARCHY[i])) {
+                                this.currentAchievement = ACHIEVEMENTS_HIERARCHY[i];
+                                return;
+                            }
+                        }
+                        this.currentAchievement = null;
                     },
 
                     // === CALCUL XP POUR NIVEAU SUIVANT ===
@@ -1951,6 +2137,7 @@
                         if (!this.unlockedAchievements.includes(icon)) {
                             this.unlockedAchievements.push(icon);
                             this.showAchievementPopup(icon, title);
+                            this.updateCurrentAchievement();
                             this.saveGamingData();
                         }
                     },
@@ -1958,6 +2145,7 @@
                     // === OBTENIR LE TITRE D'UN ACHIEVEMENT ===
                     getAchievementTitle(icon) {
                         const achievements = {
+                            '🚪': 'Bienvenue dans le club',
                             '🎯': 'Premier article lu',
                             '📚': '10 articles lus',
                             '🏆': '100 articles lus',
@@ -1969,6 +2157,99 @@
                             '🌈': 'Explorateur - Toutes les orientations lues'
                         };
                         return achievements[icon] || 'Achievement mystère';
+                    },
+
+                    // === OBTENIR TOUTES LES DONNÉES D'ACHIEVEMENTS ===
+                    getAllAchievementsData() {
+                        const achievementsData = [
+                            {
+                                id: '🚪',
+                                icon: '🚪',
+                                title: 'Bienvenue dans le club',
+                                description: 'Se connecter à INFODROP',
+                                unlocked: this.unlockedAchievements.includes('🚪'),
+                                progress: '✓ Complété'
+                            },
+                            {
+                                id: '🎯',
+                                icon: '🎯',
+                                title: 'Premier pas',
+                                description: 'Lire votre premier article',
+                                unlocked: this.unlockedAchievements.includes('🎯'),
+                                progress: this.totalReadCount === 0 ? '0/1 article' : '✓ Complété'
+                            },
+                            {
+                                id: '📚',
+                                icon: '📚',
+                                title: 'Lecteur régulier',
+                                description: 'Lire 10 articles',
+                                unlocked: this.unlockedAchievements.includes('📚'),
+                                progress: this.totalReadCount < 10 ? `${this.totalReadCount}/10 articles` : '✓ Complété'
+                            },
+                            {
+                                id: '🏆',
+                                icon: '🏆',
+                                title: 'Centurion de l\'info',
+                                description: 'Lire 100 articles',
+                                unlocked: this.unlockedAchievements.includes('🏆'),
+                                progress: this.totalReadCount < 100 ? `${this.totalReadCount}/100 articles` : '✓ Complété'
+                            },
+                            {
+                                id: '🔥',
+                                icon: '🔥',
+                                title: 'Semaine de feu',
+                                description: 'Maintenir un streak de 7 jours',
+                                unlocked: this.unlockedAchievements.includes('🔥'),
+                                progress: this.readingStreak < 7 ? `${this.readingStreak}/7 jours` : '✓ Complété'
+                            },
+                            {
+                                id: '🌟',
+                                icon: '🌟',
+                                title: 'Mois légendaire',
+                                description: 'Maintenir un streak de 30 jours',
+                                unlocked: this.unlockedAchievements.includes('🌟'),
+                                progress: this.readingStreak < 30 ? `${this.readingStreak}/30 jours` : '✓ Complété'
+                            },
+                            {
+                                id: '⭐',
+                                icon: '⭐',
+                                title: 'Apprenti informé',
+                                description: 'Atteindre le niveau 5',
+                                unlocked: this.unlockedAchievements.includes('⭐'),
+                                progress: this.userLevel < 5 ? `Niveau ${this.userLevel}/5` : '✓ Complété'
+                            },
+                            {
+                                id: '💎',
+                                icon: '💎',
+                                title: 'Expert de l\'actu',
+                                description: 'Atteindre le niveau 10',
+                                unlocked: this.unlockedAchievements.includes('💎'),
+                                progress: this.userLevel < 10 ? `Niveau ${this.userLevel}/10` : '✓ Complété'
+                            },
+                            {
+                                id: '🌈',
+                                icon: '🌈',
+                                title: 'Esprit ouvert',
+                                description: 'Lire des articles de toutes les orientations (Score diversité 100%)',
+                                unlocked: this.unlockedAchievements.includes('🌈'),
+                                progress: this.diversityScore < 100 ? `Score: ${this.diversityScore || 0}%` : '✓ Complété'
+                            },
+                            {
+                                id: '👑',
+                                icon: '👑',
+                                title: 'Légende d\'INFODROP',
+                                description: 'Atteindre le niveau 25',
+                                unlocked: this.unlockedAchievements.includes('👑'),
+                                progress: this.userLevel < 25 ? `Niveau ${this.userLevel}/25` : '✓ Complété'
+                            }
+                        ];
+
+                        // Trier : débloqués d'abord, puis par ordre de hiérarchie
+                        return achievementsData.sort((a, b) => {
+                            if (a.unlocked && !b.unlocked) return -1;
+                            if (!a.unlocked && b.unlocked) return 1;
+                            return ACHIEVEMENTS_HIERARCHY.indexOf(a.id) - ACHIEVEMENTS_HIERARCHY.indexOf(b.id);
+                        });
                     },
 
                     // === ANIMATION GAIN XP ===
@@ -2768,8 +3049,8 @@
                                     this.unlockAchievement('🏆', '100 articles lus!');
                                 }
 
-                                // Achievement diversité
-                                if (this.readOrientations.length === 9) {
+                                // Achievement diversité - Vérifier si toutes les orientations ont été lues
+                                if (this.diversityScore === 100 && !this.unlockedAchievements.includes('🌈')) {
                                     this.unlockAchievement('🌈', 'Explorateur - Toutes les orientations lues!');
                                 }
                             }
