@@ -563,6 +563,21 @@
                 font-size: 0.95rem;
             }
         }
+
+        /* === MODAL SCROLL === */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: #1a1a2e;
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #4A9EFF;
+            border-radius: 4px;
+        }
     </style>
 
     <!-- === CONFIGURATION TAILWIND === -->
@@ -717,7 +732,7 @@
                                             <span>🎁</span>
                                             <span class="font-medium">Mon code d'invitation</span>
                                         </a>
-                                        <a href="/apropos.html"
+                                        <a @click.prevent="showAboutModal = true; showMenu = false" href="#"
                                             class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition">
                                             <span>ℹ️</span>
                                             <span>À propos</span>
@@ -1241,6 +1256,164 @@
             </div>
 
             <!-- ============================================================== -->
+            <!-- ℹ️ MODAL À PROPOS                                               -->
+            <!-- ============================================================== -->
+            <div x-show="showAboutModal" x-transition @click="if($event.target === $el) showAboutModal = false"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 overflow-y-auto"
+                style="display: none;">
+                <div class="clash-card w-full max-w-3xl max-h-[90vh] overflow-y-auto modal-content animate-bounce-in"
+                    style="animation: achievement-appear 0.5s ease-out;">
+                    <!-- Header du modal -->
+                    <div
+                        class="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 p-6 -m-[3px] rounded-t-[17px] border-b-4 border-blue-800">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-3xl font-bold text-white flex items-center gap-3">
+                                <span class="text-4xl">📰</span>
+                                À propos d'INFODROP
+                            </h2>
+                            <button @click="showAboutModal = false"
+                                class="clash-btn clash-btn-red p-2 w-10 h-10 flex items-center justify-center">
+                                <span class="text-xl">✕</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Contenu du modal -->
+                    <div class="p-6 space-y-6">
+                        <!-- Version -->
+                        <div class="text-center">
+                            <span class="inline-block level-badge">
+                                <span>🚀</span>
+                                Version 3.2.0
+                            </span>
+                        </div>
+
+                        <!-- Le Projet -->
+                        <div class="clash-card p-4">
+                            <h3 class="text-2xl font-bold text-white mb-3 flex items-center gap-2">
+                                <span class="text-yellow-400">⚡</span>
+                                Le Projet
+                            </h3>
+                            <p class="text-gray-300 leading-relaxed">
+                                INFODROP est un club privé d'actualités gamifiées qui transforme la consommation
+                                d'information en mission d'intelligence.
+                                Notre objectif : vous aider à sortir de votre bulle de filtre et développer une vision
+                                équilibrée de l'actualité.
+                            </p>
+                        </div>
+
+                        <!-- Comment ça marche -->
+                        <div class="clash-card p-4">
+                            <h3 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-green-400">🎮</span>
+                                Comment ça marche ?
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-blue-400 text-xl">📰</span>
+                                    <span class="text-gray-300">Lisez des articles de sources variées pour gagner de
+                                        l'XP</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-green-400 text-xl">🎯</span>
+                                    <span class="text-gray-300">Diversifiez vos lectures pour améliorer votre Score de
+                                        Diversité</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-yellow-400 text-xl">⭐</span>
+                                    <span class="text-gray-300">Montez en niveau et débloquez des achievements</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-purple-400 text-xl">🏆</span>
+                                    <span class="text-gray-300">Maintenez votre streak de lecture quotidien</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-red-400 text-xl">🌐</span>
+                                    <span class="text-gray-300">Analysez les sujets sous tous les angles avec INFODROP
+                                        360°</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Le Système de Parrainage -->
+                        <div class="clash-card p-4">
+                            <h3 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-purple-400">🎁</span>
+                                Le Système de Parrainage
+                            </h3>
+                            <p class="text-gray-300 mb-4">
+                                INFODROP fonctionne sur invitation uniquement. Chaque membre reçoit un code d'invitation
+                                unique à partager.
+                            </p>
+                            <div class="bg-green-900/30 border-2 border-green-600 rounded-lg p-4">
+                                <p class="text-green-300 font-bold text-center">
+                                    Un code = Un filleul = Une communauté de qualité
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Les Fonctionnalités -->
+                        <div class="clash-card p-4">
+                            <h3 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-blue-400">✨</span>
+                                Les Fonctionnalités
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div class="stat-card">
+                                    <div class="relative z-10 text-center">
+                                        <div class="text-2xl mb-2">📰</div>
+                                        <h4 class="font-bold text-white mb-1">Flux 24H</h4>
+                                        <p class="text-xs text-blue-200">Multi-sources temps réel</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="relative z-10 text-center">
+                                        <div class="text-2xl mb-2">🌍</div>
+                                        <h4 class="font-bold text-white mb-1">360°</h4>
+                                        <p class="text-xs text-blue-200">Analyses multi-angles</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="relative z-10 text-center">
+                                        <div class="text-2xl mb-2">📚</div>
+                                        <h4 class="font-bold text-white mb-1">Articles Lus</h4>
+                                        <p class="text-xs text-blue-200">Historique synchronisé</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="relative z-10 text-center">
+                                        <div class="text-2xl mb-2">🎮</div>
+                                        <h4 class="font-bold text-white mb-1">Gamification</h4>
+                                        <p class="text-xs text-blue-200">XP & achievements</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- L'Équipe -->
+                        <div class="clash-card p-4">
+                            <h3 class="text-2xl font-bold text-white mb-3 flex items-center gap-2">
+                                <span class="text-red-400">👥</span>
+                                L'Équipe
+                            </h3>
+                            <p class="text-gray-300 text-center">
+                                Un projet 3C - By Emile Marclin & L0r4.py [AI]
+                            </p>
+                        </div>
+
+                        <!-- CTA -->
+                        <div class="text-center space-y-4">
+                            <p class="text-gray-400">Des questions ? Des suggestions ?</p>
+                            <a href="mailto:l0r4.py@gmail.com"
+                                class="clash-btn px-6 py-3 inline-block text-white font-bold">
+                                📧 Contactez-nous
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
             <!-- 🦶 FOOTER                                                     -->
             <!-- ============================================================== -->
             <footer class="text-center py-6 sm:py-8 text-xs text-gray-500 mt-auto border-t-2 border-gray-800">
@@ -1434,6 +1607,9 @@
                     // === GESTION DES ARTICLES LUS ===
                     showReadArticles: false,
                     hideReadFromMain: true,
+
+                    // === MODAL À PROPOS ===
+                    showAboutModal: false,
 
                     // === HELPER POUR L'AFFICHAGE SÉCURISÉ DES ORIENTATIONS ===
                     getOrientationDisplayName(orientation) {
