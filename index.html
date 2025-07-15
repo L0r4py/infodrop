@@ -256,7 +256,7 @@
             background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
             border: 2px solid #1B4F91;
             border-radius: 10px;
-            padding: 12px 8px;
+            padding: 10px 6px;
             text-align: center;
             box-shadow:
                 0 2px 0 #0D47A1,
@@ -267,7 +267,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 70px;
+            min-height: 60px;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -298,9 +298,9 @@
 
         @media (max-width: 640px) {
             .stat-card {
-                padding: 10px 6px;
+                padding: 8px 4px;
                 border-radius: 8px;
-                min-height: 60px;
+                min-height: 50px;
             }
         }
 
@@ -1244,37 +1244,39 @@
                 <!-- 📈 STATISTIQUES GLOBALES                                  -->
                 <!-- ========================================================== -->
                 <div class="flex gap-2 sm:gap-3 mb-3 sm:mb-4 overflow-x-auto">
-                    <div class="stat-card flex-1 min-w-[95px]"
+                    <div class="stat-card flex-1 min-w-[85px]"
                         @click="showStatTooltip($event, 'Articles des dernières 24H')">
                         <div class="relative z-10">
-                            <div class="text-lg sm:text-xl">📰</div>
-                            <div class="text-lg sm:text-xl font-bold text-white leading-tight"
+                            <div class="text-base sm:text-lg">📰</div>
+                            <div class="text-base sm:text-lg font-bold text-white leading-tight"
                                 x-text="stats.total_articles">0</div>
                         </div>
                     </div>
 
-                    <div class="stat-card flex-1 min-w-[95px]" @click="showStatTooltip($event, 'Sources actives')">
+                    <div class="stat-card flex-1 min-w-[85px]" @click="showStatTooltip($event, 'Sources actives')">
                         <div class="relative z-10">
-                            <div class="text-lg sm:text-xl">📊</div>
-                            <div class="text-lg sm:text-xl font-bold text-white leading-tight"
+                            <div class="text-base sm:text-lg">📊</div>
+                            <div class="text-base sm:text-lg font-bold text-white leading-tight"
                                 x-text="stats.total_sources">0</div>
                         </div>
                     </div>
 
-                    <div class="stat-card flex-1 min-w-[95px]"
+                    <div class="stat-card flex-1 min-w-[85px]"
                         @click="showStatTooltip($event, 'Jours de lecture consécutifs')">
                         <div class="relative z-10">
-                            <div class="text-lg sm:text-xl">🔥</div>
-                            <div class="text-lg sm:text-xl font-bold text-white leading-tight" x-text="readingStreak">0
+                            <div class="text-base sm:text-lg">🔥</div>
+                            <div class="text-base sm:text-lg font-bold text-white leading-tight" x-text="readingStreak">
+                                0
                             </div>
                         </div>
                     </div>
 
-                    <div class="stat-card gold-card flex-1 min-w-[95px] hover:scale-105 transition-transform"
+                    <div class="stat-card gold-card flex-1 min-w-[85px] hover:scale-105 transition-transform"
                         @click="showReadArticles = !showReadArticles">
                         <div class="relative z-10">
-                            <div class="text-lg sm:text-xl">📚</div>
-                            <div class="text-lg sm:text-xl font-bold text-white leading-tight" x-text="totalReadCount">0
+                            <div class="text-base sm:text-lg">📚</div>
+                            <div class="text-base sm:text-lg font-bold text-white leading-tight"
+                                x-text="totalReadCount">0
                             </div>
                         </div>
                     </div>
@@ -3411,7 +3413,6 @@
                         const existingTooltip = document.querySelector('.stat-tooltip');
                         if (existingTooltip) {
                             existingTooltip.remove();
-                            return;
                         }
 
                         // Créer le nouveau tooltip
@@ -3440,12 +3441,18 @@
                         tooltip.style.top = top + 'px';
 
                         // Auto-suppression après 2 secondes
-                        setTimeout(() => tooltip.remove(), 2000);
+                        const autoRemoveTimeout = setTimeout(() => tooltip.remove(), 2000);
+
+                        // Stocker le timeout sur le tooltip pour pouvoir l'annuler
+                        tooltip.dataset.timeout = autoRemoveTimeout;
 
                         // Supprimer au clic ailleurs
-                        const removeTooltip = () => {
-                            tooltip.remove();
-                            document.removeEventListener('click', removeTooltip);
+                        const removeTooltip = (e) => {
+                            if (!tooltip.contains(e.target) && !event.currentTarget.contains(e.target)) {
+                                clearTimeout(autoRemoveTimeout);
+                                tooltip.remove();
+                                document.removeEventListener('click', removeTooltip);
+                            }
                         };
                         setTimeout(() => {
                             document.addEventListener('click', removeTooltip);
