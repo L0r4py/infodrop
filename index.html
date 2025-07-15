@@ -322,6 +322,20 @@
             transition: all 0.2s;
         }
 
+        @media (max-width: 640px) {
+            .achievement-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+                border-width: 2px;
+                border-radius: 8px;
+                box-shadow:
+                    0 2px 0 #D68910,
+                    0 3px 6px rgba(0, 0, 0, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            }
+        }
+
         .achievement-icon:hover {
             transform: translateY(-2px) scale(1.1);
             box-shadow:
@@ -845,7 +859,7 @@
                             </div>
 
                             <!-- Stats joueur -->
-                            <div class="flex items-center gap-2 sm:gap-6">
+                            <div class="flex items-center gap-1 sm:gap-6">
                                 <!-- Niveau -->
                                 <div class="level-badge">
                                     <span class="text-xs">⭐</span>
@@ -853,16 +867,18 @@
                                 </div>
 
                                 <!-- Achievements -->
-                                <div class="hidden md:flex items-center gap-1">
-                                    <template x-for="achievement in unlockedAchievements.slice(0, 3)"
+                                <div class="flex items-center gap-0.5 sm:gap-1">
+                                    <template
+                                        x-for="achievement in unlockedAchievements.slice(0, window.innerWidth < 640 ? 2 : 3)"
                                         :key="achievement">
                                         <div class="achievement-icon" :title="getAchievementTitle(achievement)">
                                             <span x-text="achievement"></span>
                                         </div>
                                     </template>
-                                    <span x-show="unlockedAchievements.length > 3"
-                                        class="text-xs bg-gray-800 px-2 py-1 rounded-full text-gray-400">
-                                        +<span x-text="unlockedAchievements.length - 3"></span>
+                                    <span x-show="unlockedAchievements.length > (window.innerWidth < 640 ? 2 : 3)"
+                                        class="text-[10px] sm:text-xs bg-gray-800 px-1 sm:px-2 py-0.5 sm:py-1 rounded-full text-gray-400">
+                                        +<span
+                                            x-text="unlockedAchievements.length - (window.innerWidth < 640 ? 2 : 3)"></span>
                                     </span>
                                 </div>
 
