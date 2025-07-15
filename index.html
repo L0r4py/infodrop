@@ -256,7 +256,7 @@
             background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
             border: 2px solid #1B4F91;
             border-radius: 10px;
-            padding: 10px 6px;
+            padding: 8px 4px;
             text-align: center;
             box-shadow:
                 0 2px 0 #0D47A1,
@@ -267,7 +267,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 60px;
+            min-height: 50px;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -298,9 +298,9 @@
 
         @media (max-width: 640px) {
             .stat-card {
-                padding: 8px 4px;
+                padding: 6px 3px;
                 border-radius: 8px;
-                min-height: 50px;
+                min-height: 45px;
             }
         }
 
@@ -1243,39 +1243,39 @@
                 <!-- ========================================================== -->
                 <!-- 📈 STATISTIQUES GLOBALES                                  -->
                 <!-- ========================================================== -->
-                <div class="flex gap-2 sm:gap-3 mb-3 sm:mb-4 overflow-x-auto">
-                    <div class="stat-card flex-1 min-w-[85px]"
+                <div class="flex gap-1 sm:gap-2 mb-3 sm:mb-4 overflow-x-auto">
+                    <div class="stat-card flex-1 min-w-[75px]"
                         @click="showStatTooltip($event, 'Articles des dernières 24H')">
                         <div class="relative z-10">
-                            <div class="text-base sm:text-lg">📰</div>
-                            <div class="text-base sm:text-lg font-bold text-white leading-tight"
+                            <div class="text-sm sm:text-base">📰</div>
+                            <div class="text-sm sm:text-base font-bold text-white leading-tight"
                                 x-text="stats.total_articles">0</div>
                         </div>
                     </div>
 
-                    <div class="stat-card flex-1 min-w-[85px]" @click="showStatTooltip($event, 'Sources actives')">
+                    <div class="stat-card flex-1 min-w-[75px]" @click="showStatTooltip($event, 'Sources actives')">
                         <div class="relative z-10">
-                            <div class="text-base sm:text-lg">📊</div>
-                            <div class="text-base sm:text-lg font-bold text-white leading-tight"
+                            <div class="text-sm sm:text-base">📊</div>
+                            <div class="text-sm sm:text-base font-bold text-white leading-tight"
                                 x-text="stats.total_sources">0</div>
                         </div>
                     </div>
 
-                    <div class="stat-card flex-1 min-w-[85px]"
+                    <div class="stat-card flex-1 min-w-[75px]"
                         @click="showStatTooltip($event, 'Jours de lecture consécutifs')">
                         <div class="relative z-10">
-                            <div class="text-base sm:text-lg">🔥</div>
-                            <div class="text-base sm:text-lg font-bold text-white leading-tight" x-text="readingStreak">
+                            <div class="text-sm sm:text-base">🔥</div>
+                            <div class="text-sm sm:text-base font-bold text-white leading-tight" x-text="readingStreak">
                                 0
                             </div>
                         </div>
                     </div>
 
-                    <div class="stat-card gold-card flex-1 min-w-[85px] hover:scale-105 transition-transform"
+                    <div class="stat-card gold-card flex-1 min-w-[75px] hover:scale-105 transition-transform"
                         @click="showReadArticles = !showReadArticles">
                         <div class="relative z-10">
-                            <div class="text-base sm:text-lg">📚</div>
-                            <div class="text-base sm:text-lg font-bold text-white leading-tight"
+                            <div class="text-sm sm:text-base">📚</div>
+                            <div class="text-sm sm:text-base font-bold text-white leading-tight"
                                 x-text="totalReadCount">0
                             </div>
                         </div>
