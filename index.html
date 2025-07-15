@@ -707,99 +707,65 @@
                                 <!-- Menu -->
                                 <div class="relative" x-data="{ showMenu: false }">
                                     <button @click="showMenu = !showMenu"
-                                        class="clash-btn clash-btn-menu p-2 w-10 h-10 flex items-center justify-center relative overflow-hidden"
-                                        :class="{ 'menu-active': showMenu }">
-                                        <div class="menu-icon-wrapper">
-                                            <span class="menu-bar menu-bar-1"></span>
-                                            <span class="menu-bar menu-bar-2"></span>
-                                            <span class="menu-bar menu-bar-3"></span>
-                                        </div>
+                                        class="clash-btn p-2 w-10 h-10 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M4 6h16M4 12h16M4 18h16" />
+                                        </svg>
                                     </button>
                                     <div x-show="showMenu" x-transition
-                                        class="absolute top-full right-0 mt-3 w-64 clash-menu-dropdown z-50"
+                                        class="absolute top-full right-0 mt-2 w-56 clash-card shadow-xl z-50"
                                         @click.away="showMenu = false" style="display: none;">
-                                        <!-- Header du menu -->
-                                        <div class="menu-header">
-                                            <span class="text-xs font-bold text-yellow-300">⚡ MENU PRINCIPAL</span>
-                                        </div>
-
-                                        <!-- Items du menu -->
-                                        <div class="menu-items">
-                                            <a href="/index.html" class="menu-item">
-                                                <div class="menu-item-icon">📰</div>
-                                                <div class="menu-item-content">
-                                                    <span class="menu-item-title">Flux 24H</span>
-                                                    <span class="menu-item-desc">Actualités temps réel</span>
-                                                </div>
-                                                <div class="menu-item-arrow">→</div>
-                                            </a>
-                                            <a href="/infodrop360.html" class="menu-item">
-                                                <div class="menu-item-icon">🌐</div>
-                                                <div class="menu-item-content">
-                                                    <span class="menu-item-title">Analyses 360°</span>
-                                                    <span class="menu-item-desc">Vision complète</span>
-                                                </div>
-                                                <div class="menu-item-arrow">→</div>
-                                            </a>
-                                            <a @click.prevent="showShareModal = true" href="#" class="menu-item">
-                                                <div class="menu-item-icon">🎁</div>
-                                                <div class="menu-item-content">
-                                                    <span class="menu-item-title">Mon code</span>
-                                                    <span class="menu-item-desc">Inviter des amis</span>
-                                                </div>
-                                                <div class="menu-item-arrow">→</div>
-                                            </a>
-
-                                            <div class="menu-separator"></div>
-
-                                            <a @click.prevent="showAboutModal = true; showMenu = false" href="#"
-                                                class="menu-item">
-                                                <div class="menu-item-icon">ℹ️</div>
-                                                <div class="menu-item-content">
-                                                    <span class="menu-item-title">À propos</span>
-                                                    <span class="menu-item-desc">En savoir plus</span>
-                                                </div>
-                                                <div class="menu-item-arrow">→</div>
-                                            </a>
-                                            <a href="https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801" target="_blank"
-                                                class="menu-item menu-item-special">
-                                                <div class="menu-item-icon">❤️</div>
-                                                <div class="menu-item-content">
-                                                    <span class="menu-item-title">Soutenir</span>
-                                                    <span class="menu-item-desc">Aidez-nous</span>
-                                                </div>
-                                                <div class="menu-item-arrow">→</div>
-                                            </a>
-
-                                            <div class="menu-separator"></div>
-
-                                            <a @click="logout()" href="#" class="menu-item menu-item-danger">
-                                                <div class="menu-item-icon">🚪</div>
-                                                <div class="menu-item-content">
-                                                    <span class="menu-item-title">Déconnexion</span>
-                                                    <span class="menu-item-desc">À bientôt !</span>
-                                                </div>
-                                                <div class="menu-item-arrow">→</div>
-                                            </a>
-                                        </div>
+                                        <a href="/index.html"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition border-b border-gray-700">
+                                            <span>📰</span>
+                                            <span class="font-medium">Flux 24H</span>
+                                        </a>
+                                        <a href="/infodrop360.html"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition border-b border-gray-700">
+                                            <span>🌐</span>
+                                            <span class="font-medium">Analyses 360°</span>
+                                        </a>
+                                        <a @click.prevent="showShareModal = true" href="#"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition border-b border-gray-700">
+                                            <span>🎁</span>
+                                            <span class="font-medium">Mon code d'invitation</span>
+                                        </a>
+                                        <a @click.prevent="showAboutModal = true; showMenu = false" href="#"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition">
+                                            <span>ℹ️</span>
+                                            <span>À propos</span>
+                                        </a>
+                                        <a href="https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801" target="_blank"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-blue-900/20 transition">
+                                            <span>❤️</span>
+                                            <span>Soutenir</span>
+                                        </a>
+                                        <div class="border-t border-gray-700"></div>
+                                        <a @click="logout()" href="#"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-red-900/20 transition text-red-400">
+                                            <span>🚪</span>
+                                            <span>Déconnexion</span>
+                                        </a>
                                     </div>
-                                </div>
-                            </div>
-
-                            <!-- Barre XP -->
-                            <div class="pb-2 sm:pb-3">
-                                <div class="flex items-center gap-2 sm:gap-3">
-                                    <span class="text-xs font-bold text-blue-300">XP</span>
-                                    <div class="flex-1 xp-bar-container">
-                                        <div class="xp-bar-fill" :style="`width: ${(userXP / xpToNextLevel) * 100}%`">
-                                        </div>
-                                    </div>
-                                    <span class="text-xs font-medium text-gray-400">
-                                        <span x-text="userXP"></span> / <span x-text="xpToNextLevel"></span>
-                                    </span>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Barre XP -->
+                        <div class="pb-2 sm:pb-3">
+                            <div class="flex items-center gap-2 sm:gap-3">
+                                <span class="text-xs font-bold text-blue-300">XP</span>
+                                <div class="flex-1 xp-bar-container">
+                                    <div class="xp-bar-fill" :style="`width: ${(userXP / xpToNextLevel) * 100}%`"></div>
+                                </div>
+                                <span class="text-xs font-medium text-gray-400">
+                                    <span x-text="userXP"></span> / <span x-text="xpToNextLevel"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </header>
 
                 <!-- ========================================================== -->
