@@ -963,6 +963,14 @@
         .achievement-item.locked .achievement-progress {
             color: #999;
         }
+
+        /* === CONFETTI ANIMATION === */
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
     </style>
 
     <!-- === CONFIGURATION TAILWIND === -->
@@ -1075,7 +1083,7 @@
                             <!-- Stats joueur -->
                             <div class="flex items-center gap-1 sm:gap-4">
                                 <!-- Niveau + Achievement fusionnés -->
-                                <div @click="showAchievementsModal = true"
+                                <div @click="showAchievementsModal = true; trackUserAction('open_achievements')"
                                     class="level-badge cursor-pointer hover:scale-105 transition-transform"
                                     :title="currentAchievement ? getAchievementTitle(currentAchievement) : 'Mes achievements'">
                                     <span class="text-xs" x-text="currentAchievement || '⭐'"></span>
@@ -1090,7 +1098,7 @@
                                         @click="showMenu = false">
                                     </div>
 
-                                    <button @click="showMenu = !showMenu"
+                                    <button @click="showMenu = !showMenu; trackUserAction('toggle_menu', { open: !showMenu })"
                                         class="clash-btn p-2 w-10 h-10 flex items-center justify-center relative z-50">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
@@ -1108,7 +1116,7 @@
 
                                         <!-- Items du menu -->
                                         <div class="menu-items">
-                                            <a href="/index.html" class="menu-item">
+                                            <a href="/index.html" @click="trackUserAction('menu_click', { item: 'flux_24h' })" class="menu-item">
                                                 <div class="menu-item-icon">📰</div>
                                                 <div class="menu-item-content">
                                                     <span class="menu-item-title">Flux 24H</span>
@@ -1116,7 +1124,7 @@
                                                 </div>
                                                 <div class="menu-item-arrow">→</div>
                                             </a>
-                                            <a href="/infodrop360.html" class="menu-item">
+                                            <a href="/infodrop360.html" @click="trackUserAction('menu_click', { item: 'analyses_360' })" class="menu-item">
                                                 <div class="menu-item-icon">🌐</div>
                                                 <div class="menu-item-content">
                                                     <span class="menu-item-title">Analyses 360°</span>
@@ -1124,7 +1132,7 @@
                                                 </div>
                                                 <div class="menu-item-arrow">→</div>
                                             </a>
-                                            <a @click.prevent="showShareModal = true" href="#" class="menu-item">
+                                            <a @click.prevent="showShareModal = true; trackUserAction('menu_click', { item: 'invitation_code' })" href="#" class="menu-item">
                                                 <div class="menu-item-icon">🎁</div>
                                                 <div class="menu-item-content">
                                                     <span class="menu-item-title">Mon code d'invitation</span>
@@ -1135,7 +1143,7 @@
 
                                             <div class="menu-separator"></div>
 
-                                            <a @click.prevent="showAboutModal = true; showMenu = false" href="#"
+                                            <a @click.prevent="showAboutModal = true; showMenu = false; trackUserAction('menu_click', { item: 'about' })" href="#"
                                                 class="menu-item">
                                                 <div class="menu-item-icon">ℹ️</div>
                                                 <div class="menu-item-content">
@@ -1145,6 +1153,7 @@
                                                 <div class="menu-item-arrow">→</div>
                                             </a>
                                             <a href="https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801" target="_blank"
+                                                @click="trackUserAction('menu_click', { item: 'support' })"
                                                 class="menu-item menu-item-special">
                                                 <div class="menu-item-icon">❤️</div>
                                                 <div class="menu-item-content">
@@ -1267,7 +1276,7 @@
                     </div>
 
                     <div class="stat-card gold-card flex-1 min-w-[75px] hover:scale-105 transition-transform"
-                        @click="showReadArticles = !showReadArticles">
+                        @click="showReadArticles = !showReadArticles; trackUserAction('toggle_read_articles', { show: !showReadArticles })">
                         <div class="relative z-10">
                             <div class="text-sm sm:text-base">📚</div>
                             <div class="text-sm sm:text-base font-bold text-white leading-tight"
@@ -1281,7 +1290,7 @@
                 <!-- 🌈 CHECKER DE DIVERSITÉ                                   -->
                 <!-- ========================================================== -->
                 <div x-show="!loadingNews && diversityScore !== null" x-transition class="clash-card mb-4 sm:mb-6">
-                    <button @click="showDiversityChecker = !showDiversityChecker"
+                    <button @click="showDiversityChecker = !showDiversityChecker; trackUserAction('toggle_diversity_checker', { show: !showDiversityChecker })"
                         class="w-full flex items-center justify-between p-3 sm:p-4">
                         <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                             <span>🎯</span>
@@ -1335,7 +1344,7 @@
                 <!-- 🔍 SYSTÈME DE FILTRES ET RECHERCHE                       -->
                 <!-- ========================================================== -->
                 <div x-show="!loadingNews" x-transition class="clash-card mb-4 sm:mb-6">
-                    <button @click="showFilters = !showFilters"
+                    <button @click="showFilters = !showFilters; trackUserAction('toggle_filters', { show: !showFilters })"
                         class="w-full flex items-center justify-between p-3 sm:p-4">
                         <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                             <span>🔍</span>
@@ -1354,14 +1363,15 @@
                         <div>
                             <div class="relative">
                                 <input x-model="searchQuery" type="text" placeholder="Rechercher dans les articles..."
-                                    class="w-full clash-input pl-10 pr-10" @input="$el.value = $el.value.toLowerCase()">
+                                    class="w-full clash-input pl-10 pr-10" 
+                                    @input="$el.value = $el.value.toLowerCase(); trackUserAction('search', { query: $el.value })">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
-                                <button x-show="searchQuery" @click="searchQuery = ''"
+                                <button x-show="searchQuery" @click="searchQuery = ''; trackUserAction('clear_search')"
                                     class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -1431,14 +1441,14 @@
                                 <span>📚</span>
                                 <span>Articles lus (<span x-text="Object.keys(readArticles).length"></span>)</span>
                             </h2>
-                            <button @click="showReadArticles = false" class="clash-btn px-3 py-1 text-sm text-white">
+                            <button @click="showReadArticles = false; trackUserAction('close_read_articles')" class="clash-btn px-3 py-1 text-sm text-white">
                                 ✕ Fermer
                             </button>
                         </div>
 
                         <div class="mb-4">
                             <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
-                                <input type="checkbox" x-model="hideReadFromMain" @change="saveReadPreferences()"
+                                <input type="checkbox" x-model="hideReadFromMain" @change="saveReadPreferences(); trackUserAction('toggle_hide_read', { hide: hideReadFromMain })"
                                     class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500">
                                 <span>Masquer les articles lus du flux principal</span>
                             </label>
@@ -1474,7 +1484,12 @@
                     <template x-for="news in filteredNewsList" :key="news.id">
                         <div x-show="!hideReadFromMain || !readArticles[news.id]" class="news-card-clash fade-in group"
                             :class="{ 'read-article': readArticles[news.id] && !hideReadFromMain }">
-                            <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="block">
+                            <a :href="news.url" target="_blank" @click="markAsRead(news.id); trackUserAction('read_article', { 
+                                    article_id: news.id, 
+                                    source: news.source, 
+                                    orientation: news.orientation,
+                                    tags: news.tags 
+                                })" class="block">
                                 <p class="text-base sm:text-lg text-white mb-3 leading-relaxed" x-text="news.resume">
                                 </p>
                                 <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-sm">
@@ -1533,7 +1548,7 @@
                             <h3 class="text-xl font-bold text-white mb-3">Aucun résultat</h3>
                             <p class="text-gray-400 mb-6">Aucun article ne correspond à votre recherche "<span
                                     x-text="searchQuery"></span>"</p>
-                            <button @click="searchQuery = ''" class="clash-btn px-6 py-3 text-white">
+                            <button @click="searchQuery = ''; trackUserAction('clear_search_from_empty')" class="clash-btn px-6 py-3 text-white">
                                 ← Effacer la recherche
                             </button>
                         </div>
@@ -1558,7 +1573,7 @@
                     <div x-show="userInviteData.code" class="mb-6">
                         <p class="text-gray-300 mb-3">Partagez ce code avec vos proches :</p>
                         <div class="font-mono bg-blue-900/50 px-4 py-3 rounded-lg cursor-pointer hover:bg-blue-900/70 transition text-white text-xl border-2 border-blue-600 font-bold"
-                            @click="copyInviteMessage(userInviteData.code)" title="Cliquez pour copier">
+                            @click="copyInviteMessage(userInviteData.code); trackUserAction('copy_invite_code')" title="Cliquez pour copier">
                             <span x-text="userInviteData.code"></span>
                         </div>
                         <span x-show="copied" class="text-green-400 font-bold text-sm mt-2 inline-block">✓ Copié
@@ -1583,7 +1598,7 @@
                         </div>
                     </div>
 
-                    <button @click="showShareModal = false" class="clash-btn px-6 py-2 mt-6 text-white">
+                    <button @click="showShareModal = false; trackUserAction('close_share_modal')" class="clash-btn px-6 py-2 mt-6 text-white">
                         Fermer
                     </button>
                 </div>
@@ -1597,7 +1612,7 @@
                 class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
                 <div class="achievements-modal" @click.stop>
                     <div class="achievements-header relative">
-                        <button @click="showAchievementsModal = false"
+                        <button @click="showAchievementsModal = false; trackUserAction('close_achievements_modal')"
                             class="absolute top-3 right-3 clash-btn clash-btn-red p-1.5 w-8 h-8 flex items-center justify-center">
                             <span class="text-lg">✕</span>
                         </button>
@@ -1611,11 +1626,11 @@
                             <span>✅</span>
                             <span>Débloqués</span>
                         </h3>
-                        <template x-for="achievement in getAllAchievementsData().filter(a => a.unlocked)"
-                            :key="achievement.id">
+                        <template x-for="achievement in achievementsData.filter(a => a.is_unlocked)"
+                            :key="achievement.code">
                             <div class="achievement-item unlocked">
                                 <div class="achievement-icon-modal">
-                                    <span x-text="achievement.icon"></span>
+                                    <span x-text="achievement.icon_emoji"></span>
                                 </div>
                                 <div class="achievement-info">
                                     <div class="achievement-title" x-text="achievement.title"></div>
@@ -1630,8 +1645,8 @@
                             <span>🔒</span>
                             <span>À débloquer</span>
                         </h3>
-                        <template x-for="achievement in getAllAchievementsData().filter(a => !a.unlocked)"
-                            :key="achievement.id">
+                        <template x-for="achievement in achievementsData.filter(a => !a.is_unlocked)"
+                            :key="achievement.code">
                             <div class="achievement-item locked">
                                 <div class="achievement-icon-modal">
                                     <span>🔒</span>
@@ -1639,7 +1654,7 @@
                                 <div class="achievement-info">
                                     <div class="achievement-title" x-text="achievement.title"></div>
                                     <div class="achievement-desc" x-text="achievement.description"></div>
-                                    <div class="achievement-progress" x-text="achievement.progress"></div>
+                                    <div class="achievement-progress" x-text="achievement.progress_text"></div>
                                 </div>
                             </div>
                         </template>
@@ -1692,7 +1707,7 @@
                                 placeholder="ex: national, crypto, tv">
                         </div>
                         <div class="flex justify-end gap-3 pt-4">
-                            <button type="button" @click="showEditPanel = false" class="clash-btn px-4 py-2 text-white">
+                            <button type="button" @click="showEditPanel = false; trackUserAction('cancel_edit')" class="clash-btn px-4 py-2 text-white">
                                 Annuler
                             </button>
                             <button type="submit" class="clash-btn clash-btn-green px-4 py-2 text-white">
@@ -1718,7 +1733,7 @@
                                 <span class="text-4xl">📰</span>
                                 À propos d'INFODROP
                             </h2>
-                            <button @click="showAboutModal = false"
+                            <button @click="showAboutModal = false; trackUserAction('close_about_modal')"
                                 class="clash-btn clash-btn-red p-2 w-10 h-10 flex items-center justify-center">
                                 <span class="text-xl">✕</span>
                             </button>
@@ -1852,6 +1867,7 @@
                         <div class="text-center space-y-4">
                             <p class="text-gray-400">Des questions ? Des suggestions ?</p>
                             <a href="mailto:l0r4.py@gmail.com"
+                                @click="trackUserAction('contact_click')"
                                 class="clash-btn px-6 py-3 inline-block text-white font-bold">
                                 📧 Contactez-nous
                             </a>
@@ -1873,7 +1889,7 @@
         <!-- 🔝 BOUTON SCROLL TO TOP                                                 -->
         <!-- ======================================================================== -->
         <button x-data="{ show: false }" x-show="show" x-transition
-            @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            @click="window.scrollTo({ top: 0, behavior: 'smooth' }); trackUserAction('scroll_to_top')"
             x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
             class="fixed bottom-6 right-6 z-40 clash-btn p-3 text-white" style="display: none;">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -1908,7 +1924,7 @@
 
                     ADMIN_EMAILS = cfg.adminEmails;
                     STRIPE_LINK = cfg.stripeLink;
-                    dlog('⚙️  Config récupérée', cfg);
+                    dlog('⚙️  Config récupérée (sans données sensibles)');
 
                     const { createClient } = window.supabase;
                     supabase = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
@@ -1951,20 +1967,6 @@
                     'gouvernement': { class: 'bg-blue-800 text-blue-100 border-blue-900', color: '#1e40af' },
                     'neutre': { class: 'bg-green-700 text-green-100 border-green-800', color: '#16a34a' }
                 };
-
-                // === HIÉRARCHIE DES ACHIEVEMENTS ===
-                const ACHIEVEMENTS_HIERARCHY = [
-                    '🚪', // Connexion
-                    '🎯', // Premier article
-                    '📚', // 10 articles
-                    '🏆', // 100 articles
-                    '🔥', // Streak 7 jours
-                    '🌟', // Streak 30 jours
-                    '⭐', // Niveau 5
-                    '💎', // Niveau 10
-                    '🌈', // Toutes orientations
-                    '👑'  // Niveau 25
-                ];
 
                 return {
                     // ============================================================
@@ -2018,6 +2020,9 @@
                     connectedUsers: 0,
                     socialBoost: 11,
                     realtimeChannel: null,
+                    gamingChannel: null,
+                    readArticlesChannel: null,
+                    diversityChannel: null,
                     showEditPanel: false,
                     editingNews: {
                         id: null,
@@ -2048,6 +2053,7 @@
                     lastReadDate: null,
                     currentAchievement: null,
                     showAchievementsModal: false,
+                    achievementsData: [],
 
                     // === RÉINITIALISATION DE LA RECHERCHE SUR CHANGEMENT DE FILTRE ===
                     toggleFilter(filter) {
@@ -2058,6 +2064,9 @@
                         }
                         // Effacer la recherche quand on change de filtre
                         this.searchQuery = '';
+                        
+                        // Tracker le changement de filtre
+                        this.trackUserAction('filter_change', { filter: this.activeFilter });
                     },
 
                     // === SYSTÈME DE LECTURES ET DIVERSITÉ ===
@@ -2066,7 +2075,6 @@
                     diversityScore: null,
                     readOrientations: [],
                     showDiversityChecker: true,
-                    diversityData: JSON.parse(localStorage.getItem('infodrop_diversity') || '{}'),
 
                     // === GESTION DES ARTICLES LUS ===
                     showReadArticles: false,
@@ -2093,43 +2101,122 @@
                     },
 
                     // ============================================================
-                    // 🎮 SYSTÈME DE GAMIFICATION
+                    // 📊 SYSTÈME DE TRACKING DES ACTIONS UTILISATEUR
+                    // ============================================================
+                    
+                    async trackUserAction(action, metadata = {}) {
+                        if (!this.user) return;
+                        
+                        try {
+                            const actionData = {
+                                user_id: this.user.id,
+                                action: action,
+                                metadata: metadata,
+                                timestamp: new Date().toISOString(),
+                                page: window.location.pathname,
+                                user_agent: navigator.userAgent
+                            };
+                            
+                            await supabase
+                                .from('user_actions')
+                                .insert(actionData);
+                                
+                            dlog('📊 Action trackée:', action, metadata);
+                        } catch (error) {
+                            console.error('Erreur tracking:', error);
+                        }
+                    },
+
+                    // ============================================================
+                    // 🎮 SYSTÈME DE GAMIFICATION - VERSION SUPABASE PURE
                     // ============================================================
 
                     // === INITIALISATION DE LA GAMIFICATION ===
-                    initGamification() {
+                    async initGamification() {
                         if (!this.user) return;
 
-                        const savedData = localStorage.getItem('infodrop_gaming_' + this.user.id);
-                        if (savedData) {
-                            const data = JSON.parse(savedData);
-                            this.userXP = data.xp || 0;
-                            this.userLevel = data.level || 1;
-                            this.readingStreak = data.streak || 0;
-                            this.unlockedAchievements = data.achievements || [];
-                            this.lastReadDate = data.lastReadDate || null;
-                        }
+                        try {
+                            dlog('🎮 Initialisation de la gamification pour:', this.user.id);
 
-                        // Débloquer achievement de connexion
-                        if (!this.unlockedAchievements.includes('🚪')) {
-                            this.unlockAchievement('🚪', 'Bienvenue dans le club!');
-                        }
+                            // Tracker l'initialisation
+                            await this.trackUserAction('gamification_init');
 
-                        this.updateXPToNextLevel();
-                        this.checkDailyStreak();
-                        this.updateCurrentAchievement();
+                            // Charger les données de gamification depuis Supabase
+                            const { data: gamingData, error } = await supabase
+                                .from('user_gaming_stats')
+                                .select('*')
+                                .eq('user_id', this.user.id)
+                                .single();
+
+                            if (error && error.code !== 'PGRST116') {
+                                console.error('❌ Erreur chargement gaming stats:', error);
+                                return;
+                            }
+
+                            if (gamingData) {
+                                this.userXP = gamingData.xp || 0;
+                                this.userLevel = gamingData.level || 1;
+                                this.readingStreak = gamingData.reading_streak || 0;
+                                this.unlockedAchievements = gamingData.unlocked_achievements || [];
+                                this.lastReadDate = gamingData.last_read_date || null;
+
+                                dlog('✅ Données gaming chargées:', gamingData);
+                            } else {
+                                // Créer les données initiales avec achievements de base
+                                await this.createInitialGamingData();
+                            }
+
+                            this.updateXPToNextLevel();
+                            await this.checkDailyStreak();
+                            await this.loadAchievements();
+
+                        } catch (error) {
+                            console.error('❌ Erreur initialisation gamification:', error);
+                        }
+                    },
+
+                    // === CRÉER LES DONNÉES INITIALES DE GAMIFICATION ===
+                    async createInitialGamingData() {
+                        try {
+                            dlog('🆕 Création des données gaming initiales');
+
+                            const { error } = await supabase
+                                .from('user_gaming_stats')
+                                .insert({
+                                    user_id: this.user.id,
+                                    xp: 0,
+                                    level: 1,
+                                    reading_streak: 0,
+                                    unlocked_achievements: [],
+                                    last_read_date: null
+                                });
+
+                            if (error) throw error;
+
+                            // Initialiser les données locales
+                            this.userXP = 0;
+                            this.userLevel = 1;
+                            this.readingStreak = 0;
+                            this.unlockedAchievements = [];
+                            this.lastReadDate = null;
+
+                            dlog('✅ Données gaming initiales créées');
+                        } catch (error) {
+                            console.error('❌ Erreur création données gaming:', error);
+                        }
                     },
 
                     // === MISE À JOUR DU BADGE ACTUEL ===
                     updateCurrentAchievement() {
                         // Trouver le badge de plus haut niveau débloqué
-                        for (let i = ACHIEVEMENTS_HIERARCHY.length - 1; i >= 0; i--) {
-                            if (this.unlockedAchievements.includes(ACHIEVEMENTS_HIERARCHY[i])) {
-                                this.currentAchievement = ACHIEVEMENTS_HIERARCHY[i];
-                                return;
-                            }
+                        const unlockedAchievements = this.achievementsData.filter(a => a.is_unlocked);
+                        if (unlockedAchievements.length > 0) {
+                            // Trier par ordre de priorité décroissant et prendre le premier
+                            const highestAchievement = unlockedAchievements.sort((a, b) => b.order_priority - a.order_priority)[0];
+                            this.currentAchievement = highestAchievement.icon_emoji;
+                        } else {
+                            this.currentAchievement = null;
                         }
-                        this.currentAchievement = null;
                     },
 
                     // === CALCUL XP POUR NIVEAU SUIVANT ===
@@ -2138,9 +2225,9 @@
                     },
 
                     // === VÉRIFICATION DU STREAK QUOTIDIEN ===
-                    checkDailyStreak() {
-                        const today = new Date().toDateString();
-                        const yesterday = new Date(Date.now() - 86400000).toDateString();
+                    async checkDailyStreak() {
+                        const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+                        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
 
                         if (this.lastReadDate === today) {
                             // Déjà lu aujourd'hui
@@ -2157,185 +2244,213 @@
                         }
 
                         this.lastReadDate = today;
-                        this.saveGamingData();
-
-                        // Vérifier achievements de streak
-                        if (this.readingStreak === 7) {
-                            this.unlockAchievement('🔥', 'Lecteur assidu - 7 jours de suite!');
-                        } else if (this.readingStreak === 30) {
-                            this.unlockAchievement('🌟', 'Maître de l\'info - 30 jours de suite!');
-                        }
+                        await this.saveGamingData();
                     },
 
                     // === GAGNER DE L'XP ===
-                    gainXP(amount, reason) {
+                    async gainXP(amount, reason) {
                         this.userXP += amount;
 
                         // Animation XP
                         this.showXPAnimation(amount);
 
                         // Vérifier level up
+                        let leveledUp = false;
                         while (this.userXP >= this.xpToNextLevel) {
                             this.userXP -= this.xpToNextLevel;
                             this.userLevel++;
                             this.updateXPToNextLevel();
-                            this.showLevelUpAnimation();
-
-                            // Achievements de niveau
-                            if (this.userLevel === 5) {
-                                this.unlockAchievement('⭐', 'Apprenti informé - Niveau 5!');
-                            } else if (this.userLevel === 10) {
-                                this.unlockAchievement('💎', 'Expert de l\'actu - Niveau 10!');
-                            } else if (this.userLevel === 25) {
-                                this.unlockAchievement('👑', 'Légende d\'INFODROP - Niveau 25!');
-                            }
+                            leveledUp = true;
                         }
 
-                        this.saveGamingData();
+                        if (leveledUp) {
+                            this.addPendingAnimation('levelup', { level: this.userLevel });
+                            await this.trackUserAction('level_up', { new_level: this.userLevel });
+                        }
+
+                        await this.saveGamingData();
                     },
 
                     // === GAGNER DE L'XP SANS ANIMATION ===
-                    gainXPSilently(amount) {
+                    async gainXPSilently(amount) {
                         this.userXP += amount;
 
                         // Vérifier level up
+                        let leveledUp = false;
                         while (this.userXP >= this.xpToNextLevel) {
                             this.userXP -= this.xpToNextLevel;
                             this.userLevel++;
                             this.updateXPToNextLevel();
-                            this.showLevelUpAnimation();
-
-                            // Achievements de niveau
-                            if (this.userLevel === 5) {
-                                this.unlockAchievement('⭐', 'Apprenti informé - Niveau 5!');
-                            } else if (this.userLevel === 10) {
-                                this.unlockAchievement('💎', 'Expert de l\'actu - Niveau 10!');
-                            } else if (this.userLevel === 25) {
-                                this.unlockAchievement('👑', 'Légende d\'INFODROP - Niveau 25!');
-                            }
+                            leveledUp = true;
                         }
 
-                        this.saveGamingData();
+                        if (leveledUp) {
+                            this.addPendingAnimation('levelup', { level: this.userLevel });
+                            await this.trackUserAction('level_up', { new_level: this.userLevel });
+                        }
+
+                        await this.saveGamingData();
                     },
 
-                    // === DÉBLOQUER UN ACHIEVEMENT ===
-                    unlockAchievement(icon, title) {
-                        if (!this.unlockedAchievements.includes(icon)) {
-                            this.unlockedAchievements.push(icon);
-                            this.showAchievementPopup(icon, title);
+                    // === CHARGEMENT DES ACHIEVEMENTS DEPUIS SUPABASE ===
+                    async loadAchievements() {
+                        if (!this.user) return;
+
+                        try {
+                            dlog('🏆 Chargement des achievements depuis Supabase...');
+
+                            const { data, error } = await supabase.rpc('get_user_achievements', {
+                                p_user_id: this.user.id
+                            });
+
+                            if (error) {
+                                console.error('❌ Erreur chargement achievements:', error);
+                                return;
+                            }
+
+                            this.achievementsData = data || [];
                             this.updateCurrentAchievement();
-                            this.saveGamingData();
+
+                            dlog('✅ Achievements chargés:', this.achievementsData.length, 'achievements');
+                        } catch (error) {
+                            console.error('❌ Erreur chargement achievements:', error);
+                        }
+                    },
+
+                    // === DÉTECTION DES NOUVEAUX ACHIEVEMENTS ===
+                    async detectNewAchievements() {
+                        if (!this.user) return;
+
+                        try {
+                            dlog('🔍 Détection des nouveaux achievements...');
+
+                            // Garder l'état précédent
+                            const previousAchievements = this.achievementsData.map(a => ({
+                                code: a.code,
+                                is_unlocked: a.is_unlocked
+                            }));
+
+                            // Recharger les achievements depuis Supabase
+                            await this.loadAchievements();
+
+                            // Détecter les nouveaux achievements débloqués
+                            const newUnlocked = this.achievementsData.filter(current => {
+                                const previous = previousAchievements.find(prev => prev.code === current.code);
+                                return current.is_unlocked && (!previous || !previous.is_unlocked);
+                            });
+
+                            // Déclencher les animations pour les nouveaux achievements
+                            if (newUnlocked.length > 0) {
+                                dlog('🎉 Nouveaux achievements débloqués:', newUnlocked.length);
+
+                                for (const achievement of newUnlocked) {
+                                    this.addPendingAnimation('achievement', {
+                                        icon: achievement.icon_emoji,
+                                        title: achievement.title
+                                    });
+                                    
+                                    await this.trackUserAction('achievement_unlocked', {
+                                        code: achievement.code,
+                                        title: achievement.title
+                                    });
+                                }
+                            }
+
+                        } catch (error) {
+                            console.error('❌ Erreur détection nouveaux achievements:', error);
                         }
                     },
 
                     // === OBTENIR LE TITRE D'UN ACHIEVEMENT ===
-                    getAchievementTitle(icon) {
-                        const achievements = {
-                            '🚪': 'Bienvenue dans le club',
-                            '🎯': 'Premier article lu',
-                            '📚': '10 articles lus',
-                            '🏆': '100 articles lus',
-                            '🔥': 'Lecteur assidu - 7 jours',
-                            '🌟': 'Maître de l\'info - 30 jours',
-                            '⭐': 'Apprenti informé - Niveau 5',
-                            '💎': 'Expert de l\'actu - Niveau 10',
-                            '👑': 'Légende d\'INFODROP - Niveau 25',
-                            '🌈': 'Explorateur - Toutes les orientations lues'
-                        };
-                        return achievements[icon] || 'Achievement mystère';
+                    getAchievementTitle(iconEmoji) {
+                        const achievement = this.achievementsData.find(a => a.icon_emoji === iconEmoji);
+                        return achievement ? achievement.title : 'Achievement mystère';
                     },
 
-                    // === OBTENIR TOUTES LES DONNÉES D'ACHIEVEMENTS ===
-                    getAllAchievementsData() {
-                        const achievementsData = [
-                            {
-                                id: '🚪',
-                                icon: '🚪',
-                                title: 'Bienvenue dans le club',
-                                description: 'Se connecter à INFODROP',
-                                unlocked: this.unlockedAchievements.includes('🚪'),
-                                progress: '✓ Complété'
-                            },
-                            {
-                                id: '🎯',
-                                icon: '🎯',
-                                title: 'Premier pas',
-                                description: 'Lire votre premier article',
-                                unlocked: this.unlockedAchievements.includes('🎯'),
-                                progress: this.totalReadCount === 0 ? '0/1 article' : '✓ Complété'
-                            },
-                            {
-                                id: '📚',
-                                icon: '📚',
-                                title: 'Lecteur régulier',
-                                description: 'Lire 10 articles',
-                                unlocked: this.unlockedAchievements.includes('📚'),
-                                progress: this.totalReadCount < 10 ? `${this.totalReadCount}/10 articles` : '✓ Complété'
-                            },
-                            {
-                                id: '🏆',
-                                icon: '🏆',
-                                title: 'Centurion de l\'info',
-                                description: 'Lire 100 articles',
-                                unlocked: this.unlockedAchievements.includes('🏆'),
-                                progress: this.totalReadCount < 100 ? `${this.totalReadCount}/100 articles` : '✓ Complété'
-                            },
-                            {
-                                id: '🔥',
-                                icon: '🔥',
-                                title: 'Semaine de feu',
-                                description: 'Maintenir un streak de 7 jours',
-                                unlocked: this.unlockedAchievements.includes('🔥'),
-                                progress: this.readingStreak < 7 ? `${this.readingStreak}/7 jours` : '✓ Complété'
-                            },
-                            {
-                                id: '🌟',
-                                icon: '🌟',
-                                title: 'Mois légendaire',
-                                description: 'Maintenir un streak de 30 jours',
-                                unlocked: this.unlockedAchievements.includes('🌟'),
-                                progress: this.readingStreak < 30 ? `${this.readingStreak}/30 jours` : '✓ Complété'
-                            },
-                            {
-                                id: '⭐',
-                                icon: '⭐',
-                                title: 'Apprenti informé',
-                                description: 'Atteindre le niveau 5',
-                                unlocked: this.unlockedAchievements.includes('⭐'),
-                                progress: this.userLevel < 5 ? `Niveau ${this.userLevel}/5` : '✓ Complété'
-                            },
-                            {
-                                id: '💎',
-                                icon: '💎',
-                                title: 'Expert de l\'actu',
-                                description: 'Atteindre le niveau 10',
-                                unlocked: this.unlockedAchievements.includes('💎'),
-                                progress: this.userLevel < 10 ? `Niveau ${this.userLevel}/10` : '✓ Complété'
-                            },
-                            {
-                                id: '🌈',
-                                icon: '🌈',
-                                title: 'Esprit ouvert',
-                                description: 'Lire des articles de toutes les orientations (Score diversité 100%)',
-                                unlocked: this.unlockedAchievements.includes('🌈'),
-                                progress: this.diversityScore < 100 ? `Score: ${this.diversityScore || 0}%` : '✓ Complété'
-                            },
-                            {
-                                id: '👑',
-                                icon: '👑',
-                                title: 'Légende d\'INFODROP',
-                                description: 'Atteindre le niveau 25',
-                                unlocked: this.unlockedAchievements.includes('👑'),
-                                progress: this.userLevel < 25 ? `Niveau ${this.userLevel}/25` : '✓ Complété'
-                            }
-                        ];
+                    // === SAUVEGARDE DES DONNÉES GAMING ===
+                    async saveGamingData() {
+                        if (!this.user) return;
 
-                        // Trier : débloqués d'abord, puis par ordre de hiérarchie
-                        return achievementsData.sort((a, b) => {
-                            if (a.unlocked && !b.unlocked) return -1;
-                            if (!a.unlocked && b.unlocked) return 1;
-                            return ACHIEVEMENTS_HIERARCHY.indexOf(a.id) - ACHIEVEMENTS_HIERARCHY.indexOf(b.id);
+                        try {
+                            dlog('💾 Sauvegarde des données gaming...');
+
+                            const { error } = await supabase
+                                .from('user_gaming_stats')
+                                .upsert({
+                                    user_id: this.user.id,
+                                    xp: this.userXP,
+                                    level: this.userLevel,
+                                    reading_streak: this.readingStreak,
+                                    unlocked_achievements: this.unlockedAchievements,
+                                    last_read_date: this.lastReadDate
+                                }, {
+                                    onConflict: 'user_id'
+                                });
+
+                            if (error) throw error;
+
+                            // Détecter les nouveaux achievements débloqués
+                            await this.detectNewAchievements();
+
+                            dlog('✅ Données gaming sauvegardées');
+                        } catch (error) {
+                            console.error('❌ Erreur sauvegarde gaming data:', error);
+                        }
+                    },
+
+                    // ============================================================
+                    // 🎬 SYSTÈME D'ANIMATIONS EN ATTENTE UNIFIÉ
+                    // ============================================================
+
+                    // === AJOUTER UNE ANIMATION EN ATTENTE ===
+                    addPendingAnimation(type, data) {
+                        const animations = JSON.parse(localStorage.getItem('infodrop_pending_animations') || '[]');
+                        animations.push({
+                            type: type,
+                            data: data,
+                            timestamp: Date.now()
                         });
+                        localStorage.setItem('infodrop_pending_animations', JSON.stringify(animations));
+                    },
+
+                    // === TRAITER LES ANIMATIONS EN ATTENTE ===
+                    processPendingAnimations() {
+                        const animations = JSON.parse(localStorage.getItem('infodrop_pending_animations') || '[]');
+
+                        if (animations.length === 0) return;
+
+                        // Filtrer les animations trop anciennes (plus de 5 minutes)
+                        const recentAnimations = animations.filter(anim =>
+                            Date.now() - anim.timestamp < 5 * 60 * 1000
+                        );
+
+                        if (recentAnimations.length === 0) {
+                            localStorage.removeItem('infodrop_pending_animations');
+                            return;
+                        }
+
+                        // Traiter les animations avec un délai entre chaque
+                        recentAnimations.forEach((animation, index) => {
+                            setTimeout(() => {
+                                switch (animation.type) {
+                                    case 'xp':
+                                        this.showXPAnimation(animation.data.amount);
+                                        break;
+                                    case 'levelup':
+                                        this.showLevelUpAnimation(animation.data.level);
+                                        break;
+                                    case 'achievement':
+                                        this.showAchievementPopup(animation.data.icon, animation.data.title);
+                                        break;
+                                    case 'celebration':
+                                        this.showCelebration(animation.data.count);
+                                        break;
+                                }
+                            }, index * 1000); // 1 seconde entre chaque animation
+                        });
+
+                        // Nettoyer les animations traitées
+                        localStorage.removeItem('infodrop_pending_animations');
                     },
 
                     // === ANIMATION GAIN XP ===
@@ -2350,7 +2465,7 @@
                     },
 
                     // === ANIMATION LEVEL UP ===
-                    showLevelUpAnimation() {
+                    showLevelUpAnimation(level) {
                         const levelUp = document.createElement('div');
                         levelUp.style.cssText = `
                             position: fixed;
@@ -2365,7 +2480,7 @@
                             z-index: 9999;
                             pointer-events: none;
                         `;
-                        levelUp.textContent = `NIVEAU ${this.userLevel}!`;
+                        levelUp.textContent = `NIVEAU ${level || this.userLevel}!`;
                         document.body.appendChild(levelUp);
 
                         // Confettis dorés
@@ -2389,21 +2504,6 @@
                             popup.style.animation = 'achievement-appear 0.5s ease-out reverse forwards';
                             setTimeout(() => popup.remove(), 500);
                         }, 3000);
-                    },
-
-                    // === SAUVEGARDE DES DONNÉES GAMING ===
-                    saveGamingData() {
-                        if (!this.user) return;
-
-                        const data = {
-                            xp: this.userXP,
-                            level: this.userLevel,
-                            streak: this.readingStreak,
-                            achievements: this.unlockedAchievements,
-                            lastReadDate: this.lastReadDate
-                        };
-
-                        localStorage.setItem('infodrop_gaming_' + this.user.id, JSON.stringify(data));
                     },
 
                     // === CONFETTIS DORÉS ===
@@ -2430,6 +2530,439 @@
                                 setTimeout(() => conf.remove(), 5000);
                             }, i * 50);
                         }
+                    },
+
+                    // ============================================================
+                    // 📚 SYSTÈME DE LECTURES ET DIVERSITÉ - VERSION SUPABASE
+                    // ============================================================
+
+                    // === MARQUER UN ARTICLE COMME LU (AVEC GAMIFICATION) ===
+                    async markAsRead(id) {
+                        if (!this.readArticles[id]) {
+                            const readAt = new Date().toISOString();
+                            this.readArticles[id] = readAt;
+
+                            // Sauvegarder dans la DB
+                            await this.saveReadArticleToDB(id);
+                            this.updateTotalReadCount();
+
+                            const article = this.newsList.find(n => n.id === id);
+                            if (article) {
+                                // Ajouter aux données de diversité
+                                await this.addToDiversityData(article);
+
+                                // GAMIFICATION : Calculer l'XP à gagner
+                                let xpGained = 10; // XP de base
+
+                                // Bonus pour diversité
+                                if (article.orientation && !this.readOrientations.includes(article.orientation)) {
+                                    xpGained += 20; // Bonus pour nouvelle orientation
+                                }
+
+                                // Bonus pour tags spéciaux
+                                if (article.tags && article.tags.includes('🧨INFODROP')) {
+                                    xpGained += 5;
+                                }
+
+                                // Ajouter l'XP en attente pour l'animation au retour
+                                this.addPendingAnimation('xp', { amount: xpGained });
+
+                                // Gagner l'XP sans animation
+                                await this.gainXPSilently(xpGained);
+
+                                // Vérifier le streak quotidien
+                                await this.checkDailyStreak();
+                            }
+
+                            // Célébrations
+                            if (this.totalReadCount % 20 === 0 && this.totalReadCount > 0) {
+                                if (document.hidden) {
+                                    this.addPendingAnimation('celebration', { count: this.totalReadCount });
+                                } else {
+                                    this.showCelebration(this.totalReadCount);
+                                }
+                                
+                                await this.trackUserAction('milestone_reached', { 
+                                    articles_read: this.totalReadCount 
+                                });
+                            }
+                        }
+                    },
+
+                    // === SAUVEGARDER ARTICLE LU DANS LA DB ===
+                    async saveReadArticleToDB(articleId) {
+                        if (!this.user) return;
+
+                        try {
+                            await supabase
+                                .from('user_read_articles')
+                                .upsert({
+                                    user_id: this.user.id,
+                                    article_id: articleId,
+                                    read_at: new Date().toISOString()
+                                }, {
+                                    onConflict: 'user_id,article_id'
+                                });
+                        } catch (error) {
+                            console.error('Erreur sauvegarde article lu:', error);
+                        }
+                    },
+
+                    // === CHARGER ARTICLES LUS DEPUIS LA DB ===
+                    async loadReadArticlesFromDB() {
+                        if (!this.user) return;
+
+                        try {
+                            const { data, error } = await supabase
+                                .from('user_read_articles')
+                                .select('article_id, read_at')
+                                .eq('user_id', this.user.id);
+
+                            if (error) throw error;
+
+                            if (data) {
+                                this.readArticles = {};
+                                data.forEach(item => {
+                                    this.readArticles[item.article_id] = item.read_at;
+                                });
+                                this.updateTotalReadCount();
+                            }
+                        } catch (error) {
+                            console.error('Erreur chargement articles lus:', error);
+                        }
+                    },
+
+                    // === OBTENIR LA LISTE DES ARTICLES LUS ===
+                    getReadArticlesList() {
+                        return this.newsList.filter(news => this.readArticles[news.id])
+                            .sort((a, b) => new Date(this.readArticles[b.id]) - new Date(this.readArticles[a.id]));
+                    },
+
+                    // === SAUVEGARDER PRÉFÉRENCES LECTURE ===
+                    async saveReadPreferences() {
+                        if (!this.user) return;
+
+                        try {
+                            await supabase
+                                .from('user_preferences')
+                                .upsert({
+                                    user_id: this.user.id,
+                                    hide_read_articles: this.hideReadFromMain,
+                                    updated_at: new Date().toISOString()
+                                }, {
+                                    onConflict: 'user_id'
+                                });
+                        } catch (error) {
+                            console.error('Erreur sauvegarde préférences:', error);
+                        }
+                    },
+
+                    // === CHARGER PRÉFÉRENCES LECTURE ===
+                    async loadReadPreferences() {
+                        if (!this.user) return;
+
+                        try {
+                            const { data, error } = await supabase
+                                .from('user_preferences')
+                                .select('hide_read_articles')
+                                .eq('user_id', this.user.id)
+                                .single();
+
+                            if (error && error.code !== 'PGRST116') {
+                                throw error;
+                            }
+
+                            if (data) {
+                                this.hideReadFromMain = data.hide_read_articles !== false; // true par défaut
+                            }
+                        } catch (error) {
+                            console.error('Erreur chargement préférences:', error);
+                            // Valeur par défaut
+                            this.hideReadFromMain = true;
+                        }
+                    },
+
+                    // === MISE À JOUR DU COMPTEUR TOTAL ===
+                    updateTotalReadCount() {
+                        this.totalReadCount = Object.keys(this.readArticles).length;
+                    },
+
+                    // === AJOUT AUX DONNÉES DE DIVERSITÉ ===
+                    async addToDiversityData(article) {
+                        if (!this.user) return;
+
+                        try {
+                            let orientation = article.orientation || 'neutre';
+                            if (article.tags?.includes('🧨INFODROP')) {
+                                orientation = '🧨INFODROP';
+                            }
+
+                            const { error } = await supabase
+                                .from('user_diversity_data')
+                                .insert({
+                                    user_id: this.user.id,
+                                    read_at: new Date().toISOString(),
+                                    orientation: orientation,
+                                    source: article.source
+                                });
+
+                            if (error) throw error;
+
+                            // Le score de diversité se met à jour automatiquement via Supabase
+                            await this.loadDiversityScore();
+                        } catch (error) {
+                            console.error('Erreur ajout données diversité:', error);
+                        }
+                    },
+
+                    // === CHARGEMENT DU SCORE DE DIVERSITÉ DEPUIS SUPABASE ===
+                    async loadDiversityScore() {
+                        if (!this.user) return;
+
+                        try {
+                            // Récupérer les données des dernières 24h
+                            const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
+                            const { data: diversityData, error } = await supabase
+                                .from('user_diversity_data')
+                                .select('orientation, source')
+                                .eq('user_id', this.user.id)
+                                .gte('read_at', oneDayAgo);
+
+                            if (error) throw error;
+
+                            const reads = diversityData || [];
+
+                            if (reads.length === 0) {
+                                this.diversityScore = null;
+                                this.readOrientations = [];
+                                return;
+                            }
+
+                            const orientationSet = new Set(reads.map(r => r.orientation).filter(Boolean));
+                            const sourceSet = new Set(reads.map(r => r.source));
+
+                            const spectrumOrientations = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
+
+                            this.readOrientations = [...orientationSet]
+                                .filter(o => o !== 'gouvernement')
+                                .sort((a, b) => spectrumOrientations.indexOf(a) - spectrumOrientations.indexOf(b));
+
+                            // Calcul du score : 50% pour orientations + 50% pour sources
+                            const orientationScore = (this.readOrientations.length / 9) * 50;
+                            const sourceScore = Math.min((sourceSet.size / 5) * 50, 50);
+
+                            this.diversityScore = Math.round(orientationScore + sourceScore);
+                            this.showDiversityChecker = this.diversityScore < 100;
+
+                        } catch (error) {
+                            console.error('Erreur chargement score diversité:', error);
+                            this.diversityScore = null;
+                            this.readOrientations = [];
+                        }
+                    },
+
+                    // === MESSAGE DU SCORE DE DIVERSITÉ ===
+                    getDiversityMessage() {
+                        if (this.diversityScore < 30) return "🔴 Bulle de filtre ! Explorez d'autres horizons";
+                        if (this.diversityScore < 50) return "🟡 Bon début ! Continuez à diversifier";
+                        if (this.diversityScore < 70) return "🟠 Bien ! Quelques perspectives en plus ?";
+                        if (this.diversityScore < 85) return "🟢 Très bien ! Vous êtes sur la bonne voie";
+                        return "🏆 Champion de la diversité !";
+                    },
+
+                    getDiversityTip() {
+                        const missing = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP']
+                            .filter(orientation => !this.readOrientations.includes(orientation));
+
+                        if (missing.length === 0) return "🎉 Toutes les orientations explorées !";
+                        if (missing.length > 6) return "💡 Essayez de lire des perspectives variées";
+
+                        const suggestion = missing[Math.floor(Math.random() * missing.length)];
+                        return `💡 Essayez de lire du "${suggestion.replace('-', ' ')}"`;
+                    },
+
+                    // === CÉLÉBRATION DES ARTICLES ===
+                    showCelebration(count = 100) {
+                        const cont = document.createElement('div');
+                        cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:auto;z-index:9999;background:rgba(0,0,0,0.8);cursor:pointer;';
+
+                        this.startConfettiLoop(cont);
+
+                        const msg = document.createElement('div');
+                        msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
+                        const isSpecial = count === 100 || count % 100 === 0;
+                        const emoji = isSpecial ? '🏆' : '🎉';
+                        const title = isSpecial ? 'Incroyable !' : 'Bravo !';
+
+                        msg.innerHTML = `
+                            <h2 class="text-3xl font-bold mb-2">${emoji} ${title} ${emoji}</h2>
+                            <p class="text-lg mb-2">${count} articles lus !</p>
+                            <p class="text-sm opacity-80">Cliquez pour continuer</p>
+                        `;
+
+                        cont.appendChild(msg);
+                        document.body.appendChild(cont);
+
+                        const closeAnimation = () => {
+                            cont.remove();
+                            this.stopConfettiLoop();
+                        };
+
+                        cont.addEventListener('click', closeAnimation);
+                        msg.addEventListener('click', closeAnimation);
+                    },
+
+                    startConfettiLoop(container) {
+                        this.confettiInterval = setInterval(() => {
+                            this.createConfettiBatch(container);
+                        }, 1000);
+                    },
+
+                    stopConfettiLoop() {
+                        if (this.confettiInterval) {
+                            clearInterval(this.confettiInterval);
+                            this.confettiInterval = null;
+                        }
+                    },
+
+                    createConfettiBatch(container) {
+                        const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7'];
+                        for (let i = 0; i < 10; i++) {
+                            const conf = document.createElement('div');
+                            conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;pointer-events:none;`;
+                            container.appendChild(conf);
+
+                            setTimeout(() => conf.remove(), 5000);
+                        }
+                    },
+
+                    // ============================================================
+                    // ⚡ SYNCHRONISATION TEMPS RÉEL DES DONNÉES UTILISATEUR
+                    // ============================================================
+
+                    // === CONFIGURATION DU TEMPS RÉEL POUR LES DONNÉES UTILISATEUR ===
+                    setupUserDataRealtime() {
+                        if (!this.user) return;
+
+                        // Channel pour les stats de gaming
+                        this.gamingChannel = supabase
+                            .channel(`user_gaming_${this.user.id}`)
+                            .on(
+                                'postgres_changes',
+                                {
+                                    event: '*',
+                                    schema: 'public',
+                                    table: 'user_gaming_stats',
+                                    filter: `user_id=eq.${this.user.id}`
+                                },
+                                (payload) => {
+                                    console.log('🎮 Mise à jour gaming stats reçue:', payload);
+                                    this.handleGamingStatsUpdate(payload);
+                                }
+                            )
+                            .subscribe();
+
+                        // Channel pour les articles lus
+                        this.readArticlesChannel = supabase
+                            .channel(`user_read_articles_${this.user.id}`)
+                            .on(
+                                'postgres_changes',
+                                {
+                                    event: 'INSERT',
+                                    schema: 'public',
+                                    table: 'user_read_articles',
+                                    filter: `user_id=eq.${this.user.id}`
+                                },
+                                (payload) => {
+                                    console.log('📚 Nouvel article lu reçu:', payload);
+                                    this.handleNewReadArticle(payload);
+                                }
+                            )
+                            .subscribe();
+
+                        // Channel pour les données de diversité
+                        this.diversityChannel = supabase
+                            .channel(`user_diversity_${this.user.id}`)
+                            .on(
+                                'postgres_changes',
+                                {
+                                    event: 'INSERT',
+                                    schema: 'public',
+                                    table: 'user_diversity_data',
+                                    filter: `user_id=eq.${this.user.id}`
+                                },
+                                (payload) => {
+                                    console.log('🌈 Nouvelle donnée diversité reçue:', payload);
+                                    this.handleDiversityUpdate();
+                                }
+                            )
+                            .subscribe();
+
+                        console.log('⚡ Synchronisation temps réel activée');
+                    },
+
+                    // === GÉRER LA MISE À JOUR DES STATS DE GAMING ===
+                    async handleGamingStatsUpdate(payload) {
+                        if (payload.eventType === 'UPDATE' || payload.eventType === 'INSERT') {
+                            const newData = payload.new;
+
+                            // Mettre à jour les données locales si elles sont différentes
+                            if (this.userXP !== newData.xp ||
+                                this.userLevel !== newData.level ||
+                                this.readingStreak !== newData.reading_streak ||
+                                JSON.stringify(this.unlockedAchievements) !== JSON.stringify(newData.unlocked_achievements)) {
+
+                                this.userXP = newData.xp;
+                                this.userLevel = newData.level;
+                                this.readingStreak = newData.reading_streak;
+                                this.unlockedAchievements = newData.unlocked_achievements || [];
+                                this.lastReadDate = newData.last_read_date;
+
+                                this.updateXPToNextLevel();
+                                await this.detectNewAchievements();
+
+                                console.log('🎮 Stats de gaming synchronisées');
+                            }
+                        }
+                    },
+
+                    // === GÉRER UN NOUVEL ARTICLE LU ===
+                    handleNewReadArticle(payload) {
+                        if (payload.eventType === 'INSERT') {
+                            const { article_id, read_at } = payload.new;
+
+                            // Ajouter à la liste locale si pas déjà présent
+                            if (!this.readArticles[article_id]) {
+                                this.readArticles[article_id] = read_at;
+                                this.updateTotalReadCount();
+
+                                console.log('📚 Article lu synchronisé');
+                            }
+                        }
+                    },
+
+                    // === GÉRER LA MISE À JOUR DE DIVERSITÉ ===
+                    handleDiversityUpdate() {
+                        // Recharger le score de diversité
+                        this.loadDiversityScore();
+                    },
+
+                    // === NETTOYER LES CHANNELS TEMPS RÉEL ===
+                    cleanupRealtimeChannels() {
+                        if (this.gamingChannel) {
+                            supabase.removeChannel(this.gamingChannel);
+                            this.gamingChannel = null;
+                        }
+                        if (this.readArticlesChannel) {
+                            supabase.removeChannel(this.readArticlesChannel);
+                            this.readArticlesChannel = null;
+                        }
+                        if (this.diversityChannel) {
+                            supabase.removeChannel(this.diversityChannel);
+                            this.diversityChannel = null;
+                        }
+                        console.log('🔇 Channels temps réel nettoyés');
                     },
 
                     // ============================================================
@@ -2465,136 +2998,109 @@
                     // ============================================================
                     async init() {
                         console.log('🚀 Initialisation de l\'application...');
+                        
+                        // Timeout de sécurité pour éviter le blocage du loader
+                        const loaderTimeout = setTimeout(() => {
+                            if (this.loadingNews) {
+                                console.error('⏱️ Timeout du loader - Forçage de la désactivation');
+                                this.loadingNews = false;
+                                alert('Le chargement a pris trop de temps. Veuillez rafraîchir la page.');
+                            }
+                        }, 30000); // 30 secondes de timeout
+                        
                         const supabaseReady = await initializeSupabase();
                         if (!supabaseReady) {
                             this.sessionLoaded = true;
+                            clearTimeout(loaderTimeout);
                             return;
                         }
 
                         // === GESTION DES ÉVÉNEMENTS D'AUTHENTIFICATION ===
                         supabase.auth.onAuthStateChange(async (event, session) => {
+                            console.log('🔐 Auth state change:', event, session?.user?.email);
                             this.user = session?.user || null;
                             this.sessionLoaded = true;
                             if (event === 'SIGNED_IN') {
                                 console.log('✅ Événement SIGNED_IN détecté ! Chargement des données...');
                                 this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
-                                const userReadData = localStorage.getItem('infodrop_read_' + this.user.id) || '{}';
-                                this.readArticles = JSON.parse(userReadData);
 
-                                // Initialiser la gamification
-                                this.initGamification();
+                                try {
+                                    // Tracker la connexion
+                                    await this.trackUserAction('user_login', { 
+                                        email: this.user.email,
+                                        is_admin: this.isAdmin 
+                                    });
 
-                                this.loadData(true);
-                                this.startAutoUpdate();
-                                this.setupRealtime(session);
-                                this.updateTotalReadCount();
-                                this.calculateDiversityScore();
-                                this.loadUserInviteData();
+                                    // Initialiser toutes les données depuis Supabase
+                                    await this.initGamification();
+                                    await this.loadReadArticlesFromDB();
+                                    await this.loadReadPreferences();
+                                    await this.loadDiversityScore();
+                                    await this.loadAchievements();
 
-                                // Charger les articles lus et préférences depuis la DB
-                                this.loadReadArticlesFromDB();
-                                this.loadReadPreferences();
+                                    await this.loadData(true);
+                                    this.startAutoUpdate();
+                                    this.setupRealtime(session);
+                                    await this.loadUserInviteData();
+                                } catch (error) {
+                                    console.error('❌ Erreur lors de l\'initialisation après connexion:', error);
+                                    this.loadingNews = false; // S'assurer que le loader est désactivé en cas d'erreur
+                                }
                             }
                             if (event === 'SIGNED_OUT') {
+                                await this.trackUserAction('user_logout');
+                                
                                 this.stopAutoUpdate();
+
+                                // Nettoyer tous les channels
                                 if (this.realtimeChannel) {
                                     supabase.removeChannel(this.realtimeChannel);
                                     this.realtimeChannel = null;
                                 }
+
+                                this.cleanupRealtimeChannels();
+
                                 this.userInviteData = {
                                     code: null,
                                     is_used: false,
                                     parrainEmail: null,
                                     filleulEmail: null
                                 };
+
+                                // Réinitialiser les données utilisateur
+                                this.userXP = 0;
+                                this.userLevel = 1;
+                                this.readingStreak = 0;
+                                this.unlockedAchievements = [];
+                                this.readArticles = {};
+                                this.totalReadCount = 0;
+                                this.diversityScore = null;
+                                this.readOrientations = [];
                             }
                         });
 
-                        // === GESTION DE L'INTERFACE ===
+                        // === GESTION DE L'INTERFACE ET ANIMATIONS ===
                         window.addEventListener('scroll', () => {
                             document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
                         });
 
-                        this.cleanOldDiversityData();
-
+                        // === GESTION DES ANIMATIONS AU RETOUR SUR LA PAGE ===
                         document.addEventListener('visibilitychange', () => {
                             if (!document.hidden) {
-                                // Gérer les animations XP en attente
-                                const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                                if (pendingXP.length > 0) {
-                                    // Filtrer les XP trop anciennes (plus de 5 minutes)
-                                    const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
-
-                                    if (recentXP.length > 0) {
-                                        // Calculer le total d'XP à afficher
-                                        const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
-
-                                        // Déclencher l'animation après un court délai
-                                        setTimeout(() => {
-                                            this.showXPAnimation(totalXP);
-                                        }, 500);
-
-                                        // Vider les XP en attente
-                                        localStorage.removeItem('infodrop_pending_xp');
-                                    }
-                                }
-
-                                // Chercher toutes les célébrations en attente
-                                for (let i = 0; i < localStorage.length; i++) {
-                                    const key = localStorage.key(i);
-                                    if (key && key.startsWith('infodrop_celebration_pending_')) {
-                                        const count = parseInt(key.split('_')[3]);
-                                        setTimeout(() => this.showCelebration(count), 1000);
-                                        break; // Une seule célébration à la fois
-                                    }
-                                }
-                                // Compatibilité avec l'ancien système (sans nombre)
-                                if (localStorage.getItem('infodrop_celebration_pending')) {
-                                    setTimeout(() => this.showCelebration(100), 1000);
-                                    localStorage.removeItem('infodrop_celebration_pending');
-                                }
+                                // Traiter toutes les animations en attente
+                                setTimeout(() => {
+                                    this.processPendingAnimations();
+                                }, 500);
                             }
                         });
 
-                        // Vérifier au chargement aussi
-                        for (let i = 0; i < localStorage.length; i++) {
-                            const key = localStorage.key(i);
-                            if (key && key.startsWith('infodrop_celebration_pending_')) {
-                                const count = parseInt(key.split('_')[3]);
-                                setTimeout(() => this.showCelebration(count), 2000);
-                                break;
-                            }
-                        }
-                        // Compatibilité avec l'ancien système
-                        if (localStorage.getItem('infodrop_celebration_pending')) {
-                            setTimeout(() => this.showCelebration(100), 2000);
-                            localStorage.removeItem('infodrop_celebration_pending');
-                        }
-
-                        // Vérifier les XP en attente au chargement
-                        const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                        if (pendingXP.length > 0) {
-                            const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
-                            if (recentXP.length > 0) {
-                                const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
-                                setTimeout(() => {
-                                    this.showXPAnimation(totalXP);
-                                }, 1500);
-                                localStorage.removeItem('infodrop_pending_xp');
-                            }
-                        }
-
-                        // Ajout du CSS pour les animations manquantes
-                        const style = document.createElement('style');
-                        style.textContent = `
-                            @keyframes confetti-fall {
-                                to {
-                                    transform: translateY(100vh) rotate(720deg);
-                                    opacity: 0;
-                                }
-                            }
-                        `;
-                        document.head.appendChild(style);
+                        // === TRAITEMENT DES ANIMATIONS AU CHARGEMENT ===
+                        setTimeout(() => {
+                            this.processPendingAnimations();
+                        }, 2000);
+                        
+                        // Nettoyer le timeout de sécurité
+                        clearTimeout(loaderTimeout);
                     },
 
                     // ============================================================
@@ -2608,6 +3114,9 @@
                         this.message = '';
                         this.messageType = '';
                         try {
+                            // Tracker la tentative de connexion
+                            await this.trackUserAction('login_attempt', { email: this.email.toLowerCase() });
+                            
                             // Vérifie si l'email existe déjà (user existant ou non)
                             const checkRes = await fetch('/api/check-email', {
                                 method: 'POST',
@@ -2651,9 +3160,16 @@
 
                             this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
                             this.messageType = 'success';
+                            
+                            await this.trackUserAction('login_email_sent', { email: this.email.toLowerCase() });
                         } catch (error) {
                             this.message = error.message || 'Une erreur est survenue.';
                             this.messageType = 'error';
+                            
+                            await this.trackUserAction('login_error', { 
+                                email: this.email.toLowerCase(),
+                                error: error.message 
+                            });
                         } finally {
                             this.loading = false;
                         }
@@ -2771,9 +3287,11 @@
 
                     // === CONFIGURATION DU TEMPS RÉEL ===
                     setupRealtime(session) {
+                        // Channel existant pour les utilisateurs en ligne
                         this.realtimeChannel = supabase.channel('infodrop-online-users', {
                             config: { presence: { key: session.user.id } }
                         });
+
                         this.realtimeChannel.on('presence', { event: 'sync' }, () => {
                             this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
                         }).subscribe(async (status) => {
@@ -2781,6 +3299,9 @@
                                 await this.realtimeChannel.track({ online_at: new Date().toISOString() });
                             }
                         });
+
+                        // Nouveau : Configuration du temps réel pour les données utilisateur
+                        this.setupUserDataRealtime();
                     },
 
                     // === GESTION DE L'ÉDITION D'ARTICLES ===
@@ -2790,6 +3311,7 @@
                             tagsText: (news.tags || []).join(', ')
                         };
                         this.showEditPanel = true;
+                        this.trackUserAction('open_edit_panel', { article_id: news.id });
                     },
 
                     // === MISE À JOUR D'UN ARTICLE ===
@@ -2804,6 +3326,11 @@
                             }
                             this.showEditPanel = false;
                             this.updateTagsList();
+                            
+                            await this.trackUserAction('update_article', { 
+                                article_id: id,
+                                updated_fields: { resume, source, url, orientation, tags }
+                            });
                         } catch (e) {
                             alert("La mise à jour a échoué.");
                         }
@@ -2812,10 +3339,15 @@
                     // === SUPPRESSION D'UN ARTICLE ===
                     async deleteNews(id) {
                         if (!confirm("Supprimer ?")) return;
+                        
+                        await this.trackUserAction('delete_article_attempt', { article_id: id });
+                        
                         this.newsList = this.newsList.filter(n => n.id !== id);
                         try {
                             await supabase.from('actu').delete().eq('id', id);
                             if (this.isAdmin) this.loadStats();
+                            
+                            await this.trackUserAction('delete_article_success', { article_id: id });
                         } catch (e) {
                             alert("La suppression a échoué.");
                             this.loadNews();
@@ -2895,6 +3427,13 @@
 
                             console.log('✅ Article créé avec succès:', data);
 
+                            // Tracker l'ajout
+                            await this.trackUserAction('add_article', {
+                                url: articleData.url,
+                                orientation: articleData.orientation,
+                                tags: tags
+                            });
+
                             // === NETTOYAGE DU FORMULAIRE ===
                             this.newNews = {
                                 resume: '',
@@ -2966,6 +3505,8 @@
                             this.copyInviteMessage(result.code);
                             console.log('✅ Code copié dans le presse-papier');
 
+                            await this.trackUserAction('generate_invite_code', { code: result.code });
+
                             console.log('✅ Code généré:', result.code);
 
                         } catch (error) {
@@ -2979,11 +3520,18 @@
                     // === CHARGEMENT DES DONNÉES GÉNÉRALES ===
                     async loadData(isInitial = false) {
                         if (isInitial) this.loadingNews = true;
-                        await this.loadStats();
-                        if (isInitial) {
-                            await this.loadNews(this.activeFilter, true);
+                        
+                        try {
+                            await this.loadStats();
+                            if (isInitial) {
+                                await this.loadNews(this.activeFilter, true);
+                            }
+                        } catch (error) {
+                            console.error('❌ Erreur dans loadData:', error);
+                        } finally {
+                            // On s'assure que le loader est toujours désactivé après le chargement initial
+                            if (isInitial) this.loadingNews = false;
                         }
-                        if (isInitial) this.loadingNews = false;
                     },
 
                     // === CHARGEMENT DES ACTUALITÉS ===
@@ -2995,6 +3543,8 @@
                         }
 
                         try {
+                            console.log('📰 Début chargement des actualités...', { filter, isNewFilter });
+                            
                             let query = supabase
                                 .from('actu')
                                 .select('id, resume, url, heure, source, orientation, tags, added_by')
@@ -3014,7 +3564,13 @@
                             }
 
                             const { data: newArticles, error } = await query;
-                            if (error) throw error;
+                            
+                            if (error) {
+                                console.error('❌ Erreur Supabase dans loadNews:', error);
+                                throw error;
+                            }
+
+                            console.log('✅ Articles reçus:', newArticles ? newArticles.length : 0);
 
                             if (newArticles && newArticles.length > 0) {
                                 if (isNewFilter || !this.latestNewsTimestamp) {
@@ -3023,13 +3579,18 @@
                                     this.newsList = [...newArticles, ...this.newsList];
                                 }
                                 this.latestNewsTimestamp = this.newsList[0].heure;
+                            } else if (isNewFilter) {
+                                // Si c'est un nouveau filtre et qu'il n'y a pas de résultats
+                                this.newsList = [];
                             }
 
                             // On met à jour la liste des tags affichés dans les filtres
                             this.updateTagsList();
 
                         } catch (e) {
-                            console.error('Erreur dans loadNews:', e);
+                            console.error('❌ Erreur dans loadNews:', e);
+                            // En cas d'erreur, on affiche un message à l'utilisateur
+                            alert('Erreur lors du chargement des actualités. Veuillez rafraîchir la page.');
                         } finally {
                             // Quoi qu'il arrive (succès ou erreur), on désactive le loader à la fin
                             if (isNewFilter) {
@@ -3069,311 +3630,39 @@
                     // === CHARGEMENT DES STATISTIQUES ET DES FILTRES ACTIFS ===
                     async loadStats() {
                         try {
-
+                            console.log('📊 Chargement des stats...');
+                            
                             const { data, error } = await supabase.rpc('get_global_stats_and_filters');
 
-                            if (error) throw error;
+                            if (error) {
+                                console.error('❌ Erreur RPC get_global_stats_and_filters:', error);
+                                throw error;
+                            }
+
+                            if (!data) {
+                                console.warn('⚠️ Aucune donnée reçue de get_global_stats_and_filters');
+                                return;
+                            }
 
                             this.stats = {
-                                total_articles: data.total_articles,
-                                total_sources: data.total_sources
+                                total_articles: data.total_articles || 0,
+                                total_sources: data.total_sources || 0
                             };
 
                             this.activeOrientations = data.active_orientations || [];
                             this.activeTags = data.active_tags || [];
 
+                            console.log('✅ Stats chargées:', this.stats);
+
                         } catch (e) {
-                            console.error('Erreur stats:', e);
-                        }
-                    },
-
-                    // ============================================================
-                    // 📚 SYSTÈME DE LECTURES ET DIVERSITÉ
-                    // ============================================================
-
-                    // === MARQUER UN ARTICLE COMME LU (AVEC GAMIFICATION) ===
-                    markAsRead(id) {
-                        if (!this.readArticles[id]) {
-                            this.readArticles[id] = new Date().toISOString();
-                            localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
-                            this.updateTotalReadCount();
-
-                            // Sauvegarder dans la DB
-                            this.saveReadArticleToDB(id);
-
-                            const article = this.newsList.find(n => n.id === id);
-                            if (article) {
-                                this.addToDiversityData(article);
-
-                                // GAMIFICATION : Calculer l'XP à gagner
-                                let xpGained = 10; // XP de base
-
-                                // Bonus pour diversité
-                                if (article.orientation && !this.readOrientations.includes(article.orientation)) {
-                                    xpGained += 20; // Bonus pour nouvelle orientation
-                                }
-
-                                // Bonus pour tags spéciaux
-                                if (article.tags && article.tags.includes('🧨INFODROP')) {
-                                    xpGained += 5;
-                                }
-
-                                // Stocker l'XP en attente pour l'animation au retour
-                                const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                                pendingXP.push({ amount: xpGained, timestamp: Date.now() });
-                                localStorage.setItem('infodrop_pending_xp', JSON.stringify(pendingXP));
-
-                                // Gagner l'XP sans animation
-                                this.gainXPSilently(xpGained);
-
-                                // Vérifier le streak quotidien
-                                this.checkDailyStreak();
-
-                                // Achievements
-                                if (this.totalReadCount === 1) {
-                                    this.unlockAchievement('🎯', 'Premier article lu!');
-                                } else if (this.totalReadCount === 10) {
-                                    this.unlockAchievement('📚', '10 articles lus!');
-                                } else if (this.totalReadCount === 100) {
-                                    this.unlockAchievement('🏆', '100 articles lus!');
-                                }
-
-                                // Achievement diversité - Vérifier si toutes les orientations ont été lues
-                                if (this.diversityScore === 100 && !this.unlockedAchievements.includes('🌈')) {
-                                    this.unlockAchievement('🌈', 'Explorateur - Toutes les orientations lues!');
-                                }
-                            }
-
-                            // Célébrations originales
-                            if (this.totalReadCount % 20 === 0 && this.totalReadCount > 0) {
-                                this.celebrateArticles(this.totalReadCount);
-                            }
-                        }
-                    },
-
-                    // === SAUVEGARDER ARTICLE LU DANS LA DB ===
-                    async saveReadArticleToDB(articleId) {
-                        if (!this.user) return;
-
-                        try {
-                            await supabase
-                                .from('user_read_articles')
-                                .upsert({
-                                    user_id: this.user.id,
-                                    article_id: articleId,
-                                    read_at: new Date().toISOString()
-                                }, {
-                                    onConflict: 'user_id,article_id'
-                                });
-                        } catch (error) {
-                            console.error('Erreur sauvegarde article lu:', error);
-                        }
-                    },
-
-                    // === CHARGER ARTICLES LUS DEPUIS LA DB ===
-                    async loadReadArticlesFromDB() {
-                        if (!this.user) return;
-
-                        try {
-                            const { data, error } = await supabase
-                                .from('user_read_articles')
-                                .select('article_id, read_at')
-                                .eq('user_id', this.user.id);
-
-                            if (data) {
-                                const readFromDB = {};
-                                data.forEach(item => {
-                                    readFromDB[item.article_id] = item.read_at;
-                                });
-
-                                // Fusionner avec les données locales
-                                this.readArticles = { ...readFromDB, ...this.readArticles };
-                                localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
-                                this.updateTotalReadCount();
-                            }
-                        } catch (error) {
-                            console.error('Erreur chargement articles lus:', error);
-                        }
-                    },
-
-                    // === OBTENIR LA LISTE DES ARTICLES LUS ===
-                    getReadArticlesList() {
-                        return this.newsList.filter(news => this.readArticles[news.id])
-                            .sort((a, b) => new Date(this.readArticles[b.id]) - new Date(this.readArticles[a.id]));
-                    },
-
-                    // === SAUVEGARDER PRÉFÉRENCES LECTURE ===
-                    async saveReadPreferences() {
-                        if (!this.user) return;
-
-                        localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
-
-                        try {
-                            await supabase
-                                .from('user_preferences')
-                                .upsert({
-                                    user_id: this.user.id,
-                                    hide_read_articles: this.hideReadFromMain,
-                                    updated_at: new Date().toISOString()
-                                }, {
-                                    onConflict: 'user_id'
-                                });
-                        } catch (error) {
-                            console.error('Erreur sauvegarde préférences:', error);
-                        }
-                    },
-
-                    // === CHARGER PRÉFÉRENCES LECTURE ===
-                    async loadReadPreferences() {
-                        if (!this.user) return;
-
-                        // Charger depuis localStorage d'abord
-                        const localPref = localStorage.getItem('infodrop_hide_read_' + this.user.id);
-                        if (localPref !== null) {
-                            this.hideReadFromMain = localPref === 'true';
-                        }
-
-                        // Puis depuis la DB
-                        try {
-                            const { data } = await supabase
-                                .from('user_preferences')
-                                .select('hide_read_articles')
-                                .eq('user_id', this.user.id)
-                                .single();
-
-                            if (data) {
-                                this.hideReadFromMain = data.hide_read_articles;
-                                localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
-                            }
-                        } catch (error) {
-                            // Pas de préférences trouvées, utiliser la valeur par défaut
-                        }
-                    },
-
-                    // === MISE À JOUR DU COMPTEUR TOTAL ===
-                    updateTotalReadCount() {
-                        this.totalReadCount = Object.keys(this.readArticles).length;
-                    },
-
-                    // === NETTOYAGE DES ANCIENNES DONNÉES DE DIVERSITÉ ===
-                    cleanOldDiversityData() {
-                        const expiry = Date.now() - 24 * 60 * 60 * 1000;
-                        Object.keys(this.diversityData).forEach(t => {
-                            if (new Date(t).getTime() < expiry) delete this.diversityData[t];
-                        });
-                        localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
-                    },
-
-                    // === AJOUT AUX DONNÉES DE DIVERSITÉ ===
-                    addToDiversityData(article) {
-                        let o = article.orientation || 'neutre';
-                        if (article.tags?.includes('🧨INFODROP')) o = '🧨INFODROP';
-                        this.diversityData[new Date().toISOString()] = {
-                            orientation: o,
-                            source: article.source
-                        };
-                        localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
-                        this.calculateDiversityScore();
-                    },
-
-                    // === CALCUL DU SCORE DE DIVERSITÉ ===
-                    calculateDiversityScore() {
-                        this.cleanOldDiversityData();
-                        const reads = Object.values(this.diversityData);
-                        if (reads.length === 0) {
-                            this.diversityScore = null;
-                            this.readOrientations = [];
-                            return;
-                        }
-                        const oSet = new Set(reads.map(r => r.orientation).filter(Boolean));
-                        const sSet = new Set(reads.map(r => r.source));
-                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
-                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
-                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
-                        this.showDiversityChecker = this.diversityScore < 100;
-                    },
-
-                    // === MESSAGE DU SCORE DE DIVERSITÉ ===
-                    getDiversityMessage() {
-                        if (this.diversityScore < 30) return "🔴 Bulle de filtre ! Explorez d'autres horizons";
-                        if (this.diversityScore < 50) return "🟡 Bon début ! Continuez à diversifier";
-                        if (this.diversityScore < 70) return "🟠 Bien ! Quelques perspectives en plus ?";
-                        if (this.diversityScore < 85) return "🟢 Très bien ! Vous êtes sur la bonne voie";
-                        return "🏆 Champion de la diversité !";
-                    },
-
-                    getDiversityTip() {
-                        const missing = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP']
-                            .filter(orientation => !this.readOrientations.includes(orientation));
-
-                        if (missing.length === 0) return "🎉 Toutes les orientations explorées !";
-                        if (missing.length > 6) return "💡 Essayez de lire des perspectives variées";
-
-                        const suggestion = missing[Math.floor(Math.random() * missing.length)];
-                        return `💡 Essayez de lire du "${suggestion.replace('-', ' ')}"`;
-                    },
-
-                    // === CÉLÉBRATION DES ARTICLES ===
-                    celebrateArticles(count) {
-                        if (document.hidden) {
-                            localStorage.setItem(`infodrop_celebration_pending_${count}`, 'true');
-                            return;
-                        }
-                        this.showCelebration(count);
-                    },
-
-                    showCelebration(count = 100) {
-                        const cont = document.createElement('div');
-                        cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:auto;z-index:9999;background:rgba(0,0,0,0.8);cursor:pointer;';
-
-                        this.startConfettiLoop(cont);
-
-                        const msg = document.createElement('div');
-                        msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
-                        const isSpecial = count === 100 || count % 100 === 0;
-                        const emoji = isSpecial ? '🏆' : '🎉';
-                        const title = isSpecial ? 'Incroyable !' : 'Bravo !';
-
-                        msg.innerHTML = `
-        <h2 class="text-3xl font-bold mb-2">${emoji} ${title} ${emoji}</h2>
-        <p class="text-lg mb-2">${count} articles lus !</p>
-        <p class="text-sm opacity-80">Cliquez pour continuer</p>
-    `;
-
-                        cont.appendChild(msg);
-                        document.body.appendChild(cont);
-
-                        const closeAnimation = () => {
-                            cont.remove();
-                            this.stopConfettiLoop();
-                            localStorage.removeItem(`infodrop_celebration_pending_${count}`);
-                        };
-
-                        cont.addEventListener('click', closeAnimation);
-                        msg.addEventListener('click', closeAnimation);
-                    },
-
-                    startConfettiLoop(container) {
-                        this.confettiInterval = setInterval(() => {
-                            this.createConfettiBatch(container);
-                        }, 1000);
-                    },
-
-                    stopConfettiLoop() {
-                        if (this.confettiInterval) {
-                            clearInterval(this.confettiInterval);
-                            this.confettiInterval = null;
-                        }
-                    },
-
-                    createConfettiBatch(container) {
-                        const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7'];
-                        for (let i = 0; i < 10; i++) {
-                            const conf = document.createElement('div');
-                            conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;pointer-events:none;`;
-                            container.appendChild(conf);
-
-                            setTimeout(() => conf.remove(), 5000);
+                            console.error('❌ Erreur stats:', e);
+                            // Valeurs par défaut en cas d'erreur
+                            this.stats = {
+                                total_articles: 0,
+                                total_sources: 0
+                            };
+                            this.activeOrientations = [];
+                            this.activeTags = [];
                         }
                     },
 
@@ -3471,6 +3760,7 @@ Utilisez ce code lors de votre inscription : ${code}`;
                 };
             }
         </script>
+    </div>
 </body>
 
 </html>
