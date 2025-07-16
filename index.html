@@ -1952,20 +1952,6 @@
                     'neutre': { class: 'bg-green-700 text-green-100 border-green-800', color: '#16a34a' }
                 };
 
-                // === HIÉRARCHIE DES ACHIEVEMENTS ===
-                const ACHIEVEMENTS_HIERARCHY = [
-                    '🚪', // Connexion
-                    '🎯', // Premier article
-                    '📚', // 10 articles
-                    '🏆', // 100 articles
-                    '🔥', // Streak 7 jours
-                    '🌟', // Streak 30 jours
-                    '⭐', // Niveau 5
-                    '💎', // Niveau 10
-                    '🌈', // Toutes orientations
-                    '👑'  // Niveau 25
-                ];
-
                 return {
                     // ============================================================
                     // 📊 ÉTAT DE L'APPLICATION - VARIABLES RÉACTIVES
@@ -2048,6 +2034,7 @@
                     lastReadDate: null,
                     currentAchievement: null,
                     showAchievementsModal: false,
+                    achievementsData: [], // Cache des achievements depuis DB
 
                     // === RÉINITIALISATION DE LA RECHERCHE SUR CHANGEMENT DE FILTRE ===
                     toggleFilter(filter) {
@@ -2066,7 +2053,6 @@
                     diversityScore: null,
                     readOrientations: [],
                     showDiversityChecker: true,
-                    diversityData: JSON.parse(localStorage.getItem('infodrop_diversity') || '{}'),
 
                     // === GESTION DES ARTICLES LUS ===
                     showReadArticles: false,
@@ -2096,40 +2082,135 @@
                     // 🎮 SYSTÈME DE GAMIFICATION
                     // ============================================================
 
+                    // === CHARGER LES ACHIEVEMENTS DEPUIS LA DB ===
+                    async loadAchievements() {
+                        try {
+                            const { data } = await supabase
+                                .from('achievements')
+                                .select('*')
+                                .eq('is_active', true)
+                                .order('order_priority');
+
+                            this.achievementsData = data || [];
+                            console.log('✅ Achievements chargés:', this.achievementsData.length);
+                        } catch (error) {
+                            console.error('Erreur chargement achievements:', error);
+                        }
+                    },
+
                     // === INITIALISATION DE LA GAMIFICATION ===
-                    initGamification() {
+                    async initGamification() {
                         if (!this.user) return;
 
-                        const savedData = localStorage.getItem('infodrop_gaming_' + this.user.id);
-                        if (savedData) {
-                            const data = JSON.parse(savedData);
+                        try {
+                            let { data, error } = await supabase
+                                .from('user_gaming_stats')
+                                .select('*')
+                                .eq('user_id', this.user.id)
+                                .single();
+
+                            if (error && error.code === 'PGRST116') {
+                                // Pas de stats, créer l'entrée
+                                const { data: newStats } = await supabase
+                                    .from('user_gaming_stats')
+                                    .insert({
+                                        user_id: this.user.id,
+                                        xp: 0,
+                                        level: 1,
+                                        reading_streak: 0,
+                                        unlocked_achievements: ['WELCOME'],
+                                        last_read_date: null
+                                    })
+                                    .select()
+                                    .single();
+                                data = newStats;
+                            }
+
+                            // Appliquer les données
                             this.userXP = data.xp || 0;
                             this.userLevel = data.level || 1;
-                            this.readingStreak = data.streak || 0;
-                            this.unlockedAchievements = data.achievements || [];
-                            this.lastReadDate = data.lastReadDate || null;
-                        }
+                            this.readingStreak = data.reading_streak || 0;
+                            this.unlockedAchievements = data.unlocked_achievements || ['WELCOME'];
+                            this.lastReadDate = data.last_read_date;
 
-                        // Débloquer achievement de connexion
-                        if (!this.unlockedAchievements.includes('🚪')) {
-                            this.unlockAchievement('🚪', 'Bienvenue dans le club!');
+                            this.updateXPToNextLevel();
+                            this.updateCurrentAchievement();
+                        } catch (error) {
+                            console.error('Erreur init gamification:', error);
                         }
+                    },
 
-                        this.updateXPToNextLevel();
-                        this.checkDailyStreak();
-                        this.updateCurrentAchievement();
+                    // === SAUVEGARDE DES DONNÉES GAMING ===
+                    async saveGamingData() {
+                        if (!this.user) return;
+
+                        try {
+                            await supabase
+                                .from('user_gaming_stats')
+                                .update({
+                                    xp: this.userXP,
+                                    level: this.userLevel,
+                                    reading_streak: this.readingStreak,
+                                    unlocked_achievements: this.unlockedAchievements,
+                                    last_read_date: this.lastReadDate,
+                                    updated_at: new Date().toISOString()
+                                })
+                                .eq('user_id', this.user.id);
+                        } catch (error) {
+                            console.error('Erreur sauvegarde gaming:', error);
+                        }
+                    },
+
+                    // === VÉRIFIER LES ACHIEVEMENTS ===
+                    async checkAchievements() {
+                        if (!this.user || !this.achievementsData.length) return;
+
+                        for (const achievement of this.achievementsData) {
+                            // Skip si déjà débloqué
+                            if (this.unlockedAchievements.includes(achievement.code)) continue;
+
+                            let shouldUnlock = false;
+
+                            switch (achievement.condition_type) {
+                                case 'connection':
+                                    shouldUnlock = true; // Toujours vrai si connecté
+                                    break;
+
+                                case 'articles_read':
+                                    shouldUnlock = this.totalReadCount >= achievement.condition_value;
+                                    break;
+
+                                case 'streak_days':
+                                    shouldUnlock = this.readingStreak >= achievement.condition_value;
+                                    break;
+
+                                case 'level_reached':
+                                    shouldUnlock = this.userLevel >= achievement.condition_value;
+                                    break;
+
+                                case 'diversity_score':
+                                    shouldUnlock = this.diversityScore >= achievement.condition_value;
+                                    break;
+                            }
+
+                            if (shouldUnlock) {
+                                await this.unlockAchievement(achievement.code, achievement.title);
+                            }
+                        }
                     },
 
                     // === MISE À JOUR DU BADGE ACTUEL ===
                     updateCurrentAchievement() {
                         // Trouver le badge de plus haut niveau débloqué
-                        for (let i = ACHIEVEMENTS_HIERARCHY.length - 1; i >= 0; i--) {
-                            if (this.unlockedAchievements.includes(ACHIEVEMENTS_HIERARCHY[i])) {
-                                this.currentAchievement = ACHIEVEMENTS_HIERARCHY[i];
-                                return;
-                            }
+                        const unlockedAchievements = this.achievementsData
+                            .filter(a => this.unlockedAchievements.includes(a.code))
+                            .sort((a, b) => b.order_priority - a.order_priority);
+
+                        if (unlockedAchievements.length > 0) {
+                            this.currentAchievement = unlockedAchievements[0].icon_emoji;
+                        } else {
+                            this.currentAchievement = null;
                         }
-                        this.currentAchievement = null;
                     },
 
                     // === CALCUL XP POUR NIVEAU SUIVANT ===
@@ -2158,13 +2239,6 @@
 
                         this.lastReadDate = today;
                         this.saveGamingData();
-
-                        // Vérifier achievements de streak
-                        if (this.readingStreak === 7) {
-                            this.unlockAchievement('🔥', 'Lecteur assidu - 7 jours de suite!');
-                        } else if (this.readingStreak === 30) {
-                            this.unlockAchievement('🌟', 'Maître de l\'info - 30 jours de suite!');
-                        }
                     },
 
                     // === GAGNER DE L'XP ===
@@ -2180,18 +2254,10 @@
                             this.userLevel++;
                             this.updateXPToNextLevel();
                             this.showLevelUpAnimation();
-
-                            // Achievements de niveau
-                            if (this.userLevel === 5) {
-                                this.unlockAchievement('⭐', 'Apprenti informé - Niveau 5!');
-                            } else if (this.userLevel === 10) {
-                                this.unlockAchievement('💎', 'Expert de l\'actu - Niveau 10!');
-                            } else if (this.userLevel === 25) {
-                                this.unlockAchievement('👑', 'Légende d\'INFODROP - Niveau 25!');
-                            }
                         }
 
                         this.saveGamingData();
+                        this.checkAchievements();
                     },
 
                     // === GAGNER DE L'XP SANS ANIMATION ===
@@ -2204,138 +2270,78 @@
                             this.userLevel++;
                             this.updateXPToNextLevel();
                             this.showLevelUpAnimation();
-
-                            // Achievements de niveau
-                            if (this.userLevel === 5) {
-                                this.unlockAchievement('⭐', 'Apprenti informé - Niveau 5!');
-                            } else if (this.userLevel === 10) {
-                                this.unlockAchievement('💎', 'Expert de l\'actu - Niveau 10!');
-                            } else if (this.userLevel === 25) {
-                                this.unlockAchievement('👑', 'Légende d\'INFODROP - Niveau 25!');
-                            }
                         }
 
                         this.saveGamingData();
                     },
 
                     // === DÉBLOQUER UN ACHIEVEMENT ===
-                    unlockAchievement(icon, title) {
-                        if (!this.unlockedAchievements.includes(icon)) {
-                            this.unlockedAchievements.push(icon);
-                            this.showAchievementPopup(icon, title);
+                    async unlockAchievement(code, title) {
+                        if (!this.unlockedAchievements.includes(code)) {
+                            this.unlockedAchievements.push(code);
+
+                            // Trouver l'achievement complet
+                            const achievement = this.achievementsData.find(a => a.code === code);
+                            if (achievement) {
+                                this.showAchievementPopup(achievement.icon_emoji, achievement.title);
+                            }
+
+                            // Sauvegarder dans user_gaming_stats
+                            await this.saveGamingData();
+
+                            // Sauvegarder dans user_achievement_history
+                            await supabase
+                                .from('user_achievement_history')
+                                .insert({
+                                    user_id: this.user.id,
+                                    achievement_code: code,
+                                    unlocked_at: new Date().toISOString()
+                                });
+
                             this.updateCurrentAchievement();
-                            this.saveGamingData();
                         }
                     },
 
                     // === OBTENIR LE TITRE D'UN ACHIEVEMENT ===
-                    getAchievementTitle(icon) {
-                        const achievements = {
-                            '🚪': 'Bienvenue dans le club',
-                            '🎯': 'Premier article lu',
-                            '📚': '10 articles lus',
-                            '🏆': '100 articles lus',
-                            '🔥': 'Lecteur assidu - 7 jours',
-                            '🌟': 'Maître de l\'info - 30 jours',
-                            '⭐': 'Apprenti informé - Niveau 5',
-                            '💎': 'Expert de l\'actu - Niveau 10',
-                            '👑': 'Légende d\'INFODROP - Niveau 25',
-                            '🌈': 'Explorateur - Toutes les orientations lues'
-                        };
-                        return achievements[icon] || 'Achievement mystère';
+                    getAchievementTitle(code) {
+                        const achievement = this.achievementsData.find(a => a.code === code);
+                        return achievement ? achievement.title : 'Achievement mystère';
                     },
 
                     // === OBTENIR TOUTES LES DONNÉES D'ACHIEVEMENTS ===
                     getAllAchievementsData() {
-                        const achievementsData = [
-                            {
-                                id: '🚪',
-                                icon: '🚪',
-                                title: 'Bienvenue dans le club',
-                                description: 'Se connecter à INFODROP',
-                                unlocked: this.unlockedAchievements.includes('🚪'),
-                                progress: '✓ Complété'
-                            },
-                            {
-                                id: '🎯',
-                                icon: '🎯',
-                                title: 'Premier pas',
-                                description: 'Lire votre premier article',
-                                unlocked: this.unlockedAchievements.includes('🎯'),
-                                progress: this.totalReadCount === 0 ? '0/1 article' : '✓ Complété'
-                            },
-                            {
-                                id: '📚',
-                                icon: '📚',
-                                title: 'Lecteur régulier',
-                                description: 'Lire 10 articles',
-                                unlocked: this.unlockedAchievements.includes('📚'),
-                                progress: this.totalReadCount < 10 ? `${this.totalReadCount}/10 articles` : '✓ Complété'
-                            },
-                            {
-                                id: '🏆',
-                                icon: '🏆',
-                                title: 'Centurion de l\'info',
-                                description: 'Lire 100 articles',
-                                unlocked: this.unlockedAchievements.includes('🏆'),
-                                progress: this.totalReadCount < 100 ? `${this.totalReadCount}/100 articles` : '✓ Complété'
-                            },
-                            {
-                                id: '🔥',
-                                icon: '🔥',
-                                title: 'Semaine de feu',
-                                description: 'Maintenir un streak de 7 jours',
-                                unlocked: this.unlockedAchievements.includes('🔥'),
-                                progress: this.readingStreak < 7 ? `${this.readingStreak}/7 jours` : '✓ Complété'
-                            },
-                            {
-                                id: '🌟',
-                                icon: '🌟',
-                                title: 'Mois légendaire',
-                                description: 'Maintenir un streak de 30 jours',
-                                unlocked: this.unlockedAchievements.includes('🌟'),
-                                progress: this.readingStreak < 30 ? `${this.readingStreak}/30 jours` : '✓ Complété'
-                            },
-                            {
-                                id: '⭐',
-                                icon: '⭐',
-                                title: 'Apprenti informé',
-                                description: 'Atteindre le niveau 5',
-                                unlocked: this.unlockedAchievements.includes('⭐'),
-                                progress: this.userLevel < 5 ? `Niveau ${this.userLevel}/5` : '✓ Complété'
-                            },
-                            {
-                                id: '💎',
-                                icon: '💎',
-                                title: 'Expert de l\'actu',
-                                description: 'Atteindre le niveau 10',
-                                unlocked: this.unlockedAchievements.includes('💎'),
-                                progress: this.userLevel < 10 ? `Niveau ${this.userLevel}/10` : '✓ Complété'
-                            },
-                            {
-                                id: '🌈',
-                                icon: '🌈',
-                                title: 'Esprit ouvert',
-                                description: 'Lire des articles de toutes les orientations (Score diversité 100%)',
-                                unlocked: this.unlockedAchievements.includes('🌈'),
-                                progress: this.diversityScore < 100 ? `Score: ${this.diversityScore || 0}%` : '✓ Complété'
-                            },
-                            {
-                                id: '👑',
-                                icon: '👑',
-                                title: 'Légende d\'INFODROP',
-                                description: 'Atteindre le niveau 25',
-                                unlocked: this.unlockedAchievements.includes('👑'),
-                                progress: this.userLevel < 25 ? `Niveau ${this.userLevel}/25` : '✓ Complété'
-                            }
-                        ];
+                        return this.achievementsData.map(achievement => ({
+                            id: achievement.code,
+                            icon: achievement.icon_emoji,
+                            title: achievement.title,
+                            description: achievement.description,
+                            unlocked: this.unlockedAchievements.includes(achievement.code),
+                            progress: this.getAchievementProgress(achievement)
+                        }));
+                    },
 
-                        // Trier : débloqués d'abord, puis par ordre de hiérarchie
-                        return achievementsData.sort((a, b) => {
-                            if (a.unlocked && !b.unlocked) return -1;
-                            if (!a.unlocked && b.unlocked) return 1;
-                            return ACHIEVEMENTS_HIERARCHY.indexOf(a.id) - ACHIEVEMENTS_HIERARCHY.indexOf(b.id);
-                        });
+                    // === CALCULER LA PROGRESSION ===
+                    getAchievementProgress(achievement) {
+                        if (this.unlockedAchievements.includes(achievement.code)) {
+                            return '✓ Complété';
+                        }
+
+                        switch (achievement.condition_type) {
+                            case 'articles_read':
+                                return `${this.totalReadCount}/${achievement.condition_value} articles`;
+
+                            case 'streak_days':
+                                return `${this.readingStreak}/${achievement.condition_value} jours`;
+
+                            case 'level_reached':
+                                return `Niveau ${this.userLevel}/${achievement.condition_value}`;
+
+                            case 'diversity_score':
+                                return `Score: ${this.diversityScore || 0}%`;
+
+                            default:
+                                return '...';
+                        }
                     },
 
                     // === ANIMATION GAIN XP ===
@@ -2389,21 +2395,6 @@
                             popup.style.animation = 'achievement-appear 0.5s ease-out reverse forwards';
                             setTimeout(() => popup.remove(), 500);
                         }, 3000);
-                    },
-
-                    // === SAUVEGARDE DES DONNÉES GAMING ===
-                    saveGamingData() {
-                        if (!this.user) return;
-
-                        const data = {
-                            xp: this.userXP,
-                            level: this.userLevel,
-                            streak: this.readingStreak,
-                            achievements: this.unlockedAchievements,
-                            lastReadDate: this.lastReadDate
-                        };
-
-                        localStorage.setItem('infodrop_gaming_' + this.user.id, JSON.stringify(data));
                     },
 
                     // === CONFETTIS DORÉS ===
@@ -2478,22 +2469,25 @@
                             if (event === 'SIGNED_IN') {
                                 console.log('✅ Événement SIGNED_IN détecté ! Chargement des données...');
                                 this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
-                                const userReadData = localStorage.getItem('infodrop_read_' + this.user.id) || '{}';
-                                this.readArticles = JSON.parse(userReadData);
 
-                                // Initialiser la gamification
-                                this.initGamification();
+                                // 1. Charger les achievements en premier
+                                await this.loadAchievements();
+
+                                // 2. Charger tout le reste depuis Supabase
+                                await Promise.all([
+                                    this.initGamification(),
+                                    this.loadReadArticlesFromDB(),
+                                    this.loadReadPreferences(),
+                                    this.calculateDiversityScore(),
+                                    this.loadUserInviteData()
+                                ]);
+
+                                // 3. Vérifier les achievements
+                                await this.checkAchievements();
 
                                 this.loadData(true);
                                 this.startAutoUpdate();
                                 this.setupRealtime(session);
-                                this.updateTotalReadCount();
-                                this.calculateDiversityScore();
-                                this.loadUserInviteData();
-
-                                // Charger les articles lus et préférences depuis la DB
-                                this.loadReadArticlesFromDB();
-                                this.loadReadPreferences();
                             }
                             if (event === 'SIGNED_OUT') {
                                 this.stopAutoUpdate();
@@ -2514,8 +2508,6 @@
                         window.addEventListener('scroll', () => {
                             document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
                         });
-
-                        this.cleanOldDiversityData();
 
                         document.addEventListener('visibilitychange', () => {
                             if (!document.hidden) {
@@ -3091,19 +3083,40 @@
                     // 📚 SYSTÈME DE LECTURES ET DIVERSITÉ
                     // ============================================================
 
+                    // === CHARGER ARTICLES LUS DEPUIS LA DB ===
+                    async loadReadArticlesFromDB() {
+                        if (!this.user) return;
+
+                        try {
+                            const { data } = await supabase
+                                .from('user_read_articles')
+                                .select('article_id, read_at')
+                                .eq('user_id', this.user.id);
+
+                            this.readArticles = {};
+                            if (data) {
+                                data.forEach(item => {
+                                    this.readArticles[item.article_id] = item.read_at;
+                                });
+                            }
+                            this.updateTotalReadCount();
+                        } catch (error) {
+                            console.error('Erreur chargement articles lus:', error);
+                        }
+                    },
+
                     // === MARQUER UN ARTICLE COMME LU (AVEC GAMIFICATION) ===
-                    markAsRead(id) {
+                    async markAsRead(id) {
                         if (!this.readArticles[id]) {
                             this.readArticles[id] = new Date().toISOString();
-                            localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
                             this.updateTotalReadCount();
 
                             // Sauvegarder dans la DB
-                            this.saveReadArticleToDB(id);
+                            await this.saveReadArticleToDB(id);
 
                             const article = this.newsList.find(n => n.id === id);
                             if (article) {
-                                this.addToDiversityData(article);
+                                await this.addToDiversityData(article);
 
                                 // GAMIFICATION : Calculer l'XP à gagner
                                 let xpGained = 10; // XP de base
@@ -3129,19 +3142,8 @@
                                 // Vérifier le streak quotidien
                                 this.checkDailyStreak();
 
-                                // Achievements
-                                if (this.totalReadCount === 1) {
-                                    this.unlockAchievement('🎯', 'Premier article lu!');
-                                } else if (this.totalReadCount === 10) {
-                                    this.unlockAchievement('📚', '10 articles lus!');
-                                } else if (this.totalReadCount === 100) {
-                                    this.unlockAchievement('🏆', '100 articles lus!');
-                                }
-
-                                // Achievement diversité - Vérifier si toutes les orientations ont été lues
-                                if (this.diversityScore === 100 && !this.unlockedAchievements.includes('🌈')) {
-                                    this.unlockAchievement('🌈', 'Explorateur - Toutes les orientations lues!');
-                                }
+                                // Vérifier tous les achievements
+                                await this.checkAchievements();
                             }
 
                             // Célébrations originales
@@ -3170,29 +3172,58 @@
                         }
                     },
 
-                    // === CHARGER ARTICLES LUS DEPUIS LA DB ===
-                    async loadReadArticlesFromDB() {
+                    // === AJOUTER AUX DONNÉES DE DIVERSITÉ ===
+                    async addToDiversityData(article) {
+                        if (!this.user) return;
+
+                        const orientation = article.tags?.includes('🧨INFODROP') ? '🧨INFODROP' : (article.orientation || 'neutre');
+
+                        try {
+                            await supabase
+                                .from('user_diversity_data')
+                                .insert({
+                                    user_id: this.user.id,
+                                    orientation: orientation,
+                                    source: article.source,
+                                    read_at: new Date().toISOString()
+                                });
+
+                            await this.calculateDiversityScore();
+                        } catch (error) {
+                            console.error('Erreur sauvegarde diversité:', error);
+                        }
+                    },
+
+                    // === CALCULER LE SCORE DE DIVERSITÉ ===
+                    async calculateDiversityScore() {
                         if (!this.user) return;
 
                         try {
-                            const { data, error } = await supabase
-                                .from('user_read_articles')
-                                .select('article_id, read_at')
-                                .eq('user_id', this.user.id);
+                            const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                            const { data } = await supabase
+                                .from('user_diversity_data')
+                                .select('orientation, source')
+                                .eq('user_id', this.user.id)
+                                .gte('read_at', twentyFourHoursAgo.toISOString());
 
-                            if (data) {
-                                const readFromDB = {};
-                                data.forEach(item => {
-                                    readFromDB[item.article_id] = item.read_at;
-                                });
-
-                                // Fusionner avec les données locales
-                                this.readArticles = { ...readFromDB, ...this.readArticles };
-                                localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
-                                this.updateTotalReadCount();
+                            if (!data || data.length === 0) {
+                                this.diversityScore = null;
+                                this.readOrientations = [];
+                                return;
                             }
+
+                            const orientationSet = new Set(data.map(r => r.orientation).filter(Boolean));
+                            const sourceSet = new Set(data.map(r => r.source));
+
+                            const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
+                            this.readOrientations = [...orientationSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
+
+                            this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sourceSet.size / 5) * 50, 50)));
+                            this.showDiversityChecker = this.diversityScore < 100;
+
+                            await this.checkAchievements();
                         } catch (error) {
-                            console.error('Erreur chargement articles lus:', error);
+                            console.error('Erreur calcul diversité:', error);
                         }
                     },
 
@@ -3205,8 +3236,6 @@
                     // === SAUVEGARDER PRÉFÉRENCES LECTURE ===
                     async saveReadPreferences() {
                         if (!this.user) return;
-
-                        localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
 
                         try {
                             await supabase
@@ -3227,13 +3256,6 @@
                     async loadReadPreferences() {
                         if (!this.user) return;
 
-                        // Charger depuis localStorage d'abord
-                        const localPref = localStorage.getItem('infodrop_hide_read_' + this.user.id);
-                        if (localPref !== null) {
-                            this.hideReadFromMain = localPref === 'true';
-                        }
-
-                        // Puis depuis la DB
                         try {
                             const { data } = await supabase
                                 .from('user_preferences')
@@ -3243,7 +3265,6 @@
 
                             if (data) {
                                 this.hideReadFromMain = data.hide_read_articles;
-                                localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
                             }
                         } catch (error) {
                             // Pas de préférences trouvées, utiliser la valeur par défaut
@@ -3253,44 +3274,6 @@
                     // === MISE À JOUR DU COMPTEUR TOTAL ===
                     updateTotalReadCount() {
                         this.totalReadCount = Object.keys(this.readArticles).length;
-                    },
-
-                    // === NETTOYAGE DES ANCIENNES DONNÉES DE DIVERSITÉ ===
-                    cleanOldDiversityData() {
-                        const expiry = Date.now() - 24 * 60 * 60 * 1000;
-                        Object.keys(this.diversityData).forEach(t => {
-                            if (new Date(t).getTime() < expiry) delete this.diversityData[t];
-                        });
-                        localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
-                    },
-
-                    // === AJOUT AUX DONNÉES DE DIVERSITÉ ===
-                    addToDiversityData(article) {
-                        let o = article.orientation || 'neutre';
-                        if (article.tags?.includes('🧨INFODROP')) o = '🧨INFODROP';
-                        this.diversityData[new Date().toISOString()] = {
-                            orientation: o,
-                            source: article.source
-                        };
-                        localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
-                        this.calculateDiversityScore();
-                    },
-
-                    // === CALCUL DU SCORE DE DIVERSITÉ ===
-                    calculateDiversityScore() {
-                        this.cleanOldDiversityData();
-                        const reads = Object.values(this.diversityData);
-                        if (reads.length === 0) {
-                            this.diversityScore = null;
-                            this.readOrientations = [];
-                            return;
-                        }
-                        const oSet = new Set(reads.map(r => r.orientation).filter(Boolean));
-                        const sSet = new Set(reads.map(r => r.source));
-                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
-                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
-                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
-                        this.showDiversityChecker = this.diversityScore < 100;
                     },
 
                     // === MESSAGE DU SCORE DE DIVERSITÉ ===
