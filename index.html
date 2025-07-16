@@ -2980,10 +2980,11 @@
 
                     // === CHARGEMENT DES ACTUALITÉS ===
                     async loadNews(filter = null, isNewFilter = false) {
-                        // Si l'utilisateur applique un nouveau filtre, on active immédiatement le loader
+                        console.log('🔄 loadNews appelé avec filter:', filter, 'isNewFilter:', isNewFilter);
+
                         if (isNewFilter) {
                             this.loadingNews = true;
-                            this.newsList = []; // C'est maintenant sûr de vider la liste, car le loader s'affichera
+                            this.newsList = [];
                         }
 
                         try {
@@ -2996,16 +2997,16 @@
                                 query = query.or(`orientation.eq.${filter},tags.cs.{${filter}}`);
                             }
 
-                            // Pour les rafraîchissements automatiques, on prend que le nouveau.
-                            // On ne gère plus isNewFilter ici, c'est fait au-dessus.
                             if (!isNewFilter && this.latestNewsTimestamp) {
                                 query = query.gt('heure', this.latestNewsTimestamp);
                             } else {
-                                // Pour le premier chargement ou un nouveau filtre, on prend les 100 premiers
                                 query = query.limit(100);
                             }
 
+                            console.log('📤 Requête envoyée...');
                             const { data: newArticles, error } = await query;
+                            console.log('📥 Réponse:', { newArticles, error });
+
                             if (error) throw error;
 
                             if (newArticles && newArticles.length > 0) {
@@ -3017,14 +3018,13 @@
                                 this.latestNewsTimestamp = this.newsList[0].heure;
                             }
 
-                            // On met à jour la liste des tags affichés dans les filtres
                             this.updateTagsList();
 
                         } catch (e) {
-                            console.error('Erreur dans loadNews:', e);
+                            console.error('❌ Erreur dans loadNews:', e);
                         } finally {
-                            // Quoi qu'il arrive (succès ou erreur), on désactive le loader à la fin
                             if (isNewFilter) {
+                                console.log('✅ loadingNews = false');
                                 this.loadingNews = false;
                             }
                         }
