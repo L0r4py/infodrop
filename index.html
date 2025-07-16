@@ -2161,7 +2161,7 @@
                             const savedGamingData = localStorage.getItem('infodrop_gaming_' + this.user.id);
                             if (savedGamingData) {
                                 const data = JSON.parse(savedGamingData);
-
+                                
                                 // Vérifier si les données existent déjà en DB
                                 const { data: existingGaming } = await supabase
                                     .from('user_gaming_stats')
@@ -2181,7 +2181,7 @@
                                             unlocked_achievements: data.achievements || [],
                                             last_read_date: data.lastReadDate || null
                                         });
-
+                                    
                                     console.log('✅ Données de gamification migrées');
                                 }
                             }
@@ -2190,9 +2190,9 @@
                             const savedReadData = localStorage.getItem('infodrop_read_' + this.user.id);
                             if (savedReadData) {
                                 const readArticles = JSON.parse(savedReadData);
-
+                                
                                 console.log('📚 Migration des articles lus...');
-
+                                
                                 // Insérer en lot (batch insert) pour de meilleures performances
                                 const readDataToInsert = Object.entries(readArticles).map(([articleId, readAt]) => ({
                                     user_id: this.user.id,
@@ -2220,9 +2220,9 @@
                             const savedDiversityData = localStorage.getItem('infodrop_diversity');
                             if (savedDiversityData) {
                                 const diversityData = JSON.parse(savedDiversityData);
-
+                                
                                 console.log('🌈 Migration des données de diversité...');
-
+                                
                                 const diversityDataToInsert = Object.entries(diversityData)
                                     .filter(([timestamp]) => {
                                         // Ne migrer que les données des dernières 24h
@@ -2254,7 +2254,7 @@
                             const savedHideRead = localStorage.getItem('infodrop_hide_read_' + this.user.id);
                             if (savedHideRead !== null) {
                                 console.log('⚙️ Migration des préférences...');
-
+                                
                                 await supabase
                                     .from('user_preferences')
                                     .upsert({
@@ -2264,7 +2264,7 @@
                                     }, {
                                         onConflict: 'user_id'
                                     });
-
+                                
                                 console.log('✅ Préférences migrées');
                             }
 
@@ -2274,7 +2274,7 @@
                             localStorage.removeItem('infodrop_read_' + this.user.id);
                             localStorage.removeItem('infodrop_diversity');
                             localStorage.removeItem('infodrop_hide_read_' + this.user.id);
-
+                            
                             console.log('✅ Migration terminée avec succès');
 
                         } catch (error) {
@@ -2534,7 +2534,7 @@
                         if (!this.readArticles[id]) {
                             const readAt = new Date().toISOString();
                             this.readArticles[id] = readAt;
-
+                            
                             // Sauvegarder dans la DB
                             await this.saveReadArticleToDB(id);
                             this.updateTotalReadCount();
@@ -2683,7 +2683,7 @@
 
                         try {
                             const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-
+                            
                             const { error } = await supabase
                                 .from('user_diversity_data')
                                 .delete()
@@ -2733,7 +2733,7 @@
 
                             // Récupérer les données des dernières 24h
                             const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-
+                            
                             const { data: diversityData, error } = await supabase
                                 .from('user_diversity_data')
                                 .select('orientation, source')
@@ -2743,7 +2743,7 @@
                             if (error) throw error;
 
                             const reads = diversityData || [];
-
+                            
                             if (reads.length === 0) {
                                 this.diversityScore = null;
                                 this.readOrientations = [];
@@ -2752,9 +2752,9 @@
 
                             const orientationSet = new Set(reads.map(r => r.orientation).filter(Boolean));
                             const sourceSet = new Set(reads.map(r => r.source));
-
+                            
                             const spectrumOrientations = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
-
+                            
                             this.readOrientations = [...orientationSet]
                                 .filter(o => o !== 'gouvernement')
                                 .sort((a, b) => spectrumOrientations.indexOf(a) - spectrumOrientations.indexOf(b));
@@ -2762,7 +2762,7 @@
                             // Calcul du score : 50% pour orientations + 50% pour sources
                             const orientationScore = (this.readOrientations.length / 9) * 50;
                             const sourceScore = Math.min((sourceSet.size / 5) * 50, 50);
-
+                            
                             this.diversityScore = Math.round(orientationScore + sourceScore);
                             this.showDiversityChecker = this.diversityScore < 100;
 
@@ -2926,22 +2926,22 @@
                     async handleGamingStatsUpdate(payload) {
                         if (payload.eventType === 'UPDATE' || payload.eventType === 'INSERT') {
                             const newData = payload.new;
-
+                            
                             // Mettre à jour les données locales si elles sont différentes
-                            if (this.userXP !== newData.xp ||
-                                this.userLevel !== newData.level ||
+                            if (this.userXP !== newData.xp || 
+                                this.userLevel !== newData.level || 
                                 this.readingStreak !== newData.reading_streak ||
                                 JSON.stringify(this.unlockedAchievements) !== JSON.stringify(newData.unlocked_achievements)) {
-
+                                
                                 this.userXP = newData.xp;
                                 this.userLevel = newData.level;
                                 this.readingStreak = newData.reading_streak;
                                 this.unlockedAchievements = newData.unlocked_achievements || [];
                                 this.lastReadDate = newData.last_read_date;
-
+                                
                                 this.updateXPToNextLevel();
                                 await this.detectNewAchievements();
-
+                                
                                 console.log('🎮 Stats de gaming synchronisées');
                             }
                         }
@@ -2951,12 +2951,12 @@
                     handleNewReadArticle(payload) {
                         if (payload.eventType === 'INSERT') {
                             const { article_id, read_at } = payload.new;
-
+                            
                             // Ajouter à la liste locale si pas déjà présent
                             if (!this.readArticles[article_id]) {
                                 this.readArticles[article_id] = read_at;
                                 this.updateTotalReadCount();
-
+                                
                                 console.log('📚 Article lu synchronisé');
                             }
                         }
@@ -3000,7 +3000,7 @@
                                 this.calculateDiversityScore(),
                                 this.loadAchievements()
                             ]);
-
+                            
                             console.log('✅ Synchronisation manuelle terminée');
                         } catch (error) {
                             console.error('❌ Erreur lors de la synchronisation:', error);
@@ -3055,7 +3055,7 @@
                                 this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
 
                                 // Vérifier s'il y a des données locales à migrer
-                                const hasLocalData =
+                                const hasLocalData = 
                                     localStorage.getItem('infodrop_gaming_' + this.user.id) ||
                                     localStorage.getItem('infodrop_read_' + this.user.id) ||
                                     localStorage.getItem('infodrop_diversity') ||
@@ -3072,7 +3072,7 @@
                                 await this.loadReadPreferences();
                                 await this.calculateDiversityScore();
                                 await this.loadAchievements();
-
+                                
                                 this.loadData(true);
                                 this.startAutoUpdate();
                                 this.setupRealtime(session);
@@ -3080,22 +3080,22 @@
                             }
                             if (event === 'SIGNED_OUT') {
                                 this.stopAutoUpdate();
-
+                                
                                 // Nettoyer tous les channels
                                 if (this.realtimeChannel) {
                                     supabase.removeChannel(this.realtimeChannel);
                                     this.realtimeChannel = null;
                                 }
-
+                                
                                 this.cleanupRealtimeChannels();
-
+                                
                                 this.userInviteData = {
                                     code: null,
                                     is_used: false,
                                     parrainEmail: null,
                                     filleulEmail: null
                                 };
-
+                                
                                 // Réinitialiser les données utilisateur
                                 this.userXP = 0;
                                 this.userLevel = 1;
@@ -3359,7 +3359,7 @@
                         this.realtimeChannel = supabase.channel('infodrop-online-users', {
                             config: { presence: { key: session.user.id } }
                         });
-
+                        
                         this.realtimeChannel.on('presence', { event: 'sync' }, () => {
                             this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
                         }).subscribe(async (status) => {
