@@ -3061,19 +3061,13 @@
                     // === CHARGEMENT DES STATISTIQUES ET DES FILTRES ACTIFS ===
                     async loadStats() {
                         try {
-
-                            const { data, error } = await supabase.rpc('get_global_stats_and_filters');
-
-                            if (error) throw error;
-
+                            // Temporairement, on met des valeurs par défaut
                             this.stats = {
-                                total_articles: data.total_articles,
-                                total_sources: data.total_sources
+                                total_articles: 0,
+                                total_sources: 0
                             };
-
-                            this.activeOrientations = data.active_orientations || [];
-                            this.activeTags = data.active_tags || [];
-
+                            this.activeOrientations = [];
+                            this.activeTags = [];
                         } catch (e) {
                             console.error('Erreur stats:', e);
                         }
