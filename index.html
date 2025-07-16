@@ -2096,28 +2096,54 @@
                     // 🎮 SYSTÈME DE GAMIFICATION
                     // ============================================================
 
-                    // === INITIALISATION DE LA GAMIFICATION ===
-                    initGamification() {
+                    // === INITIALISATION DE LA GAMIFICATION (DEPUIS SUPABASE) ===
+                    async initGamification() {
                         if (!this.user) return;
 
-                        const savedData = localStorage.getItem('infodrop_gaming_' + this.user.id);
-                        if (savedData) {
-                            const data = JSON.parse(savedData);
-                            this.userXP = data.xp || 0;
-                            this.userLevel = data.level || 1;
-                            this.readingStreak = data.streak || 0;
-                            this.unlockedAchievements = data.achievements || [];
-                            this.lastReadDate = data.lastReadDate || null;
-                        }
+                        try {
+                            const { data, error } = await supabase
+                                .from('user_gaming_stats')
+                                .select('*')
+                                .eq('user_id', this.user.id)
+                                .single();
 
-                        // Débloquer achievement de connexion
-                        if (!this.unlockedAchievements.includes('🚪')) {
-                            this.unlockAchievement('🚪', 'Bienvenue dans le club!');
-                        }
+                            if (error && error.code !== 'PGRST116') { // PGRST116 = row not found
+                                throw error;
+                            }
 
-                        this.updateXPToNextLevel();
-                        this.checkDailyStreak();
-                        this.updateCurrentAchievement();
+                            if (data) {
+                                // L'utilisateur a déjà des stats, on les charge
+                                this.userXP = data.xp || 0;
+                                this.userLevel = data.level || 1;
+                                this.readingStreak = data.reading_streak || 0;
+                                this.unlockedAchievements = data.unlocked_achievements || [];
+                                this.lastReadDate = data.last_read_date || null;
+                                dlog('🎮 Gamification chargée depuis Supabase', data);
+                            } else {
+                                // Nouvel utilisateur, on initialise les stats par défaut
+                                dlog('🎮 Nouvel utilisateur, initialisation de la gamification.');
+                                this.userXP = 0;
+                                this.userLevel = 1;
+                                this.readingStreak = 0;
+                                this.unlockedAchievements = [];
+                                this.lastReadDate = null;
+                                // On peut optionnellement insérer cette ligne initiale dans la DB ici même.
+                                await this.saveGamingData();
+                            }
+
+                            // Le reste de la logique est bon
+                            if (!this.unlockedAchievements.includes('🚪')) {
+                                this.unlockAchievement('🚪', 'Bienvenue dans le club!');
+                            }
+
+                            this.updateXPToNextLevel();
+                            await this.checkDailyStreak(); // Cette fonction devra maintenant sauvegarder sur Supabase
+                            this.updateCurrentAchievement();
+
+                        } catch (error) {
+                            console.error("❌ Erreur chargement gamification:", error);
+                            // Fallback: utiliser les valeurs par défaut déjà initialisées
+                        }
                     },
 
                     // === MISE À JOUR DU BADGE ACTUEL ===
@@ -2138,7 +2164,7 @@
                     },
 
                     // === VÉRIFICATION DU STREAK QUOTIDIEN ===
-                    checkDailyStreak() {
+                    async checkDailyStreak() {
                         const today = new Date().toDateString();
                         const yesterday = new Date(Date.now() - 86400000).toDateString();
 
@@ -2157,7 +2183,7 @@
                         }
 
                         this.lastReadDate = today;
-                        this.saveGamingData();
+                        await this.saveGamingData();
 
                         // Vérifier achievements de streak
                         if (this.readingStreak === 7) {
@@ -2168,7 +2194,7 @@
                     },
 
                     // === GAGNER DE L'XP ===
-                    gainXP(amount, reason) {
+                    async gainXP(amount, reason) {
                         this.userXP += amount;
 
                         // Animation XP
@@ -2191,11 +2217,11 @@
                             }
                         }
 
-                        this.saveGamingData();
+                        await this.saveGamingData();
                     },
 
                     // === GAGNER DE L'XP SANS ANIMATION ===
-                    gainXPSilently(amount) {
+                    async gainXPSilently(amount) {
                         this.userXP += amount;
 
                         // Vérifier level up
@@ -2215,16 +2241,16 @@
                             }
                         }
 
-                        this.saveGamingData();
+                        await this.saveGamingData();
                     },
 
                     // === DÉBLOQUER UN ACHIEVEMENT ===
-                    unlockAchievement(icon, title) {
+                    async unlockAchievement(icon, title) {
                         if (!this.unlockedAchievements.includes(icon)) {
                             this.unlockedAchievements.push(icon);
                             this.showAchievementPopup(icon, title);
                             this.updateCurrentAchievement();
-                            this.saveGamingData();
+                            await this.saveGamingData();
                         }
                     },
 
@@ -2391,19 +2417,29 @@
                         }, 3000);
                     },
 
-                    // === SAUVEGARDE DES DONNÉES GAMING ===
-                    saveGamingData() {
+                    // === SAUVEGARDE DES DONNÉES GAMING (SUR SUPABASE) ===
+                    async saveGamingData() {
                         if (!this.user) return;
 
-                        const data = {
+                        const dataToSave = {
+                            user_id: this.user.id,
                             xp: this.userXP,
                             level: this.userLevel,
-                            streak: this.readingStreak,
-                            achievements: this.unlockedAchievements,
-                            lastReadDate: this.lastReadDate
+                            reading_streak: this.readingStreak,
+                            unlocked_achievements: this.unlockedAchievements,
+                            last_read_date: this.lastReadDate
                         };
 
-                        localStorage.setItem('infodrop_gaming_' + this.user.id, JSON.stringify(data));
+                        try {
+                            const { error } = await supabase
+                                .from('user_gaming_stats')
+                                .upsert(dataToSave, { onConflict: 'user_id' }); // upsert est parfait ici
+
+                            if (error) throw error;
+                            dlog('💾 Gamification sauvegardée sur Supabase.');
+                        } catch (error) {
+                            console.error("❌ Erreur sauvegarde gamification:", error);
+                        }
                     },
 
                     // === CONFETTIS DORÉS ===
@@ -2412,20 +2448,7 @@
                         for (let i = 0; i < 30; i++) {
                             setTimeout(() => {
                                 const conf = document.createElement('div');
-                                conf.style.cssText = `
-                                    position: fixed;
-                                    width: 15px;
-                                    height: 15px;
-                                    background: ${colors[i % colors.length]};
-                                    left: ${Math.random() * 100}%;
-                                    top: -20px;
-                                    opacity: ${Math.random() + 0.5};
-                                    transform: rotate(${Math.random() * 360}deg);
-                                    animation: confetti-fall ${3 + Math.random() * 2}s linear forwards;
-                                    pointer-events: none;
-                                    z-index: 9999;
-                                    box-shadow: 0 0 10px ${colors[i % colors.length]};
-                                `;
+                                conf.style.cssText = 'position: fixed; width: 15px; height: 15px; background: ' + colors[i % colors.length] + '; left: ' + (Math.random() * 100) + '%; top: -20px; opacity: ' + (Math.random() + 0.5) + '; transform: rotate(' + (Math.random() * 360) + 'deg); animation: confetti-fall ' + (3 + Math.random() * 2) + 's linear forwards; pointer-events: none; z-index: 9999; box-shadow: 0 0 10px ' + colors[i % colors.length] + ';';
                                 document.body.appendChild(conf);
                                 setTimeout(() => conf.remove(), 5000);
                             }, i * 50);
@@ -2476,26 +2499,30 @@
                             this.user = session?.user || null;
                             this.sessionLoaded = true;
                             if (event === 'SIGNED_IN') {
-                                console.log('✅ Événement SIGNED_IN détecté ! Chargement des données...');
+                                console.log('✅ SIGNED_IN: Chargement des données utilisateur...');
                                 this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
-                                const userReadData = localStorage.getItem('infodrop_read_' + this.user.id) || '{}';
-                                this.readArticles = JSON.parse(userReadData);
 
-                                // Initialiser la gamification
-                                this.initGamification();
+                                // --- DÉBUT DE LA SÉQUENCE DE CHARGEMENT OPTIMISÉE ---
+                                // Exécuter ces chargements en parallèle pour plus de rapidité
+                                await Promise.all([
+                                    this.initGamification(),      // Charge stats, niveaux, succès
+                                    this.loadReadArticlesFromDB(),// Charge l'historique de lecture
+                                    this.loadUserInviteData(),    // Charge les infos de parrainage
+                                    this.loadReadPreferences()    // Charge les préférences UI
+                                ]);
 
-                                this.loadData(true);
+                                // Une fois les données de base chargées, on peut calculer les scores dérivés
+                                await this.calculateDiversityScore();
+
+                                // Le chargement principal est terminé, l'UI est à jour
+                                console.log('✅ Toutes les données utilisateur sont chargées et synchronisées.');
+
+                                // On continue avec le reste
+                                this.loadData(true); // Charge les actualités
                                 this.startAutoUpdate();
                                 this.setupRealtime(session);
-                                this.updateTotalReadCount();
-                                this.calculateDiversityScore();
-                                this.loadUserInviteData();
 
-                                // Charger les articles lus et préférences depuis la DB
-                                this.loadReadArticlesFromDB();
-                                this.loadReadPreferences();
-                            }
-                            if (event === 'SIGNED_OUT') {
+                            } else if (event === 'SIGNED_OUT') {
                                 this.stopAutoUpdate();
                                 if (this.realtimeChannel) {
                                     supabase.removeChannel(this.realtimeChannel);
@@ -2514,8 +2541,6 @@
                         window.addEventListener('scroll', () => {
                             document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
                         });
-
-                        this.cleanOldDiversityData();
 
                         document.addEventListener('visibilitychange', () => {
                             if (!document.hidden) {
@@ -3088,22 +3113,23 @@
                     },
 
                     // ============================================================
-                    // 📚 SYSTÈME DE LECTURES ET DIVERSITÉ
+                    // 📚 SYSTÈME DE LECTURES ET DIVERSITÉ (MIGRATION SUPABASE)
                     // ============================================================
 
                     // === MARQUER UN ARTICLE COMME LU (AVEC GAMIFICATION) ===
-                    markAsRead(id) {
+                    async markAsRead(id) {
                         if (!this.readArticles[id]) {
+                            // Mise à jour optimiste de l'UI
                             this.readArticles[id] = new Date().toISOString();
-                            localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
                             this.updateTotalReadCount();
 
-                            // Sauvegarder dans la DB
-                            this.saveReadArticleToDB(id);
+                            // Sauvegarder dans la DB en arrière-plan
+                            await this.saveReadArticleToDB(id);
 
                             const article = this.newsList.find(n => n.id === id);
                             if (article) {
-                                this.addToDiversityData(article);
+                                // NOUVELLE PARTIE: Sauvegarder les données pour le score de diversité
+                                await this.saveDiversityData(article);
 
                                 // GAMIFICATION : Calculer l'XP à gagner
                                 let xpGained = 10; // XP de base
@@ -3124,23 +3150,23 @@
                                 localStorage.setItem('infodrop_pending_xp', JSON.stringify(pendingXP));
 
                                 // Gagner l'XP sans animation
-                                this.gainXPSilently(xpGained);
+                                await this.gainXPSilently(xpGained);
 
                                 // Vérifier le streak quotidien
-                                this.checkDailyStreak();
+                                await this.checkDailyStreak();
 
                                 // Achievements
                                 if (this.totalReadCount === 1) {
-                                    this.unlockAchievement('🎯', 'Premier article lu!');
+                                    await this.unlockAchievement('🎯', 'Premier article lu!');
                                 } else if (this.totalReadCount === 10) {
-                                    this.unlockAchievement('📚', '10 articles lus!');
+                                    await this.unlockAchievement('📚', '10 articles lus!');
                                 } else if (this.totalReadCount === 100) {
-                                    this.unlockAchievement('🏆', '100 articles lus!');
+                                    await this.unlockAchievement('🏆', '100 articles lus!');
                                 }
 
                                 // Achievement diversité - Vérifier si toutes les orientations ont été lues
                                 if (this.diversityScore === 100 && !this.unlockedAchievements.includes('🌈')) {
-                                    this.unlockAchievement('🌈', 'Explorateur - Toutes les orientations lues!');
+                                    await this.unlockAchievement('🌈', 'Explorateur - Toutes les orientations lues!');
                                 }
                             }
 
@@ -3180,19 +3206,21 @@
                                 .select('article_id, read_at')
                                 .eq('user_id', this.user.id);
 
+                            if (error) throw error;
+
                             if (data) {
                                 const readFromDB = {};
                                 data.forEach(item => {
                                     readFromDB[item.article_id] = item.read_at;
                                 });
 
-                                // Fusionner avec les données locales
-                                this.readArticles = { ...readFromDB, ...this.readArticles };
-                                localStorage.setItem('infodrop_read_' + this.user.id, JSON.stringify(this.readArticles));
+                                // Remplacer complètement l'objet local, ne pas fusionner
+                                this.readArticles = readFromDB;
                                 this.updateTotalReadCount();
+                                dlog('📚 Articles lus chargés depuis Supabase.', Object.keys(this.readArticles).length);
                             }
                         } catch (error) {
-                            console.error('Erreur chargement articles lus:', error);
+                            console.error('❌ Erreur chargement articles lus:', error);
                         }
                     },
 
@@ -3205,8 +3233,6 @@
                     // === SAUVEGARDER PRÉFÉRENCES LECTURE ===
                     async saveReadPreferences() {
                         if (!this.user) return;
-
-                        localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
 
                         try {
                             await supabase
@@ -3227,13 +3253,6 @@
                     async loadReadPreferences() {
                         if (!this.user) return;
 
-                        // Charger depuis localStorage d'abord
-                        const localPref = localStorage.getItem('infodrop_hide_read_' + this.user.id);
-                        if (localPref !== null) {
-                            this.hideReadFromMain = localPref === 'true';
-                        }
-
-                        // Puis depuis la DB
                         try {
                             const { data } = await supabase
                                 .from('user_preferences')
@@ -3243,10 +3262,10 @@
 
                             if (data) {
                                 this.hideReadFromMain = data.hide_read_articles;
-                                localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
                             }
                         } catch (error) {
                             // Pas de préférences trouvées, utiliser la valeur par défaut
+                            console.log('Préférences par défaut utilisées');
                         }
                     },
 
@@ -3255,42 +3274,66 @@
                         this.totalReadCount = Object.keys(this.readArticles).length;
                     },
 
-                    // === NETTOYAGE DES ANCIENNES DONNÉES DE DIVERSITÉ ===
-                    cleanOldDiversityData() {
-                        const expiry = Date.now() - 24 * 60 * 60 * 1000;
-                        Object.keys(this.diversityData).forEach(t => {
-                            if (new Date(t).getTime() < expiry) delete this.diversityData[t];
-                        });
-                        localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
-                    },
+                    // === SAUVEGARDER LES DONNÉES DE DIVERSITÉ (NOUVELLE FONCTION) ===
+                    async saveDiversityData(article) {
+                        if (!this.user || !article) return;
 
-                    // === AJOUT AUX DONNÉES DE DIVERSITÉ ===
-                    addToDiversityData(article) {
-                        let o = article.orientation || 'neutre';
-                        if (article.tags?.includes('🧨INFODROP')) o = '🧨INFODROP';
-                        this.diversityData[new Date().toISOString()] = {
-                            orientation: o,
-                            source: article.source
+                        const diversityEntry = {
+                            user_id: this.user.id,
+                            orientation: article.orientation || 'neutre',
+                            source: article.source,
+                            read_at: new Date().toISOString()
                         };
-                        localStorage.setItem('infodrop_diversity', JSON.stringify(this.diversityData));
-                        this.calculateDiversityScore();
+
+                        if (article.tags?.includes('🧨INFODROP')) {
+                            diversityEntry.orientation = '🧨INFODROP';
+                        }
+
+                        try {
+                            await supabase.from('user_diversity_data').insert(diversityEntry);
+                            // Recalculer le score après ajout
+                            await this.calculateDiversityScore();
+                        } catch (error) {
+                            console.error("Erreur sauvegarde diversité:", error);
+                        }
                     },
 
-                    // === CALCUL DU SCORE DE DIVERSITÉ ===
-                    calculateDiversityScore() {
-                        this.cleanOldDiversityData();
-                        const reads = Object.values(this.diversityData);
-                        if (reads.length === 0) {
+                    // === CALCUL DU SCORE DE DIVERSITÉ (DEPUIS SUPABASE) ===
+                    async calculateDiversityScore() {
+                        if (!this.user) {
                             this.diversityScore = null;
-                            this.readOrientations = [];
                             return;
                         }
-                        const oSet = new Set(reads.map(r => r.orientation).filter(Boolean));
-                        const sSet = new Set(reads.map(r => r.source));
-                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
-                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
-                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
-                        this.showDiversityChecker = this.diversityScore < 100;
+
+                        try {
+                            // On récupère les lectures des dernières 24h pour cet utilisateur
+                            const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+                            const { data: recentReads, error } = await supabase
+                                .from('user_diversity_data')
+                                .select('orientation, source')
+                                .eq('user_id', this.user.id)
+                                .gte('read_at', twentyFourHoursAgo);
+
+                            if (error) throw error;
+
+                            if (!recentReads || recentReads.length === 0) {
+                                this.diversityScore = null;
+                                this.readOrientations = [];
+                                return;
+                            }
+
+                            const oSet = new Set(recentReads.map(r => r.orientation).filter(Boolean));
+                            const sSet = new Set(recentReads.map(r => r.source));
+
+                            const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
+                            this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
+                            this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
+                            this.showDiversityChecker = this.diversityScore < 100;
+
+                        } catch (error) {
+                            console.error("❌ Erreur calcul diversité:", error);
+                            this.diversityScore = null;
+                        }
                     },
 
                     // === MESSAGE DU SCORE DE DIVERSITÉ ===
@@ -3335,10 +3378,10 @@
                         const title = isSpecial ? 'Incroyable !' : 'Bravo !';
 
                         msg.innerHTML = `
-        <h2 class="text-3xl font-bold mb-2">${emoji} ${title} ${emoji}</h2>
-        <p class="text-lg mb-2">${count} articles lus !</p>
-        <p class="text-sm opacity-80">Cliquez pour continuer</p>
-    `;
+                            <h2 class="text-3xl font-bold mb-2">${emoji} ${title} ${emoji}</h2>
+                            <p class="text-lg mb-2">${count} articles lus !</p>
+                            <p class="text-sm opacity-80">Cliquez pour continuer</p>
+                        `;
 
                         cont.appendChild(msg);
                         document.body.appendChild(cont);
@@ -3471,6 +3514,7 @@ Utilisez ce code lors de votre inscription : ${code}`;
                 };
             }
         </script>
+    </div>
 </body>
 
 </html>

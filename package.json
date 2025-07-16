@@ -12,5 +12,20 @@
   },
   "engines": {
     "node": "18.x"
-  }
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/L0r4py/infodrop.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/L0r4py/infodrop/issues"
+  },
+  "homepage": "https://github.com/L0r4py/infodrop#readme"
 }
