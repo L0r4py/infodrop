@@ -1619,11 +1619,11 @@
                             <span>✅</span>
                             <span>Débloqués</span>
                         </h3>
-                        <template x-for="achievement in achievementsData.filter(a => a.is_unlocked)"
-                            :key="achievement.code">
+                        <template x-for="achievement in getAllAchievementsData().filter(a => a.unlocked)"
+                            :key="achievement.id">
                             <div class="achievement-item unlocked">
                                 <div class="achievement-icon-modal">
-                                    <span x-text="achievement.icon_emoji"></span>
+                                    <span x-text="achievement.icon"></span>
                                 </div>
                                 <div class="achievement-info">
                                     <div class="achievement-title" x-text="achievement.title"></div>
@@ -1638,8 +1638,8 @@
                             <span>🔒</span>
                             <span>À débloquer</span>
                         </h3>
-                        <template x-for="achievement in achievementsData.filter(a => !a.is_unlocked)"
-                            :key="achievement.code">
+                        <template x-for="achievement in getAllAchievementsData().filter(a => !a.unlocked)"
+                            :key="achievement.id">
                             <div class="achievement-item locked">
                                 <div class="achievement-icon-modal">
                                     <span>🔒</span>
@@ -1647,7 +1647,7 @@
                                 <div class="achievement-info">
                                     <div class="achievement-title" x-text="achievement.title"></div>
                                     <div class="achievement-desc" x-text="achievement.description"></div>
-                                    <div class="achievement-progress" x-text="achievement.progress_text"></div>
+                                    <div class="achievement-progress" x-text="achievement.progress"></div>
                                 </div>
                             </div>
                         </template>
@@ -2090,7 +2090,7 @@
                     },
 
                     // ============================================================
-                    // 🎮 SYSTÈME DE GAMIFICATION - VERSION SUPABASE PURE
+                    // 🎮 SYSTÈME DE GAMIFICATION - VERSION SUPABASE
                     // ============================================================
 
                     // === INITIALISATION DE LA GAMIFICATION ===
@@ -2098,8 +2098,6 @@
                         if (!this.user) return;
 
                         try {
-                            dlog('🎮 Initialisation de la gamification pour:', this.user.id);
-
                             // Charger les données de gamification depuis Supabase
                             const { data: gamingData, error } = await supabase
                                 .from('user_gaming_stats')
@@ -2108,7 +2106,7 @@
                                 .single();
 
                             if (error && error.code !== 'PGRST116') {
-                                console.error('❌ Erreur chargement gaming stats:', error);
+                                console.error('Erreur chargement gaming stats:', error);
                                 return;
                             }
 
@@ -2118,10 +2116,8 @@
                                 this.readingStreak = gamingData.reading_streak || 0;
                                 this.unlockedAchievements = gamingData.unlocked_achievements || [];
                                 this.lastReadDate = gamingData.last_read_date || null;
-
-                                dlog('✅ Données gaming chargées:', gamingData);
                             } else {
-                                // Créer les données initiales avec achievements de base
+                                // Créer les données initiales
                                 await this.createInitialGamingData();
                             }
 
@@ -2130,15 +2126,13 @@
                             await this.loadAchievements();
 
                         } catch (error) {
-                            console.error('❌ Erreur initialisation gamification:', error);
+                            console.error('Erreur initialisation gamification:', error);
                         }
                     },
 
                     // === CRÉER LES DONNÉES INITIALES DE GAMIFICATION ===
                     async createInitialGamingData() {
                         try {
-                            dlog('🆕 Création des données gaming initiales');
-
                             const { error } = await supabase
                                 .from('user_gaming_stats')
                                 .insert({
@@ -2151,17 +2145,140 @@
                                 });
 
                             if (error) throw error;
-
-                            // Initialiser les données locales
-                            this.userXP = 0;
-                            this.userLevel = 1;
-                            this.readingStreak = 0;
-                            this.unlockedAchievements = [];
-                            this.lastReadDate = null;
-
-                            dlog('✅ Données gaming initiales créées');
                         } catch (error) {
-                            console.error('❌ Erreur création données gaming:', error);
+                            console.error('Erreur création données gaming:', error);
+                        }
+                    },
+
+                    // === MIGRATION DES DONNÉES LOCALES VERS SUPABASE ===
+                    async migrateLocalDataToSupabase() {
+                        if (!this.user) return;
+
+                        console.log('🔄 Début de la migration des données locales...');
+
+                        try {
+                            // === MIGRATION DES DONNÉES DE GAMIFICATION ===
+                            const savedGamingData = localStorage.getItem('infodrop_gaming_' + this.user.id);
+                            if (savedGamingData) {
+                                const data = JSON.parse(savedGamingData);
+
+                                // Vérifier si les données existent déjà en DB
+                                const { data: existingGaming } = await supabase
+                                    .from('user_gaming_stats')
+                                    .select('user_id')
+                                    .eq('user_id', this.user.id)
+                                    .single();
+
+                                if (!existingGaming) {
+                                    console.log('📊 Migration des données de gamification...');
+                                    await supabase
+                                        .from('user_gaming_stats')
+                                        .insert({
+                                            user_id: this.user.id,
+                                            xp: data.xp || 0,
+                                            level: data.level || 1,
+                                            reading_streak: data.streak || 0,
+                                            unlocked_achievements: data.achievements || [],
+                                            last_read_date: data.lastReadDate || null
+                                        });
+
+                                    console.log('✅ Données de gamification migrées');
+                                }
+                            }
+
+                            // === MIGRATION DES ARTICLES LUS ===
+                            const savedReadData = localStorage.getItem('infodrop_read_' + this.user.id);
+                            if (savedReadData) {
+                                const readArticles = JSON.parse(savedReadData);
+
+                                console.log('📚 Migration des articles lus...');
+
+                                // Insérer en lot (batch insert) pour de meilleures performances
+                                const readDataToInsert = Object.entries(readArticles).map(([articleId, readAt]) => ({
+                                    user_id: this.user.id,
+                                    article_id: parseInt(articleId),
+                                    read_at: readAt
+                                }));
+
+                                if (readDataToInsert.length > 0) {
+                                    // Upsert pour éviter les doublons
+                                    const { error } = await supabase
+                                        .from('user_read_articles')
+                                        .upsert(readDataToInsert, {
+                                            onConflict: 'user_id,article_id'
+                                        });
+
+                                    if (error) {
+                                        console.error('Erreur migration articles lus:', error);
+                                    } else {
+                                        console.log(`✅ ${readDataToInsert.length} articles lus migrés`);
+                                    }
+                                }
+                            }
+
+                            // === MIGRATION DES DONNÉES DE DIVERSITÉ ===
+                            const savedDiversityData = localStorage.getItem('infodrop_diversity');
+                            if (savedDiversityData) {
+                                const diversityData = JSON.parse(savedDiversityData);
+
+                                console.log('🌈 Migration des données de diversité...');
+
+                                const diversityDataToInsert = Object.entries(diversityData)
+                                    .filter(([timestamp]) => {
+                                        // Ne migrer que les données des dernières 24h
+                                        const date = new Date(timestamp);
+                                        const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+                                        return date.getTime() > oneDayAgo;
+                                    })
+                                    .map(([timestamp, data]) => ({
+                                        user_id: this.user.id,
+                                        read_at: timestamp,
+                                        orientation: data.orientation,
+                                        source: data.source
+                                    }));
+
+                                if (diversityDataToInsert.length > 0) {
+                                    const { error } = await supabase
+                                        .from('user_diversity_data')
+                                        .insert(diversityDataToInsert);
+
+                                    if (error) {
+                                        console.error('Erreur migration données diversité:', error);
+                                    } else {
+                                        console.log(`✅ ${diversityDataToInsert.length} entrées de diversité migrées`);
+                                    }
+                                }
+                            }
+
+                            // === MIGRATION DES PRÉFÉRENCES ===
+                            const savedHideRead = localStorage.getItem('infodrop_hide_read_' + this.user.id);
+                            if (savedHideRead !== null) {
+                                console.log('⚙️ Migration des préférences...');
+
+                                await supabase
+                                    .from('user_preferences')
+                                    .upsert({
+                                        user_id: this.user.id,
+                                        hide_read_articles: savedHideRead === 'true',
+                                        updated_at: new Date().toISOString()
+                                    }, {
+                                        onConflict: 'user_id'
+                                    });
+
+                                console.log('✅ Préférences migrées');
+                            }
+
+                            // === NETTOYAGE DES DONNÉES LOCALES APRÈS MIGRATION ===
+                            console.log('🧹 Nettoyage des données locales...');
+                            localStorage.removeItem('infodrop_gaming_' + this.user.id);
+                            localStorage.removeItem('infodrop_read_' + this.user.id);
+                            localStorage.removeItem('infodrop_diversity');
+                            localStorage.removeItem('infodrop_hide_read_' + this.user.id);
+
+                            console.log('✅ Migration terminée avec succès');
+
+                        } catch (error) {
+                            console.error('❌ Erreur lors de la migration:', error);
                         }
                     },
 
@@ -2172,7 +2289,7 @@
                         if (unlockedAchievements.length > 0) {
                             // Trier par ordre de priorité décroissant et prendre le premier
                             const highestAchievement = unlockedAchievements.sort((a, b) => b.order_priority - a.order_priority)[0];
-                            this.currentAchievement = highestAchievement.icon_emoji;
+                            this.currentAchievement = highestAchievement.code;
                         } else {
                             this.currentAchievement = null;
                         }
@@ -2214,16 +2331,11 @@
                         this.showXPAnimation(amount);
 
                         // Vérifier level up
-                        let leveledUp = false;
                         while (this.userXP >= this.xpToNextLevel) {
                             this.userXP -= this.xpToNextLevel;
                             this.userLevel++;
                             this.updateXPToNextLevel();
-                            leveledUp = true;
-                        }
-
-                        if (leveledUp) {
-                            this.addPendingAnimation('levelup', { level: this.userLevel });
+                            this.showLevelUpAnimation();
                         }
 
                         await this.saveGamingData();
@@ -2234,58 +2346,23 @@
                         this.userXP += amount;
 
                         // Vérifier level up
-                        let leveledUp = false;
                         while (this.userXP >= this.xpToNextLevel) {
                             this.userXP -= this.xpToNextLevel;
                             this.userLevel++;
                             this.updateXPToNextLevel();
-                            leveledUp = true;
-                        }
-
-                        if (leveledUp) {
-                            this.addPendingAnimation('levelup', { level: this.userLevel });
+                            this.showLevelUpAnimation();
                         }
 
                         await this.saveGamingData();
                     },
 
-                    // === CHARGEMENT DES ACHIEVEMENTS DEPUIS SUPABASE ===
-                    async loadAchievements() {
-                        if (!this.user) return;
-
-                        try {
-                            dlog('🏆 Chargement des achievements depuis Supabase...');
-
-                            const { data, error } = await supabase.rpc('get_user_achievements', {
-                                p_user_id: this.user.id
-                            });
-
-                            if (error) {
-                                console.error('❌ Erreur chargement achievements:', error);
-                                return;
-                            }
-
-                            this.achievementsData = data || [];
-                            this.updateCurrentAchievement();
-
-                            dlog('✅ Achievements chargés:', this.achievementsData.length, 'achievements');
-                        } catch (error) {
-                            console.error('❌ Erreur chargement achievements:', error);
-                        }
-                    },
-
-                    // === DÉTECTION DES NOUVEAUX ACHIEVEMENTS ===
+                    // === DÉTECTER LES NOUVEAUX ACHIEVEMENTS ===
                     async detectNewAchievements() {
                         if (!this.user) return;
 
                         try {
-                            dlog('🔍 Détection des nouveaux achievements...');
-
                             // Garder l'état précédent
-                            const previousAchievements = this.achievementsData.map(a => ({
-                                code: a.code,
-                                is_unlocked: a.is_unlocked
-                            }));
+                            const previousAchievements = [...this.achievementsData];
 
                             // Recharger les achievements depuis Supabase
                             await this.loadAchievements();
@@ -2297,26 +2374,49 @@
                             });
 
                             // Déclencher les animations pour les nouveaux achievements
-                            if (newUnlocked.length > 0) {
-                                dlog('🎉 Nouveaux achievements débloqués:', newUnlocked.length);
-
-                                newUnlocked.forEach(achievement => {
-                                    this.addPendingAnimation('achievement', {
-                                        icon: achievement.icon_emoji,
-                                        title: achievement.title
-                                    });
-                                });
-                            }
+                            newUnlocked.forEach(achievement => {
+                                this.showAchievementPopup(achievement.icon_emoji, achievement.title);
+                            });
 
                         } catch (error) {
-                            console.error('❌ Erreur détection nouveaux achievements:', error);
+                            console.error('Erreur détection nouveaux achievements:', error);
+                        }
+                    },
+
+                    // === CHARGEMENT DES ACHIEVEMENTS DEPUIS SUPABASE ===
+                    async loadAchievements() {
+                        if (!this.user) return;
+
+                        try {
+                            const { data, error } = await supabase.rpc('get_user_achievements', {
+                                p_user_id: this.user.id
+                            });
+
+                            if (error) throw error;
+
+                            this.achievementsData = data || [];
+                            this.updateCurrentAchievement();
+                        } catch (error) {
+                            console.error('Erreur chargement achievements:', error);
                         }
                     },
 
                     // === OBTENIR LE TITRE D'UN ACHIEVEMENT ===
-                    getAchievementTitle(iconEmoji) {
-                        const achievement = this.achievementsData.find(a => a.icon_emoji === iconEmoji);
+                    getAchievementTitle(code) {
+                        const achievement = this.achievementsData.find(a => a.code === code);
                         return achievement ? achievement.title : 'Achievement mystère';
+                    },
+
+                    // === OBTENIR TOUTES LES DONNÉES D'ACHIEVEMENTS ===
+                    getAllAchievementsData() {
+                        return this.achievementsData.map(achievement => ({
+                            id: achievement.code,
+                            icon: achievement.icon_emoji,
+                            title: achievement.title,
+                            description: achievement.description,
+                            unlocked: achievement.is_unlocked,
+                            progress: achievement.progress_text
+                        }));
                     },
 
                     // === SAUVEGARDE DES DONNÉES GAMING ===
@@ -2324,8 +2424,6 @@
                         if (!this.user) return;
 
                         try {
-                            dlog('💾 Sauvegarde des données gaming...');
-
                             const { error } = await supabase
                                 .from('user_gaming_stats')
                                 .upsert({
@@ -2343,66 +2441,9 @@
 
                             // Détecter les nouveaux achievements débloqués
                             await this.detectNewAchievements();
-
-                            dlog('✅ Données gaming sauvegardées');
                         } catch (error) {
-                            console.error('❌ Erreur sauvegarde gaming data:', error);
+                            console.error('Erreur sauvegarde gaming data:', error);
                         }
-                    },
-
-                    // ============================================================
-                    // 🎬 SYSTÈME D'ANIMATIONS EN ATTENTE UNIFIÉ
-                    // ============================================================
-
-                    // === AJOUTER UNE ANIMATION EN ATTENTE ===
-                    addPendingAnimation(type, data) {
-                        const animations = JSON.parse(localStorage.getItem('infodrop_pending_animations') || '[]');
-                        animations.push({
-                            type: type,
-                            data: data,
-                            timestamp: Date.now()
-                        });
-                        localStorage.setItem('infodrop_pending_animations', JSON.stringify(animations));
-                    },
-
-                    // === TRAITER LES ANIMATIONS EN ATTENTE ===
-                    processPendingAnimations() {
-                        const animations = JSON.parse(localStorage.getItem('infodrop_pending_animations') || '[]');
-
-                        if (animations.length === 0) return;
-
-                        // Filtrer les animations trop anciennes (plus de 5 minutes)
-                        const recentAnimations = animations.filter(anim =>
-                            Date.now() - anim.timestamp < 5 * 60 * 1000
-                        );
-
-                        if (recentAnimations.length === 0) {
-                            localStorage.removeItem('infodrop_pending_animations');
-                            return;
-                        }
-
-                        // Traiter les animations avec un délai entre chaque
-                        recentAnimations.forEach((animation, index) => {
-                            setTimeout(() => {
-                                switch (animation.type) {
-                                    case 'xp':
-                                        this.showXPAnimation(animation.data.amount);
-                                        break;
-                                    case 'levelup':
-                                        this.showLevelUpAnimation(animation.data.level);
-                                        break;
-                                    case 'achievement':
-                                        this.showAchievementPopup(animation.data.icon, animation.data.title);
-                                        break;
-                                    case 'celebration':
-                                        this.showCelebration(animation.data.count);
-                                        break;
-                                }
-                            }, index * 1000); // 1 seconde entre chaque animation
-                        });
-
-                        // Nettoyer les animations traitées
-                        localStorage.removeItem('infodrop_pending_animations');
                     },
 
                     // === ANIMATION GAIN XP ===
@@ -2417,7 +2458,7 @@
                     },
 
                     // === ANIMATION LEVEL UP ===
-                    showLevelUpAnimation(level) {
+                    showLevelUpAnimation() {
                         const levelUp = document.createElement('div');
                         levelUp.style.cssText = `
                             position: fixed;
@@ -2432,7 +2473,7 @@
                             z-index: 9999;
                             pointer-events: none;
                         `;
-                        levelUp.textContent = `NIVEAU ${level || this.userLevel}!`;
+                        levelUp.textContent = `NIVEAU ${this.userLevel}!`;
                         document.body.appendChild(levelUp);
 
                         // Confettis dorés
@@ -2516,8 +2557,10 @@
                                     xpGained += 5;
                                 }
 
-                                // Ajouter l'XP en attente pour l'animation au retour
-                                this.addPendingAnimation('xp', { amount: xpGained });
+                                // Stocker l'XP en attente pour l'animation au retour
+                                const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
+                                pendingXP.push({ amount: xpGained, timestamp: Date.now() });
+                                localStorage.setItem('infodrop_pending_xp', JSON.stringify(pendingXP));
 
                                 // Gagner l'XP sans animation
                                 await this.gainXPSilently(xpGained);
@@ -2526,13 +2569,12 @@
                                 await this.checkDailyStreak();
                             }
 
-                            // Célébrations
+                            // Recharger les achievements pour mettre à jour les statuts
+                            await this.loadAchievements();
+
+                            // Célébrations originales
                             if (this.totalReadCount % 20 === 0 && this.totalReadCount > 0) {
-                                if (document.hidden) {
-                                    this.addPendingAnimation('celebration', { count: this.totalReadCount });
-                                } else {
-                                    this.showCelebration(this.totalReadCount);
-                                }
+                                this.celebrateArticles(this.totalReadCount);
                             }
                         }
                     },
@@ -2635,6 +2677,25 @@
                         this.totalReadCount = Object.keys(this.readArticles).length;
                     },
 
+                    // === NETTOYAGE DES ANCIENNES DONNÉES DE DIVERSITÉ ===
+                    async cleanOldDiversityData() {
+                        if (!this.user) return;
+
+                        try {
+                            const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
+                            const { error } = await supabase
+                                .from('user_diversity_data')
+                                .delete()
+                                .eq('user_id', this.user.id)
+                                .lt('read_at', oneDayAgo);
+
+                            if (error) throw error;
+                        } catch (error) {
+                            console.error('Erreur nettoyage données diversité:', error);
+                        }
+                    },
+
                     // === AJOUT AUX DONNÉES DE DIVERSITÉ ===
                     async addToDiversityData(article) {
                         if (!this.user) return;
@@ -2656,18 +2717,20 @@
 
                             if (error) throw error;
 
-                            // Le score de diversité se met à jour automatiquement via Supabase
-                            await this.loadDiversityScore();
+                            await this.calculateDiversityScore();
                         } catch (error) {
                             console.error('Erreur ajout données diversité:', error);
                         }
                     },
 
-                    // === CHARGEMENT DU SCORE DE DIVERSITÉ DEPUIS SUPABASE ===
-                    async loadDiversityScore() {
+                    // === CALCUL DU SCORE DE DIVERSITÉ ===
+                    async calculateDiversityScore() {
                         if (!this.user) return;
 
                         try {
+                            // Nettoyer d'abord les anciennes données
+                            await this.cleanOldDiversityData();
+
                             // Récupérer les données des dernières 24h
                             const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
@@ -2704,7 +2767,7 @@
                             this.showDiversityChecker = this.diversityScore < 100;
 
                         } catch (error) {
-                            console.error('Erreur chargement score diversité:', error);
+                            console.error('Erreur calcul score diversité:', error);
                             this.diversityScore = null;
                             this.readOrientations = [];
                         }
@@ -2731,6 +2794,14 @@
                     },
 
                     // === CÉLÉBRATION DES ARTICLES ===
+                    celebrateArticles(count) {
+                        if (document.hidden) {
+                            localStorage.setItem(`infodrop_celebration_pending_${count}`, 'true');
+                            return;
+                        }
+                        this.showCelebration(count);
+                    },
+
                     showCelebration(count = 100) {
                         const cont = document.createElement('div');
                         cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:auto;z-index:9999;background:rgba(0,0,0,0.8);cursor:pointer;';
@@ -2755,6 +2826,7 @@
                         const closeAnimation = () => {
                             cont.remove();
                             this.stopConfettiLoop();
+                            localStorage.removeItem(`infodrop_celebration_pending_${count}`);
                         };
 
                         cont.addEventListener('click', closeAnimation);
@@ -2892,8 +2964,8 @@
 
                     // === GÉRER LA MISE À JOUR DE DIVERSITÉ ===
                     handleDiversityUpdate() {
-                        // Recharger le score de diversité
-                        this.loadDiversityScore();
+                        // Recalculer le score de diversité
+                        this.calculateDiversityScore();
                     },
 
                     // === NETTOYER LES CHANNELS TEMPS RÉEL ===
@@ -2911,6 +2983,28 @@
                             this.diversityChannel = null;
                         }
                         console.log('🔇 Channels temps réel nettoyés');
+                    },
+
+                    // === FONCTION DE SYNCHRONISATION MANUELLE ===
+                    async syncAllUserData() {
+                        if (!this.user) return;
+
+                        console.log('🔄 Synchronisation manuelle des données...');
+
+                        try {
+                            // Recharger toutes les données depuis Supabase
+                            await Promise.all([
+                                this.initGamification(),
+                                this.loadReadArticlesFromDB(),
+                                this.loadReadPreferences(),
+                                this.calculateDiversityScore(),
+                                this.loadAchievements()
+                            ]);
+
+                            console.log('✅ Synchronisation manuelle terminée');
+                        } catch (error) {
+                            console.error('❌ Erreur lors de la synchronisation:', error);
+                        }
                     },
 
                     // ============================================================
@@ -2960,11 +3054,23 @@
                                 console.log('✅ Événement SIGNED_IN détecté ! Chargement des données...');
                                 this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
 
+                                // Vérifier s'il y a des données locales à migrer
+                                const hasLocalData =
+                                    localStorage.getItem('infodrop_gaming_' + this.user.id) ||
+                                    localStorage.getItem('infodrop_read_' + this.user.id) ||
+                                    localStorage.getItem('infodrop_diversity') ||
+                                    localStorage.getItem('infodrop_hide_read_' + this.user.id);
+
+                                if (hasLocalData) {
+                                    console.log('📦 Données locales détectées, migration en cours...');
+                                    await this.migrateLocalDataToSupabase();
+                                }
+
                                 // Initialiser toutes les données depuis Supabase
                                 await this.initGamification();
                                 await this.loadReadArticlesFromDB();
                                 await this.loadReadPreferences();
-                                await this.loadDiversityScore();
+                                await this.calculateDiversityScore();
                                 await this.loadAchievements();
 
                                 this.loadData(true);
@@ -3002,25 +3108,77 @@
                             }
                         });
 
-                        // === GESTION DE L'INTERFACE ET ANIMATIONS ===
+                        // === GESTION DE L'INTERFACE ===
                         window.addEventListener('scroll', () => {
                             document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
                         });
 
-                        // === GESTION DES ANIMATIONS AU RETOUR SUR LA PAGE ===
                         document.addEventListener('visibilitychange', () => {
                             if (!document.hidden) {
-                                // Traiter toutes les animations en attente
-                                setTimeout(() => {
-                                    this.processPendingAnimations();
-                                }, 500);
+                                // Gérer les animations XP en attente
+                                const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
+                                if (pendingXP.length > 0) {
+                                    // Filtrer les XP trop anciennes (plus de 5 minutes)
+                                    const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
+
+                                    if (recentXP.length > 0) {
+                                        // Calculer le total d'XP à afficher
+                                        const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
+
+                                        // Déclencher l'animation après un court délai
+                                        setTimeout(() => {
+                                            this.showXPAnimation(totalXP);
+                                        }, 500);
+
+                                        // Vider les XP en attente
+                                        localStorage.removeItem('infodrop_pending_xp');
+                                    }
+                                }
+
+                                // Chercher toutes les célébrations en attente
+                                for (let i = 0; i < localStorage.length; i++) {
+                                    const key = localStorage.key(i);
+                                    if (key && key.startsWith('infodrop_celebration_pending_')) {
+                                        const count = parseInt(key.split('_')[3]);
+                                        setTimeout(() => this.showCelebration(count), 1000);
+                                        break; // Une seule célébration à la fois
+                                    }
+                                }
+                                // Compatibilité avec l'ancien système (sans nombre)
+                                if (localStorage.getItem('infodrop_celebration_pending')) {
+                                    setTimeout(() => this.showCelebration(100), 1000);
+                                    localStorage.removeItem('infodrop_celebration_pending');
+                                }
                             }
                         });
 
-                        // === TRAITEMENT DES ANIMATIONS AU CHARGEMENT ===
-                        setTimeout(() => {
-                            this.processPendingAnimations();
-                        }, 2000);
+                        // Vérifier au chargement aussi
+                        for (let i = 0; i < localStorage.length; i++) {
+                            const key = localStorage.key(i);
+                            if (key && key.startsWith('infodrop_celebration_pending_')) {
+                                const count = parseInt(key.split('_')[3]);
+                                setTimeout(() => this.showCelebration(count), 2000);
+                                break;
+                            }
+                        }
+                        // Compatibilité avec l'ancien système
+                        if (localStorage.getItem('infodrop_celebration_pending')) {
+                            setTimeout(() => this.showCelebration(100), 2000);
+                            localStorage.removeItem('infodrop_celebration_pending');
+                        }
+
+                        // Vérifier les XP en attente au chargement
+                        const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
+                        if (pendingXP.length > 0) {
+                            const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
+                            if (recentXP.length > 0) {
+                                const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
+                                setTimeout(() => {
+                                    this.showXPAnimation(totalXP);
+                                }, 1500);
+                                localStorage.removeItem('infodrop_pending_xp');
+                            }
+                        }
                     },
 
                     // ============================================================
