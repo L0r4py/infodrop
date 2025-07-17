@@ -1909,6 +1909,11 @@
                     // Nettoyer TOUT au démarrage pour éviter les bugs
                     Object.keys(localStorage).forEach(key => {
                         if (key.startsWith('infodrop_unlocking_')) {
+                            const pendingCode = key.replace('infodrop_unlocking_', '');
+                            if (!this.unlockedAchievements.includes(pendingCode)) {
+                                this.unlockedAchievements.push(pendingCode);
+                            }
+                            // AJOUT IMPORTANT : Supprimer la clé après traitement
                             localStorage.removeItem(key);
                         }
                     });
@@ -2010,8 +2015,28 @@
                     await this.saveReadArticleToDB(id);
                     await this.addToDiversityData(article);
 
+                    // Vérifier s'il y a vraiment de nouvelles animations à jouer
                     if (animationQueue.length > 0) {
-                        localStorage.setItem('infodrop_animation_queue', JSON.stringify(animationQueue));
+                        // Récupérer la queue existante
+                        const existingQueue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
+
+                        // Filtrer pour éviter les doublons d'achievements
+                        const newAnimations = animationQueue.filter(newAnim => {
+                            if (newAnim.type === 'achievement') {
+                                // Vérifier si cet achievement n'est pas déjà dans la queue
+                                return !existingQueue.some(existing =>
+                                    existing.type === 'achievement' &&
+                                    existing.title === newAnim.title
+                                );
+                            }
+                            return true; // XP et level up peuvent être ajoutés
+                        });
+
+                        if (newAnimations.length > 0) {
+                            localStorage.setItem('infodrop_animation_queue',
+                                JSON.stringify([...existingQueue, ...newAnimations])
+                            );
+                        }
                     }
                 },
 
@@ -2063,8 +2088,6 @@
 
                 async unlockAchievement(code, queue) {
                     if (this.unlockedAchievements.includes(code)) return;
-
-                    localStorage.setItem(`infodrop_unlocking_${code}`, 'true');
                     this.unlockedAchievements.push(code);
 
                     const achievement = this.achievementsData.find(a => a.code === code);
