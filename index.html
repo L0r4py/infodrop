@@ -2461,6 +2461,56 @@
                         document.head.appendChild(style);
                     },
 
+                    // === NOUVELLE FONCTION POUR GÉRER L'AUTHENTIFICATION ===
+                    async handleAuthChange({ event, session }) {
+                        this.user = session?.user || null;
+                        this.sessionLoaded = true;
+
+                        if (event === 'SIGNED_IN') {
+                            console.log('✅ Événement SIGNED_IN reçu par Alpine ! Chargement des données...');
+                            this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+
+                            try {
+                                // On peut maintenant revenir à Promise.all car la structure est stable.
+                                await Promise.all([
+                                    this.loadAchievements(),
+                                    this.initGamification(),
+                                    this.loadReadArticlesFromDB(),
+                                    this.loadReadPreferences(),
+                                    this.calculateDiversityScore(),
+                                    this.loadUserInviteData()
+                                ]);
+
+                                console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées.');
+
+                                // On vérifie les succès après avoir tout chargé.
+                                await this.checkAchievements();
+
+                                // On lance le chargement des news UNIQUEMENT si tout le reste a réussi.
+                                this.loadData(true);
+                                this.startAutoUpdate();
+                                this.setupRealtime(session);
+
+                            } catch (error) {
+                                console.error('[FATAL] Une erreur a bloqué le chargement des données utilisateur :', error);
+                            }
+
+                        } else if (event === 'SIGNED_OUT') {
+                            console.log('🚪 Événement SIGNED_OUT reçu.');
+                            this.stopAutoUpdate();
+                            if (this.realtimeChannel) {
+                                supabase.removeChannel(this.realtimeChannel);
+                                this.realtimeChannel = null;
+                            }
+                            this.userInviteData = {
+                                code: null,
+                                is_used: false,
+                                parrainEmail: null,
+                                filleulEmail: null
+                            };
+                        }
+                    },
+
                     // === CHARGEMENT DES ACHIEVEMENTS DEPUIS LA DB ===
                     async loadAchievements() {
                         try {
@@ -2476,6 +2526,8 @@
                             console.error('Erreur chargement achievements:', error);
                         }
                     },
+
+
 
                     // ============================================================
                     // 🔐 SYSTÈME D'AUTHENTIFICATION ET INVITATIONS
