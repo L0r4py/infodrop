@@ -2996,27 +2996,31 @@
                 async markAsRead(id) {
                     if (!this.user || this.readArticles[id]) return;
 
-                    // --- ÉTAPE 1: Mise à jour de l'état local ---
+                    // --- ÉTAPE 1: Mise à jour de l'état local pour une UI réactive ---
                     this.readArticles[id] = new Date().toISOString();
                     this.updateTotalReadCount();
 
-                    // --- ÉTAPE 2: Calcul de toutes les nouvelles statistiques ---
                     const article = this.newsList.find(n => n.id === id);
-                    this.gainXPSilently(article);
-                    this.checkDailyStreak();
-                    await this.calculateDiversityScore();
 
-                    // --- ÉTAPE 3: Vérification centralisée des succès ---
+                    // --- ÉTAPE 2: Calcul de toutes les nouvelles statistiques LOCALEMENT ---
+                    this.updateXP(article);
+                    this.updateStreak();
+                    await this.updateDiversityScore(); // Cette fonction ne fait que calculer
+
+                    // --- ÉTAPE 3: Maintenant que TOUT est à jour, on vérifie les succès une seule fois ---
                     await this.checkAchievements();
 
-                    // --- ÉTAPE 4: Sauvegarde en base de données à la toute fin ---
+                    // --- ÉTAPE 4: On sauvegarde TOUT en base de données, une seule fois et à la fin ---
                     await this.saveGamingData();
+                    await this.saveReadArticleToDB(id);
+                    await this.addToDiversityData(article);
 
-
+                    // Célébrations
                     if (this.totalReadCount % 20 === 0 && this.totalReadCount > 0) {
                         this.celebrateArticles(this.totalReadCount);
                     }
                 },
+                
 
                 // `gainXPSilently` ne fait QUE calculer l'XP.
                 gainXPSilently(article) {
@@ -3038,6 +3042,7 @@
                         this.showLevelUpAnimation();
                     }
                 },
+
 
                 // `checkDailyStreak` ne fait QUE calculer le streak.
                 checkDailyStreak() {
