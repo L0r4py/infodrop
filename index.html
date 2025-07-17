@@ -2458,7 +2458,6 @@
                     async init() {
                         console.log('🚀 Alpine init() appelé.');
 
-                        // Garde de protection pour empêcher les exécutions multiples.
                         if (window.infodropAppInitialized) {
                             console.log('👍 App déjà initialisée. On ignore cet appel.');
                             return;
@@ -2466,19 +2465,23 @@
                         window.infodropAppInitialized = true;
                         console.log('🏁 Première initialisation. Lancement du processus...');
 
-                        // On attend que Supabase soit prêt.
                         const isReady = await initializeSupabase();
 
-                        // Si Supabase est prêt, on continue.
                         if (isReady && supabase) {
-                            // On attache l'écouteur d'authentification.
                             supabase.auth.onAuthStateChange(async (event, session) => {
                                 this.user = session?.user || null;
                                 this.sessionLoaded = true;
 
-                                if (event === 'SIGNED_IN') {
-                                    console.log('✅ Événement SIGNED_IN reçu ! Chargement des données...');
+                                // LA CORRECTION EST ICI : on écoute les deux événements.
+                                if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+                                    console.log(`✅ Événement ${event} reçu ! Chargement des données...`);
                                     this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+
+                                    // Si la session est restaurée mais qu'il n'y a pas d'utilisateur, on ne fait rien.
+                                    if (!this.user) {
+                                        this.sessionLoaded = true;
+                                        return;
+                                    }
 
                                     try {
                                         await Promise.all([
@@ -2541,7 +2544,6 @@
                             });
                         }
 
-                        // Le reste de la logique d'interface qui ne dépend pas de Supabase.
                         window.addEventListener('scroll', () => {
                             document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
                         });
@@ -2574,7 +2576,6 @@
     `;
                         document.head.appendChild(style);
                     },
-
 
                     // ============================================================
                     // 🔐 SYSTÈME D'AUTHENTIFICATION ET INVITATIONS
