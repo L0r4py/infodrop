@@ -1900,7 +1900,17 @@
                initializeSupabase — Appel unique au chargement, version propre
                ─────────────────────────────────────────────────────────────────── */
             async function initializeSupabase() {
-                dlog('🔐 initializeSupabase() lancé');
+                // =================================================================
+                // AJOUT DE LA GARDE : C'est la correction qui va tout débloquer.
+                // Si l'objet supabase existe déjà, cela veut dire que l'initialisation
+                // a déjà eu lieu. On sort immédiatement.
+                if (supabase) {
+                    dlog('👍 Supabase déjà initialisé, on ne fait rien.');
+                    return true;
+                }
+                // =================================================================
+
+                dlog('🔐 initializeSupabase() lancé'); // Ce message ne doit maintenant apparaître qu'une seule fois.
                 try {
                     const res = await fetch('/api/config');
                     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -1911,6 +1921,7 @@
                     dlog('⚙️  Config récupérée', cfg);
 
                     const { createClient } = window.supabase;
+                    // On assigne l'objet à notre variable globale
                     supabase = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
 
                     dlog('✅ Supabase initialisé');
@@ -1919,17 +1930,17 @@
                     console.error('❌ Erreur initialisation:', err);
                     const errorDiv = document.createElement('div');
                     errorDiv.innerHTML = `
-                        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: Arial;">
-                            <div style="text-align: center; padding: 2rem;">
-                                <h2>❌ Erreur de configuration</h2>
-                                <p>Impossible de charger la configuration sécurisée.</p>
-                                <p>Veuillez contacter l'administrateur.</p>
-                                <button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3B82F6; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                    Recharger la page
-                                </button>
-                            </div>
-                        </div>
-                    `;
+            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: Arial;">
+                <div style="text-align: center; padding: 2rem;">
+                    <h2>❌ Erreur de configuration</h2>
+                    <p>Impossible de charger la configuration sécurisée.</p>
+                    <p>Veuillez contacter l'administrateur.</p>
+                    <button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3B82F6; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        Recharger la page
+                    </button>
+                </div>
+            </div>
+        `;
                     document.body.appendChild(errorDiv);
                     return false;
                 }
