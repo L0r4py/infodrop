@@ -2058,6 +2058,34 @@
                     });
                 },
 
+
+                async calculateDiversityScore() {
+                    if (!this.user) return;
+                    try {
+                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                        const { data } = await supabase
+                            .from('user_diversity_data')
+                            .select('orientation, source')
+                            .eq('user_id', this.user.id)
+                            .gte('read_at', twentyFourHoursAgo.toISOString());
+
+                        if (!data || data.length === 0) {
+                            this.diversityScore = null;
+                            this.readOrientations = [];
+                            return;
+                        }
+
+                        const oSet = new Set(data.map(r => r.orientation).filter(Boolean));
+                        const sSet = new Set(data.map(r => r.source));
+                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
+                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
+                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
+
+                    } catch (error) {
+                        console.error('Erreur calcul diversité:', error);
+                    }
+                },
+
                 // ============================================================
                 // ⚙️ INITIALISATION & SAUVEGARDES
                 // ============================================================
@@ -2153,422 +2181,422 @@
                 getAchievementProgress(achievement) {
                     if (this.unlockedAchievements.includes(achievement.code)) return '✓ Complété';
                     switch (achievement.condition_type) {
-                        case 'articles_read': return `${this.totalReadCount}/${achievement.condition_value} articles`;
+                        case 'articles_read': return `${ this.totalReadCount }/${achievement.condition_value} articles`;
                         case 'streak_days': return `${this.readingStreak}/${achievement.condition_value} jours`;
                         case 'level_reached': return `Niveau ${this.userLevel}/${achievement.condition_value}`;
                         case 'diversity_score': return `Score: ${this.diversityScore || 0}%`;
                         default: return '...';
-                    }
+        }
                 },
 
-                showXPAnimation(amount) {
-                    const popup = document.createElement('div');
-                    popup.className = 'xp-popup';
-                    popup.textContent = `+${amount} XP`;
-                    popup.style.left = '50%';
-                    popup.style.top = '200px';
-                    document.body.appendChild(popup);
-                    setTimeout(() => popup.remove(), 1500);
-                },
+        showXPAnimation(amount) {
+            const popup = document.createElement('div');
+            popup.className = 'xp-popup';
+            popup.textContent = `+${amount} XP`;
+            popup.style.left = '50%';
+            popup.style.top = '200px';
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 1500);
+        },
 
-                showLevelUpAnimation() {
-                    const levelUp = document.createElement('div');
-                    levelUp.style.cssText = `position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; font-weight: bold; color: var(--clash-gold); text-shadow: 0 0 30px var(--clash-gold); animation: level-up-clash 1.5s ease-out forwards; z-index: 9999; pointer-events: none;`;
-                    levelUp.textContent = `NIVEAU ${this.userLevel}!`;
-                    document.body.appendChild(levelUp);
-                    this.createGoldConfetti();
-                    setTimeout(() => levelUp.remove(), 1500);
-                },
+        showLevelUpAnimation() {
+            const levelUp = document.createElement('div');
+            levelUp.style.cssText = `position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; font-weight: bold; color: var(--clash-gold); text-shadow: 0 0 30px var(--clash-gold); animation: level-up-clash 1.5s ease-out forwards; z-index: 9999; pointer-events: none;`;
+            levelUp.textContent = `NIVEAU ${this.userLevel}!`;
+            document.body.appendChild(levelUp);
+            this.createGoldConfetti();
+            setTimeout(() => levelUp.remove(), 1500);
+        },
 
-                showAchievementPopup(icon, title) {
-                    const popup = document.createElement('div');
-                    popup.className = 'achievement-popup-clash';
-                    popup.innerHTML = `<div class="text-6xl mb-3">${icon}</div><h3 class="text-2xl font-bold mb-2 text-white">SUCCÈS DÉBLOQUÉ!</h3><p class="text-lg text-blue-200">${title}</p>`;
-                    document.body.appendChild(popup);
-                    setTimeout(() => {
-                        popup.style.animation = 'achievement-appear 0.5s ease-out reverse forwards';
-                        setTimeout(() => popup.remove(), 500);
-                    }, 3000);
-                },
+        showAchievementPopup(icon, title) {
+            const popup = document.createElement('div');
+            popup.className = 'achievement-popup-clash';
+            popup.innerHTML = `<div class="text-6xl mb-3">${icon}</div><h3 class="text-2xl font-bold mb-2 text-white">SUCCÈS DÉBLOQUÉ!</h3><p class="text-lg text-blue-200">${title}</p>`;
+            document.body.appendChild(popup);
+            setTimeout(() => {
+                popup.style.animation = 'achievement-appear 0.5s ease-out reverse forwards';
+                setTimeout(() => popup.remove(), 500);
+            }, 3000);
+        },
 
-                createGoldConfetti() {
-                    const colors = ['#FFD700', '#FFA500', '#FFFF00', '#FFE4B5'];
-                    for (let i = 0; i < 30; i++) {
-                        setTimeout(() => {
-                            const conf = document.createElement('div');
-                            conf.style.cssText = `position: fixed; width: 15px; height: 15px; background: ${colors[i % colors.length]}; left: ${Math.random() * 100}%; top: -20px; opacity: ${Math.random() + 0.5}; transform: rotate(${Math.random() * 360}deg); animation: confetti-fall ${3 + Math.random() * 2}s linear forwards; pointer-events: none; z-index: 9999; box-shadow: 0 0 10px ${colors[i % colors.length]};`;
-                            document.body.appendChild(conf);
-                            setTimeout(() => conf.remove(), 5000);
-                        }, i * 50);
-                    }
-                },
+        createGoldConfetti() {
+            const colors = ['#FFD700', '#FFA500', '#FFFF00', '#FFE4B5'];
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const conf = document.createElement('div');
+                    conf.style.cssText = `position: fixed; width: 15px; height: 15px; background: ${colors[i % colors.length]}; left: ${Math.random() * 100}%; top: -20px; opacity: ${Math.random() + 0.5}; transform: rotate(${Math.random() * 360}deg); animation: confetti-fall ${3 + Math.random() * 2}s linear forwards; pointer-events: none; z-index: 9999; box-shadow: 0 0 10px ${colors[i % colors.length]};`;
+                    document.body.appendChild(conf);
+                    setTimeout(() => conf.remove(), 5000);
+                }, i * 50);
+            }
+        },
 
                 get filteredNewsList() {
-                    if (!this.searchQuery || this.searchQuery.trim() === '') return this.newsList;
-                    const query = this.searchQuery.toLowerCase().trim();
-                    return this.newsList.filter(news => (news.resume && news.resume.toLowerCase().includes(query)) || (news.source && news.source.toLowerCase().includes(query)) || (news.tags && news.tags.some(tag => tag.toLowerCase().includes(query))) || (news.orientation && news.orientation.toLowerCase().includes(query)));
-                },
+            if (!this.searchQuery || this.searchQuery.trim() === '') return this.newsList;
+            const query = this.searchQuery.toLowerCase().trim();
+            return this.newsList.filter(news => (news.resume && news.resume.toLowerCase().includes(query)) || (news.source && news.source.toLowerCase().includes(query)) || (news.tags && news.tags.some(tag => tag.toLowerCase().includes(query))) || (news.orientation && news.orientation.toLowerCase().includes(query)));
+        },
 
-                getOrientationColor(o) { return ORIENTATION_DATA[o]?.color || '#808080'; },
-                getOrientationClass(o) { return ORIENTATION_DATA[o]?.class || 'bg-gray-700 text-gray-200 border-gray-600'; },
+        getOrientationColor(o) { return ORIENTATION_DATA[o]?.color || '#808080'; },
+        getOrientationClass(o) { return ORIENTATION_DATA[o]?.class || 'bg-gray-700 text-gray-200 border-gray-600'; },
 
                 async login() {
-                    if (this.loading) return;
-                    this.loading = true;
-                    this.message = '';
-                    this.messageType = '';
-                    try {
-                        const checkRes = await fetch('/api/check-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: this.email.toLowerCase() }) });
-                        if (!checkRes.ok) { const err = await checkRes.json(); throw new Error(err.error || 'Erreur de communication.'); }
-                        const { exists } = await checkRes.json();
-                        if (!exists) {
-                            if (!this.inviteCode) { this.message = "Code d'invitation requis pour les nouveaux utilisateurs."; this.messageType = 'error'; this.loading = false; return; }
-                            const validateRes = await fetch('/api/validate-invite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: this.inviteCode, email: this.email }) });
-                            const validationResult = await validateRes.json();
-                            if (!validationResult.success) { this.message = validationResult.error; this.messageType = 'error'; this.loading = false; return; }
-                        }
-                        const { error: otpError } = await supabase.auth.signInWithOtp({ email: this.email.toLowerCase(), options: { emailRedirectTo: window.location.origin } });
-                        if (otpError) throw otpError;
-                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
-                        this.messageType = 'success';
-                    } catch (error) {
-                        this.message = error.message || 'Une erreur est survenue.';
-                        this.messageType = 'error';
-                    } finally {
-                        this.loading = false;
-                    }
-                },
+            if (this.loading) return;
+            this.loading = true;
+            this.message = '';
+            this.messageType = '';
+            try {
+                const checkRes = await fetch('/api/check-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: this.email.toLowerCase() }) });
+                if (!checkRes.ok) { const err = await checkRes.json(); throw new Error(err.error || 'Erreur de communication.'); }
+                const { exists } = await checkRes.json();
+                if (!exists) {
+                    if (!this.inviteCode) { this.message = "Code d'invitation requis pour les nouveaux utilisateurs."; this.messageType = 'error'; this.loading = false; return; }
+                    const validateRes = await fetch('/api/validate-invite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: this.inviteCode, email: this.email }) });
+                    const validationResult = await validateRes.json();
+                    if (!validationResult.success) { this.message = validationResult.error; this.messageType = 'error'; this.loading = false; return; }
+                }
+                const { error: otpError } = await supabase.auth.signInWithOtp({ email: this.email.toLowerCase(), options: { emailRedirectTo: window.location.origin } });
+                if (otpError) throw otpError;
+                this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
+                this.messageType = 'success';
+            } catch (error) {
+                this.message = error.message || 'Une erreur est survenue.';
+                this.messageType = 'error';
+            } finally {
+                this.loading = false;
+            }
+        },
 
                 async loadUserInviteData() {
-                    if (!this.user || !this.user.email) return;
-                    if (this.isAdmin) {
-                        try {
-                            const { data: adminCode, error: adminError } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
-                            if (adminError && adminError.code !== 'PGRST116') { console.error('❌ Erreur requête admin:', adminError); return; }
-                            if (adminCode) {
-                                this.userInviteData.code = adminCode.code;
-                                this.userInviteData.is_used = adminCode.is_used || false;
-                                if (adminCode.is_used && adminCode.used_by_email) { this.userInviteData.filleulEmail = adminCode.used_by_email; }
-                            } else { this.userInviteData.code = null; }
-                            this.userInviteData.parrainEmail = null;
-                            return;
-                        } catch (error) { console.error('❌ Erreur traitement admin:', error); return; }
-                    }
-                    try {
-                        const { data: ownCode } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
-                        if (ownCode) {
-                            this.userInviteData.code = ownCode.code;
-                            this.userInviteData.is_used = ownCode.is_used || false;
-                            if (ownCode.is_used && ownCode.used_by_email) { this.userInviteData.filleulEmail = ownCode.used_by_email; }
-                        }
-                        const { data: usedCode } = await supabase.from('invitation_codes').select('owner_email').ilike('used_by_email', this.user.email.toLowerCase()).maybeSingle();
-                        if (usedCode) { this.userInviteData.parrainEmail = usedCode.owner_email; }
-                    } catch (error) {
-                        console.error("❌ Erreur chargement des données d'invitation:", error);
-                        this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null };
-                    }
-                },
+            if (!this.user || !this.user.email) return;
+            if (this.isAdmin) {
+                try {
+                    const { data: adminCode, error: adminError } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
+                    if (adminError && adminError.code !== 'PGRST116') { console.error('❌ Erreur requête admin:', adminError); return; }
+                    if (adminCode) {
+                        this.userInviteData.code = adminCode.code;
+                        this.userInviteData.is_used = adminCode.is_used || false;
+                        if (adminCode.is_used && adminCode.used_by_email) { this.userInviteData.filleulEmail = adminCode.used_by_email; }
+                    } else { this.userInviteData.code = null; }
+                    this.userInviteData.parrainEmail = null;
+                    return;
+                } catch (error) { console.error('❌ Erreur traitement admin:', error); return; }
+            }
+            try {
+                const { data: ownCode } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
+                if (ownCode) {
+                    this.userInviteData.code = ownCode.code;
+                    this.userInviteData.is_used = ownCode.is_used || false;
+                    if (ownCode.is_used && ownCode.used_by_email) { this.userInviteData.filleulEmail = ownCode.used_by_email; }
+                }
+                const { data: usedCode } = await supabase.from('invitation_codes').select('owner_email').ilike('used_by_email', this.user.email.toLowerCase()).maybeSingle();
+                if (usedCode) { this.userInviteData.parrainEmail = usedCode.owner_email; }
+            } catch (error) {
+                console.error("❌ Erreur chargement des données d'invitation:", error);
+                this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null };
+            }
+        },
 
-                setupRealtime(session) {
-                    this.realtimeChannel = supabase.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } });
-                    this.realtimeChannel.on('presence', { event: 'sync' }, () => {
-                        this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
-                    }).subscribe(async (status) => {
-                        if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); }
-                    });
-                },
+        setupRealtime(session) {
+            this.realtimeChannel = supabase.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } });
+            this.realtimeChannel.on('presence', { event: 'sync' }, () => {
+                this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
+            }).subscribe(async (status) => {
+                if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); }
+            });
+        },
 
-                openEditPanel(news) {
-                    this.editingNews = { ...JSON.parse(JSON.stringify(news)), tagsText: (news.tags || []).join(', ') };
-                    this.showEditPanel = true;
-                },
+        openEditPanel(news) {
+            this.editingNews = { ...JSON.parse(JSON.stringify(news)), tagsText: (news.tags || []).join(', ') };
+            this.showEditPanel = true;
+        },
 
                 async updateNews() {
-                    const { id, resume, source, url, orientation, tagsText } = this.editingNews;
-                    const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
-                    try {
-                        await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id);
-                        const index = this.newsList.findIndex(n => n.id === id);
-                        if (index !== -1) { this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; }
-                        this.showEditPanel = false;
-                        this.updateTagsList();
-                    } catch (e) { alert("La mise à jour a échoué."); }
-                },
+            const { id, resume, source, url, orientation, tagsText } = this.editingNews;
+            const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
+            try {
+                await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id);
+                const index = this.newsList.findIndex(n => n.id === id);
+                if (index !== -1) { this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; }
+                this.showEditPanel = false;
+                this.updateTagsList();
+            } catch (e) { alert("La mise à jour a échoué."); }
+        },
 
                 async deleteNews(id) {
-                    if (!confirm("Supprimer ?")) return;
-                    this.newsList = this.newsList.filter(n => n.id !== id);
-                    try {
-                        await supabase.from('actu').delete().eq('id', id);
-                        if (this.isAdmin) this.loadStats();
-                    } catch (e) { alert("La suppression a échoué."); this.loadNews(); }
-                },
+            if (!confirm("Supprimer ?")) return;
+            this.newsList = this.newsList.filter(n => n.id !== id);
+            try {
+                await supabase.from('actu').delete().eq('id', id);
+                if (this.isAdmin) this.loadStats();
+            } catch (e) { alert("La suppression a échoué."); this.loadNews(); }
+        },
 
                 async addManualNews() {
-                    this.addingNews = true;
-                    try {
-                        if (!this.newNews.resume || !this.newNews.resume.trim()) { throw new Error('Le résumé est obligatoire'); }
-                        if (!this.newNews.url || !this.newNews.url.trim()) { throw new Error('L\'URL est obligatoire'); }
-                        let tags = ['🧨INFODROP'];
-                        if (this.newNews.tagsText && this.newNews.tagsText.trim()) {
-                            const additionalTags = this.newNews.tagsText.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0 && tag !== '🧨INFODROP');
-                            tags = tags.concat(additionalTags);
-                        }
-                        const articleData = { resume: this.newNews.resume.trim(), source: '🧨INFODROP', url: this.newNews.url.trim(), heure: new Date().toISOString(), tags: tags, added_by: this.user.email };
-                        if (this.newNews.orientation && this.newNews.orientation.trim()) { articleData.orientation = this.newNews.orientation.trim(); }
-                        const { error } = await supabase.from('actu').insert(articleData).select('*');
-                        if (error) { throw new Error(`Erreur DB: ${error.message}`); }
-                        this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
-                        this.showAdminPanel = false;
-                        await this.loadData();
-                        alert('✅ Article ajouté avec succès !');
-                    } catch (error) {
-                        alert('Erreur lors de l\'ajout de l\'article: ' + error.message);
-                    } finally {
-                        this.addingNews = false;
-                    }
-                },
+            this.addingNews = true;
+            try {
+                if (!this.newNews.resume || !this.newNews.resume.trim()) { throw new Error('Le résumé est obligatoire'); }
+                if (!this.newNews.url || !this.newNews.url.trim()) { throw new Error('L\'URL est obligatoire'); }
+                let tags = ['🧨INFODROP'];
+                if (this.newNews.tagsText && this.newNews.tagsText.trim()) {
+                    const additionalTags = this.newNews.tagsText.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0 && tag !== '🧨INFODROP');
+                    tags = tags.concat(additionalTags);
+                }
+                const articleData = { resume: this.newNews.resume.trim(), source: '🧨INFODROP', url: this.newNews.url.trim(), heure: new Date().toISOString(), tags: tags, added_by: this.user.email };
+                if (this.newNews.orientation && this.newNews.orientation.trim()) { articleData.orientation = this.newNews.orientation.trim(); }
+                const { error } = await supabase.from('actu').insert(articleData).select('*');
+                if (error) { throw new Error(`Erreur DB: ${error.message}`); }
+                this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
+                this.showAdminPanel = false;
+                await this.loadData();
+                alert('✅ Article ajouté avec succès !');
+            } catch (error) {
+                alert('Erreur lors de l\'ajout de l\'article: ' + error.message);
+            } finally {
+                this.addingNews = false;
+            }
+        },
 
                 async generateInviteCode() {
-                    if (!this.isAdmin || this.generatingCode) return;
-                    this.generatingCode = true;
-                    try {
-                        const { data: { session } } = await supabase.auth.getSession();
-                        if (!session) throw new Error("Session introuvable");
-                        const response = await fetch('/api/generate-invite', { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' } });
-                        const result = await response.json();
-                        if (!result.success) throw new Error(result.error || 'Erreur lors de la génération');
-                        this.lastGeneratedCode = result.code;
-                        this.copyInviteMessage(result.code);
-                    } catch (error) {
-                        alert('Erreur lors de la génération du code: ' + error.message);
-                    } finally {
-                        this.generatingCode = false;
-                    }
-                },
+            if (!this.isAdmin || this.generatingCode) return;
+            this.generatingCode = true;
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) throw new Error("Session introuvable");
+                const response = await fetch('/api/generate-invite', { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' } });
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error || 'Erreur lors de la génération');
+                this.lastGeneratedCode = result.code;
+                this.copyInviteMessage(result.code);
+            } catch (error) {
+                alert('Erreur lors de la génération du code: ' + error.message);
+            } finally {
+                this.generatingCode = false;
+            }
+        },
 
                 async loadData(isInitial = false) {
-                    if (isInitial) this.loadingNews = true;
-                    await this.loadStats();
-                    if (isInitial) {
-                        await this.loadNews(this.activeFilter, true);
-                    }
-                    if (isInitial) this.loadingNews = false;
-                },
+            if (isInitial) this.loadingNews = true;
+            await this.loadStats();
+            if (isInitial) {
+                await this.loadNews(this.activeFilter, true);
+            }
+            if (isInitial) this.loadingNews = false;
+        },
 
                 async loadNews(filter = null, isNewFilter = false) {
-                    if (isNewFilter) this.loadingNews = true;
-                    try {
-                        let query = supabase.from('actu').select('id, resume, url, heure, source, orientation, tags, added_by').order('heure', { ascending: false });
-                        if (filter && filter !== 'all') {
-                            if (this.allOrientations.includes(filter)) { query = query.eq('orientation', filter); }
-                            else { query = query.contains('tags', [filter]); }
-                        }
-                        if (!isNewFilter && this.latestNewsTimestamp) { query = query.gt('heure', this.latestNewsTimestamp); }
-                        else { query = query.limit(100); }
+            if (isNewFilter) this.loadingNews = true;
+            try {
+                let query = supabase.from('actu').select('id, resume, url, heure, source, orientation, tags, added_by').order('heure', { ascending: false });
+                if (filter && filter !== 'all') {
+                    if (this.allOrientations.includes(filter)) { query = query.eq('orientation', filter); }
+                    else { query = query.contains('tags', [filter]); }
+                }
+                if (!isNewFilter && this.latestNewsTimestamp) { query = query.gt('heure', this.latestNewsTimestamp); }
+                else { query = query.limit(100); }
 
-                        const { data: newArticles, error } = await query;
-                        if (error) throw error;
+                const { data: newArticles, error } = await query;
+                if (error) throw error;
 
-                        if (newArticles && newArticles.length > 0) {
-                            if (isNewFilter) { this.newsList = newArticles; }
-                            else { this.newsList = [...newArticles, ...this.newsList]; }
-                            this.latestNewsTimestamp = this.newsList[0].heure;
-                        } else if (isNewFilter) { this.newsList = []; }
-                    } catch (e) {
-                        console.error('Erreur dans loadNews:', e);
-                    } finally {
-                        if (isNewFilter) this.loadingNews = false;
-                    }
-                },
+                if (newArticles && newArticles.length > 0) {
+                    if (isNewFilter) { this.newsList = newArticles; }
+                    else { this.newsList = [...newArticles, ...this.newsList]; }
+                    this.latestNewsTimestamp = this.newsList[0].heure;
+                } else if (isNewFilter) { this.newsList = []; }
+            } catch (e) {
+                console.error('Erreur dans loadNews:', e);
+            } finally {
+                if (isNewFilter) this.loadingNews = false;
+            }
+        },
 
-                updateTagsList() {
-                    const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
-                    this.allOrientations = pol;
-                    this.allOtherTags = this.activeTags.filter(tag => !pol.includes(tag));
-                },
+        updateTagsList() {
+            const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
+            this.allOrientations = pol;
+            this.allOtherTags = this.activeTags.filter(tag => !pol.includes(tag));
+        },
 
-                hasArticlesForOrientation(o) { return this.activeOrientations.includes(o); },
-                hasArticlesForTag(t) { return this.activeTags.includes(t); },
+        hasArticlesForOrientation(o) { return this.activeOrientations.includes(o); },
+        hasArticlesForTag(t) { return this.activeTags.includes(t); },
 
-                getEmptyFilterMessage() {
-                    if (this.allOrientations.includes(this.activeFilter)) return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`;
-                    return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`;
-                },
+        getEmptyFilterMessage() {
+            if (this.allOrientations.includes(this.activeFilter)) return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`;
+            return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`;
+        },
 
                 async loadStats() {
-                    try {
-                        const { data, error } = await supabase.rpc('get_live_stats');
-                        if (error) throw error;
-                        this.stats = { total_articles: data.total_articles || 0, total_sources: data.total_sources || 0 };
-                        this.activeOrientations = data.active_orientations || [];
-                        this.activeTags = data.active_tags || [];
-                        this.updateTagsList();
-                    } catch (e) {
-                        console.error('[ERREUR] Le chargement des statistiques et filtres a échoué :', e);
-                    }
-                },
+            try {
+                const { data, error } = await supabase.rpc('get_live_stats');
+                if (error) throw error;
+                this.stats = { total_articles: data.total_articles || 0, total_sources: data.total_sources || 0 };
+                this.activeOrientations = data.active_orientations || [];
+                this.activeTags = data.active_tags || [];
+                this.updateTagsList();
+            } catch (e) {
+                console.error('[ERREUR] Le chargement des statistiques et filtres a échoué :', e);
+            }
+        },
 
                 async saveReadArticleToDB(articleId) {
-                    if (!this.user) return;
-                    try {
-                        await supabase.from('user_read_articles').upsert({ user_id: this.user.id, article_id: articleId, read_at: new Date().toISOString() }, { onConflict: 'user_id,article_id' });
-                    } catch (error) { console.error('Erreur sauvegarde article lu:', error); }
-                },
+            if (!this.user) return;
+            try {
+                await supabase.from('user_read_articles').upsert({ user_id: this.user.id, article_id: articleId, read_at: new Date().toISOString() }, { onConflict: 'user_id,article_id' });
+            } catch (error) { console.error('Erreur sauvegarde article lu:', error); }
+        },
 
                 async loadReadArticlesFromDB() {
-                    if (!this.user) return;
-                    try {
-                        const { data } = await supabase.from('user_read_articles').select('article_id, read_at').eq('user_id', this.user.id);
-                        this.readArticles = {};
-                        if (data) { data.forEach(item => { this.readArticles[item.article_id] = item.read_at; }); }
-                        this.updateTotalReadCount();
-                    } catch (error) { console.error('Erreur chargement articles lus:', error); }
-                },
+            if (!this.user) return;
+            try {
+                const { data } = await supabase.from('user_read_articles').select('article_id, read_at').eq('user_id', this.user.id);
+                this.readArticles = {};
+                if (data) { data.forEach(item => { this.readArticles[item.article_id] = item.read_at; }); }
+                this.updateTotalReadCount();
+            } catch (error) { console.error('Erreur chargement articles lus:', error); }
+        },
 
-                getReadArticlesList() {
-                    return this.newsList.filter(news => this.readArticles[news.id]).sort((a, b) => new Date(this.readArticles[b.id]) - new Date(this.readArticles[a.id]));
-                },
+        getReadArticlesList() {
+            return this.newsList.filter(news => this.readArticles[news.id]).sort((a, b) => new Date(this.readArticles[b.id]) - new Date(this.readArticles[a.id]));
+        },
 
                 async saveReadPreferences() {
-                    if (!this.user) return;
-                    localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
-                    try {
-                        await supabase.from('user_preferences').upsert({ user_id: this.user.id, hide_read_articles: this.hideReadFromMain, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
-                    } catch (error) { console.error('Erreur sauvegarde préférences:', error); }
-                },
+            if (!this.user) return;
+            localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
+            try {
+                await supabase.from('user_preferences').upsert({ user_id: this.user.id, hide_read_articles: this.hideReadFromMain, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+            } catch (error) { console.error('Erreur sauvegarde préférences:', error); }
+        },
 
                 async loadReadPreferences() {
-                    if (!this.user) return;
-                    const localPref = localStorage.getItem('infodrop_hide_read_' + this.user.id);
-                    if (localPref !== null) { this.hideReadFromMain = localPref === 'true'; }
-                    try {
-                        const { data, error } = await supabase.from('user_preferences').select('hide_read_articles').eq('user_id', this.user.id).maybeSingle();
-                        if (error) throw error;
-                        if (data) {
-                            this.hideReadFromMain = data.hide_read_articles;
-                            localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
-                        }
-                    } catch (error) {
-                        console.error('[ERREUR] Chargement des préférences utilisateur échoué :', error);
-                    }
-                },
+            if (!this.user) return;
+            const localPref = localStorage.getItem('infodrop_hide_read_' + this.user.id);
+            if (localPref !== null) { this.hideReadFromMain = localPref === 'true'; }
+            try {
+                const { data, error } = await supabase.from('user_preferences').select('hide_read_articles').eq('user_id', this.user.id).maybeSingle();
+                if (error) throw error;
+                if (data) {
+                    this.hideReadFromMain = data.hide_read_articles;
+                    localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
+                }
+            } catch (error) {
+                console.error('[ERREUR] Chargement des préférences utilisateur échoué :', error);
+            }
+        },
 
-                updateTotalReadCount() {
-                    this.totalReadCount = Object.keys(this.readArticles).length;
-                },
+        updateTotalReadCount() {
+            this.totalReadCount = Object.keys(this.readArticles).length;
+        },
 
                 async addToDiversityData(article) {
-                    if (!this.user || !article) return;
-                    const orientation = article.tags?.includes('🧨INFODROP') ? '🧨INFODROP' : (article.orientation || 'neutre');
-                    try {
-                        await supabase.from('user_diversity_data').insert({ user_id: this.user.id, orientation: orientation, source: article.source, read_at: new Date().toISOString() });
-                        await this.calculateDiversityScore();
-                    } catch (error) { console.error('Erreur sauvegarde diversité:', error); }
-                },
+            if (!this.user || !article) return;
+            const orientation = article.tags?.includes('🧨INFODROP') ? '🧨INFODROP' : (article.orientation || 'neutre');
+            try {
+                await supabase.from('user_diversity_data').insert({ user_id: this.user.id, orientation: orientation, source: article.source, read_at: new Date().toISOString() });
+                await this.calculateDiversityScore();
+            } catch (error) { console.error('Erreur sauvegarde diversité:', error); }
+        },
 
-                getDiversityMessage() {
-                    if (this.diversityScore < 30) return "🔴 Bulle de filtre ! Explorez d'autres horizons";
-                    if (this.diversityScore < 50) return "🟡 Bon début ! Continuez à diversifier";
-                    if (this.diversityScore < 70) return "🟠 Bien ! Quelques perspectives en plus ?";
-                    if (this.diversityScore < 85) return "🟢 Très bien ! Vous êtes sur la bonne voie";
-                    return "🏆 Champion de la diversité !";
-                },
+        getDiversityMessage() {
+            if (this.diversityScore < 30) return "🔴 Bulle de filtre ! Explorez d'autres horizons";
+            if (this.diversityScore < 50) return "🟡 Bon début ! Continuez à diversifier";
+            if (this.diversityScore < 70) return "🟠 Bien ! Quelques perspectives en plus ?";
+            if (this.diversityScore < 85) return "🟢 Très bien ! Vous êtes sur la bonne voie";
+            return "🏆 Champion de la diversité !";
+        },
 
-                getDiversityTip() {
-                    const missing = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'].filter(o => !this.readOrientations.includes(o));
-                    if (missing.length === 0) return "🎉 Toutes les orientations explorées !";
-                    if (missing.length > 6) return "💡 Essayez de lire des perspectives variées";
-                    const suggestion = missing[Math.floor(Math.random() * missing.length)];
-                    return `💡 Essayez de lire du "${suggestion.replace('-', ' ')}"`;
-                },
+        getDiversityTip() {
+            const missing = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'].filter(o => !this.readOrientations.includes(o));
+            if (missing.length === 0) return "🎉 Toutes les orientations explorées !";
+            if (missing.length > 6) return "💡 Essayez de lire des perspectives variées";
+            const suggestion = missing[Math.floor(Math.random() * missing.length)];
+            return `💡 Essayez de lire du "${suggestion.replace('-', ' ')}"`;
+        },
 
-                celebrateArticles(count) {
-                    if (document.hidden) { localStorage.setItem(`infodrop_celebration_pending_${count}`, 'true'); return; }
-                    this.showCelebration(count);
-                },
+        celebrateArticles(count) {
+            if (document.hidden) { localStorage.setItem(`infodrop_celebration_pending_${count}`, 'true'); return; }
+            this.showCelebration(count);
+        },
 
-                showCelebration(count = 100) {
-                    const cont = document.createElement('div');
-                    cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:auto;z-index:9999;background:rgba(0,0,0,0.8);cursor:pointer;';
-                    this.startConfettiLoop(cont);
-                    const msg = document.createElement('div');
-                    msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
-                    const isSpecial = count === 100 || count % 100 === 0;
-                    const emoji = isSpecial ? '🏆' : '🎉';
-                    const title = isSpecial ? 'Incroyable !' : 'Bravo !';
-                    msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">${emoji} ${title} ${emoji}</h2><p class="text-lg mb-2">${count} articles lus !</p><p class="text-sm opacity-80">Cliquez pour continuer</p>`;
-                    cont.appendChild(msg);
-                    document.body.appendChild(cont);
-                    const closeAnimation = () => { cont.remove(); this.stopConfettiLoop(); localStorage.removeItem(`infodrop_celebration_pending_${count}`); };
-                    cont.addEventListener('click', closeAnimation);
-                    msg.addEventListener('click', closeAnimation);
-                },
+        showCelebration(count = 100) {
+            const cont = document.createElement('div');
+            cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:auto;z-index:9999;background:rgba(0,0,0,0.8);cursor:pointer;';
+            this.startConfettiLoop(cont);
+            const msg = document.createElement('div');
+            msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
+            const isSpecial = count === 100 || count % 100 === 0;
+            const emoji = isSpecial ? '🏆' : '🎉';
+            const title = isSpecial ? 'Incroyable !' : 'Bravo !';
+            msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">${emoji} ${title} ${emoji}</h2><p class="text-lg mb-2">${count} articles lus !</p><p class="text-sm opacity-80">Cliquez pour continuer</p>`;
+            cont.appendChild(msg);
+            document.body.appendChild(cont);
+            const closeAnimation = () => { cont.remove(); this.stopConfettiLoop(); localStorage.removeItem(`infodrop_celebration_pending_${count}`); };
+            cont.addEventListener('click', closeAnimation);
+            msg.addEventListener('click', closeAnimation);
+        },
 
-                startConfettiLoop(container) { this.confettiInterval = setInterval(() => { this.createConfettiBatch(container); }, 1000); },
-                stopConfettiLoop() { if (this.confettiInterval) { clearInterval(this.confettiInterval); this.confettiInterval = null; } },
+        startConfettiLoop(container) { this.confettiInterval = setInterval(() => { this.createConfettiBatch(container); }, 1000); },
+        stopConfettiLoop() { if (this.confettiInterval) { clearInterval(this.confettiInterval); this.confettiInterval = null; } },
 
-                createConfettiBatch(container) {
-                    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7'];
-                    for (let i = 0; i < 10; i++) {
-                        const conf = document.createElement('div');
-                        conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;pointer-events:none;`;
-                        container.appendChild(conf);
-                        setTimeout(() => conf.remove(), 5000);
-                    }
-                },
+        createConfettiBatch(container) {
+            const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7'];
+            for (let i = 0; i < 10; i++) {
+                const conf = document.createElement('div');
+                conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;pointer-events:none;`;
+                container.appendChild(conf);
+                setTimeout(() => conf.remove(), 5000);
+            }
+        },
 
                 async logout() {
-                    if (this.realtimeChannel) await this.realtimeChannel.untrack();
-                    await supabase.auth.signOut();
-                },
+            if (this.realtimeChannel) await this.realtimeChannel.untrack();
+            await supabase.auth.signOut();
+        },
 
-                startAutoUpdate() {
-                    if (this.updateInterval) clearInterval(this.updateInterval);
-                    this.updateInterval = setInterval(() => { this.loadNews(this.activeFilter, false); }, 30000);
-                },
+        startAutoUpdate() {
+            if (this.updateInterval) clearInterval(this.updateInterval);
+            this.updateInterval = setInterval(() => { this.loadNews(this.activeFilter, false); }, 30000);
+        },
 
-                stopAutoUpdate() {
-                    if (this.updateInterval) clearInterval(this.updateInterval);
-                },
+        stopAutoUpdate() {
+            if (this.updateInterval) clearInterval(this.updateInterval);
+        },
 
-                formatTime(t) { return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); },
+        formatTime(t) { return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); },
 
-                showStatTooltip(event, text) {
-                    event.stopPropagation();
-                    const existingTooltip = document.querySelector('.stat-tooltip');
-                    if (existingTooltip) existingTooltip.remove();
-                    const tooltip = document.createElement('div');
-                    tooltip.className = 'stat-tooltip';
-                    tooltip.textContent = text;
-                    document.body.appendChild(tooltip);
-                    const rect = event.currentTarget.getBoundingClientRect();
-                    const tooltipRect = tooltip.getBoundingClientRect();
-                    let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                    let top = rect.top - tooltipRect.height - 10;
-                    if (left < 10) left = 10;
-                    if (left + tooltipRect.width > window.innerWidth - 10) { left = window.innerWidth - tooltipRect.width - 10; }
-                    if (top < 10) { top = rect.bottom + 10; }
-                    tooltip.style.left = left + 'px';
-                    tooltip.style.top = top + 'px';
-                    const autoRemoveTimeout = setTimeout(() => tooltip.remove(), 2000);
-                    tooltip.dataset.timeout = autoRemoveTimeout;
-                    const removeTooltip = (e) => {
-                        if (!tooltip.contains(e.target) && !event.currentTarget.contains(e.target)) {
-                            clearTimeout(autoRemoveTimeout);
-                            tooltip.remove();
-                            document.removeEventListener('click', removeTooltip);
-                        }
-                    };
-                    setTimeout(() => { document.addEventListener('click', removeTooltip); }, 100);
-                },
-
-                copyInviteMessage(code) {
-                    const message = `Vous avez été invité à rejoindre le club privé INFODROP !\nAccédez à l'actu essentielle sur : https://infodrop.live\nUtilisez ce code lors de votre inscription : ${code}`;
-                    navigator.clipboard.writeText(message);
-                    this.copied = true;
-                    setTimeout(() => this.copied = false, 1500);
+        showStatTooltip(event, text) {
+            event.stopPropagation();
+            const existingTooltip = document.querySelector('.stat-tooltip');
+            if (existingTooltip) existingTooltip.remove();
+            const tooltip = document.createElement('div');
+            tooltip.className = 'stat-tooltip';
+            tooltip.textContent = text;
+            document.body.appendChild(tooltip);
+            const rect = event.currentTarget.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+            let top = rect.top - tooltipRect.height - 10;
+            if (left < 10) left = 10;
+            if (left + tooltipRect.width > window.innerWidth - 10) { left = window.innerWidth - tooltipRect.width - 10; }
+            if (top < 10) { top = rect.bottom + 10; }
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
+            const autoRemoveTimeout = setTimeout(() => tooltip.remove(), 2000);
+            tooltip.dataset.timeout = autoRemoveTimeout;
+            const removeTooltip = (e) => {
+                if (!tooltip.contains(e.target) && !event.currentTarget.contains(e.target)) {
+                    clearTimeout(autoRemoveTimeout);
+                    tooltip.remove();
+                    document.removeEventListener('click', removeTooltip);
                 }
+            };
+            setTimeout(() => { document.addEventListener('click', removeTooltip); }, 100);
+        },
+
+        copyInviteMessage(code) {
+            const message = `Vous avez été invité à rejoindre le club privé INFODROP !\nAccédez à l'actu essentielle sur : https://infodrop.live\nUtilisez ce code lors de votre inscription : ${code}`;
+            navigator.clipboard.writeText(message);
+            this.copied = true;
+            setTimeout(() => this.copied = false, 1500);
+        }
             };
         }
     </script>
