@@ -2156,80 +2156,49 @@
                     const today = new Date().toDateString();
                     const yesterday = new Date(Date.now() - 86400000).toDateString();
 
-                    if (this.lastReadDate === today) {
-                        // Déjà lu aujourd'hui
-                        return;
-                    } else if (this.lastReadDate === yesterday) {
-                        // Streak continue
+                    if (this.lastReadDate === today) return;
+
+                    if (this.lastReadDate === yesterday) {
                         this.readingStreak++;
-                    } else if (this.lastReadDate) {
-                        // Streak brisé
-                        this.readingStreak = 1;
                     } else {
-                        // Premier jour
                         this.readingStreak = 1;
                     }
 
                     this.lastReadDate = today;
-                    this.saveGamingData();
 
-                    // Vérifier achievements de streak
-                    if (this.readingStreak === 7) {
-                        this.unlockAchievement('🔥', 'Lecteur assidu - 7 jours de suite!');
-                    } else if (this.readingStreak === 30) {
-                        this.unlockAchievement('🌟', 'Maître de l\'info - 30 jours de suite!');
-                    }
+                    // On sauvegarde, PUIS on vérifie les succès
+                    this.saveGamingData().then(() => this.checkAchievements());
                 },
+
 
                 // === GAGNER DE L'XP ===
                 gainXP(amount, reason) {
                     this.userXP += amount;
-
-                    // Animation XP
                     this.showXPAnimation(amount);
 
-                    // Vérifier level up
                     while (this.userXP >= this.xpToNextLevel) {
                         this.userXP -= this.xpToNextLevel;
                         this.userLevel++;
                         this.updateXPToNextLevel();
                         this.showLevelUpAnimation();
-
-                        // Achievements de niveau
-                        if (this.userLevel === 5) {
-                            this.unlockAchievement('⭐', 'Apprenti informé - Niveau 5!');
-                        } else if (this.userLevel === 10) {
-                            this.unlockAchievement('💎', 'Expert de l\'actu - Niveau 10!');
-                        } else if (this.userLevel === 25) {
-                            this.unlockAchievement('👑', 'Légende d\'INFODROP - Niveau 25!');
-                        }
                     }
 
-                    this.saveGamingData();
+                    // On sauvegarde, PUIS on vérifie les succès
+                    this.saveGamingData().then(() => this.checkAchievements());
                 },
 
                 // === GAGNER DE L'XP SANS ANIMATION ===
                 gainXPSilently(amount) {
                     this.userXP += amount;
 
-                    // Vérifier level up
                     while (this.userXP >= this.xpToNextLevel) {
                         this.userXP -= this.xpToNextLevel;
                         this.userLevel++;
                         this.updateXPToNextLevel();
-                        this.showLevelUpAnimation();
-
-                        // Achievements de niveau
-                        if (this.userLevel === 5) {
-                            this.unlockAchievement('⭐', 'Apprenti informé - Niveau 5!');
-                        } else if (this.userLevel === 10) {
-                            this.unlockAchievement('💎', 'Expert de l\'actu - Niveau 10!');
-                        } else if (this.userLevel === 25) {
-                            this.unlockAchievement('👑', 'Légende d\'INFODROP - Niveau 25!');
-                        }
                     }
 
-                    this.saveGamingData();
+                    // On sauvegarde, PUIS on vérifie les succès
+                    this.saveGamingData().then(() => this.checkAchievements());
                 },
 
                 // === DÉBLOQUER UN ACHIEVEMENT ===
@@ -3232,6 +3201,9 @@
                         const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
                         this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
                         this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
+
+                        // On ne débloque plus le succès ici, on se contente de vérifier.
+                        await this.checkAchievements();
 
                     } catch (error) {
                         console.error('Erreur calcul diversité:', error);
