@@ -2145,7 +2145,6 @@
                 },
 
 
-
                 // === CALCUL XP POUR NIVEAU SUIVANT ===
                 updateXPToNextLevel() {
                     this.xpToNextLevel = this.userLevel * 100;
@@ -2167,8 +2166,6 @@
                 },
 
 
-
-
                 // === GAGNER DE L'XP ===
                 gainXP(amount, reason) {
                     this.userXP += amount;
@@ -2185,6 +2182,7 @@
                     this.saveGamingData().then(() => this.checkAchievements());
                 },
 
+                // === GAGNER DE L'XP SILENCIEUSEMENT ===
                 gainXPSilently(article) {
                     let xpGained = 10;
                     if (article) {
@@ -3196,6 +3194,7 @@
                         console.error('Erreur calcul diversité:', error);
                     }
                 },
+
 
                 // === MESSAGE DU SCORE DE DIVERSITÉ ===
                 getDiversityMessage() {
