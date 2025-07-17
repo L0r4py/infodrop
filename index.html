@@ -2439,103 +2439,99 @@
                     // ============================================================
                     // 🚀 INITIALISATION DE L'APPLICATION
                     // ============================================================
-                    // ============================================================
-                    // 🚀 INITIALISATION DE L'APPLICATION
-                    // ============================================================
-                    init() {
+                    async init() {
                         console.log('🚀 Alpine init() appelé.');
-                        // GARDE DE PROTECTION : on vérifie un drapeau global.
-                        // Si l'application est déjà initialisée, on ne fait rien du tout.
+
+                        // Garde de protection pour empêcher les exécutions multiples.
                         if (window.infodropAppInitialized) {
                             console.log('👍 App déjà initialisée. On ignore cet appel.');
                             return;
                         }
-                        // On pose le drapeau immédiatement pour empêcher tout autre appel de passer.
                         window.infodropAppInitialized = true;
                         console.log('🏁 Première initialisation. Lancement du processus...');
 
-                        // On lance l'initialisation de Supabase.
-                        initializeSupabase().then(isReady => {
-                            if (isReady && supabase) {
-                                // Et on attache l'écouteur d'authentification une seule et unique fois.
-                                supabase.auth.onAuthStateChange(async (event, session) => {
-                                    this.user = session?.user || null;
-                                    this.sessionLoaded = true;
+                        // On attend que Supabase soit prêt.
+                        const isReady = await initializeSupabase();
 
-                                    if (event === 'SIGNED_IN') {
-                                        console.log('✅ Événement SIGNED_IN reçu ! Chargement des données...');
-                                        this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+                        // Si Supabase est prêt, on continue.
+                        if (isReady && supabase) {
+                            // On attache l'écouteur d'authentification.
+                            supabase.auth.onAuthStateChange(async (event, session) => {
+                                this.user = session?.user || null;
+                                this.sessionLoaded = true;
 
-                                        try {
-                                            // On peut revenir à Promise.all car la structure est stable.
-                                            await Promise.all([
-                                                this.loadAchievements(),
-                                                this.initGamification(),
-                                                this.loadReadArticlesFromDB(),
-                                                this.loadReadPreferences(),
-                                                this.calculateDiversityScore(),
-                                                this.loadUserInviteData()
-                                            ]);
+                                if (event === 'SIGNED_IN') {
+                                    console.log('✅ Événement SIGNED_IN reçu ! Chargement des données...');
+                                    this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
 
-                                            console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées.');
-                                            await this.checkAchievements();
-                                            this.loadData(true);
-                                            this.startAutoUpdate();
-                                            this.setupRealtime(session);
+                                    try {
+                                        await Promise.all([
+                                            this.loadAchievements(),
+                                            this.initGamification(),
+                                            this.loadReadArticlesFromDB(),
+                                            this.loadReadPreferences(),
+                                            this.calculateDiversityScore(),
+                                            this.loadUserInviteData()
+                                        ]);
 
-                                            // Gestion des animations en attente
-                                            const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                                            if (pendingXP.length > 0) {
-                                                const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
-                                                if (recentXP.length > 0) {
-                                                    const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
-                                                    setTimeout(() => {
-                                                        this.showXPAnimation(totalXP);
-                                                    }, 1500);
-                                                    localStorage.removeItem('infodrop_pending_xp');
-                                                }
+                                        console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées.');
+                                        await this.checkAchievements();
+
+                                        this.loadData(true);
+                                        this.startAutoUpdate();
+                                        this.setupRealtime(session);
+
+                                        // Gestion des animations en attente
+                                        const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
+                                        if (pendingXP.length > 0) {
+                                            const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
+                                            if (recentXP.length > 0) {
+                                                const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
+                                                setTimeout(() => {
+                                                    this.showXPAnimation(totalXP);
+                                                }, 1500);
+                                                localStorage.removeItem('infodrop_pending_xp');
                                             }
-
-                                            // Vérifier les célébrations en attente
-                                            for (let i = 0; i < localStorage.length; i++) {
-                                                const key = localStorage.key(i);
-                                                if (key && key.startsWith('infodrop_celebration_pending_')) {
-                                                    const count = parseInt(key.split('_')[3]);
-                                                    setTimeout(() => this.showCelebration(count), 2000);
-                                                    break;
-                                                }
-                                            }
-
-                                        } catch (error) {
-                                            console.error('[FATAL] Une erreur a bloqué le chargement :', error);
                                         }
 
-                                    } else if (event === 'SIGNED_OUT') {
-                                        console.log('🚪 Événement SIGNED_OUT reçu.');
-                                        this.stopAutoUpdate();
-                                        if (this.realtimeChannel) {
-                                            supabase.removeChannel(this.realtimeChannel);
-                                            this.realtimeChannel = null;
+                                        // Vérifier les célébrations en attente
+                                        for (let i = 0; i < localStorage.length; i++) {
+                                            const key = localStorage.key(i);
+                                            if (key && key.startsWith('infodrop_celebration_pending_')) {
+                                                const count = parseInt(key.split('_')[3]);
+                                                setTimeout(() => this.showCelebration(count), 2000);
+                                                break;
+                                            }
                                         }
-                                        this.userInviteData = {
-                                            code: null,
-                                            is_used: false,
-                                            parrainEmail: null,
-                                            filleulEmail: null
-                                        };
+
+                                    } catch (error) {
+                                        console.error('[FATAL] Une erreur a bloqué le chargement :', error);
                                     }
-                                });
-                            }
-                        });
 
-                        // Le reste de la logique d'interface
+                                } else if (event === 'SIGNED_OUT') {
+                                    console.log('🚪 Événement SIGNED_OUT reçu.');
+                                    this.stopAutoUpdate();
+                                    if (this.realtimeChannel) {
+                                        supabase.removeChannel(this.realtimeChannel);
+                                        this.realtimeChannel = null;
+                                    }
+                                    this.userInviteData = {
+                                        code: null,
+                                        is_used: false,
+                                        parrainEmail: null,
+                                        filleulEmail: null
+                                    };
+                                }
+                            });
+                        }
+
+                        // Le reste de la logique d'interface qui ne dépend pas de Supabase.
                         window.addEventListener('scroll', () => {
                             document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
                         });
 
                         document.addEventListener('visibilitychange', () => {
                             if (!document.hidden) {
-                                // Gérer les animations XP en attente
                                 const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
                                 if (pendingXP.length > 0) {
                                     const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
@@ -2562,24 +2558,6 @@
     `;
                         document.head.appendChild(style);
                     },
-                    // === CHARGEMENT DES ACHIEVEMENTS DEPUIS LA DB ===
-                    async loadAchievements() {
-                        try {
-                            const { data } = await supabase
-                                .from('achievements')
-                                .select('*')
-                                .eq('is_active', true)
-                                .order('order_priority');
-
-                            this.achievementsData = data || [];
-                            console.log('✅ Achievements chargés depuis la DB:', this.achievementsData.length);
-                        } catch (error) {
-                            console.error('Erreur chargement achievements:', error);
-                        }
-                    },
-
-
-
                     // ============================================================
                     // 🔐 SYSTÈME D'AUTHENTIFICATION ET INVITATIONS
                     // ============================================================
