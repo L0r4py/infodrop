@@ -2342,6 +2342,7 @@
 
                 // `unlockAchievement` est maintenant propre et ne contient plus de code erroné.
                 async unlockAchievement(code) {
+                    // On vérifie une dernière fois si le succès n'est pas déjà dans la liste
                     if (this.unlockedAchievements.includes(code)) return;
 
                     // 1. Mise à jour de l'état local
@@ -2353,17 +2354,20 @@
                         this.showAchievementPopup(achievement.icon_emoji, achievement.title);
                     }
 
-                    // 3. Il ne sauvegarde plus ici, car saveGamingData dans markAsRead le fera.
-                    // Il enregistre seulement l'événement dans l'historique.
+                    // 3. Mise à jour de l'interface (comme le badge NIV)
+                    this.updateCurrentAchievement();
+
+                    // 4. Mise à jour de la base de données
+                    // SAUVEGARDE LA LISTE COMPLÈTE DES SUCCÈS DANS LES STATS DU JOUEUR
+                    await this.saveGamingData();
+
+                    // Enregistre cet événement de déblocage spécifique dans l'historique
                     await supabase
                         .from('user_achievement_history')
                         .upsert(
                             { user_id: this.user.id, achievement_code: code },
                             { onConflict: 'user_id, achievement_code' }
                         );
-
-                    // 4. Mise à jour de l'interface
-                    this.updateCurrentAchievement();
                 },
 
                 // === OBTENIR LE TITRE D'UN ACHIEVEMENT ===
