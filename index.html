@@ -1840,7 +1840,7 @@
 
 
 
-    <!-- ======================================================================== -->
+    ======================================================================== -->
     <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER AVEC GAMIFICATION                        -->
     <!-- ======================================================================== -->
     <script>
@@ -1882,17 +1882,16 @@
         // 🏗️ APPLICATION PRINCIPALE - GESTION DE L'ÉTAT ET LOGIQUE MÉTIER
         // ====================================================================
         function infodropApp() {
-            const ORIENTATION_DATA = { 'extrême-gauche': { class: 'bg-[#FF0000] text-white border-[#CC0000]' }, 'gauche': { class: 'bg-[#D42A2A] text-white border-[#A82020]' }, 'centre-gauche': { class: 'bg-[#AA5555] text-white border-[#884444]' }, 'centre': { class: 'bg-[#808080] text-white border-[#666666]' }, 'centre-droit': { class: 'bg-[#5555AA] text-white border-[#444488]' }, 'droite': { class: 'bg-[#2A2AD4] text-white border-[#2020A8]' }, 'extrême-droite': { class: 'bg-[#0000FF] text-white border-[#0000CC]' }, 'gouvernement': { class: 'bg-blue-800 text-blue-100 border-blue-900' }, 'neutre': { class: 'bg-green-700 text-green-100 border-green-800' } };
+            const ORIENTATION_DATA = { 'extrême-gauche': { class: 'bg-[#FF0000] text-white border-[#CC0000]', color: '#FF0000' }, 'gauche': { class: 'bg-[#D42A2A] text-white border-[#A82020]', color: '#D42A2A' }, 'centre-gauche': { class: 'bg-[#AA5555] text-white border-[#884444]', color: '#AA5555' }, 'centre': { class: 'bg-[#808080] text-white border-[#666666]', color: '#808080' }, 'centre-droit': { class: 'bg-[#5555AA] text-white border-[#444488]', color: '#5555AA' }, 'droite': { class: 'bg-[#2A2AD4] text-white border-[#2020A8]', color: '#2A2AD4' }, 'extrême-droite': { class: 'bg-[#0000FF] text-white border-[#0000CC]', color: '#0000FF' }, 'gouvernement': { class: 'bg-blue-800 text-blue-100 border-blue-900', color: '#1e40af' }, 'neutre': { class: 'bg-green-700 text-green-100 border-green-800', color: '#16a34a' } };
 
             return {
                 // --- ÉTAT DE L'APPLICATION ---
                 sessionLoaded: false, user: null, email: '', loading: false, message: '', messageType: '', inviteCode: '',
-                newsList: [], loadingNews: true, latestNewsTimestamp: null, updateInterval: null, realtimeChannel: null,
+                newsList: [], loadingNews: true, latestNewsTimestamp: null, updateInterval: null,
                 isAdmin: false, showAdminPanel: false, addingNews: false, newNews: { resume: '', url: '' },
                 stats: { total_articles: 0, total_sources: 0 }, lastGeneratedCode: null, generatingCode: false,
                 userInviteData: { code: null, parrainEmail: null, filleulEmail: null },
-                // --- MODALES & PANNEAUX ---
-                showEditPanel: false, editingNews: {}, showShareModal: false, copied: false, showAboutModal: false, showFilters: false,
+                showEditPanel: false, editingNews: {}, showShareModal: false, copied: false,
                 // --- GAMIFICATION ---
                 achievementsData: [], userXP: 0, userLevel: 1, xpToNextLevel: 100, readingStreak: 0, unlockedAchievements: [], lastReadDate: null, currentAchievement: null, showAchievementsModal: false,
                 // --- FILTRES & DIVERSITÉ ---
@@ -1900,7 +1899,8 @@
                 diversityScore: null, readOrientations: [], showDiversityChecker: true,
                 // --- ARTICLES LUS ---
                 readArticles: {}, totalReadCount: 0, showReadArticles: false, hideReadFromMain: true,
-
+                // --- MODALES ---
+                showAboutModal: false, showFilters: false,
 
                 // ============================================================
                 // 🚀 INITIALISATION DE L'APPLICATION
@@ -1919,12 +1919,14 @@
                                 this.sessionLoaded = true;
 
                                 if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-                                    if (!this.user) { this.loadingNews = false; return; }
+                                    if (!this.user) return;
 
+                                    // 1. On verrouille l'interface en affichant le spinner de chargement.
                                     this.loadingNews = true;
-                                    this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
 
+                                    this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
                                     try {
+                                        // 2. On charge TOUTES les données de base en parallèle et on attend qu'elles soient toutes là.
                                         await Promise.all([
                                             this.loadAchievements(),
                                             this.initGamification(),
@@ -1934,6 +1936,7 @@
                                             this.loadStats()
                                         ]);
 
+                                        // 3. On fait la vérification de sécurité du localStorage (c'est rapide).
                                         Object.keys(localStorage).forEach(key => {
                                             if (key.startsWith('infodrop_unlocking_')) {
                                                 const pendingCode = key.replace('infodrop_unlocking_', '');
@@ -1941,14 +1944,19 @@
                                             }
                                         });
 
-                                        await this.loadNews(this.activeFilter, true);
+                                        // 4. Maintenant que l'état du joueur est prêt, on charge les actualités.
+                                        await this.loadNews(this.activeFilter, true); // Le second paramètre est important
 
+                                        // 5. TOUT est chargé. On peut déverrouiller l'interface.
+                                        // la fonction loadNews(..., true) s'occupe de mettre loadingNews à false.
+
+                                        // 6. On lance les tâches de fond.
                                         this.startAutoUpdate();
                                         this.setupRealtime(session);
 
                                     } catch (error) {
                                         console.error('[FATAL] Erreur de chargement:', error);
-                                        this.loadingNews = false;
+                                        this.loadingNews = false; // On déverrouille aussi en cas d'erreur pour ne pas rester bloqué.
                                     }
                                 } else if (event === 'SIGNED_OUT') {
                                     this.stopAutoUpdate();
@@ -1960,8 +1968,13 @@
 
                     document.addEventListener('visibilitychange', () => {
                         if (!document.hidden) {
+                            // 1. On lit la file d'attente et on la stocke dans une variable temporaire.
                             const queue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
+                            
+                            // 2. On la supprime IMMÉDIATEMENT du localStorage.
                             localStorage.removeItem('infodrop_animation_queue');
+                            
+                            // 3. Si la file n'était pas vide, on joue les animations depuis notre variable.
                             if (queue.length > 0) {
                                 this.playAnimationQueue(queue);
                             }
@@ -1986,13 +1999,13 @@
                     await this.calculateDiversityScore();
                     await this.checkAchievements(animationQueue);
 
-                    if (animationQueue.length > 0) {
-                        localStorage.setItem('infodrop_animation_queue', JSON.stringify(animationQueue));
-                    }
-
                     await this.saveGamingData();
                     await this.saveReadArticleToDB(id);
                     await this.addToDiversityData(article);
+
+                    if (animationQueue.length > 0) {
+                        localStorage.setItem('infodrop_animation_queue', JSON.stringify(animationQueue));
+                    }
                 },
 
                 // ============================================================
@@ -2021,20 +2034,6 @@
                     const yesterday = new Date(Date.now() - 86400000).toDateString();
                     this.readingStreak = (this.lastReadDate === yesterday) ? this.readingStreak + 1 : 1;
                     this.lastReadDate = today;
-                },
-
-                async calculateDiversityScore() {
-                    if (!this.user) return;
-                    try {
-                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-                        const { data } = await supabase.from('user_diversity_data').select('orientation, source').eq('user_id', this.user.id).gte('read_at', twentyFourHoursAgo.toISOString());
-                        if (!data || data.length === 0) { this.diversityScore = null; this.readOrientations = []; return; }
-                        const oSet = new Set(data.map(r => r.orientation).filter(Boolean));
-                        const sSet = new Set(data.map(r => r.source));
-                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
-                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
-                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
-                    } catch (error) { console.error('Erreur calcul diversité:', error); }
                 },
 
                 async checkAchievements(queue) {
@@ -2071,7 +2070,9 @@
                         await this.saveGamingData();
                         await supabase.from('user_achievement_history').upsert({ user_id: this.user.id, achievement_code: code }, { onConflict: 'user_id, achievement_code' });
                         localStorage.removeItem(`infodrop_unlocking_${code}`);
-                    } catch (error) { console.error(`Erreur sauvegarde succès ${code}:`, error); }
+                    } catch (error) {
+                        console.error(`Erreur sauvegarde succès ${code}:`, error);
+                    }
                 },
 
                 playAnimationQueue(queue) {
@@ -2088,18 +2089,37 @@
                     });
                 },
 
-                // ============================================================
-                // 💾 GESTION DES DONNÉES & HELPERS (Code original)
-                // ============================================================
-                // J'inclus ici toutes les fonctions de votre code original qui n'ont pas été modifiées.
 
-                async loadAchievements() {
+                async calculateDiversityScore() {
+                    if (!this.user) return;
                     try {
-                        const { data } = await supabase.from('achievements').select('*').eq('is_active', true).order('order_priority');
-                        this.achievementsData = data || [];
-                    } catch (error) { console.error('[ERREUR] Le chargement des achievements a échoué', error); }
+                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                        const { data } = await supabase
+                            .from('user_diversity_data')
+                            .select('orientation, source')
+                            .eq('user_id', this.user.id)
+                            .gte('read_at', twentyFourHoursAgo.toISOString());
+
+                        if (!data || data.length === 0) {
+                            this.diversityScore = null;
+                            this.readOrientations = [];
+                            return;
+                        }
+
+                        const oSet = new Set(data.map(r => r.orientation).filter(Boolean));
+                        const sSet = new Set(data.map(r => r.source));
+                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
+                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
+                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
+
+                    } catch (error) {
+                        console.error('Erreur calcul diversité:', error);
+                    }
                 },
 
+                // ============================================================
+                // ⚙️ INITIALISATION & SAUVEGARDES
+                // ============================================================
                 async initGamification() {
                     if (!this.user) return;
                     try {
@@ -2115,15 +2135,62 @@
                         this.lastReadDate = data.last_read_date;
                         this.updateXPToNextLevel();
                         this.updateCurrentAchievement();
-                    } catch (error) { console.error('Erreur init gamification:', error); }
+                    } catch (error) {
+                        console.error('Erreur init gamification:', error);
+                    }
+                },
+
+                async saveGamingData() {
+                    if (!this.user) return;
+                    try {
+                        await supabase.from('user_gaming_stats').update({
+                            xp: this.userXP,
+                            level: this.userLevel,
+                            reading_streak: this.readingStreak,
+                            unlocked_achievements: this.unlockedAchievements,
+                            last_read_date: this.lastReadDate,
+                            updated_at: new Date().toISOString()
+                        }).eq('user_id', this.user.id);
+                    } catch (error) {
+                        console.error('Erreur sauvegarde gaming:', error);
+                    }
+                },
+
+                // Le reste des fonctions (login, loadNews, helpers, etc.) reste ici...
+                // J'inclus toutes les fonctions pour que ce soit un remplacement complet et propre.
+
+                toggleFilter(filter) {
+                    this.activeFilter = (this.activeFilter === filter) ? 'all' : filter;
+                    this.searchQuery = '';
+                    this.loadNews(this.activeFilter, true);
+                },
+
+                getOrientationDisplayName(orientation) {
+                    if (!orientation) return '';
+                    if (orientation === 'gouvernement') return '🇫🇷 Gouvernement';
+                    if (orientation === '🧨INFODROP') return orientation;
+                    return orientation.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                },
+
+                async loadAchievements() {
+                    try {
+                        const { data } = await supabase.from('achievements').select('*').eq('is_active', true).order('order_priority');
+                        this.achievementsData = data || [];
+                    } catch (error) {
+                        console.error('[ERREUR] Le chargement des achievements a échoué', error);
+                    }
                 },
 
                 updateCurrentAchievement() {
-                    const unlocked = this.achievementsData.filter(a => this.unlockedAchievements.includes(a.code)).sort((a, b) => b.order_priority - a.order_priority);
+                    const unlocked = this.achievementsData
+                        .filter(a => this.unlockedAchievements.includes(a.code))
+                        .sort((a, b) => b.order_priority - a.order_priority);
                     this.currentAchievement = unlocked.length > 0 ? unlocked[0].icon_emoji : '⭐';
                 },
 
-                updateXPToNextLevel() { this.xpToNextLevel = this.userLevel * 100; },
+                updateXPToNextLevel() {
+                    this.xpToNextLevel = this.userLevel * 100;
+                },
 
                 getAchievementTitle(iconOrCode) {
                     const achievement = this.achievementsData.find(a => a.code === iconOrCode || a.icon_emoji === iconOrCode);
@@ -2132,7 +2199,14 @@
 
                 getAllAchievementsData() {
                     if (!this.achievementsData) return [];
-                    return this.achievementsData.map(achievement => ({ id: achievement.code, icon: achievement.icon_emoji, title: achievement.title, description: achievement.description, unlocked: this.unlockedAchievements.includes(achievement.code), progress: this.getAchievementProgress(achievement) }));
+                    return this.achievementsData.map(achievement => ({
+                        id: achievement.code,
+                        icon: achievement.icon_emoji,
+                        title: achievement.title,
+                        description: achievement.description,
+                        unlocked: this.unlockedAchievements.includes(achievement.code),
+                        progress: this.getAchievementProgress(achievement)
+                    }));
                 },
 
                 getAchievementProgress(achievement) {
@@ -2150,15 +2224,16 @@
                     const popup = document.createElement('div');
                     popup.className = 'xp-popup';
                     popup.textContent = `+${amount} XP`;
-                    popup.style.left = '50%'; popup.style.top = '200px';
+                    popup.style.left = '50%';
+                    popup.style.top = '200px';
                     document.body.appendChild(popup);
                     setTimeout(() => popup.remove(), 1500);
                 },
 
-                showLevelUpAnimation(newLevel) {
+                showLevelUpAnimation() {
                     const levelUp = document.createElement('div');
                     levelUp.style.cssText = `position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; font-weight: bold; color: var(--clash-gold); text-shadow: 0 0 30px var(--clash-gold); animation: level-up-clash 1.5s ease-out forwards; z-index: 9999; pointer-events: none;`;
-                    levelUp.textContent = `NIVEAU ${newLevel}!`;
+                    levelUp.textContent = `NIVEAU ${this.userLevel}!`;
                     document.body.appendChild(levelUp);
                     this.createGoldConfetti();
                     setTimeout(() => levelUp.remove(), 1500);
@@ -2173,13 +2248,6 @@
                         popup.style.animation = 'achievement-appear 0.5s ease-out reverse forwards';
                         setTimeout(() => popup.remove(), 500);
                     }, 3000);
-                },
-
-                async saveGamingData() {
-                    if (!this.user) return;
-                    try {
-                        await supabase.from('user_gaming_stats').update({ xp: this.userXP, level: this.userLevel, reading_streak: this.readingStreak, unlocked_achievements: this.unlockedAchievements, last_read_date: this.lastReadDate, updated_at: new Date().toISOString() }).eq('user_id', this.user.id);
-                    } catch (error) { console.error('Erreur sauvegarde gaming:', error); }
                 },
 
                 createGoldConfetti() {
@@ -2200,6 +2268,7 @@
                     return this.newsList.filter(news => (news.resume && news.resume.toLowerCase().includes(query)) || (news.source && news.source.toLowerCase().includes(query)) || (news.tags && news.tags.some(tag => tag.toLowerCase().includes(query))) || (news.orientation && news.orientation.toLowerCase().includes(query)));
                 },
 
+                getOrientationColor(o) { return ORIENTATION_DATA[o]?.color || '#808080'; },
                 getOrientationClass(o) { return ORIENTATION_DATA[o]?.class || 'bg-gray-700 text-gray-200 border-gray-600'; },
 
                 async login() {
