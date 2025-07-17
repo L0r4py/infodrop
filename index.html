@@ -2144,7 +2144,63 @@
                     }
                 },
 
+                // === VÉRIFICATION DE TOUS LES ACHIEVEMENTS ===
+                async checkAchievements() {
+                    if (!this.user || !this.achievementsData.length) return;
 
+                    for (const achievement of this.achievementsData) {
+                        // On vérifie une première fois ici, c'est bien.
+                        if (this.unlockedAchievements.includes(achievement.code)) continue;
+
+                        let shouldUnlock = false;
+                        switch (achievement.condition_type) {
+                            case 'connection': shouldUnlock = true; break;
+                            case 'articles_read': shouldUnlock = this.totalReadCount >= achievement.condition_value; break;
+                            case 'streak_days': shouldUnlock = this.readingStreak >= achievement.condition_value; break;
+                            case 'level_reached': shouldUnlock = this.userLevel >= achievement.condition_value; break;
+                            case 'diversity_score': shouldUnlock = this.diversityScore >= achievement.condition_value; break;
+                        }
+
+                        if (shouldUnlock) {
+                            // On ne met plus la logique ici, on appelle la nouvelle fonction sécurisée
+                            await this.unlockAchievement(achievement.code);
+                        }
+                    }
+                },
+
+                // =============================================================
+                // AJOUT DE LA FONCTION DE CORRECTION
+                // =============================================================
+                // === DÉBLOCAGE SÉCURISÉ D'UN ACHIEVEMENT ===
+                async unlockAchievement(code) {
+                    // GARDE-FOU : Si le succès est déjà dans la liste, on ne fait RIEN.
+                    // C'est la ligne la plus importante de la correction.
+                    if (this.unlockedAchievements.includes(code)) return;
+
+                    // 1. On met à jour l'état local IMMÉDIATEMENT
+                    this.unlockedAchievements.push(code);
+
+                    // 2. On récupère les détails de l'achievement pour l'animation
+                    const achievement = this.achievementsData.find(a => a.code === code);
+
+                    // 3. On joue les animations et on met à jour l'UI
+                    if (achievement) {
+                        this.showAchievementPopup(achievement.icon_emoji, achievement.title);
+                    }
+                    this.updateCurrentAchievement();
+
+                    // 4. On sauvegarde les données en base de manière asynchrone.
+                    // Même si l'utilisateur rafraîchit maintenant, l'état local (étape 1) empêchera une nouvelle animation.
+                    await this.saveGamingData();
+
+                    // Enregistre cet événement de déblocage spécifique dans l'historique
+                    await supabase
+                        .from('user_achievement_history')
+                        .upsert(
+                            { user_id: this.user.id, achievement_code: code },
+                            { onConflict: 'user_id, achievement_code' }
+                        );
+                },
 
                 // === CALCUL XP POUR NIVEAU SUIVANT ===
                 updateXPToNextLevel() {
