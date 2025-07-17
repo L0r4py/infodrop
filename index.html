@@ -2151,19 +2151,7 @@
                 },
 
                 // === VÉRIFICATION DU STREAK QUOTIDIEN ===
-                checkDailyStreak() {
-                    const today = new Date().toDateString();
-                    const yesterday = new Date(Date.now() - 86400000).toDateString();
 
-                    if (this.lastReadDate === today) return;
-
-                    if (this.lastReadDate === yesterday) {
-                        this.readingStreak++;
-                    } else {
-                        this.readingStreak = 1;
-                    }
-                    this.lastReadDate = today;
-                },
 
 
                 // === GAGNER DE L'XP ===
@@ -2183,30 +2171,11 @@
                 },
 
                 // === GAGNER DE L'XP SILENCIEUSEMENT ===
-                gainXPSilently(article) {
-                    let xpGained = 10;
-                    if (article) {
-                        if (article.orientation && !this.readOrientations.includes(article.orientation)) xpGained += 20;
-                        if (article.tags && article.tags.includes('🧨INFODROP')) xpGained += 5;
-                    }
 
-                    const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                    pendingXP.push({ amount: xpGained, timestamp: Date.now() });
-                    localStorage.setItem('infodrop_pending_xp', JSON.stringify(pendingXP));
-
-                    this.userXP += xpGained;
-                    while (this.userXP >= this.xpToNextLevel) {
-                        this.userXP -= this.xpToNextLevel;
-                        this.userLevel++;
-                        this.updateXPToNextLevel();
-                        this.showLevelUpAnimation();
-                    }
-                },
 
 
                 // === DÉBLOQUER UN ACHIEVEMENT ===
                 async unlockAchievement(code) {
-                    // On vérifie une dernière fois si le succès n'est pas déjà dans la liste
                     if (this.unlockedAchievements.includes(code)) return;
 
                     // 1. Mise à jour de l'état local
@@ -2219,9 +2188,7 @@
                     }
 
                     // 3. Mise à jour de la base de données
-                    // Sauvegarde la liste complète des succès dans les stats du joueur
                     await this.saveGamingData();
-                    // Enregistre cet événement de déblocage spécifique dans l'historique
                     await supabase
                         .from('user_achievement_history')
                         .upsert(
@@ -3018,39 +2985,98 @@
                 // ============================================================
 
                 // === MARQUER UN ARTICLE COMME LU (AVEC GAMIFICATION) ===
+                // ========================================================================
+                // BLOC DE CORRECTION 1 : REMPLACEZ CES 4 FONCTIONS
+                // ========================================================================
+
+                // La nouvelle fonction `markAsRead`, qui est maintenant le seul "chef d'orchestre".
                 async markAsRead(id) {
                     if (!this.user || this.readArticles[id]) return;
 
-                    // --- ÉTAPE 1: Mise à jour de l'état local (ce que l'utilisateur voit) ---
+                    // --- ÉTAPE 1: Mise à jour de l'état local ---
                     this.readArticles[id] = new Date().toISOString();
                     this.updateTotalReadCount();
 
                     // --- ÉTAPE 2: Calcul de toutes les nouvelles statistiques ---
                     const article = this.newsList.find(n => n.id === id);
-
-                    // On met à jour l'XP
                     this.gainXPSilently(article);
-
-                    // On met à jour le streak de lecture
                     this.checkDailyStreak();
-
-                    // On met à jour le score de diversité
                     await this.calculateDiversityScore();
 
-                    // --- ÉTAPE 3: Maintenant que TOUT est à jour, on vérifie les succès une seule fois ---
+                    // --- ÉTAPE 3: Vérification centralisée des succès ---
                     await this.checkAchievements();
 
-                    // --- ÉTAPE 4: On sauvegarde TOUT en base de données, une seule fois et à la fin ---
+                    // --- ÉTAPE 4: Sauvegarde en base de données à la toute fin ---
                     await this.saveGamingData();
                     await this.saveReadArticleToDB(id);
                     await this.addToDiversityData(article);
 
-                    // Célébrations
                     if (this.totalReadCount % 20 === 0 && this.totalReadCount > 0) {
                         this.celebrateArticles(this.totalReadCount);
                     }
                 },
 
+                // `gainXPSilently` ne fait QUE calculer l'XP.
+                gainXPSilently(article) {
+                    let xpGained = 10;
+                    if (article) {
+                        if (article.orientation && !this.readOrientations.includes(article.orientation)) xpGained += 20;
+                        if (article.tags && article.tags.includes('🧨INFODROP')) xpGained += 5;
+                    }
+
+                    const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
+                    pendingXP.push({ amount: xpGained, timestamp: Date.now() });
+                    localStorage.setItem('infodrop_pending_xp', JSON.stringify(pendingXP));
+
+                    this.userXP += xpGained;
+                    while (this.userXP >= this.xpToNextLevel) {
+                        this.userXP -= this.xpToNextLevel;
+                        this.userLevel++;
+                        this.updateXPToNextLevel();
+                        this.showLevelUpAnimation();
+                    }
+                },
+
+                // `checkDailyStreak` ne fait QUE calculer le streak.
+                checkDailyStreak() {
+                    const today = new Date().toDateString();
+                    const yesterday = new Date(Date.now() - 86400000).toDateString();
+                    if (this.lastReadDate === today) return;
+                    if (this.lastReadDate === yesterday) {
+                        this.readingStreak++;
+                    } else {
+                        this.readingStreak = 1;
+                    }
+                    this.lastReadDate = today;
+                },
+
+                // `calculateDiversityScore` ne fait QUE calculer le score.
+                async calculateDiversityScore() {
+                    if (!this.user) return;
+                    try {
+                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                        const { data } = await supabase
+                            .from('user_diversity_data')
+                            .select('orientation, source')
+                            .eq('user_id', this.user.id)
+                            .gte('read_at', twentyFourHoursAgo.toISOString());
+
+                        if (!data || data.length === 0) {
+                            this.diversityScore = null;
+                            this.readOrientations = [];
+                            return;
+                        }
+
+                        const oSet = new Set(data.map(r => r.orientation).filter(Boolean));
+                        const sSet = new Set(data.map(r => r.source));
+                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
+                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
+                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
+
+                    } catch (error) {
+                        console.error('Erreur calcul diversité:', error);
+                    }
+                },
                 // === SAUVEGARDER ARTICLE LU DANS LA DB ===
                 async saveReadArticleToDB(articleId) {
                     if (!this.user) return;
@@ -3174,32 +3200,6 @@
                 },
 
                 // === CALCUL DU SCORE DE DIVERSITÉ ===
-                async calculateDiversityScore() {
-                    if (!this.user) return;
-                    try {
-                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-                        const { data } = await supabase
-                            .from('user_diversity_data')
-                            .select('orientation, source')
-                            .eq('user_id', this.user.id)
-                            .gte('read_at', twentyFourHoursAgo.toISOString());
-
-                        if (!data || data.length === 0) {
-                            this.diversityScore = null;
-                            this.readOrientations = [];
-                            return;
-                        }
-
-                        const oSet = new Set(data.map(r => r.orientation).filter(Boolean));
-                        const sSet = new Set(data.map(r => r.source));
-                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
-                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
-                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
-
-                    } catch (error) {
-                        console.error('Erreur calcul diversité:', error);
-                    }
-                },
 
 
                 // === MESSAGE DU SCORE DE DIVERSITÉ ===
