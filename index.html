@@ -2436,7 +2436,7 @@
                             return false;
                         });
                     },
-                    
+
                     // ============================================================
                     // 🚀 INITIALISATION DE L'APPLICATION
                     // ============================================================
@@ -3350,9 +3350,9 @@ Utilisez ce code lors de votre inscription : ${code}`;
             document.addEventListener('DOMContentLoaded', () => {
                 // Cette fonction sera appelée une seule fois.
                 initializeSupabase().then(isReady => {
-                    if (isReady && window.supabase) {
+                    if (isReady && supabase) {
                         // On attache l'écouteur d'authentification ICI, une seule fois.
-                        window.supabase.auth.onAuthStateChange((event, session) => {
+                        supabase.auth.onAuthStateChange((event, session) => {
                             // On envoie un événement personnalisé à l'application Alpine
                             const authEvent = new CustomEvent('infodrop:auth-change', {
                                 detail: { event, session }
