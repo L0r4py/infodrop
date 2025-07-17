@@ -3169,18 +3169,21 @@
 
                         // Puis depuis la DB
                         try {
-                            const { data } = await supabase
+                            // LA CORRECTION EST ICI : on remplace .single() par .maybeSingle()
+                            const { data, error } = await supabase
                                 .from('user_preferences')
                                 .select('hide_read_articles')
                                 .eq('user_id', this.user.id)
-                                .single();
+                                .maybeSingle(); // Accepte de renvoyer "null" si rien n'est trouvé, sans erreur.
+
+                            if (error) throw error; // Gère les vraies erreurs de base de données
 
                             if (data) {
                                 this.hideReadFromMain = data.hide_read_articles;
                                 localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
                             }
                         } catch (error) {
-                            // Pas de préférences trouvées, utiliser la valeur par défaut
+                            console.error('[ERREUR] Chargement des préférences utilisateur échoué :', error);
                         }
                     },
 
