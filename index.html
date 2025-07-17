@@ -2265,8 +2265,11 @@
                     },
 
                     // === OBTENIR LE TITRE D'UN ACHIEVEMENT ===
-                    getAchievementTitle(icon) {
-                        const achievement = this.achievementsData.find(a => a.icon_emoji === icon);
+                    getAchievementTitle(iconOrCode) {
+                        // Recherche d'abord par code (plus fiable), puis par emoji
+                        const achievement = this.achievementsData.find(a =>
+                            a.code === iconOrCode || a.icon_emoji === iconOrCode
+                        );
                         return achievement ? achievement.title : 'Achievement mystère';
                     },
 
@@ -3038,6 +3041,7 @@
                     },
 
                     // === CHARGEMENT DES STATISTIQUES ET DES FILTRES ACTIFS ===
+                    // === CHARGEMENT DES STATISTIQUES ET DES FILTRES ACTIFS ===
                     async loadStats() {
                         try {
                             // Appelle la vue 'stats_today' via une fonction RPC pour la propreté
@@ -3049,10 +3053,15 @@
                                 total_articles: data.total_articles,
                                 total_sources: data.total_sources
                             };
+
+                            this.activeOrientations = data.active_orientations || [];
+                            this.activeTags = data.active_tags || [];
+
                         } catch (e) {
-                            console.error('Erreur chargement stats globales:', e);
+                            console.error('Erreur stats:', e);
                         }
                     },
+
                     // ============================================================
                     // 📚 SYSTÈME DE LECTURES ET DIVERSITÉ
                     // ============================================================
