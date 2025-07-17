@@ -2206,25 +2206,31 @@
 
                 // === DÉBLOQUER UN ACHIEVEMENT ===
                 async unlockAchievement(code) {
-                    if (!this.unlockedAchievements.includes(code)) {
-                        this.unlockedAchievements.push(code);
+                    // On vérifie une dernière fois si le succès n'est pas déjà dans la liste
+                    if (this.unlockedAchievements.includes(code)) return;
 
-                        const achievement = this.achievementsData.find(a => a.code === code);
-                        if (achievement) {
-                            this.showAchievementPopup(achievement.icon_emoji, achievement.title);
-                        }
+                    // 1. Mise à jour de l'état local
+                    this.unlockedAchievements.push(code);
 
-                        // Sauvegarde la nouvelle liste de succès dans les stats du joueur
-                        await this.saveGamingData();
-                        await this.saveReadArticleToDB(id);
-                        await this.addToDiversityData(article);
-
-                        // Enregistre l'événement dans l'historique
-                        await supabase
-                            .from('user_achievement_history')
-                            .upsert({ user_id: this.user.id, achievement_code: code }, { onConflict: 'user_id, achievement_code' });
-                        this.updateCurrentAchievement();
+                    // 2. Affichage du popup
+                    const achievement = this.achievementsData.find(a => a.code === code);
+                    if (achievement) {
+                        this.showAchievementPopup(achievement.icon_emoji, achievement.title);
                     }
+
+                    // 3. Mise à jour de la base de données
+                    // Sauvegarde la liste complète des succès dans les stats du joueur
+                    await this.saveGamingData();
+                    // Enregistre cet événement de déblocage spécifique dans l'historique
+                    await supabase
+                        .from('user_achievement_history')
+                        .upsert(
+                            { user_id: this.user.id, achievement_code: code },
+                            { onConflict: 'user_id, achievement_code' }
+                        );
+
+                    // 4. Mise à jour de l'interface
+                    this.updateCurrentAchievement();
                 },
 
                 // === OBTENIR LE TITRE D'UN ACHIEVEMENT ===
