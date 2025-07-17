@@ -1841,6 +1841,9 @@
     <!-- ======================================================================== -->
     <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER AVEC GAMIFICATION                        -->
     <!-- ======================================================================== -->
+    <!-- ======================================================================== -->
+    <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER AVEC GAMIFICATION                        -->
+    <!-- ======================================================================== -->
     <script>
         /* ───── CONFIG DEBUG ───── */
         const DEBUG = true;
@@ -1855,17 +1858,11 @@
            initializeSupabase — Appel unique au chargement, version propre
            ─────────────────────────────────────────────────────────────────── */
         async function initializeSupabase() {
-            // =================================================================
-            // AJOUT DE LA GARDE : C'est la correction qui va tout débloquer.
-            // Si l'objet supabase existe déjà, cela veut dire que l'initialisation
-            // a déjà eu lieu. On sort immédiatement.
             if (supabase) {
                 dlog('👍 Supabase déjà initialisé, on ne fait rien.');
                 return true;
             }
-            // =================================================================
-
-            dlog('🔐 initializeSupabase() lancé'); // Ce message ne doit maintenant apparaître qu'une seule fois.
+            dlog('🔐 initializeSupabase() lancé');
             try {
                 const res = await fetch('/api/config');
                 if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -1876,7 +1873,6 @@
                 dlog('⚙️  Config récupérée', cfg);
 
                 const { createClient } = window.supabase;
-                // On assigne l'objet à notre variable globale
                 supabase = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
 
                 dlog('✅ Supabase initialisé');
@@ -1922,8 +1918,6 @@
                 // ============================================================
                 // 📊 ÉTAT DE L'APPLICATION - VARIABLES RÉACTIVES
                 // ============================================================
-
-                // === INTERFACE UTILISATEUR ===
                 copied: false,
                 sessionLoaded: false,
                 user: null,
@@ -1933,58 +1927,24 @@
                 messageType: '',
                 inviteCode: '',
                 showShareModal: false,
-
-                // === CACHE DES ACHIEVEMENTS ===
-                achievementsData: [], // Cache local des achievements depuis la DB
-
-                // === GESTION DES ACTUALITÉS ===
+                achievementsData: [],
                 newsList: [],
                 loadingNews: true,
                 updateInterval: null,
                 latestNewsTimestamp: null,
-
-                // === ADMINISTRATION ===
                 isAdmin: false,
                 showAdminPanel: false,
                 addingNews: false,
-                newNews: {
-                    resume: '',
-                    source: '',
-                    url: '',
-                    orientation: '',
-                    tagsText: ''
-                },
-                stats: {
-                    total_articles: 0,
-                    total_sources: 0
-                },
+                newNews: { resume: '', source: '', url: '', orientation: '', tagsText: '' },
+                stats: { total_articles: 0, total_sources: 0 },
                 lastGeneratedCode: null,
                 generatingCode: false,
-
-                // === SYSTÈME D'INVITATIONS ===
-                userInviteData: {
-                    code: null,
-                    is_used: false,
-                    parrainEmail: null,
-                    filleulEmail: null
-                },
-
-                // === TEMPS RÉEL ET ÉDITION ===
+                userInviteData: { code: null, is_used: false, parrainEmail: null, filleulEmail: null },
                 connectedUsers: 0,
                 socialBoost: 11,
                 realtimeChannel: null,
                 showEditPanel: false,
-                editingNews: {
-                    id: null,
-                    resume: '',
-                    source: '',
-                    url: '',
-                    orientation: '',
-                    tags: [],
-                    tagsText: ''
-                },
-
-                // === FILTRES ET TAGS ===
+                editingNews: { id: null, resume: '', source: '', url: '', orientation: '', tags: [], tagsText: '' },
                 showFilters: false,
                 activeFilter: 'all',
                 searchQuery: '',
@@ -1993,8 +1953,6 @@
                 allOtherTags: [],
                 activeOrientations: [],
                 activeTags: [],
-
-                // === GAMIFICATION ===
                 userXP: 0,
                 userLevel: 1,
                 xpToNextLevel: 100,
@@ -2003,217 +1961,151 @@
                 lastReadDate: null,
                 currentAchievement: null,
                 showAchievementsModal: false,
-
-                // === RÉINITIALISATION DE LA RECHERCHE SUR CHANGEMENT DE FILTRE ===
-                toggleFilter(filter) {
-                    // On met à jour le filtre actif
-                    if (this.activeFilter === filter) {
-                        this.activeFilter = 'all';
-                    } else {
-                        this.activeFilter = filter;
-                    }
-
-                    // On efface la recherche pour éviter les conflits
-                    this.searchQuery = '';
-
-                    // ET ON APPELLE DIRECTEMENT loadNews()
-                    // Le 'true' indique que c'est un nouveau filtre et qu'il faut afficher le spinner
-                    this.loadNews(this.activeFilter, true);
-                },
-
-                // === SYSTÈME DE LECTURES ET DIVERSITÉ ===
                 readArticles: {},
                 totalReadCount: 0,
                 diversityScore: null,
                 readOrientations: [],
                 showDiversityChecker: true,
-                // === GESTION DES ARTICLES LUS ===
                 showReadArticles: false,
                 hideReadFromMain: true,
-
-                // === MODAL À PROPOS ===
                 showAboutModal: false,
 
-                // === HELPER POUR L'AFFICHAGE SÉCURISÉ DES ORIENTATIONS ===
-                getOrientationDisplayName(orientation) {
-                    // Gestion des valeurs null/undefined
-                    if (!orientation) return '';
-
-                    // Cas spéciaux
-                    if (orientation === 'gouvernement') return '🇫🇷 Gouvernement';
-                    if (orientation === '🧨INFODROP') return orientation;
-
-                    // Formatage avec majuscules et remplacement des tirets
-                    return orientation
-                        .replace('-', ' ')
-                        .split(' ')
-                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(' ');
-                },
-
-                // === CHARGEMENT DES ACHIEVEMENTS DEPUIS LA DB ===
-                async loadAchievements() {
-                    try {
-                        const { data } = await supabase
-                            .from('achievements')
-                            .select('*')
-                            .eq('is_active', true)
-                            .order('order_priority');
-
-                        this.achievementsData = data || [];
-                        console.log('[DEBUG] ...Succès : Achievements chargés depuis la DB:', this.achievementsData.length);
-                    } catch (error) {
-                        console.error('[ERREUR] Le chargement des achievements a échoué', error);
+                // ============================================================
+                // 🚀 INITIALISATION DE L'APPLICATION
+                // ============================================================
+                async init() {
+                    console.log('🚀 Alpine init() appelé.');
+                    if (window.infodropAppInitialized) {
+                        console.log('👍 App déjà initialisée. On ignore cet appel.');
+                        return;
                     }
+                    window.infodropAppInitialized = true;
+                    console.log('🏁 Première initialisation. Lancement du processus...');
+
+                    const isReady = await initializeSupabase();
+                    if (isReady && supabase) {
+                        supabase.auth.onAuthStateChange((event, session) => {
+                            this.$nextTick(async () => {
+                                this.user = session?.user || null;
+                                this.sessionLoaded = true;
+
+                                if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+                                    if (!this.user) {
+                                        console.log('Session restaurée mais sans utilisateur. Arrêt.');
+                                        return;
+                                    }
+                                    console.log(`✅ Événement ${event} reçu ! Chargement des données...`);
+                                    this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+
+                                    try {
+                                        await Promise.all([
+                                            this.loadAchievements(),
+                                            this.initGamification(),
+                                            this.loadReadArticlesFromDB(),
+                                            this.loadReadPreferences(),
+                                            this.calculateDiversityScore(),
+                                            this.loadUserInviteData()
+                                        ]);
+
+                                        // --- BLOC DE CORRECTION "localStorage" ---
+                                        Object.keys(localStorage).forEach(key => {
+                                            if (key.startsWith('infodrop_unlocking_')) {
+                                                const pendingCode = key.replace('infodrop_unlocking_', '');
+                                                if (!this.unlockedAchievements.includes(pendingCode)) {
+                                                    this.unlockedAchievements.push(pendingCode);
+                                                    console.log(`Succès en attente ${pendingCode} resynchronisé depuis le cache.`);
+                                                }
+                                            }
+                                        });
+
+                                        console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées.');
+                                        await this.checkAchievements();
+
+                                        this.loadData(true);
+                                        this.startAutoUpdate();
+                                        this.setupRealtime(session);
+
+                                        try {
+                                            const celebrationKey = Object.keys(localStorage).find(key => key.startsWith('infodrop_celebration_pending_'));
+                                            if (celebrationKey) {
+                                                const count = parseInt(celebrationKey.split('_')[3]);
+                                                if (!isNaN(count)) {
+                                                    setTimeout(() => {
+                                                        this.showCelebration(count);
+                                                    }, 2000);
+                                                }
+                                            }
+                                        } catch (e) {
+                                            console.error("Erreur lors de la vérification des célébrations en attente:", e);
+                                        }
+
+                                    } catch (error) {
+                                        console.error('[FATAL] Une erreur a bloqué le chargement :', error);
+                                    }
+                                } else if (event === 'SIGNED_OUT') {
+                                    console.log('🚪 Événement SIGNED_OUT reçu.');
+                                    this.stopAutoUpdate();
+                                    if (this.realtimeChannel) {
+                                        supabase.removeChannel(this.realtimeChannel);
+                                        this.realtimeChannel = null;
+                                    }
+                                }
+                            });
+                        });
+                    }
+
+                    window.addEventListener('scroll', () => {
+                        document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
+                    });
+
+                    document.addEventListener('visibilitychange', () => {
+                        if (!document.hidden) {
+                            const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
+                            if (pendingXP.length > 0) {
+                                const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
+                                if (recentXP.length > 0) {
+                                    const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
+                                    setTimeout(() => { this.showXPAnimation(totalXP); }, 500);
+                                    localStorage.removeItem('infodrop_pending_xp');
+                                }
+                            }
+                        }
+                    });
+
+                    const style = document.createElement('style');
+                    style.textContent = `@keyframes confetti-fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }`;
+                    document.head.appendChild(style);
                 },
 
                 // ============================================================
-                // 🎮 SYSTÈME DE GAMIFICATION
+                // 📚 ORCHESTRATEUR DE GAMIFICATION (Quand on lit un article)
                 // ============================================================
-
-                // === INITIALISATION DE LA GAMIFICATION ===
-                async initGamification() {
-                    if (!this.user) return;
-
-                    try {
-                        let { data, error } = await supabase
-                            .from('user_gaming_stats')
-                            .select('*')
-                            .eq('user_id', this.user.id)
-                            .single();
-
-                        // Si le joueur n'existe pas, on crée son entrée
-                        if (error && error.code === 'PGRST116') {
-                            const { data: newStats } = await supabase
-                                .from('user_gaming_stats')
-                                .insert({
-                                    user_id: this.user.id,
-                                    xp: 0,
-                                    level: 1,
-                                    reading_streak: 0,
-                                    unlocked_achievements: ['WELCOME'], // Premier succès par défaut
-                                    last_read_date: null
-                                })
-                                .select()
-                                .single();
-                            data = newStats;
-                        }
-
-                        this.userXP = data.xp || 0;
-                        this.userLevel = data.level || 1;
-                        this.readingStreak = data.reading_streak || 0;
-                        // On s'assure que 'WELCOME' est toujours là même si le tableau est vide/null
-                        this.unlockedAchievements = data.unlocked_achievements && data.unlocked_achievements.length > 0 ? data.unlocked_achievements : ['WELCOME'];
-                        this.lastReadDate = data.last_read_date;
-
-                        this.updateXPToNextLevel();
-                        this.updateCurrentAchievement();
-                    } catch (error) {
-                        console.error('Erreur init gamification:', error);
-                    }
-                },
-
-                // === MISE À JOUR DU BADGE ACTUEL ===
-                updateCurrentAchievement() {
-                    const unlocked = this.achievementsData
-                        .filter(a => this.unlockedAchievements.includes(a.code))
-                        .sort((a, b) => b.order_priority - a.order_priority);
-
-                    this.currentAchievement = unlocked.length > 0 ? unlocked[0].icon_emoji : '⭐';
-                },
-
-                // === VÉRIFICATION DE TOUS LES ACHIEVEMENTS ===
-                async checkAchievements() {
-                    if (!this.user || !this.achievementsData.length) return;
-
-                    for (const achievement of this.achievementsData) {
-                        if (this.unlockedAchievements.includes(achievement.code)) continue;
-
-                        let shouldUnlock = false;
-                        switch (achievement.condition_type) {
-                            case 'connection': shouldUnlock = true; break;
-                            case 'articles_read': shouldUnlock = this.totalReadCount >= achievement.condition_value; break;
-                            case 'streak_days': shouldUnlock = this.readingStreak >= achievement.condition_value; break;
-                            case 'level_reached': shouldUnlock = this.userLevel >= achievement.condition_value; break;
-                            case 'diversity_score': shouldUnlock = this.diversityScore >= achievement.condition_value; break;
-                        }
-
-                        if (shouldUnlock) {
-                            await this.unlockAchievement(achievement.code);
-                        }
-                    }
-                },
-
-                // === VÉRIFICATION DE TOUS LES ACHIEVEMENTS ===
-                async checkAchievements() {
-                    if (!this.user || !this.achievementsData.length) return;
-
-                    for (const achievement of this.achievementsData) {
-                        // On vérifie une première fois ici, c'est bien.
-                        if (this.unlockedAchievements.includes(achievement.code)) continue;
-
-                        let shouldUnlock = false;
-                        switch (achievement.condition_type) {
-                            case 'connection': shouldUnlock = true; break;
-                            case 'articles_read': shouldUnlock = this.totalReadCount >= achievement.condition_value; break;
-                            case 'streak_days': shouldUnlock = this.readingStreak >= achievement.condition_value; break;
-                            case 'level_reached': shouldUnlock = this.userLevel >= achievement.condition_value; break;
-                            case 'diversity_score': shouldUnlock = this.diversityScore >= achievement.condition_value; break;
-                        }
-
-                        if (shouldUnlock) {
-                            // On ne met plus la logique ici, on appelle la nouvelle fonction sécurisée
-                            await this.unlockAchievement(achievement.code);
-                        }
-                    }
-                },
-
-
-                // === CALCUL XP POUR NIVEAU SUIVANT ===
-                updateXPToNextLevel() {
-                    this.xpToNextLevel = this.userLevel * 100;
-                },
-
-                // =============================================================
-                // BLOC DE CORRECTION FINAL
-                // =============================================================
-
-                // 1. La nouvelle fonction `markAsRead`, qui est maintenant le seul "chef d'orchestre".
                 async markAsRead(id) {
                     if (!this.user || this.readArticles[id]) return;
 
-                    // --- ÉTAPE 1: Mise à jour de l'état local (ce que l'utilisateur voit) ---
                     this.readArticles[id] = new Date().toISOString();
                     this.updateTotalReadCount();
 
-                    // --- ÉTAPE 2: Calcul de toutes les nouvelles statistiques ---
                     const article = this.newsList.find(n => n.id === id);
 
-                    // On met à jour l'XP
-                    this.gainXPSilently(article);
-
-                    // On met à jour le streak de lecture
-                    this.checkDailyStreak();
-
-                    // On met à jour le score de diversité
+                    this.updateXP(article);
+                    this.updateStreak();
                     await this.calculateDiversityScore();
-
-                    // --- ÉTAPE 3: Maintenant que TOUT est à jour, on vérifie les succès une seule fois ---
                     await this.checkAchievements();
 
-                    // --- ÉTAPE 4: On sauvegarde TOUT en base de données, une seule fois et à la fin ---
                     await this.saveGamingData();
                     await this.saveReadArticleToDB(id);
                     await this.addToDiversityData(article);
 
-                    // Célébrations
-                    if (this.totalReadCount % 20 === 0 && this.totalReadCount > 0) {
+                    if (this.totalReadCount > 0 && this.totalReadCount % 20 === 0) {
                         this.celebrateArticles(this.totalReadCount);
                     }
                 },
 
-                // 2. `gainXPSilently` est maintenant très simple. Elle ne fait QUE calculer l'XP.
-                gainXPSilently(article) {
+                // ============================================================
+                // 🎮 SOUS-FONCTIONS DE GAMIFICATION
+                // ============================================================
+                updateXP(article) {
                     let xpGained = 10;
                     if (article) {
                         if (article.orientation && !this.readOrientations.includes(article.orientation)) xpGained += 20;
@@ -2233,22 +2125,15 @@
                     }
                 },
 
-                // 3. `checkDailyStreak` ne fait QUE calculer le streak. Elle ne sauvegarde plus rien.
-                checkDailyStreak() {
+                updateStreak() {
                     const today = new Date().toDateString();
-                    const yesterday = new Date(Date.now() - 86400000).toDateString();
-
                     if (this.lastReadDate === today) return;
 
-                    if (this.lastReadDate === yesterday) {
-                        this.readingStreak++;
-                    } else {
-                        this.readingStreak = 1;
-                    }
+                    const yesterday = new Date(Date.now() - 86400000).toDateString();
+                    this.readingStreak = (this.lastReadDate === yesterday) ? this.readingStreak + 1 : 1;
                     this.lastReadDate = today;
                 },
 
-                // 4. `calculateDiversityScore` ne fait QUE calculer le score. Elle n'appelle plus checkAchievements.
                 async calculateDiversityScore() {
                     if (!this.user) return;
                     try {
@@ -2276,75 +2161,8 @@
                     }
                 },
 
-                // `updateXP` (anciennement gainXPSilently) ne fait QUE calculer l'XP et mettre à jour l'état local.
-                updateXP(article) {
-                    let xpGained = 10;
-                    if (article) {
-                        if (article.orientation && !this.readOrientations.includes(article.orientation)) xpGained += 20;
-                        if (article.tags && article.tags.includes('🧨INFODROP')) xpGained += 5;
-                    }
-
-                    // On met l'animation en attente
-                    const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                    pendingXP.push({ amount: xpGained, timestamp: Date.now() });
-                    localStorage.setItem('infodrop_pending_xp', JSON.stringify(pendingXP));
-
-                    this.userXP += xpGained;
-                    while (this.userXP >= this.xpToNextLevel) {
-                        this.userXP -= this.xpToNextLevel;
-                        this.userLevel++;
-                        this.updateXPToNextLevel();
-                        this.showLevelUpAnimation();
-                    }
-                },
-
-                // `updateStreak` (anciennement checkDailyStreak) ne fait QUE calculer le streak.
-                updateStreak() {
-                    const today = new Date().toDateString();
-                    const yesterday = new Date(Date.now() - 86400000).toDateString();
-
-                    if (this.lastReadDate === today) return;
-
-                    if (this.lastReadDate === yesterday) {
-                        this.readingStreak++;
-                    } else {
-                        this.readingStreak = 1;
-                    }
-                    this.lastReadDate = today;
-                },
-
-                // `updateDiversityScore` (anciennement calculateDiversityScore) ne fait QUE calculer.
-                async updateDiversityScore() {
-                    if (!this.user) return;
-                    try {
-                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-                        const { data } = await supabase
-                            .from('user_diversity_data')
-                            .select('orientation, source')
-                            .eq('user_id', this.user.id)
-                            .gte('read_at', twentyFourHoursAgo.toISOString());
-
-                        if (!data || data.length === 0) {
-                            this.diversityScore = null;
-                            this.readOrientations = [];
-                            return;
-                        }
-
-                        const oSet = new Set(data.map(r => r.orientation).filter(Boolean));
-                        const sSet = new Set(data.map(r => r.source));
-                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
-                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
-                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
-
-                    } catch (error) {
-                        console.error('Erreur calcul diversité:', error);
-                    }
-                },
-
-                // `checkAchievements` est la fonction centrale de vérification.
                 async checkAchievements() {
                     if (!this.user || !this.achievementsData.length) return;
-
                     for (const achievement of this.achievementsData) {
                         if (this.unlockedAchievements.includes(achievement.code)) continue;
 
@@ -2356,27 +2174,18 @@
                             case 'level_reached': shouldUnlock = this.userLevel >= achievement.condition_value; break;
                             case 'diversity_score': shouldUnlock = this.diversityScore >= achievement.condition_value; break;
                         }
-
                         if (shouldUnlock) {
                             await this.unlockAchievement(achievement.code);
                         }
                     }
                 },
 
-                // === DÉBLOCAGE SÉCURISÉ D'UN ACHIEVEMENT ===
                 async unlockAchievement(code) {
-                    // GARDE-FOU : Si le succès est déjà dans la liste, on ne fait RIEN.
                     if (this.unlockedAchievements.includes(code)) return;
 
-                    // --- DEBUT DE LA CORRECTION ---
-
-                    // 1. On laisse une trace dans le "mémo" du navigateur.
                     localStorage.setItem(`infodrop_unlocking_${code}`, 'true');
-
-                    // 2. On met à jour l'état local IMMÉDIATEMENT pour la session actuelle.
                     this.unlockedAchievements.push(code);
 
-                    // 3. On joue les animations et on met à jour l'UI.
                     const achievement = this.achievementsData.find(a => a.code === code);
                     if (achievement) {
                         this.showAchievementPopup(achievement.icon_emoji, achievement.title);
@@ -2384,7 +2193,6 @@
                     this.updateCurrentAchievement();
 
                     try {
-                        // 4. On sauvegarde les données en base.
                         await this.saveGamingData();
                         await supabase
                             .from('user_achievement_history')
@@ -2392,27 +2200,92 @@
                                 { user_id: this.user.id, achievement_code: code },
                                 { onConflict: 'user_id, achievement_code' }
                             );
-
-                        // 5. SI ET SEULEMENT SI la sauvegarde réussit, on nettoie le mémo.
                         localStorage.removeItem(`infodrop_unlocking_${code}`);
-
                     } catch (error) {
                         console.error(`Erreur lors de la sauvegarde du succès ${code}:`, error);
-                        // En cas d'erreur, on ne supprime PAS le mémo, pour pouvoir réessayer plus tard.
                     }
-                    // --- FIN DE LA CORRECTION ---
                 },
 
-                // === OBTENIR LE TITRE D'UN ACHIEVEMENT ===
+                // ============================================================
+                // ⚙️ INITIALISATION & SAUVEGARDES
+                // ============================================================
+                async initGamification() {
+                    if (!this.user) return;
+                    try {
+                        let { data, error } = await supabase.from('user_gaming_stats').select('*').eq('user_id', this.user.id).single();
+                        if (error && error.code === 'PGRST116') {
+                            const { data: newStats } = await supabase.from('user_gaming_stats').insert({ user_id: this.user.id, xp: 0, level: 1, reading_streak: 0, unlocked_achievements: ['WELCOME'], last_read_date: null }).select().single();
+                            data = newStats;
+                        }
+                        this.userXP = data.xp || 0;
+                        this.userLevel = data.level || 1;
+                        this.readingStreak = data.reading_streak || 0;
+                        this.unlockedAchievements = data.unlocked_achievements && data.unlocked_achievements.length > 0 ? data.unlocked_achievements : ['WELCOME'];
+                        this.lastReadDate = data.last_read_date;
+                        this.updateXPToNextLevel();
+                        this.updateCurrentAchievement();
+                    } catch (error) {
+                        console.error('Erreur init gamification:', error);
+                    }
+                },
+
+                async saveGamingData() {
+                    if (!this.user) return;
+                    try {
+                        await supabase.from('user_gaming_stats').update({
+                            xp: this.userXP,
+                            level: this.userLevel,
+                            reading_streak: this.readingStreak,
+                            unlocked_achievements: this.unlockedAchievements,
+                            last_read_date: this.lastReadDate,
+                            updated_at: new Date().toISOString()
+                        }).eq('user_id', this.user.id);
+                    } catch (error) {
+                        console.error('Erreur sauvegarde gaming:', error);
+                    }
+                },
+
+                // Le reste des fonctions (login, loadNews, helpers, etc.) reste ici...
+                // J'inclus toutes les fonctions pour que ce soit un remplacement complet et propre.
+
+                toggleFilter(filter) {
+                    this.activeFilter = (this.activeFilter === filter) ? 'all' : filter;
+                    this.searchQuery = '';
+                    this.loadNews(this.activeFilter, true);
+                },
+
+                getOrientationDisplayName(orientation) {
+                    if (!orientation) return '';
+                    if (orientation === 'gouvernement') return '🇫🇷 Gouvernement';
+                    if (orientation === '🧨INFODROP') return orientation;
+                    return orientation.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                },
+
+                async loadAchievements() {
+                    try {
+                        const { data } = await supabase.from('achievements').select('*').eq('is_active', true).order('order_priority');
+                        this.achievementsData = data || [];
+                    } catch (error) {
+                        console.error('[ERREUR] Le chargement des achievements a échoué', error);
+                    }
+                },
+
+                updateCurrentAchievement() {
+                    const unlocked = this.achievementsData
+                        .filter(a => this.unlockedAchievements.includes(a.code))
+                        .sort((a, b) => b.order_priority - a.order_priority);
+                    this.currentAchievement = unlocked.length > 0 ? unlocked[0].icon_emoji : '⭐';
+                },
+
+                updateXPToNextLevel() {
+                    this.xpToNextLevel = this.userLevel * 100;
+                },
+
                 getAchievementTitle(iconOrCode) {
-                    // Recherche d'abord par code (plus fiable), puis par emoji
-                    const achievement = this.achievementsData.find(a =>
-                        a.code === iconOrCode || a.icon_emoji === iconOrCode
-                    );
+                    const achievement = this.achievementsData.find(a => a.code === iconOrCode || a.icon_emoji === iconOrCode);
                     return achievement ? achievement.title : 'Achievement mystère';
                 },
 
-                // === OBTENIR TOUTES LES DONNÉES D'ACHIEVEMENTS ===
                 getAllAchievementsData() {
                     if (!this.achievementsData) return [];
                     return this.achievementsData.map(achievement => ({
@@ -2425,7 +2298,6 @@
                     }));
                 },
 
-                // === CALCUL DE LA PROGRESSION D'UN ACHIEVEMENT ===
                 getAchievementProgress(achievement) {
                     if (this.unlockedAchievements.includes(achievement.code)) return '✓ Complété';
                     switch (achievement.condition_type) {
@@ -2437,7 +2309,6 @@
                     }
                 },
 
-                // === ANIMATION GAIN XP ===
                 showXPAnimation(amount) {
                     const popup = document.createElement('div');
                     popup.className = 'xp-popup';
@@ -2448,304 +2319,64 @@
                     setTimeout(() => popup.remove(), 1500);
                 },
 
-                // === ANIMATION LEVEL UP ===
                 showLevelUpAnimation() {
                     const levelUp = document.createElement('div');
-                    levelUp.style.cssText = `
-                            position: fixed;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            font-size: 48px;
-                            font-weight: bold;
-                            color: var(--clash-gold);
-                            text-shadow: 0 0 30px var(--clash-gold);
-                            animation: level-up-clash 1.5s ease-out forwards;
-                            z-index: 9999;
-                            pointer-events: none;
-                        `;
+                    levelUp.style.cssText = `position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; font-weight: bold; color: var(--clash-gold); text-shadow: 0 0 30px var(--clash-gold); animation: level-up-clash 1.5s ease-out forwards; z-index: 9999; pointer-events: none;`;
                     levelUp.textContent = `NIVEAU ${this.userLevel}!`;
                     document.body.appendChild(levelUp);
-
-                    // Confettis dorés
                     this.createGoldConfetti();
-
                     setTimeout(() => levelUp.remove(), 1500);
                 },
 
-                // === POPUP ACHIEVEMENT ===
                 showAchievementPopup(icon, title) {
                     const popup = document.createElement('div');
                     popup.className = 'achievement-popup-clash';
-                    popup.innerHTML = `
-                            <div class="text-6xl mb-3">${icon}</div>
-                            <h3 class="text-2xl font-bold mb-2 text-white">SUCCÈS DÉBLOQUÉ!</h3>
-                            <p class="text-lg text-blue-200">${title}</p>
-                        `;
+                    popup.innerHTML = `<div class="text-6xl mb-3">${icon}</div><h3 class="text-2xl font-bold mb-2 text-white">SUCCÈS DÉBLOQUÉ!</h3><p class="text-lg text-blue-200">${title}</p>`;
                     document.body.appendChild(popup);
-
                     setTimeout(() => {
                         popup.style.animation = 'achievement-appear 0.5s ease-out reverse forwards';
                         setTimeout(() => popup.remove(), 500);
                     }, 3000);
                 },
 
-                // === SAUVEGARDE DES DONNÉES GAMING ===
-                async saveGamingData() {
-                    if (!this.user) return;
-                    try {
-                        await supabase
-                            .from('user_gaming_stats')
-                            .update({
-                                xp: this.userXP,
-                                level: this.userLevel,
-                                reading_streak: this.readingStreak,
-                                unlocked_achievements: this.unlockedAchievements,
-                                last_read_date: this.lastReadDate,
-                                updated_at: new Date().toISOString()
-                            })
-                            .eq('user_id', this.user.id);
-                    } catch (error) {
-                        console.error('Erreur sauvegarde gaming:', error);
-                    }
-                },
-
-                // === CONFETTIS DORÉS ===
                 createGoldConfetti() {
                     const colors = ['#FFD700', '#FFA500', '#FFFF00', '#FFE4B5'];
                     for (let i = 0; i < 30; i++) {
                         setTimeout(() => {
                             const conf = document.createElement('div');
-                            conf.style.cssText = `
-                                    position: fixed;
-                                    width: 15px;
-                                    height: 15px;
-                                    background: ${colors[i % colors.length]};
-                                    left: ${Math.random() * 100}%;
-                                    top: -20px;
-                                    opacity: ${Math.random() + 0.5};
-                                    transform: rotate(${Math.random() * 360}deg);
-                                    animation: confetti-fall ${3 + Math.random() * 2}s linear forwards;
-                                    pointer-events: none;
-                                    z-index: 9999;
-                                    box-shadow: 0 0 10px ${colors[i % colors.length]};
-                                `;
+                            conf.style.cssText = `position: fixed; width: 15px; height: 15px; background: ${colors[i % colors.length]}; left: ${Math.random() * 100}%; top: -20px; opacity: ${Math.random() + 0.5}; transform: rotate(${Math.random() * 360}deg); animation: confetti-fall ${3 + Math.random() * 2}s linear forwards; pointer-events: none; z-index: 9999; box-shadow: 0 0 10px ${colors[i % colors.length]};`;
                             document.body.appendChild(conf);
                             setTimeout(() => conf.remove(), 5000);
                         }, i * 50);
                     }
                 },
 
-                // ============================================================
-                // 🔧 GETTERS ET PROPRIÉTÉS CALCULÉES
-                // ============================================================
+                get filteredNewsList() {
+                    if (!this.searchQuery || this.searchQuery.trim() === '') return this.newsList;
+                    const query = this.searchQuery.toLowerCase().trim();
+                    return this.newsList.filter(news => (news.resume && news.resume.toLowerCase().includes(query)) || (news.source && news.source.toLowerCase().includes(query)) || (news.tags && news.tags.some(tag => tag.toLowerCase().includes(query))) || (news.orientation && news.orientation.toLowerCase().includes(query)));
+                },
 
-                // === HELPERS POUR LES ORIENTATIONS ===
                 getOrientationColor(o) { return ORIENTATION_DATA[o]?.color || '#808080'; },
                 getOrientationClass(o) { return ORIENTATION_DATA[o]?.class || 'bg-gray-700 text-gray-200 border-gray-600'; },
 
-                // === LISTE D'ARTICLES FILTRÉE PAR RECHERCHE ===
-                get filteredNewsList() {
-                    if (!this.searchQuery || this.searchQuery.trim() === '') {
-                        return this.newsList;
-                    }
-
-                    const query = this.searchQuery.toLowerCase().trim();
-                    return this.newsList.filter(news => {
-                        // Recherche dans le résumé
-                        if (news.resume && news.resume.toLowerCase().includes(query)) return true;
-                        // Recherche dans la source
-                        if (news.source && news.source.toLowerCase().includes(query)) return true;
-                        // Recherche dans les tags
-                        if (news.tags && news.tags.some(tag => tag.toLowerCase().includes(query))) return true;
-                        // Recherche dans l'orientation
-                        if (news.orientation && news.orientation.toLowerCase().includes(query)) return true;
-                        return false;
-                    });
-                },
-
-                // ============================================================
-                // 🚀 INITIALISATION DE L'APPLICATION
-                // ============================================================
-                async init() {
-                    console.log('🚀 Alpine init() appelé.');
-
-                    if (window.infodropAppInitialized) {
-                        console.log('👍 App déjà initialisée. On ignore cet appel.');
-                        return;
-                    }
-                    window.infodropAppInitialized = true;
-                    console.log('🏁 Première initialisation. Lancement du processus...');
-
-                    const isReady = await initializeSupabase();
-
-                    if (isReady && supabase) {
-                        supabase.auth.onAuthStateChange((event, session) => {
-                            this.$nextTick(async () => {
-                                this.user = session?.user || null;
-                                this.sessionLoaded = true;
-
-                                if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-
-                                    if (!this.user) {
-                                        console.log('Session restaurée mais sans utilisateur. Arrêt.');
-                                        return;
-                                    }
-
-                                    console.log(`✅ Événement ${event} reçu ! Chargement des données...`);
-                                    this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
-
-                                    try {
-                                        await Promise.all([
-                                            this.loadAchievements(),
-                                            this.initGamification(),
-                                            this.loadReadArticlesFromDB(),
-                                            this.loadReadPreferences(),
-                                            this.calculateDiversityScore(),
-                                            this.loadUserInviteData()
-                                        ]);
-
-                                        // --- DEBUT DE LA CORRECTION ---
-                                        // On vérifie si des succès étaient en attente de sauvegarde lors du dernier rechargement
-                                        Object.keys(localStorage).forEach(key => {
-                                            if (key.startsWith('infodrop_unlocking_')) {
-                                                const pendingCode = key.replace('infodrop_unlocking_', '');
-                                                // Si le mémo existe mais que le succès n'est pas dans notre liste (à cause d'un rechargement), on le rajoute.
-                                                if (!this.unlockedAchievements.includes(pendingCode)) {
-                                                    this.unlockedAchievements.push(pendingCode);
-                                                    console.log(`Succès en attente ${pendingCode} resynchronisé depuis le cache.`);
-                                                }
-                                            }
-                                        });
-
-                                        console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées.');
-                                        await this.checkAchievements();
-
-                                        this.loadData(true);
-                                        this.startAutoUpdate();
-                                        this.setupRealtime(session);
-
-                                        // =============================================================
-                                        // NOUVEAU BLOC CORRIGÉ POUR LES CÉLÉBRATIONS
-                                        // =============================================================
-                                        try {
-                                            const celebrationKey = Object.keys(localStorage).find(key => key.startsWith('infodrop_celebration_pending_'));
-                                            if (celebrationKey) {
-                                                const count = parseInt(celebrationKey.split('_')[3]);
-                                                if (!isNaN(count)) {
-                                                    setTimeout(() => {
-                                                        this.showCelebration(count);
-                                                        // On nettoie le localStorage APRÈS avoir affiché la célébration
-                                                    }, 2000);
-                                                }
-                                            }
-                                        } catch (e) {
-                                            console.error("Erreur lors de la vérification des célébrations en attente:", e);
-                                        }
-                                        // =============================================================
-
-                                    } catch (error) {
-                                        console.error('[FATAL] Une erreur a bloqué le chargement :', error);
-                                    }
-
-                                } else if (event === 'SIGNED_OUT') {
-                                    console.log('🚪 Événement SIGNED_OUT reçu.');
-                                    this.stopAutoUpdate();
-                                    if (this.realtimeChannel) {
-                                        supabase.removeChannel(this.realtimeChannel);
-                                        this.realtimeChannel = null;
-                                    }
-                                }
-                            });
-                        });
-                    }
-
-                    // Le reste de votre logique d'interface qui ne dépend pas de Supabase
-                    window.addEventListener('scroll', () => {
-                        document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
-                    });
-
-                    document.addEventListener('visibilitychange', () => {
-                        if (!document.hidden) {
-                            const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                            if (pendingXP.length > 0) {
-                                const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
-                                if (recentXP.length > 0) {
-                                    const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
-                                    setTimeout(() => {
-                                        this.showXPAnimation(totalXP);
-                                    }, 500);
-                                    localStorage.removeItem('infodrop_pending_xp');
-                                }
-                            }
-                        }
-                    });
-
-                    // Ajout du CSS pour les animations
-                    const style = document.createElement('style');
-                    style.textContent = `
-    @keyframes confetti-fall {
-        to {
-            transform: translateY(100vh) rotate(720deg);
-            opacity: 0;
-        }
-    }
-`;
-                    document.head.appendChild(style);
-                },
-
-                // ============================================================
-                // 🔐 SYSTÈME D'AUTHENTIFICATION ET INVITATIONS
-                // ============================================================
-
-                // === PROCESSUS DE CONNEXION ===
                 async login() {
                     if (this.loading) return;
                     this.loading = true;
                     this.message = '';
                     this.messageType = '';
                     try {
-                        // Vérifie si l'email existe déjà (user existant ou non)
-                        const checkRes = await fetch('/api/check-email', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ email: this.email.toLowerCase() })
-                        });
-                        if (!checkRes.ok) {
-                            const err = await checkRes.json();
-                            throw new Error(err.error || 'Erreur de communication.');
-                        }
+                        const checkRes = await fetch('/api/check-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: this.email.toLowerCase() }) });
+                        if (!checkRes.ok) { const err = await checkRes.json(); throw new Error(err.error || 'Erreur de communication.'); }
                         const { exists } = await checkRes.json();
-
-                        // Si l'utilisateur n'existe pas, il faut un code valide
                         if (!exists) {
-                            if (!this.inviteCode) {
-                                this.message = "Code d'invitation requis pour les nouveaux utilisateurs.";
-                                this.messageType = 'error';
-                                this.loading = false;
-                                return;
-                            }
-                            const validateRes = await fetch('/api/validate-invite', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ code: this.inviteCode, email: this.email })
-                            });
+                            if (!this.inviteCode) { this.message = "Code d'invitation requis pour les nouveaux utilisateurs."; this.messageType = 'error'; this.loading = false; return; }
+                            const validateRes = await fetch('/api/validate-invite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: this.inviteCode, email: this.email }) });
                             const validationResult = await validateRes.json();
-                            if (!validationResult.success) {
-                                this.message = validationResult.error;
-                                this.messageType = 'error';
-                                this.loading = false;
-                                return;
-                            }
+                            if (!validationResult.success) { this.message = validationResult.error; this.messageType = 'error'; this.loading = false; return; }
                         }
-
-                        // On envoie l'OTP (lien magique) seulement si tout est OK
-                        const { error: otpError } = await supabase.auth.signInWithOtp({
-                            email: this.email.toLowerCase(),
-                            options: { emailRedirectTo: window.location.origin }
-                        });
+                        const { error: otpError } = await supabase.auth.signInWithOtp({ email: this.email.toLowerCase(), options: { emailRedirectTo: window.location.origin } });
                         if (otpError) throw otpError;
-
                         this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
                         this.messageType = 'success';
                     } catch (error) {
@@ -2756,324 +2387,114 @@
                     }
                 },
 
-                // === CHARGEMENT DES DONNÉES D'INVITATION ===
                 async loadUserInviteData() {
-                    // Vérification de sécurité : utilisateur connecté
-                    if (!this.user || !this.user.email) {
-                        console.log('❌ Pas d\'utilisateur connecté pour charger les données d\'invitation');
-                        return;
-                    }
-
-                    // === VÉRIFICATION ADMIN ===
+                    if (!this.user || !this.user.email) return;
                     if (this.isAdmin) {
-                        console.log('👑 Utilisateur admin détecté, traitement spécial...');
-
                         try {
-                            // Pour un admin, on vérifie s'il a déjà un code d'invitation
-                            const { data: adminCode, error: adminError } = await supabase
-                                .from('invitation_codes')
-                                .select('*')
-                                .ilike('owner_email', this.user.email.toLowerCase())
-                                .maybeSingle();
-
-                            if (adminError && adminError.code !== 'PGRST116') {
-                                console.error('❌ Erreur requête admin:', adminError);
-                                return;
-                            }
-
+                            const { data: adminCode, error: adminError } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
+                            if (adminError && adminError.code !== 'PGRST116') { console.error('❌ Erreur requête admin:', adminError); return; }
                             if (adminCode) {
-                                // L'admin a déjà un code
-                                console.log('✅ Code admin existant trouvé:', adminCode.code);
                                 this.userInviteData.code = adminCode.code;
                                 this.userInviteData.is_used = adminCode.is_used || false;
-
-                                if (adminCode.is_used && adminCode.used_by_email) {
-                                    this.userInviteData.filleulEmail = adminCode.used_by_email;
-                                }
-                            } else {
-                                // L'admin n'a pas de code, on peut en créer un automatiquement
-                                console.log('ℹ️ Aucun code d\'invitation pour l\'admin, c\'est normal');
-                                this.userInviteData.code = null;
-                            }
-
-                            // Un admin n'a jamais de parrain
+                                if (adminCode.is_used && adminCode.used_by_email) { this.userInviteData.filleulEmail = adminCode.used_by_email; }
+                            } else { this.userInviteData.code = null; }
                             this.userInviteData.parrainEmail = null;
-
-                            console.log('✅ Données admin configurées:', this.userInviteData);
                             return;
-
-                        } catch (error) {
-                            console.error('❌ Erreur traitement admin:', error);
-                            return;
-                        }
+                        } catch (error) { console.error('❌ Erreur traitement admin:', error); return; }
                     }
-
-                    // === TRAITEMENT POUR UTILISATEURS NORMAUX ===
                     try {
-                        console.log('🔄 Chargement des données d\'invitation pour utilisateur normal:', this.user.email);
-
-                        // Récupérer le code d'invitation du compte connecté
-                        const { data: ownCode, error: ownCodeError } = await supabase
-                            .from('invitation_codes')
-                            .select('*')
-                            .ilike('owner_email', this.user.email.toLowerCase())
-                            .maybeSingle();
-
-                        // Gestion de l'erreur pour ownCode
-                        if (ownCodeError && ownCodeError.code !== 'PGRST116') {
-                            console.error('❌ Erreur récupération code proprio:', ownCodeError);
-                        } else if (ownCode) {
-                            console.log('✅ Code proprio récupéré:', ownCode);
-
+                        const { data: ownCode } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
+                        if (ownCode) {
                             this.userInviteData.code = ownCode.code;
                             this.userInviteData.is_used = ownCode.is_used || false;
-
-                            if (ownCode.is_used && ownCode.used_by_email) {
-                                this.userInviteData.filleulEmail = ownCode.used_by_email;
-                            }
+                            if (ownCode.is_used && ownCode.used_by_email) { this.userInviteData.filleulEmail = ownCode.used_by_email; }
                         }
-
-                        // Récupérer le parrain (qui a invité cet utilisateur)
-                        const { data: usedCode, error: usedCodeError } = await supabase
-                            .from('invitation_codes')
-                            .select('owner_email')
-                            .ilike('used_by_email', this.user.email.toLowerCase())
-                            .maybeSingle();
-
-                        if (usedCodeError && usedCodeError.code !== 'PGRST116') {
-                            console.error('❌ Erreur récupération parrain:', usedCodeError);
-                        } else if (usedCode) {
-                            console.log('✅ Parrain récupéré:', usedCode);
-                            this.userInviteData.parrainEmail = usedCode.owner_email;
-                        }
-
-                        console.log('✅ Données d\'invitation finales:', this.userInviteData);
-
+                        const { data: usedCode } = await supabase.from('invitation_codes').select('owner_email').ilike('used_by_email', this.user.email.toLowerCase()).maybeSingle();
+                        if (usedCode) { this.userInviteData.parrainEmail = usedCode.owner_email; }
                     } catch (error) {
-                        console.error("❌ Erreur générale lors du chargement des données d'invitation:", error);
-
-                        // Réinitialiser les données en cas d'erreur
-                        this.userInviteData = {
-                            code: null,
-                            is_used: false,
-                            parrainEmail: null,
-                            filleulEmail: null
-                        };
+                        console.error("❌ Erreur chargement des données d'invitation:", error);
+                        this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null };
                     }
                 },
 
-                // ============================================================
-                // 🔄 GESTION DES DONNÉES ET TEMPS RÉEL
-                // ============================================================
-
-                // === CONFIGURATION DU TEMPS RÉEL ===
                 setupRealtime(session) {
-                    this.realtimeChannel = supabase.channel('infodrop-online-users', {
-                        config: { presence: { key: session.user.id } }
-                    });
+                    this.realtimeChannel = supabase.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } });
                     this.realtimeChannel.on('presence', { event: 'sync' }, () => {
                         this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
                     }).subscribe(async (status) => {
-                        if (status === 'SUBSCRIBED') {
-                            await this.realtimeChannel.track({ online_at: new Date().toISOString() });
-                        }
+                        if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); }
                     });
                 },
 
-                // === GESTION DE L'ÉDITION D'ARTICLES ===
                 openEditPanel(news) {
-                    this.editingNews = {
-                        ...JSON.parse(JSON.stringify(news)),
-                        tagsText: (news.tags || []).join(', ')
-                    };
+                    this.editingNews = { ...JSON.parse(JSON.stringify(news)), tagsText: (news.tags || []).join(', ') };
                     this.showEditPanel = true;
                 },
 
-                // === MISE À JOUR D'UN ARTICLE ===
                 async updateNews() {
                     const { id, resume, source, url, orientation, tagsText } = this.editingNews;
                     const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
                     try {
                         await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id);
                         const index = this.newsList.findIndex(n => n.id === id);
-                        if (index !== -1) {
-                            this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags };
-                        }
+                        if (index !== -1) { this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; }
                         this.showEditPanel = false;
                         this.updateTagsList();
-                    } catch (e) {
-                        alert("La mise à jour a échoué.");
-                    }
+                    } catch (e) { alert("La mise à jour a échoué."); }
                 },
 
-                // === SUPPRESSION D'UN ARTICLE ===
                 async deleteNews(id) {
                     if (!confirm("Supprimer ?")) return;
                     this.newsList = this.newsList.filter(n => n.id !== id);
                     try {
                         await supabase.from('actu').delete().eq('id', id);
                         if (this.isAdmin) this.loadStats();
-                    } catch (e) {
-                        alert("La suppression a échoué.");
-                        this.loadNews();
-                    }
+                    } catch (e) { alert("La suppression a échoué."); this.loadNews(); }
                 },
 
-                // === AJOUT MANUEL D'ACTUALITÉ (ADMIN) ===
                 async addManualNews() {
                     this.addingNews = true;
                     try {
-                        console.log('🔄 Début ajout article...');
-                        console.log('📝 Données du formulaire:', this.newNews);
-
-                        // === VALIDATION DES CHAMPS OBLIGATOIRES ===
-                        if (!this.newNews.resume || !this.newNews.resume.trim()) {
-                            throw new Error('Le résumé est obligatoire');
-                        }
-
-                        if (!this.newNews.url || !this.newNews.url.trim()) {
-                            throw new Error('L\'URL est obligatoire');
-                        }
-
-                        // === PRÉPARATION DES TAGS (ARRAY DE STRINGS) ===
+                        if (!this.newNews.resume || !this.newNews.resume.trim()) { throw new Error('Le résumé est obligatoire'); }
+                        if (!this.newNews.url || !this.newNews.url.trim()) { throw new Error('L\'URL est obligatoire'); }
                         let tags = ['🧨INFODROP'];
-
                         if (this.newNews.tagsText && this.newNews.tagsText.trim()) {
-                            const additionalTags = this.newNews.tagsText
-                                .split(',')
-                                .map(tag => tag.trim())
-                                .filter(tag => tag.length > 0)
-                                .filter(tag => tag !== '🧨INFODROP'); // Éviter doublons
-
+                            const additionalTags = this.newNews.tagsText.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0 && tag !== '🧨INFODROP');
                             tags = tags.concat(additionalTags);
                         }
-
-                        // === OBJET FINAL POUR LA DB ===
-                        const articleData = {
-                            resume: this.newNews.resume.trim(),
-                            source: '🧨INFODROP',
-                            url: this.newNews.url.trim(),
-                            heure: new Date().toISOString(),
-                            tags: tags,
-                            added_by: this.user.email
-                        };
-
-                        // === ORIENTATION OPTIONNELLE ===
-                        if (this.newNews.orientation && this.newNews.orientation.trim()) {
-                            articleData.orientation = this.newNews.orientation.trim();
-                        }
-
-                        console.log('📤 Données finales pour Supabase:', articleData);
-                        console.log('🏷️ Tags array:', tags);
-
-                        // === INSERTION AVEC GESTION D'ERREUR DÉTAILLÉE ===
-                        const { data, error } = await supabase
-                            .from('actu')
-                            .insert(articleData)
-                            .select('*');
-
-                        if (error) {
-                            console.error('❌ Erreur Supabase complète:', error);
-                            console.error('❌ Code erreur:', error.code);
-                            console.error('❌ Message:', error.message);
-                            console.error('❌ Détails:', error.details);
-
-                            // Messages d'erreur plus clairs
-                            if (error.code === '23505') {
-                                throw new Error('Cette URL existe déjà dans la base de données');
-                            } else if (error.code === '23502') {
-                                throw new Error('Un champ obligatoire est manquant');
-                            } else if (error.code === '42703') {
-                                throw new Error('Erreur de structure de données');
-                            } else {
-                                throw new Error(`Erreur DB: ${error.message}`);
-                            }
-                        }
-
-                        console.log('✅ Article créé avec succès:', data);
-
-                        // === NETTOYAGE DU FORMULAIRE ===
-                        this.newNews = {
-                            resume: '',
-                            source: '',
-                            url: '',
-                            orientation: '',
-                            tagsText: ''
-                        };
-
-                        // === FERMETURE DU PANEL ET RECHARGEMENT ===
+                        const articleData = { resume: this.newNews.resume.trim(), source: '🧨INFODROP', url: this.newNews.url.trim(), heure: new Date().toISOString(), tags: tags, added_by: this.user.email };
+                        if (this.newNews.orientation && this.newNews.orientation.trim()) { articleData.orientation = this.newNews.orientation.trim(); }
+                        const { error } = await supabase.from('actu').insert(articleData).select('*');
+                        if (error) { throw new Error(`Erreur DB: ${error.message}`); }
+                        this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
                         this.showAdminPanel = false;
-                        await this.loadData(); // Recharger les articles
-
-                        console.log('✅ Processus terminé avec succès');
+                        await this.loadData();
                         alert('✅ Article ajouté avec succès !');
-
                     } catch (error) {
-                        console.error('❌ Erreur dans addManualNews:', error);
-
-                        let userMessage = 'Erreur lors de l\'ajout de l\'article: ';
-
-                        if (error.message.includes('obligatoire')) {
-                            userMessage += error.message;
-                        } else if (error.message.includes('existe déjà')) {
-                            userMessage += 'Cette URL est déjà utilisée pour un autre article.';
-                        } else if (error.message.includes('permission')) {
-                            userMessage += 'Vous n\'avez pas les droits pour ajouter un article.';
-                        } else {
-                            userMessage += error.message || 'Erreur inconnue';
-                        }
-
-                        alert(userMessage);
-
+                        alert('Erreur lors de l\'ajout de l\'article: ' + error.message);
                     } finally {
                         this.addingNews = false;
                     }
                 },
 
-                // === GÉNÉRATION DE CODE D'INVITATION ===
                 async generateInviteCode() {
                     if (!this.isAdmin || this.generatingCode) return;
-
                     this.generatingCode = true;
                     try {
-                        console.log('🎁 Génération code d\'invitation...');
-
                         const { data: { session } } = await supabase.auth.getSession();
-                        if (!session) {
-                            throw new Error("Session introuvable");
-                        }
-
-                        const response = await fetch('/api/generate-invite', {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${session.access_token}`,
-                                'Content-Type': 'application/json'
-                            }
-                        });
-
+                        if (!session) throw new Error("Session introuvable");
+                        const response = await fetch('/api/generate-invite', { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' } });
                         const result = await response.json();
-
-                        if (!result.success) {
-                            throw new Error(result.error || 'Erreur lors de la génération');
-                        }
-
+                        if (!result.success) throw new Error(result.error || 'Erreur lors de la génération');
                         this.lastGeneratedCode = result.code;
-
-                        // Copier le message complet dans le presse-papier
                         this.copyInviteMessage(result.code);
-                        console.log('✅ Code copié dans le presse-papier');
-
-                        console.log('✅ Code généré:', result.code);
-
                     } catch (error) {
-                        console.error('❌ Erreur génération code:', error);
                         alert('Erreur lors de la génération du code: ' + error.message);
                     } finally {
                         this.generatingCode = false;
                     }
                 },
 
-                // === CHARGEMENT DES DONNÉES GÉNÉRALES ===
                 async loadData(isInitial = false) {
                     if (isInitial) this.loadingNews = true;
                     await this.loadStats();
@@ -3083,217 +2504,95 @@
                     if (isInitial) this.loadingNews = false;
                 },
 
-                // === CHARGEMENT DES ACTUALITÉS ===
                 async loadNews(filter = null, isNewFilter = false) {
-                    // Si c'est un NOUVEAU filtre, on active le spinner
-                    if (isNewFilter) {
-                        this.loadingNews = true;
-                    }
-
+                    if (isNewFilter) this.loadingNews = true;
                     try {
-                        let query = supabase
-                            .from('actu')
-                            .select('id, resume, url, heure, source, orientation, tags, added_by')
-                            .order('heure', { ascending: false });
-
-                        // Bloc de filtrage intelligent
+                        let query = supabase.from('actu').select('id, resume, url, heure, source, orientation, tags, added_by').order('heure', { ascending: false });
                         if (filter && filter !== 'all') {
-                            if (this.allOrientations.includes(filter)) {
-                                query = query.eq('orientation', filter);
-                            } else {
-                                query = query.contains('tags', [filter]);
-                            }
+                            if (this.allOrientations.includes(filter)) { query = query.eq('orientation', filter); }
+                            else { query = query.contains('tags', [filter]); }
                         }
-
-                        // =================================================================
-                        // BLOC DE MISE À JOUR CORRIGÉ
-                        // =================================================================
-                        // Pour les rafraîchissements automatiques, on ne demande que les nouveaux articles.
-                        if (!isNewFilter && this.latestNewsTimestamp) {
-                            query = query.gt('heure', this.latestNewsTimestamp);
-                        } else {
-                            // Pour le premier chargement ou un nouveau filtre, on prend les 100 premiers.
-                            query = query.limit(100);
-                        }
+                        if (!isNewFilter && this.latestNewsTimestamp) { query = query.gt('heure', this.latestNewsTimestamp); }
+                        else { query = query.limit(100); }
 
                         const { data: newArticles, error } = await query;
                         if (error) throw error;
 
-                        // Si de nouveaux articles sont arrivés (même pour un rafraîchissement)
                         if (newArticles && newArticles.length > 0) {
-                            if (isNewFilter) {
-                                // Si on a cliqué sur un filtre, on remplace toute la liste.
-                                this.newsList = newArticles;
-                            } else {
-                                // Sinon, c'est un rafraîchissement, on ajoute les nouveaux au début de la liste.
-                                this.newsList = [...newArticles, ...this.newsList];
-                            }
-                            // On met à jour le timestamp du dernier article connu.
+                            if (isNewFilter) { this.newsList = newArticles; }
+                            else { this.newsList = [...newArticles, ...this.newsList]; }
                             this.latestNewsTimestamp = this.newsList[0].heure;
-                        } else if (isNewFilter) {
-                            // Si c'est un nouveau filtre et qu'il n'y a aucun résultat.
-                            this.newsList = [];
-                        }
-                        // Si c'est un rafraîchissement et qu'il n'y a rien de neuf, on ne touche à rien.
-
+                        } else if (isNewFilter) { this.newsList = []; }
                     } catch (e) {
                         console.error('Erreur dans loadNews:', e);
                     } finally {
-                        // On désactive le spinner SEULEMENT si c'était un nouveau filtre.
-                        if (isNewFilter) {
-                            this.loadingNews = false;
-                        }
+                        if (isNewFilter) this.loadingNews = false;
                     }
                 },
 
-                // ============================================================
-                // 🏷️ GESTION DES TAGS ET FILTRES
-                // ============================================================
-
-                // === MISE À JOUR DE LA LISTE DES TAGS ===
                 updateTagsList() {
                     const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
                     this.allOrientations = pol;
                     this.allOtherTags = this.activeTags.filter(tag => !pol.includes(tag));
                 },
 
-                // === VÉRIFICATION DES ARTICLES POUR UNE ORIENTATION ===
-                hasArticlesForOrientation(o) {
-                    return this.activeOrientations.includes(o);
-                },
+                hasArticlesForOrientation(o) { return this.activeOrientations.includes(o); },
+                hasArticlesForTag(t) { return this.activeTags.includes(t); },
 
-                // === VÉRIFICATION DES ARTICLES POUR UN TAG ===
-                hasArticlesForTag(t) {
-                    return this.activeTags.includes(t);
-                },
-
-                // === MESSAGE POUR LES FILTRES VIDES ===
                 getEmptyFilterMessage() {
-                    if (this.allOrientations.includes(this.activeFilter))
-                        return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`;
+                    if (this.allOrientations.includes(this.activeFilter)) return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`;
                     return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`;
                 },
 
-                // === CHARGEMENT DES STATISTIQUES ET DES FILTRES ACTIFS ===
                 async loadStats() {
                     try {
-                        // L'appel reste le même : get_live_stats
                         const { data, error } = await supabase.rpc('get_live_stats');
-
                         if (error) throw error;
-
-                        // On peuple les stats globales
-                        this.stats = {
-                            total_articles: data.total_articles || 0,
-                            total_sources: data.total_sources || 0
-                        };
-
-                        // On peuple les listes pour les filtres
+                        this.stats = { total_articles: data.total_articles || 0, total_sources: data.total_sources || 0 };
                         this.activeOrientations = data.active_orientations || [];
                         this.activeTags = data.active_tags || [];
-
-                        // On met à jour l'interface avec les nouvelles données de filtres
                         this.updateTagsList();
-
                     } catch (e) {
                         console.error('[ERREUR] Le chargement des statistiques et filtres a échoué :', e);
                     }
                 },
 
-                // ============================================================
-                // 📚 SYSTÈME DE LECTURES ET DIVERSITÉ
-                // ============================================================
-
-                // === MARQUER UN ARTICLE COMME LU (AVEC GAMIFICATION) ===
-
-                // === SAUVEGARDER ARTICLE LU DANS LA DB ===
                 async saveReadArticleToDB(articleId) {
                     if (!this.user) return;
-
                     try {
-                        await supabase
-                            .from('user_read_articles')
-                            .upsert({
-                                user_id: this.user.id,
-                                article_id: articleId,
-                                read_at: new Date().toISOString()
-                            }, {
-                                onConflict: 'user_id,article_id'
-                            });
-                    } catch (error) {
-                        console.error('Erreur sauvegarde article lu:', error);
-                    }
+                        await supabase.from('user_read_articles').upsert({ user_id: this.user.id, article_id: articleId, read_at: new Date().toISOString() }, { onConflict: 'user_id,article_id' });
+                    } catch (error) { console.error('Erreur sauvegarde article lu:', error); }
                 },
 
-                // === CHARGER ARTICLES LUS DEPUIS LA DB ===
                 async loadReadArticlesFromDB() {
                     if (!this.user) return;
                     try {
-                        const { data } = await supabase
-                            .from('user_read_articles')
-                            .select('article_id, read_at')
-                            .eq('user_id', this.user.id);
-
-                        this.readArticles = {}; // On repart de zéro
-                        if (data) {
-                            data.forEach(item => {
-                                this.readArticles[item.article_id] = item.read_at;
-                            });
-                        }
+                        const { data } = await supabase.from('user_read_articles').select('article_id, read_at').eq('user_id', this.user.id);
+                        this.readArticles = {};
+                        if (data) { data.forEach(item => { this.readArticles[item.article_id] = item.read_at; }); }
                         this.updateTotalReadCount();
-                    } catch (error) {
-                        console.error('Erreur chargement articles lus:', error);
-                    }
+                    } catch (error) { console.error('Erreur chargement articles lus:', error); }
                 },
 
-                // === OBTENIR LA LISTE DES ARTICLES LUS ===
                 getReadArticlesList() {
-                    return this.newsList.filter(news => this.readArticles[news.id])
-                        .sort((a, b) => new Date(this.readArticles[b.id]) - new Date(this.readArticles[a.id]));
+                    return this.newsList.filter(news => this.readArticles[news.id]).sort((a, b) => new Date(this.readArticles[b.id]) - new Date(this.readArticles[a.id]));
                 },
 
-                // === SAUVEGARDER PRÉFÉRENCES LECTURE ===
                 async saveReadPreferences() {
                     if (!this.user) return;
-
                     localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
-
                     try {
-                        await supabase
-                            .from('user_preferences')
-                            .upsert({
-                                user_id: this.user.id,
-                                hide_read_articles: this.hideReadFromMain,
-                                updated_at: new Date().toISOString()
-                            }, {
-                                onConflict: 'user_id'
-                            });
-                    } catch (error) {
-                        console.error('Erreur sauvegarde préférences:', error);
-                    }
+                        await supabase.from('user_preferences').upsert({ user_id: this.user.id, hide_read_articles: this.hideReadFromMain, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+                    } catch (error) { console.error('Erreur sauvegarde préférences:', error); }
                 },
 
-                // === CHARGER PRÉFÉRENCES LECTURE ===
                 async loadReadPreferences() {
                     if (!this.user) return;
-
-                    // Charger depuis localStorage d'abord
                     const localPref = localStorage.getItem('infodrop_hide_read_' + this.user.id);
-                    if (localPref !== null) {
-                        this.hideReadFromMain = localPref === 'true';
-                    }
-
-                    // Puis depuis la DB
+                    if (localPref !== null) { this.hideReadFromMain = localPref === 'true'; }
                     try {
-                        // LA CORRECTION EST ICI : on remplace .single() par .maybeSingle()
-                        const { data, error } = await supabase
-                            .from('user_preferences')
-                            .select('hide_read_articles')
-                            .eq('user_id', this.user.id)
-                            .maybeSingle(); // Accepte de renvoyer "null" si rien n'est trouvé, sans erreur.
-
-                        if (error) throw error; // Gère les vraies erreurs de base de données
-
+                        const { data, error } = await supabase.from('user_preferences').select('hide_read_articles').eq('user_id', this.user.id).maybeSingle();
+                        if (error) throw error;
                         if (data) {
                             this.hideReadFromMain = data.hide_read_articles;
                             localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
@@ -3303,34 +2602,19 @@
                     }
                 },
 
-                // === MISE À JOUR DU COMPTEUR TOTAL ===
                 updateTotalReadCount() {
                     this.totalReadCount = Object.keys(this.readArticles).length;
                 },
 
-                // === AJOUT AUX DONNÉES DE DIVERSITÉ ===
                 async addToDiversityData(article) {
                     if (!this.user || !article) return;
                     const orientation = article.tags?.includes('🧨INFODROP') ? '🧨INFODROP' : (article.orientation || 'neutre');
                     try {
-                        await supabase
-                            .from('user_diversity_data')
-                            .insert({
-                                user_id: this.user.id,
-                                orientation: orientation,
-                                source: article.source,
-                                read_at: new Date().toISOString()
-                            });
-                        // On recalcule le score immédiatement après
+                        await supabase.from('user_diversity_data').insert({ user_id: this.user.id, orientation: orientation, source: article.source, read_at: new Date().toISOString() });
                         await this.calculateDiversityScore();
-                    } catch (error) {
-                        console.error('Erreur sauvegarde diversité:', error);
-                    }
+                    } catch (error) { console.error('Erreur sauvegarde diversité:', error); }
                 },
 
-                // === CALCUL DU SCORE DE DIVERSITÉ ===
-
-                // === MESSAGE DU SCORE DE DIVERSITÉ ===
                 getDiversityMessage() {
                     if (this.diversityScore < 30) return "🔴 Bulle de filtre ! Explorez d'autres horizons";
                     if (this.diversityScore < 50) return "🟡 Bon début ! Continuez à diversifier";
@@ -3340,68 +2624,37 @@
                 },
 
                 getDiversityTip() {
-                    const missing = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP']
-                        .filter(orientation => !this.readOrientations.includes(orientation));
-
+                    const missing = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'].filter(o => !this.readOrientations.includes(o));
                     if (missing.length === 0) return "🎉 Toutes les orientations explorées !";
                     if (missing.length > 6) return "💡 Essayez de lire des perspectives variées";
-
                     const suggestion = missing[Math.floor(Math.random() * missing.length)];
                     return `💡 Essayez de lire du "${suggestion.replace('-', ' ')}"`;
                 },
 
-                // === CÉLÉBRATION DES ARTICLES ===
                 celebrateArticles(count) {
-                    if (document.hidden) {
-                        localStorage.setItem(`infodrop_celebration_pending_${count}`, 'true');
-                        return;
-                    }
+                    if (document.hidden) { localStorage.setItem(`infodrop_celebration_pending_${count}`, 'true'); return; }
                     this.showCelebration(count);
                 },
 
                 showCelebration(count = 100) {
                     const cont = document.createElement('div');
                     cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:auto;z-index:9999;background:rgba(0,0,0,0.8);cursor:pointer;';
-
                     this.startConfettiLoop(cont);
-
                     const msg = document.createElement('div');
                     msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
                     const isSpecial = count === 100 || count % 100 === 0;
                     const emoji = isSpecial ? '🏆' : '🎉';
                     const title = isSpecial ? 'Incroyable !' : 'Bravo !';
-
-                    msg.innerHTML = `
-        <h2 class="text-3xl font-bold mb-2">${emoji} ${title} ${emoji}</h2>
-        <p class="text-lg mb-2">${count} articles lus !</p>
-        <p class="text-sm opacity-80">Cliquez pour continuer</p>
-    `;
-
+                    msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">${emoji} ${title} ${emoji}</h2><p class="text-lg mb-2">${count} articles lus !</p><p class="text-sm opacity-80">Cliquez pour continuer</p>`;
                     cont.appendChild(msg);
                     document.body.appendChild(cont);
-
-                    const closeAnimation = () => {
-                        cont.remove();
-                        this.stopConfettiLoop();
-                        localStorage.removeItem(`infodrop_celebration_pending_${count}`);
-                    };
-
+                    const closeAnimation = () => { cont.remove(); this.stopConfettiLoop(); localStorage.removeItem(`infodrop_celebration_pending_${count}`); };
                     cont.addEventListener('click', closeAnimation);
                     msg.addEventListener('click', closeAnimation);
                 },
 
-                startConfettiLoop(container) {
-                    this.confettiInterval = setInterval(() => {
-                        this.createConfettiBatch(container);
-                    }, 1000);
-                },
-
-                stopConfettiLoop() {
-                    if (this.confettiInterval) {
-                        clearInterval(this.confettiInterval);
-                        this.confettiInterval = null;
-                    }
-                },
+                startConfettiLoop(container) { this.confettiInterval = setInterval(() => { this.createConfettiBatch(container); }, 1000); },
+                stopConfettiLoop() { if (this.confettiInterval) { clearInterval(this.confettiInterval); this.confettiInterval = null; } },
 
                 createConfettiBatch(container) {
                     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7'];
@@ -3409,80 +2662,45 @@
                         const conf = document.createElement('div');
                         conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;pointer-events:none;`;
                         container.appendChild(conf);
-
                         setTimeout(() => conf.remove(), 5000);
                     }
                 },
 
-                // ============================================================
-                // 🔧 UTILITAIRES ET HELPERS
-                // ============================================================
-
-                // === DÉCONNEXION ===
                 async logout() {
                     if (this.realtimeChannel) await this.realtimeChannel.untrack();
                     await supabase.auth.signOut();
                 },
 
-                // === GESTION DES MISES À JOUR AUTOMATIQUES ===
                 startAutoUpdate() {
                     if (this.updateInterval) clearInterval(this.updateInterval);
-                    this.updateInterval = setInterval(() => {
-                        this.loadNews(this.activeFilter, false);
-                    }, 30000);
+                    this.updateInterval = setInterval(() => { this.loadNews(this.activeFilter, false); }, 30000);
                 },
 
                 stopAutoUpdate() {
                     if (this.updateInterval) clearInterval(this.updateInterval);
                 },
 
-                // === FORMATAGE DE L'HEURE ===
-                formatTime(t) {
-                    return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-                },
+                formatTime(t) { return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); },
 
-                // === AFFICHER TOOLTIP STATISTIQUE ===
                 showStatTooltip(event, text) {
                     event.stopPropagation();
-
-                    // Supprimer tout tooltip existant
                     const existingTooltip = document.querySelector('.stat-tooltip');
-                    if (existingTooltip) {
-                        existingTooltip.remove();
-                    }
-
-                    // Créer le nouveau tooltip
+                    if (existingTooltip) existingTooltip.remove();
                     const tooltip = document.createElement('div');
                     tooltip.className = 'stat-tooltip';
                     tooltip.textContent = text;
                     document.body.appendChild(tooltip);
-
-                    // Positionner le tooltip
                     const rect = event.currentTarget.getBoundingClientRect();
                     const tooltipRect = tooltip.getBoundingClientRect();
-
                     let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
                     let top = rect.top - tooltipRect.height - 10;
-
-                    // Ajuster si déborde de l'écran
                     if (left < 10) left = 10;
-                    if (left + tooltipRect.width > window.innerWidth - 10) {
-                        left = window.innerWidth - tooltipRect.width - 10;
-                    }
-                    if (top < 10) {
-                        top = rect.bottom + 10;
-                    }
-
+                    if (left + tooltipRect.width > window.innerWidth - 10) { left = window.innerWidth - tooltipRect.width - 10; }
+                    if (top < 10) { top = rect.bottom + 10; }
                     tooltip.style.left = left + 'px';
                     tooltip.style.top = top + 'px';
-
-                    // Auto-suppression après 2 secondes
                     const autoRemoveTimeout = setTimeout(() => tooltip.remove(), 2000);
-
-                    // Stocker le timeout sur le tooltip pour pouvoir l'annuler
                     tooltip.dataset.timeout = autoRemoveTimeout;
-
-                    // Supprimer au clic ailleurs
                     const removeTooltip = (e) => {
                         if (!tooltip.contains(e.target) && !event.currentTarget.contains(e.target)) {
                             clearTimeout(autoRemoveTimeout);
@@ -3490,17 +2708,11 @@
                             document.removeEventListener('click', removeTooltip);
                         }
                     };
-                    setTimeout(() => {
-                        document.addEventListener('click', removeTooltip);
-                    }, 100);
+                    setTimeout(() => { document.addEventListener('click', removeTooltip); }, 100);
                 },
 
-                // === COPIE DU MESSAGE D'INVITATION COMPLET ===
                 copyInviteMessage(code) {
-                    const message = `Vous avez été invité à rejoindre le club privé INFODROP !
-Accédez à l'actu essentielle sur : https://infodrop.live
-Utilisez ce code lors de votre inscription : ${code}`;
-
+                    const message = `Vous avez été invité à rejoindre le club privé INFODROP !\nAccédez à l'actu essentielle sur : https://infodrop.live\nUtilisez ce code lors de votre inscription : ${code}`;
                     navigator.clipboard.writeText(message);
                     this.copied = true;
                     setTimeout(() => this.copied = false, 1500);
