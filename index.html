@@ -2151,107 +2151,150 @@
                     this.xpToNextLevel = this.userLevel * 100;
                 },
 
-                // === VÉRIFICATION DU STREAK QUOTIDIEN ===
-                checkDailyStreak() {
+                // ========================================================================
+                // BLOC DE CORRECTION FINAL : REMPLACEZ TOUTES VOS FONCTIONS DE GAMIFICATION PAR CELLES-CI
+                // ========================================================================
+
+                // La nouvelle fonction `markAsRead`, qui est maintenant le seul "chef d'orchestre".
+                async markAsRead(id) {
+                    if (!this.user || this.readArticles[id]) return;
+
+                    // --- ÉTAPE 1: Mise à jour de l'état local pour une UI réactive ---
+                    this.readArticles[id] = new Date().toISOString();
+                    this.updateTotalReadCount();
+
+                    const article = this.newsList.find(n => n.id === id);
+
+                    // --- ÉTAPE 2: Calcul de toutes les nouvelles statistiques LOCALEMENT ---
+                    this.updateXP(article);
+                    this.updateStreak();
+                    await this.updateDiversityScore(); // Cette fonction ne fait que calculer
+
+                    // --- ÉTAPE 3: Maintenant que TOUT est à jour, on vérifie les succès une seule fois ---
+                    await this.checkAchievements();
+
+                    // --- ÉTAPE 4: On sauvegarde TOUT en base de données, une seule fois et à la fin ---
+                    await this.saveGamingData();
+                    await this.saveReadArticleToDB(id);
+                    await this.addToDiversityData(article);
+
+                    // Célébrations
+                    if (this.totalReadCount % 20 === 0 && this.totalReadCount > 0) {
+                        this.celebrateArticles(this.totalReadCount);
+                    }
+                },
+
+                // `updateXP` (anciennement gainXPSilently) ne fait QUE calculer l'XP et mettre à jour l'état local.
+                updateXP(article) {
+                    let xpGained = 10;
+                    if (article) {
+                        if (article.orientation && !this.readOrientations.includes(article.orientation)) xpGained += 20;
+                        if (article.tags && article.tags.includes('🧨INFODROP')) xpGained += 5;
+                    }
+
+                    // On met l'animation en attente
+                    const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
+                    pendingXP.push({ amount: xpGained, timestamp: Date.now() });
+                    localStorage.setItem('infodrop_pending_xp', JSON.stringify(pendingXP));
+
+                    this.userXP += xpGained;
+                    while (this.userXP >= this.xpToNextLevel) {
+                        this.userXP -= this.xpToNextLevel;
+                        this.userLevel++;
+                        this.updateXPToNextLevel();
+                        this.showLevelUpAnimation();
+                    }
+                },
+
+                // `updateStreak` (anciennement checkDailyStreak) ne fait QUE calculer le streak.
+                updateStreak() {
                     const today = new Date().toDateString();
                     const yesterday = new Date(Date.now() - 86400000).toDateString();
 
-                    if (this.lastReadDate === today) {
-                        // Déjà lu aujourd'hui
-                        return;
-                    } else if (this.lastReadDate === yesterday) {
-                        // Streak continue
+                    if (this.lastReadDate === today) return;
+
+                    if (this.lastReadDate === yesterday) {
                         this.readingStreak++;
-                    } else if (this.lastReadDate) {
-                        // Streak brisé
-                        this.readingStreak = 1;
                     } else {
-                        // Premier jour
                         this.readingStreak = 1;
                     }
-
                     this.lastReadDate = today;
-                    this.saveGamingData();
+                },
 
-                    // Vérifier achievements de streak
-                    if (this.readingStreak === 7) {
-                        this.unlockAchievement('🔥', 'Lecteur assidu - 7 jours de suite!');
-                    } else if (this.readingStreak === 30) {
-                        this.unlockAchievement('🌟', 'Maître de l\'info - 30 jours de suite!');
+                // `updateDiversityScore` (anciennement calculateDiversityScore) ne fait QUE calculer.
+                async updateDiversityScore() {
+                    if (!this.user) return;
+                    try {
+                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                        const { data } = await supabase
+                            .from('user_diversity_data')
+                            .select('orientation, source')
+                            .eq('user_id', this.user.id)
+                            .gte('read_at', twentyFourHoursAgo.toISOString());
+
+                        if (!data || data.length === 0) {
+                            this.diversityScore = null;
+                            this.readOrientations = [];
+                            return;
+                        }
+
+                        const oSet = new Set(data.map(r => r.orientation).filter(Boolean));
+                        const sSet = new Set(data.map(r => r.source));
+                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
+                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
+                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
+
+                    } catch (error) {
+                        console.error('Erreur calcul diversité:', error);
                     }
                 },
 
-                // === GAGNER DE L'XP ===
-                gainXP(amount, reason) {
-                    this.userXP += amount;
+                // `checkAchievements` est la fonction centrale de vérification.
+                async checkAchievements() {
+                    if (!this.user || !this.achievementsData.length) return;
 
-                    // Animation XP
-                    this.showXPAnimation(amount);
+                    for (const achievement of this.achievementsData) {
+                        if (this.unlockedAchievements.includes(achievement.code)) continue;
 
-                    // Vérifier level up
-                    while (this.userXP >= this.xpToNextLevel) {
-                        this.userXP -= this.xpToNextLevel;
-                        this.userLevel++;
-                        this.updateXPToNextLevel();
-                        this.showLevelUpAnimation();
+                        let shouldUnlock = false;
+                        switch (achievement.condition_type) {
+                            case 'connection': shouldUnlock = true; break;
+                            case 'articles_read': shouldUnlock = this.totalReadCount >= achievement.condition_value; break;
+                            case 'streak_days': shouldUnlock = this.readingStreak >= achievement.condition_value; break;
+                            case 'level_reached': shouldUnlock = this.userLevel >= achievement.condition_value; break;
+                            case 'diversity_score': shouldUnlock = this.diversityScore >= achievement.condition_value; break;
+                        }
 
-                        // Achievements de niveau
-                        if (this.userLevel === 5) {
-                            this.unlockAchievement('⭐', 'Apprenti informé - Niveau 5!');
-                        } else if (this.userLevel === 10) {
-                            this.unlockAchievement('💎', 'Expert de l\'actu - Niveau 10!');
-                        } else if (this.userLevel === 25) {
-                            this.unlockAchievement('👑', 'Légende d\'INFODROP - Niveau 25!');
+                        if (shouldUnlock) {
+                            await this.unlockAchievement(achievement.code);
                         }
                     }
-
-                    this.saveGamingData();
                 },
 
-                // === GAGNER DE L'XP SANS ANIMATION ===
-                gainXPSilently(amount) {
-                    this.userXP += amount;
-
-                    // Vérifier level up
-                    while (this.userXP >= this.xpToNextLevel) {
-                        this.userXP -= this.xpToNextLevel;
-                        this.userLevel++;
-                        this.updateXPToNextLevel();
-                        this.showLevelUpAnimation();
-
-                        // Achievements de niveau
-                        if (this.userLevel === 5) {
-                            this.unlockAchievement('⭐', 'Apprenti informé - Niveau 5!');
-                        } else if (this.userLevel === 10) {
-                            this.unlockAchievement('💎', 'Expert de l\'actu - Niveau 10!');
-                        } else if (this.userLevel === 25) {
-                            this.unlockAchievement('👑', 'Légende d\'INFODROP - Niveau 25!');
-                        }
-                    }
-
-                    this.saveGamingData();
-                },
-
-                // === DÉBLOQUER UN ACHIEVEMENT ===
+                // `unlockAchievement` est maintenant propre et ne contient plus de code erroné.
                 async unlockAchievement(code) {
-                    if (!this.unlockedAchievements.includes(code)) {
-                        this.unlockedAchievements.push(code);
+                    if (this.unlockedAchievements.includes(code)) return;
 
-                        const achievement = this.achievementsData.find(a => a.code === code);
-                        if (achievement) {
-                            this.showAchievementPopup(achievement.icon_emoji, achievement.title);
-                        }
+                    // 1. Mise à jour de l'état local
+                    this.unlockedAchievements.push(code);
 
-                        // Sauvegarde la nouvelle liste de succès dans les stats du joueur
-                        await this.saveGamingData();
-
-                        // Enregistre l'événement dans l'historique
-                        await supabase
-                            .from('user_achievement_history')
-                            .insert({ user_id: this.user.id, achievement_code: code });
-
-                        this.updateCurrentAchievement();
+                    // 2. Affichage du popup
+                    const achievement = this.achievementsData.find(a => a.code === code);
+                    if (achievement) {
+                        this.showAchievementPopup(achievement.icon_emoji, achievement.title);
                     }
+
+                    // 3. Il ne sauvegarde plus ici, car saveGamingData dans markAsRead le fera.
+                    // Il enregistre seulement l'événement dans l'historique.
+                    await supabase
+                        .from('user_achievement_history')
+                        .upsert(
+                            { user_id: this.user.id, achievement_code: code },
+                            { onConflict: 'user_id, achievement_code' }
+                        );
+
+                    // 4. Mise à jour de l'interface
+                    this.updateCurrentAchievement();
                 },
 
                 // === OBTENIR LE TITRE D'UN ACHIEVEMENT ===
@@ -3043,50 +3086,6 @@
                 // ============================================================
 
                 // === MARQUER UN ARTICLE COMME LU (AVEC GAMIFICATION) ===
-                async markAsRead(id) {
-                    if (!this.user || this.readArticles[id]) return;
-
-                    // 1. Mise à jour de l'état local pour une UI réactive
-                    this.readArticles[id] = new Date().toISOString();
-                    this.updateTotalReadCount();
-
-                    // 2. Calcul de l'XP et mise en attente de l'animation
-                    const article = this.newsList.find(n => n.id === id);
-                    let xpGained = 10; // XP de base
-
-                    if (article) {
-                        // Bonus pour diversité
-                        if (article.orientation && !this.readOrientations.includes(article.orientation)) {
-                            xpGained += 20; // Bonus pour nouvelle orientation
-                        }
-
-                        // Bonus pour tags spéciaux
-                        if (article.tags && article.tags.includes('🧨INFODROP')) {
-                            xpGained += 5;
-                        }
-                    }
-
-                    const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                    pendingXP.push({ amount: xpGained, timestamp: Date.now() });
-                    localStorage.setItem('infodrop_pending_xp', JSON.stringify(pendingXP));
-
-                    // Gagner l'XP "silencieusement" sur l'état local
-                    this.gainXPSilently(xpGained);
-
-                    // 3. Lancement des sauvegardes asynchrones vers Supabase
-                    this.saveReadArticleToDB(id);
-                    this.addToDiversityData(article); // Sauvegarde pour le calcul de diversité
-                    await this.saveGamingData();     // Met à jour XP/niveau dans la DB
-                    await this.checkAchievements();  // Vérifie si la lecture a débloqué un succès
-
-                    // Vérifier le streak quotidien
-                    this.checkDailyStreak();
-
-                    // Célébrations originales
-                    if (this.totalReadCount % 20 === 0 && this.totalReadCount > 0) {
-                        this.celebrateArticles(this.totalReadCount);
-                    }
-                },
 
                 // === SAUVEGARDER ARTICLE LU DANS LA DB ===
                 async saveReadArticleToDB(articleId) {
@@ -3211,32 +3210,6 @@
                 },
 
                 // === CALCUL DU SCORE DE DIVERSITÉ ===
-                async calculateDiversityScore() {
-                    if (!this.user) return;
-                    try {
-                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-                        const { data } = await supabase
-                            .from('user_diversity_data')
-                            .select('orientation, source')
-                            .eq('user_id', this.user.id)
-                            .gte('read_at', twentyFourHoursAgo.toISOString());
-
-                        if (!data || data.length === 0) {
-                            this.diversityScore = null;
-                            this.readOrientations = [];
-                            return;
-                        }
-
-                        const oSet = new Set(data.map(r => r.orientation).filter(Boolean));
-                        const sSet = new Set(data.map(r => r.source));
-                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
-                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
-                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
-
-                    } catch (error) {
-                        console.error('Erreur calcul diversité:', error);
-                    }
-                },
 
                 // === MESSAGE DU SCORE DE DIVERSITÉ ===
                 getDiversityMessage() {
