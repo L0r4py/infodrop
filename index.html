@@ -2088,6 +2088,22 @@
                             .join(' ');
                     },
 
+                    // === CHARGEMENT DES ACHIEVEMENTS DEPUIS LA DB ===
+                    async loadAchievements() {
+                        try {
+                            const { data } = await supabase
+                                .from('achievements')
+                                .select('*')
+                                .eq('is_active', true)
+                                .order('order_priority');
+
+                            this.achievementsData = data || [];
+                            console.log('[DEBUG] ...Succès : Achievements chargés depuis la DB:', this.achievementsData.length);
+                        } catch (error) {
+                            console.error('[ERREUR] Le chargement des achievements a échoué', error);
+                        }
+                    },
+
                     // ============================================================
                     // 🎮 SYSTÈME DE GAMIFICATION
                     // ============================================================
@@ -2558,6 +2574,8 @@
     `;
                         document.head.appendChild(style);
                     },
+
+
                     // ============================================================
                     // 🔐 SYSTÈME D'AUTHENTIFICATION ET INVITATIONS
                     // ============================================================
