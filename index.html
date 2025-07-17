@@ -2176,6 +2176,7 @@
 
                 // === DÉBLOQUER UN ACHIEVEMENT ===
                 async unlockAchievement(code) {
+                    // On vérifie une dernière fois si le succès n'est pas déjà dans la liste
                     if (this.unlockedAchievements.includes(code)) return;
 
                     // 1. Mise à jour de l'état local
@@ -2188,7 +2189,9 @@
                     }
 
                     // 3. Mise à jour de la base de données
+                    // Sauvegarde la liste complète des succès dans les stats du joueur
                     await this.saveGamingData();
+                    // Enregistre cet événement de déblocage spécifique dans l'historique
                     await supabase
                         .from('user_achievement_history')
                         .upsert(
@@ -3008,7 +3011,7 @@
 
                     // --- ÉTAPE 4: Sauvegarde en base de données à la toute fin ---
                     await this.saveGamingData();
-                
+
 
                     if (this.totalReadCount % 20 === 0 && this.totalReadCount > 0) {
                         this.celebrateArticles(this.totalReadCount);
