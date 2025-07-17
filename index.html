@@ -976,8 +976,7 @@
     <!-- ======================================================================== -->
     <!-- 🏗️ STRUCTURE PRINCIPALE DE L'APPLICATION                               -->
     <!-- ======================================================================== -->
-    <div x-data="infodropApp()" x-init="init()" @infodrop:auth-change.document="handleAuthChange($event.detail)"
-        class="w-full">
+    <div x-data="infodropApp()" x-init="init()" class="w-full">
         <!-- ================================================================== -->
         <!-- ⏳ ÉCRAN DE CHARGEMENT                                            -->
         <!-- ================================================================== -->
@@ -2440,12 +2439,115 @@
                     // ============================================================
                     // 🚀 INITIALISATION DE L'APPLICATION
                     // ============================================================
-                    async init() {
-                        console.log('🚀 Alpine App initialisée. En attente de l\'événement d\'authentification...');
+                    // ============================================================
+                    // 🚀 INITIALISATION DE L'APPLICATION
+                    // ============================================================
+                    init() {
+                        console.log('🚀 Alpine init() appelé.');
+                        // GARDE DE PROTECTION : on vérifie un drapeau global.
+                        // Si l'application est déjà initialisée, on ne fait rien du tout.
+                        if (window.infodropAppInitialized) {
+                            console.log('👍 App déjà initialisée. On ignore cet appel.');
+                            return;
+                        }
+                        // On pose le drapeau immédiatement pour empêcher tout autre appel de passer.
+                        window.infodropAppInitialized = true;
+                        console.log('🏁 Première initialisation. Lancement du processus...');
 
-                        // Garder uniquement la gestion de l'interface (sans Supabase)
+                        // On lance l'initialisation de Supabase.
+                        initializeSupabase().then(isReady => {
+                            if (isReady && supabase) {
+                                // Et on attache l'écouteur d'authentification une seule et unique fois.
+                                supabase.auth.onAuthStateChange(async (event, session) => {
+                                    this.user = session?.user || null;
+                                    this.sessionLoaded = true;
+
+                                    if (event === 'SIGNED_IN') {
+                                        console.log('✅ Événement SIGNED_IN reçu ! Chargement des données...');
+                                        this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+
+                                        try {
+                                            // On peut revenir à Promise.all car la structure est stable.
+                                            await Promise.all([
+                                                this.loadAchievements(),
+                                                this.initGamification(),
+                                                this.loadReadArticlesFromDB(),
+                                                this.loadReadPreferences(),
+                                                this.calculateDiversityScore(),
+                                                this.loadUserInviteData()
+                                            ]);
+
+                                            console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées.');
+                                            await this.checkAchievements();
+                                            this.loadData(true);
+                                            this.startAutoUpdate();
+                                            this.setupRealtime(session);
+
+                                            // Gestion des animations en attente
+                                            const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
+                                            if (pendingXP.length > 0) {
+                                                const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
+                                                if (recentXP.length > 0) {
+                                                    const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
+                                                    setTimeout(() => {
+                                                        this.showXPAnimation(totalXP);
+                                                    }, 1500);
+                                                    localStorage.removeItem('infodrop_pending_xp');
+                                                }
+                                            }
+
+                                            // Vérifier les célébrations en attente
+                                            for (let i = 0; i < localStorage.length; i++) {
+                                                const key = localStorage.key(i);
+                                                if (key && key.startsWith('infodrop_celebration_pending_')) {
+                                                    const count = parseInt(key.split('_')[3]);
+                                                    setTimeout(() => this.showCelebration(count), 2000);
+                                                    break;
+                                                }
+                                            }
+
+                                        } catch (error) {
+                                            console.error('[FATAL] Une erreur a bloqué le chargement :', error);
+                                        }
+
+                                    } else if (event === 'SIGNED_OUT') {
+                                        console.log('🚪 Événement SIGNED_OUT reçu.');
+                                        this.stopAutoUpdate();
+                                        if (this.realtimeChannel) {
+                                            supabase.removeChannel(this.realtimeChannel);
+                                            this.realtimeChannel = null;
+                                        }
+                                        this.userInviteData = {
+                                            code: null,
+                                            is_used: false,
+                                            parrainEmail: null,
+                                            filleulEmail: null
+                                        };
+                                    }
+                                });
+                            }
+                        });
+
+                        // Le reste de la logique d'interface
                         window.addEventListener('scroll', () => {
                             document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
+                        });
+
+                        document.addEventListener('visibilitychange', () => {
+                            if (!document.hidden) {
+                                // Gérer les animations XP en attente
+                                const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
+                                if (pendingXP.length > 0) {
+                                    const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
+                                    if (recentXP.length > 0) {
+                                        const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
+                                        setTimeout(() => {
+                                            this.showXPAnimation(totalXP);
+                                        }, 500);
+                                        localStorage.removeItem('infodrop_pending_xp');
+                                    }
+                                }
+                            }
                         });
 
                         // Ajout du CSS pour les animations
@@ -2460,57 +2562,6 @@
     `;
                         document.head.appendChild(style);
                     },
-
-                    // === NOUVELLE FONCTION POUR GÉRER L'AUTHENTIFICATION ===
-                    async handleAuthChange({ event, session }) {
-                        this.user = session?.user || null;
-                        this.sessionLoaded = true;
-
-                        if (event === 'SIGNED_IN') {
-                            console.log('✅ Événement SIGNED_IN reçu par Alpine ! Chargement des données...');
-                            this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
-
-                            try {
-                                // On peut maintenant revenir à Promise.all car la structure est stable.
-                                await Promise.all([
-                                    this.loadAchievements(),
-                                    this.initGamification(),
-                                    this.loadReadArticlesFromDB(),
-                                    this.loadReadPreferences(),
-                                    this.calculateDiversityScore(),
-                                    this.loadUserInviteData()
-                                ]);
-
-                                console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées.');
-
-                                // On vérifie les succès après avoir tout chargé.
-                                await this.checkAchievements();
-
-                                // On lance le chargement des news UNIQUEMENT si tout le reste a réussi.
-                                this.loadData(true);
-                                this.startAutoUpdate();
-                                this.setupRealtime(session);
-
-                            } catch (error) {
-                                console.error('[FATAL] Une erreur a bloqué le chargement des données utilisateur :', error);
-                            }
-
-                        } else if (event === 'SIGNED_OUT') {
-                            console.log('🚪 Événement SIGNED_OUT reçu.');
-                            this.stopAutoUpdate();
-                            if (this.realtimeChannel) {
-                                supabase.removeChannel(this.realtimeChannel);
-                                this.realtimeChannel = null;
-                            }
-                            this.userInviteData = {
-                                code: null,
-                                is_used: false,
-                                parrainEmail: null,
-                                filleulEmail: null
-                            };
-                        }
-                    },
-
                     // === CHARGEMENT DES ACHIEVEMENTS DEPUIS LA DB ===
                     async loadAchievements() {
                         try {
@@ -3394,26 +3445,6 @@ Utilisez ce code lors de votre inscription : ${code}`;
                     }
                 };
             }
-        </script>
-        <!-- ======================================================================== -->
-        <!-- NOUVEAU SCRIPT D'INITIALISATION GLOBALE (LA CORRECTION)                  -->
-        <!-- ======================================================================== -->
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                // Cette fonction sera appelée une seule fois.
-                initializeSupabase().then(isReady => {
-                    if (isReady && supabase) {
-                        // On attache l'écouteur d'authentification ICI, une seule fois.
-                        supabase.auth.onAuthStateChange((event, session) => {
-                            // On envoie un événement personnalisé à l'application Alpine
-                            const authEvent = new CustomEvent('infodrop:auth-change', {
-                                detail: { event, session }
-                            });
-                            document.dispatchEvent(authEvent);
-                        });
-                    }
-                });
-            });
         </script>
 </body>
 
