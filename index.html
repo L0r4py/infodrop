@@ -2070,51 +2070,7 @@
                     this.lastReadDate = today;
                 },
 
-                async checkAchievements(queue) {
-                    if (!this.user || !this.achievementsData.length) return;
 
-                    // IMPORTANT : Ne vérifier qu'une seule fois par session
-                    if (this._achievementsCheckedThisSession) return;
-
-                    for (const achievement of this.achievementsData) {
-                        // Double vérification pour éviter les doublons
-                        if (this.unlockedAchievements.includes(achievement.code)) continue;
-
-                        // Vérifier aussi dans la base de données
-                        if (achievement.condition_type === 'diversity_score' && this.diversityScore !== null) {
-                            // Pour la diversité, ne vérifier que si le score vient de changer
-                            const lastCheckedScore = sessionStorage.getItem('last_diversity_check');
-                            if (lastCheckedScore === this.diversityScore.toString()) continue;
-                            sessionStorage.setItem('last_diversity_check', this.diversityScore.toString());
-                        }
-
-                        let shouldUnlock = false;
-                        switch (achievement.condition_type) {
-                            case 'articles_read':
-                                shouldUnlock = this.totalReadCount >= achievement.condition_value;
-                                break;
-                            case 'streak_days':
-                                shouldUnlock = this.readingStreak >= achievement.condition_value;
-                                break;
-                            case 'level_reached':
-                                shouldUnlock = this.userLevel >= achievement.condition_value;
-                                break;
-                            case 'diversity_score':
-                                shouldUnlock = this.diversityScore >= achievement.condition_value;
-                                break;
-                        }
-
-                        if (shouldUnlock) {
-                            console.log(`Achievement ${achievement.code} should unlock`);
-                            await this.unlockAchievement(achievement.code, queue);
-                            // Ne débloquer qu'un achievement à la fois
-                            break;
-                        }
-                    }
-
-                    // Marquer comme vérifié pour cette session
-                    this._achievementsCheckedThisSession = true;
-                },
 
                 async unlockAchievement(code, queue) {
                     if (this.unlockedAchievements.includes(code)) return;
