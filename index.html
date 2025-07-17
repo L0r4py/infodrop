@@ -3039,24 +3039,28 @@
                     },
 
                     // === CHARGEMENT DES STATISTIQUES ET DES FILTRES ACTIFS ===
-                    // === CHARGEMENT DES STATISTIQUES ET DES FILTRES ACTIFS ===
                     async loadStats() {
                         try {
-                            // Appelle la vue 'stats_today' via une fonction RPC pour la propreté
+                            // L'appel reste le même : get_live_stats
                             const { data, error } = await supabase.rpc('get_live_stats');
 
                             if (error) throw error;
 
+                            // On peuple les stats globales
                             this.stats = {
-                                total_articles: data.total_articles,
-                                total_sources: data.total_sources
+                                total_articles: data.total_articles || 0,
+                                total_sources: data.total_sources || 0
                             };
 
+                            // On peuple les listes pour les filtres
                             this.activeOrientations = data.active_orientations || [];
                             this.activeTags = data.active_tags || [];
 
+                            // On met à jour l'interface avec les nouvelles données de filtres
+                            this.updateTagsList();
+
                         } catch (e) {
-                            console.error('Erreur stats:', e);
+                            console.error('[ERREUR] Le chargement des statistiques et filtres a échoué :', e);
                         }
                     },
 
