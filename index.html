@@ -2469,78 +2469,83 @@
 
                         if (isReady && supabase) {
                             supabase.auth.onAuthStateChange(async (event, session) => {
-                                this.user = session?.user || null;
-                                this.sessionLoaded = true;
+                                // =================================================================
+                                // LA CORRECTION FINALE EST ICI : on utilise $nextTick
+                                // =================================================================
+                                this.$nextTick(async () => {
+                                    this.user = session?.user || null;
+                                    this.sessionLoaded = true;
 
-                                // LA CORRECTION EST ICI : on écoute les deux événements.
-                                if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-                                    console.log(`✅ Événement ${event} reçu ! Chargement des données...`);
-                                    this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+                                    if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+                                        console.log(`✅ Événement ${event} reçu ! Chargement des données...`);
 
-                                    // Si la session est restaurée mais qu'il n'y a pas d'utilisateur, on ne fait rien.
-                                    if (!this.user) {
-                                        this.sessionLoaded = true;
-                                        return;
-                                    }
-
-                                    try {
-                                        await Promise.all([
-                                            this.loadAchievements(),
-                                            this.initGamification(),
-                                            this.loadReadArticlesFromDB(),
-                                            this.loadReadPreferences(),
-                                            this.calculateDiversityScore(),
-                                            this.loadUserInviteData()
-                                        ]);
-
-                                        console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées.');
-                                        await this.checkAchievements();
-
-                                        this.loadData(true);
-                                        this.startAutoUpdate();
-                                        this.setupRealtime(session);
-
-                                        // Gestion des animations en attente
-                                        const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                                        if (pendingXP.length > 0) {
-                                            const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
-                                            if (recentXP.length > 0) {
-                                                const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
-                                                setTimeout(() => {
-                                                    this.showXPAnimation(totalXP);
-                                                }, 1500);
-                                                localStorage.removeItem('infodrop_pending_xp');
-                                            }
+                                        if (!this.user) {
+                                            this.sessionLoaded = true;
+                                            return;
                                         }
 
-                                        // Vérifier les célébrations en attente
-                                        for (let i = 0; i < localStorage.length; i++) {
-                                            const key = localStorage.key(i);
-                                            if (key && key.startsWith('infodrop_celebration_pending_')) {
-                                                const count = parseInt(key.split('_')[3]);
-                                                setTimeout(() => this.showCelebration(count), 2000);
-                                                break;
+                                        this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+
+                                        try {
+                                            await Promise.all([
+                                                this.loadAchievements(),
+                                                this.initGamification(),
+                                                this.loadReadArticlesFromDB(),
+                                                this.loadReadPreferences(),
+                                                this.calculateDiversityScore(),
+                                                this.loadUserInviteData()
+                                            ]);
+
+                                            console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées.');
+                                            await this.checkAchievements();
+
+                                            this.loadData(true);
+                                            this.startAutoUpdate();
+                                            this.setupRealtime(session);
+
+                                            // Gestion des animations en attente
+                                            const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
+                                            if (pendingXP.length > 0) {
+                                                const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
+                                                if (recentXP.length > 0) {
+                                                    const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
+                                                    setTimeout(() => {
+                                                        this.showXPAnimation(totalXP);
+                                                    }, 1500);
+                                                    localStorage.removeItem('infodrop_pending_xp');
+                                                }
                                             }
+
+                                            // Vérifier les célébrations en attente
+                                            for (let i = 0; i < localStorage.length; i++) {
+                                                const key = localStorage.key(i);
+                                                if (key && key.startsWith('infodrop_celebration_pending_')) {
+                                                    const count = parseInt(key.split('_')[3]);
+                                                    setTimeout(() => this.showCelebration(count), 2000);
+                                                    break;
+                                                }
+                                            }
+
+                                        } catch (error) {
+                                            console.error('[FATAL] Une erreur a bloqué le chargement :', error);
                                         }
 
-                                    } catch (error) {
-                                        console.error('[FATAL] Une erreur a bloqué le chargement :', error);
+                                    } else if (event === 'SIGNED_OUT') {
+                                        console.log('🚪 Événement SIGNED_OUT reçu.');
+                                        this.stopAutoUpdate();
+                                        if (this.realtimeChannel) {
+                                            supabase.removeChannel(this.realtimeChannel);
+                                            this.realtimeChannel = null;
+                                        }
+                                        this.userInviteData = {
+                                            code: null,
+                                            is_used: false,
+                                            parrainEmail: null,
+                                            filleulEmail: null
+                                        };
                                     }
-
-                                } else if (event === 'SIGNED_OUT') {
-                                    console.log('🚪 Événement SIGNED_OUT reçu.');
-                                    this.stopAutoUpdate();
-                                    if (this.realtimeChannel) {
-                                        supabase.removeChannel(this.realtimeChannel);
-                                        this.realtimeChannel = null;
-                                    }
-                                    this.userInviteData = {
-                                        code: null,
-                                        is_used: false,
-                                        parrainEmail: null,
-                                        filleulEmail: null
-                                    };
-                                }
+                                });
+                                // =================================================================
                             });
                         }
 
