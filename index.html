@@ -2049,13 +2049,19 @@
 
                     // === RÉINITIALISATION DE LA RECHERCHE SUR CHANGEMENT DE FILTRE ===
                     toggleFilter(filter) {
+                        // On met à jour le filtre actif
                         if (this.activeFilter === filter) {
                             this.activeFilter = 'all';
                         } else {
                             this.activeFilter = filter;
                         }
-                        // Effacer la recherche quand on change de filtre
+
+                        // On efface la recherche pour éviter les conflits
                         this.searchQuery = '';
+
+                        // ET ON APPELLE DIRECTEMENT loadNews()
+                        // Le 'true' indique que c'est un nouveau filtre et qu'il faut afficher le spinner
+                        this.loadNews(this.activeFilter, true);
                     },
 
                     // === SYSTÈME DE LECTURES ET DIVERSITÉ ===
@@ -2962,7 +2968,7 @@
                     async loadNews(filter = null, isNewFilter = false) {
                         if (isNewFilter) {
                             this.loadingNews = true;
-                            this.newsList = [];
+                            this.newsList = []; // On vide la liste immédiatement
                         }
 
                         try {
@@ -2971,20 +2977,17 @@
                                 .select('id, resume, url, heure, source, orientation, tags, added_by')
                                 .order('heure', { ascending: false });
 
-                            // =================================================================
-                            // BLOC DE FILTRAGE CORRIGÉ
-                            // =================================================================
+                            // Bloc de filtrage intelligent
                             if (filter && filter !== 'all') {
-                                // On vérifie si le filtre est une orientation politique connue
+                                // Si le filtre est une orientation connue...
                                 if (this.allOrientations.includes(filter)) {
-                                    // Si oui, on filtre UNIQUEMENT sur la colonne 'orientation'
+                                    // ...on filtre sur la colonne 'orientation'.
                                     query = query.eq('orientation', filter);
                                 } else {
-                                    // Sinon, c'est un tag, et on filtre UNIQUEMENT sur la colonne 'tags'
+                                    // Sinon, c'est un tag, et on filtre sur la colonne 'tags'.
                                     query = query.contains('tags', [filter]);
                                 }
                             }
-                            // =================================================================
 
                             if (!isNewFilter && this.latestNewsTimestamp) {
                                 query = query.gt('heure', this.latestNewsTimestamp);
@@ -2995,12 +2998,11 @@
                             const { data: newArticles, error } = await query;
                             if (error) throw error;
 
+                            // La liste a déjà été vidée si c'est un nouveau filtre.
+                            // On remplit simplement avec les nouveaux résultats.
+                            this.newsList = newArticles || [];
+
                             if (newArticles && newArticles.length > 0) {
-                                if (isNewFilter || !this.latestNewsTimestamp) {
-                                    this.newsList = newArticles;
-                                } else {
-                                    this.newsList = [...this.newsList, ...this.newsList];
-                                }
                                 this.latestNewsTimestamp = this.newsList[0].heure;
                             }
 
