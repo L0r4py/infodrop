@@ -2166,7 +2166,7 @@
 
                     this.lastReadDate = today;
 
-                    // On sauvegarde, PUIS on vérifie les succès
+                    // On sauvegarde, PUIS on vérifie les succès. C'est tout.
                     this.saveGamingData().then(() => this.checkAchievements());
                 },
 
@@ -2183,11 +2183,10 @@
                         this.showLevelUpAnimation();
                     }
 
-                    // On sauvegarde, PUIS on vérifie les succès
+                    // On sauvegarde, PUIS on vérifie les succès. C'est tout.
                     this.saveGamingData().then(() => this.checkAchievements());
                 },
 
-                // === GAGNER DE L'XP SANS ANIMATION ===
                 gainXPSilently(amount) {
                     this.userXP += amount;
 
@@ -2197,7 +2196,7 @@
                         this.updateXPToNextLevel();
                     }
 
-                    // On sauvegarde, PUIS on vérifie les succès
+                    // On sauvegarde, PUIS on vérifie les succès. C'est tout.
                     this.saveGamingData().then(() => this.checkAchievements());
                 },
 
