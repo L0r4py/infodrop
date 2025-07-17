@@ -2455,140 +2455,51 @@
                     // 🚀 INITIALISATION DE L'APPLICATION
                     // ============================================================
                     async init() {
-                        console.log('🚀 Initialisation de l\'application...');
+                        console.log('🚀 INIT DEBUG VERSION');
+
+                        // Initialiser Supabase
                         const supabaseReady = await initializeSupabase();
                         if (!supabaseReady) {
+                            console.error('❌ Supabase init failed');
                             this.sessionLoaded = true;
                             return;
                         }
 
-                        // Attendre un peu pour éviter la double init
-                        await new Promise(resolve => setTimeout(resolve, 500));
+                        // Forcer sessionLoaded pour voir la page
+                        this.sessionLoaded = true;
 
-                        // === GESTION DES ÉVÉNEMENTS D'AUTHENTIFICATION ===
-                        supabase.auth.onAuthStateChange(async (event, session) => {
-                            this.user = session?.user || null;
-                            this.sessionLoaded = true;
+                        // Tester la connexion après un délai
+                        setTimeout(async () => {
+                            try {
+                                console.log('🔍 Test connexion...');
+                                const { data: { user } } = await supabase.auth.getUser();
+                                console.log('👤 User:', user);
 
-                            if (event === 'SIGNED_IN' && this.user) {
-                                console.log('✅ Événement SIGNED_IN détecté ! Chargement des données...');
-                                this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+                                if (user) {
+                                    this.user = user;
+                                    this.isAdmin = ADMIN_EMAILS.includes(user.email);
 
-                                try {
-                                    // 1. Charger les achievements en premier
-                                    await this.loadAchievements();
+                                    // Charger les données manuellement
+                                    console.log('📰 Chargement articles...');
+                                    const { data: articles, error } = await supabase
+                                        .from('actu')
+                                        .select('*')
+                                        .limit(10);
 
-                                    // 2. Charger tout le reste depuis Supabase
-                                    await Promise.all([
-                                        this.initGamification(),
-                                        this.loadReadArticlesFromDB(),
-                                        this.loadReadPreferences(),
-                                        this.calculateDiversityScore(),
-                                        this.loadUserInviteData()
-                                    ]);
+                                    console.log('📰 Articles:', articles, 'Error:', error);
 
-                                    // 3. Vérifier les achievements
-                                    await this.checkAchievements();
-
-                                    this.loadData(true);
-                                    this.startAutoUpdate();
-                                    this.setupRealtime(session);
-                                } catch (error) {
-                                    console.error('Erreur chargement données:', error);
-                                }
-                            }
-
-                            if (event === 'SIGNED_OUT') {
-                                this.stopAutoUpdate();
-                                if (this.realtimeChannel) {
-                                    supabase.removeChannel(this.realtimeChannel);
-                                    this.realtimeChannel = null;
-                                }
-                                this.userInviteData = {
-                                    code: null,
-                                    is_used: false,
-                                    parrainEmail: null,
-                                    filleulEmail: null
-                                };
-                            }
-                        });
-
-                        // === GESTION DE L'INTERFACE ===
-                        window.addEventListener('scroll', () => {
-                            document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
-                        });
-
-                        // Gestion des animations en attente...
-                        document.addEventListener('visibilitychange', () => {
-                            if (!document.hidden) {
-                                // Gérer les animations XP en attente
-                                const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                                if (pendingXP.length > 0) {
-                                    const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
-                                    if (recentXP.length > 0) {
-                                        const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
-                                        setTimeout(() => {
-                                            this.showXPAnimation(totalXP);
-                                        }, 500);
-                                        localStorage.removeItem('infodrop_pending_xp');
+                                    if (articles) {
+                                        this.newsList = articles;
+                                        this.loadingNews = false;
                                     }
+                                } else {
+                                    console.log('❌ Pas d\'utilisateur connecté');
                                 }
-
-                                // Chercher toutes les célébrations en attente
-                                for (let i = 0; i < localStorage.length; i++) {
-                                    const key = localStorage.key(i);
-                                    if (key && key.startsWith('infodrop_celebration_pending_')) {
-                                        const count = parseInt(key.split('_')[3]);
-                                        setTimeout(() => this.showCelebration(count), 1000);
-                                        break;
-                                    }
-                                }
-                                if (localStorage.getItem('infodrop_celebration_pending')) {
-                                    setTimeout(() => this.showCelebration(100), 1000);
-                                    localStorage.removeItem('infodrop_celebration_pending');
-                                }
+                            } catch (e) {
+                                console.error('❌ Erreur globale:', e);
                             }
-                        });
-
-                        // Vérifier au chargement aussi
-                        for (let i = 0; i < localStorage.length; i++) {
-                            const key = localStorage.key(i);
-                            if (key && key.startsWith('infodrop_celebration_pending_')) {
-                                const count = parseInt(key.split('_')[3]);
-                                setTimeout(() => this.showCelebration(count), 2000);
-                                break;
-                            }
-                        }
-                        if (localStorage.getItem('infodrop_celebration_pending')) {
-                            setTimeout(() => this.showCelebration(100), 2000);
-                            localStorage.removeItem('infodrop_celebration_pending');
-                        }
-
-                        // Vérifier les XP en attente au chargement
-                        const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                        if (pendingXP.length > 0) {
-                            const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
-                            if (recentXP.length > 0) {
-                                const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
-                                setTimeout(() => {
-                                    this.showXPAnimation(totalXP);
-                                }, 1500);
-                                localStorage.removeItem('infodrop_pending_xp');
-                            }
-                        }
-
-                        // Ajout du CSS pour les animations manquantes
-                        const style = document.createElement('style');
-                        style.textContent = `
-        @keyframes confetti-fall {
-            to {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-    `;
-                        document.head.appendChild(style);
-                    },
+                        }, 2000);
+                    }, // <-- Cette virgule termine la fonction init()
 
                     // === PROCESSUS DE CONNEXION ===
                     async login() {
