@@ -2960,10 +2960,9 @@
 
                     // === CHARGEMENT DES ACTUALITÉS ===
                     async loadNews(filter = null, isNewFilter = false) {
-                        // Si l'utilisateur applique un nouveau filtre, on active immédiatement le loader
                         if (isNewFilter) {
                             this.loadingNews = true;
-                            this.newsList = []; // C'est maintenant sûr de vider la liste, car le loader s'affichera
+                            this.newsList = [];
                         }
 
                         try {
@@ -2972,16 +2971,24 @@
                                 .select('id, resume, url, heure, source, orientation, tags, added_by')
                                 .order('heure', { ascending: false });
 
+                            // =================================================================
+                            // BLOC DE FILTRAGE CORRIGÉ
+                            // =================================================================
                             if (filter && filter !== 'all') {
-                                query = query.or(`orientation.eq.${filter},tags.cs.{${filter}}`);
+                                // On vérifie si le filtre est une orientation politique connue
+                                if (this.allOrientations.includes(filter)) {
+                                    // Si oui, on filtre UNIQUEMENT sur la colonne 'orientation'
+                                    query = query.eq('orientation', filter);
+                                } else {
+                                    // Sinon, c'est un tag, et on filtre UNIQUEMENT sur la colonne 'tags'
+                                    query = query.contains('tags', [filter]);
+                                }
                             }
+                            // =================================================================
 
-                            // Pour les rafraîchissements automatiques, on prend que le nouveau.
-                            // On ne gère plus isNewFilter ici, c'est fait au-dessus.
                             if (!isNewFilter && this.latestNewsTimestamp) {
                                 query = query.gt('heure', this.latestNewsTimestamp);
                             } else {
-                                // Pour le premier chargement ou un nouveau filtre, on prend les 100 premiers
                                 query = query.limit(100);
                             }
 
@@ -2992,18 +2999,14 @@
                                 if (isNewFilter || !this.latestNewsTimestamp) {
                                     this.newsList = newArticles;
                                 } else {
-                                    this.newsList = [...newArticles, ...this.newsList];
+                                    this.newsList = [...this.newsList, ...this.newsList];
                                 }
                                 this.latestNewsTimestamp = this.newsList[0].heure;
                             }
 
-                            // On met à jour la liste des tags affichés dans les filtres
-                            this.updateTagsList();
-
                         } catch (e) {
                             console.error('Erreur dans loadNews:', e);
                         } finally {
-                            // Quoi qu'il arrive (succès ou erreur), on désactive le loader à la fin
                             if (isNewFilter) {
                                 this.loadingNews = false;
                             }
