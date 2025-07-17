@@ -1982,15 +1982,41 @@
 
                     document.addEventListener('visibilitychange', () => {
                         if (!document.hidden) {
-                            // 1. On lit la file d'attente et on la stocke dans une variable temporaire.
+                            // 1. Récupérer la queue d'animations
                             const queue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
 
-                            // 2. On la supprime IMMÉDIATEMENT du localStorage.
+                            // 2. Supprimer immédiatement du localStorage
                             localStorage.removeItem('infodrop_animation_queue');
 
-                            // 3. Si la file n'était pas vide, on joue les animations depuis notre variable.
+                            // 3. IMPORTANT : Filtrer la queue pour éviter les doublons
                             if (queue.length > 0) {
-                                this.playAnimationQueue(queue);
+                                // Filtrer les achievements déjà débloqués
+                                const filteredQueue = queue.filter(animation => {
+                                    if (animation.type === 'achievement') {
+                                        // Vérifier si cet achievement n'a pas déjà été joué récemment
+                                        const recentKey = `recent_achievement_${animation.title}`;
+                                        const wasRecentlyShown = sessionStorage.getItem(recentKey);
+
+                                        if (wasRecentlyShown) {
+                                            console.log('Achievement déjà montré récemment:', animation.title);
+                                            return false; // Ne pas rejouer
+                                        }
+
+                                        // Marquer comme montré
+                                        sessionStorage.setItem(recentKey, 'true');
+
+                                        // Auto-nettoyer après 5 minutes
+                                        setTimeout(() => {
+                                            sessionStorage.removeItem(recentKey);
+                                        }, 300000);
+                                    }
+                                    return true; // Garder XP et level up
+                                });
+
+                                // 4. Jouer seulement les animations filtrées
+                                if (filteredQueue.length > 0) {
+                                    this.playAnimationQueue(filteredQueue);
+                                }
                             }
                         }
                     });
@@ -2008,36 +2034,82 @@
                     const article = this.newsList.find(n => n.id === id);
                     let animationQueue = [];
 
+                    // Mettre à jour l'XP
                     this.updateXP(article, animationQueue);
                     this.updateStreak();
                     await this.calculateDiversityScore();
+
+                    // IMPORTANT : Stocker les achievements actuels AVANT la vérification
+                    const achievementsBeforeCheck = [...this.unlockedAchievements];
+
                     await this.checkAchievements(animationQueue);
+
+                    // Filtrer la queue pour ne garder que les NOUVEAUX achievements
+                    animationQueue = animationQueue.filter(anim => {
+                        if (anim.type === 'achievement') {
+                            // Vérifier si c'était vraiment un nouvel achievement
+                            const wasAlreadyUnlocked = achievementsBeforeCheck.some(code => {
+                                const achievement = this.achievementsData.find(a => a.code === code);
+                                return achievement && achievement.title === anim.title;
+                            });
+                            return !wasAlreadyUnlocked;
+                        }
+                        return true; // Garder XP et level up
+                    });
 
                     await this.saveGamingData();
                     await this.saveReadArticleToDB(id);
                     await this.addToDiversityData(article);
 
-                    // Vérifier s'il y a vraiment de nouvelles animations à jouer
+                    // Sauvegarder seulement si il y a de vraies nouvelles animations
                     if (animationQueue.length > 0) {
-                        // Récupérer la queue existante
+                        // Récupérer la queue existante et fusionner
                         const existingQueue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
+                        const newQueue = [...existingQueue, ...animationQueue];
+                        localStorage.setItem('infodrop_animation_queue', JSON.stringify(newQueue));
+                    }
+                },
 
-                        // Filtrer pour éviter les doublons d'achievements
-                        const newAnimations = animationQueue.filter(newAnim => {
-                            if (newAnim.type === 'achievement') {
-                                // Vérifier si cet achievement n'est pas déjà dans la queue
-                                return !existingQueue.some(existing =>
-                                    existing.type === 'achievement' &&
-                                    existing.title === newAnim.title
-                                );
-                            }
-                            return true; // XP et level up peuvent être ajoutés
-                        });
+                // ============================================================
+                // 🎮 FONCTION checkAchievements - DOIT ÊTRE ICI
+                // ============================================================
+                async checkAchievements(queue) {
+                    if (!this.user || !this.achievementsData.length) return;
 
-                        if (newAnimations.length > 0) {
-                            localStorage.setItem('infodrop_animation_queue',
-                                JSON.stringify([...existingQueue, ...newAnimations])
-                            );
+                    // Protection contre la boucle infinie pour la diversité
+                    const diversityAchievements = this.achievementsData.filter(a =>
+                        a.condition_type === 'diversity_score'
+                    );
+
+                    const allDiversityUnlocked = diversityAchievements.every(a =>
+                        this.unlockedAchievements.includes(a.code)
+                    );
+
+                    if (allDiversityUnlocked && this.diversityScore >= 90) {
+                        return;
+                    }
+
+                    for (const achievement of this.achievementsData) {
+                        if (this.unlockedAchievements.includes(achievement.code)) continue;
+
+                        let shouldUnlock = false;
+                        switch (achievement.condition_type) {
+                            case 'articles_read':
+                                shouldUnlock = this.totalReadCount >= achievement.condition_value;
+                                break;
+                            case 'streak_days':
+                                shouldUnlock = this.readingStreak >= achievement.condition_value;
+                                break;
+                            case 'level_reached':
+                                shouldUnlock = this.userLevel >= achievement.condition_value;
+                                break;
+                            case 'diversity_score':
+                                shouldUnlock = this.diversityScore >= achievement.condition_value;
+                                break;
+                        }
+
+                        if (shouldUnlock) {
+                            await this.unlockAchievement(achievement.code, queue);
                         }
                     }
                 },
@@ -2051,16 +2123,23 @@
                         if (article.orientation && !this.readOrientations.includes(article.orientation)) xpGained += 20;
                         if (article.tags && article.tags.includes('🧨INFODROP')) xpGained += 5;
                     }
-                    if (xpGained > 0) queue.push({ type: 'xp', amount: xpGained });
+
+                    // Toujours ajouter l'XP à la queue
+                    if (xpGained > 0 && queue) {
+                        queue.push({ type: 'xp', amount: xpGained });
+                    }
 
                     this.userXP += xpGained;
                     while (this.userXP >= this.xpToNextLevel) {
                         this.userXP -= this.xpToNextLevel;
                         this.userLevel++;
                         this.updateXPToNextLevel();
-                        queue.push({ type: 'level_up', newLevel: this.userLevel });
+                        if (queue) {
+                            queue.push({ type: 'level_up', newLevel: this.userLevel });
+                        }
                     }
                 },
+
 
                 updateStreak() {
                     const today = new Date().toDateString();
@@ -2069,7 +2148,6 @@
                     this.readingStreak = (this.lastReadDate === yesterday) ? this.readingStreak + 1 : 1;
                     this.lastReadDate = today;
                 },
-
 
 
                 async unlockAchievement(code, queue) {
@@ -2093,14 +2171,26 @@
 
                 playAnimationQueue(queue) {
                     let delay = 300;
-                    queue.forEach(animation => {
+                    queue.forEach((animation, index) => {
                         setTimeout(() => {
                             switch (animation.type) {
-                                case 'xp': this.showXPAnimation(animation.amount); break;
-                                case 'level_up': this.showLevelUpAnimation(animation.newLevel); break;
-                                case 'achievement': this.showAchievementPopup(animation.icon, animation.title); break;
+                                case 'xp':
+                                    this.showXPAnimation(animation.amount);
+                                    break;
+                                case 'level_up':
+                                    this.showLevelUpAnimation(animation.newLevel);
+                                    break;
+                                case 'achievement':
+                                    // Double vérification avant de montrer
+                                    const recentCheck = sessionStorage.getItem(`recent_achievement_${animation.title}`);
+                                    if (!recentCheck || index === 0) { // Toujours montrer la première
+                                        this.showAchievementPopup(animation.icon, animation.title);
+                                    }
+                                    break;
                             }
                         }, delay);
+
+                        // Augmenter le délai pour les prochaines animations
                         delay += (animation.type === 'achievement' || animation.type === 'level_up') ? 3200 : 1500;
                     });
                 },
