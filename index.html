@@ -2455,17 +2455,46 @@
                                 console.log('✅ Événement SIGNED_IN détecté ! Chargement des données...');
                                 this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
 
-                                // 1. Charger les définitions des achievements en premier
-                                await this.loadAchievements();
+                                // =====================================================================
+                                // BLOC DE DÉBOGAGE : Exécution séquentielle pour trouver le point de blocage
+                                // =====================================================================
 
-                                // 2. Charger tout le reste en parallèle depuis Supabase
-                                await Promise.all([
-                                    this.initGamification(),
-                                    this.loadReadArticlesFromDB(),
-                                    this.loadReadPreferences(),
-                                    this.calculateDiversityScore(),
-                                    this.loadUserInviteData()
-                                ]);
+                                console.log('[DEBUG] Début du chargement séquentiel des données...');
+
+                                try {
+                                    console.log('[DEBUG] Étape 1/6 : Chargement des Achievements...');
+                                    await this.loadAchievements();
+                                    console.log('[DEBUG] ...Succès : Achievements chargés.');
+
+                                    console.log('[DEBUG] Étape 2/6 : Initialisation de la Gamification...');
+                                    await this.initGamification();
+                                    console.log('[DEBUG] ...Succès : Gamification initialisée.');
+
+                                    console.log('[DEBUG] Étape 3/6 : Chargement des Articles Lus...');
+                                    await this.loadReadArticlesFromDB();
+                                    console.log('[DEBUG] ...Succès : Articles Lus chargés.');
+
+                                    console.log('[DEBUG] Étape 4/6 : Chargement des Préférences...');
+                                    await this.loadReadPreferences();
+                                    console.log('[DEBUG] ...Succès : Préférences chargées.');
+
+                                    console.log('[DEBUG] Étape 5/6 : Calcul du Score de Diversité...');
+                                    await this.calculateDiversityScore();
+                                    console.log('[DEBUG] ...Succès : Score de Diversité calculé.');
+
+                                    console.log('[DEBUG] Étape 6/6 : Chargement des Données d\'Invitation...');
+                                    await this.loadUserInviteData();
+                                    console.log('[DEBUG] ...Succès : Données d\'Invitation chargées.');
+
+                                    console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées avec succès.');
+
+                                } catch (error) {
+                                    console.error('[FATAL] Une erreur a bloqué le chargement des données utilisateur :', error);
+                                }
+
+                                // =====================================================================
+                                // FIN DU BLOC DE DÉBOGAGE
+                                // =====================================================================
 
                                 // 3. Vérifier si des achievements ont été débloqués avec les données chargées
                                 await this.checkAchievements();
