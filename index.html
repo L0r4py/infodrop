@@ -2923,9 +2923,9 @@
 
                 // === CHARGEMENT DES ACTUALITÉS ===
                 async loadNews(filter = null, isNewFilter = false) {
+                    // Si c'est un NOUVEAU filtre, on active le spinner
                     if (isNewFilter) {
                         this.loadingNews = true;
-                        this.newsList = []; // On vide la liste immédiatement
                     }
 
                     try {
@@ -2936,36 +2936,48 @@
 
                         // Bloc de filtrage intelligent
                         if (filter && filter !== 'all') {
-                            // Si le filtre est une orientation connue...
                             if (this.allOrientations.includes(filter)) {
-                                // ...on filtre sur la colonne 'orientation'.
                                 query = query.eq('orientation', filter);
                             } else {
-                                // Sinon, c'est un tag, et on filtre sur la colonne 'tags'.
                                 query = query.contains('tags', [filter]);
                             }
                         }
 
+                        // =================================================================
+                        // BLOC DE MISE À JOUR CORRIGÉ
+                        // =================================================================
+                        // Pour les rafraîchissements automatiques, on ne demande que les nouveaux articles.
                         if (!isNewFilter && this.latestNewsTimestamp) {
                             query = query.gt('heure', this.latestNewsTimestamp);
                         } else {
+                            // Pour le premier chargement ou un nouveau filtre, on prend les 100 premiers.
                             query = query.limit(100);
                         }
 
                         const { data: newArticles, error } = await query;
                         if (error) throw error;
 
-                        // La liste a déjà été vidée si c'est un nouveau filtre.
-                        // On remplit simplement avec les nouveaux résultats.
-                        this.newsList = newArticles || [];
-
+                        // Si de nouveaux articles sont arrivés (même pour un rafraîchissement)
                         if (newArticles && newArticles.length > 0) {
+                            if (isNewFilter) {
+                                // Si on a cliqué sur un filtre, on remplace toute la liste.
+                                this.newsList = newArticles;
+                            } else {
+                                // Sinon, c'est un rafraîchissement, on ajoute les nouveaux au début de la liste.
+                                this.newsList = [...newArticles, ...this.newsList];
+                            }
+                            // On met à jour le timestamp du dernier article connu.
                             this.latestNewsTimestamp = this.newsList[0].heure;
+                        } else if (isNewFilter) {
+                            // Si c'est un nouveau filtre et qu'il n'y a aucun résultat.
+                            this.newsList = [];
                         }
+                        // Si c'est un rafraîchissement et qu'il n'y a rien de neuf, on ne touche à rien.
 
                     } catch (e) {
                         console.error('Erreur dans loadNews:', e);
                     } finally {
+                        // On désactive le spinner SEULEMENT si c'était un nouveau filtre.
                         if (isNewFilter) {
                             this.loadingNews = false;
                         }
