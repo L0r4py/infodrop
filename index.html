@@ -2416,40 +2416,36 @@
                                     this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
 
                                     try {
-                                        await Promise.all([
-                                            this.loadAchievements(),
-                                            this.initGamification(),
-                                            this.loadReadArticlesFromDB(),
-                                            this.loadReadPreferences(),
-                                            this.calculateDiversityScore(),
-                                            this.loadUserInviteData()
-                                        ]);
+                                        // =============================================================
+                                        // ON REMPLACE PROMISE.ALL PAR UN APPEL SÉQUENTIEL
+                                        // =============================================================
+                                        console.log('[SEQ] Chargement des définitions de succès...');
+                                        await this.loadAchievements();
 
-                                        console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées.');
+                                        console.log('[SEQ] Chargement des stats du joueur...');
+                                        await this.initGamification();
+
+                                        console.log('[SEQ] Chargement de l\'historique de lecture...');
+                                        await this.loadReadArticlesFromDB();
+
+                                        console.log('[SEQ] Chargement des préférences...');
+                                        await this.loadReadPreferences();
+
+                                        console.log('[SEQ] Calcul du score de diversité...');
+                                        await this.calculateDiversityScore();
+
+                                        console.log('[SEQ] Chargement des données d\'invitation...');
+                                        await this.loadUserInviteData();
+
+                                        // Maintenant que TOUT est chargé, on fait une dernière vérification globale.
+                                        console.log('[SEQ] Vérification finale des succès...');
                                         await this.checkAchievements();
+
+                                        console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées séquentiellement.');
 
                                         this.loadData(true);
                                         this.startAutoUpdate();
                                         this.setupRealtime(session);
-
-                                        // =============================================================
-                                        // NOUVEAU BLOC CORRIGÉ POUR LES CÉLÉBRATIONS
-                                        // =============================================================
-                                        try {
-                                            const celebrationKey = Object.keys(localStorage).find(key => key.startsWith('infodrop_celebration_pending_'));
-                                            if (celebrationKey) {
-                                                const count = parseInt(celebrationKey.split('_')[3]);
-                                                if (!isNaN(count)) {
-                                                    setTimeout(() => {
-                                                        this.showCelebration(count);
-                                                        // On nettoie le localStorage APRÈS avoir affiché la célébration
-                                                    }, 2000);
-                                                }
-                                            }
-                                        } catch (e) {
-                                            console.error("Erreur lors de la vérification des célébrations en attente:", e);
-                                        }
-                                        // =============================================================
 
                                     } catch (error) {
                                         console.error('[FATAL] Une erreur a bloqué le chargement :', error);
