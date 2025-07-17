@@ -2167,40 +2167,7 @@
                         }
                     }
                 },
-
-                // =============================================================
-                // AJOUT DE LA FONCTION DE CORRECTION
-                // =============================================================
-                // === DÉBLOCAGE SÉCURISÉ D'UN ACHIEVEMENT ===
-                async unlockAchievement(code) {
-                    // GARDE-FOU : Si le succès est déjà dans la liste, on ne fait RIEN.
-                    // C'est la ligne la plus importante de la correction.
-                    if (this.unlockedAchievements.includes(code)) return;
-
-                    // 1. On met à jour l'état local IMMÉDIATEMENT
-                    this.unlockedAchievements.push(code);
-
-                    // 2. On récupère les détails de l'achievement pour l'animation
-                    const achievement = this.achievementsData.find(a => a.code === code);
-
-                    // 3. On joue les animations et on met à jour l'UI
-                    if (achievement) {
-                        this.showAchievementPopup(achievement.icon_emoji, achievement.title);
-                    }
-                    this.updateCurrentAchievement();
-
-                    // 4. On sauvegarde les données en base de manière asynchrone.
-                    // Même si l'utilisateur rafraîchit maintenant, l'état local (étape 1) empêchera une nouvelle animation.
-                    await this.saveGamingData();
-
-                    // Enregistre cet événement de déblocage spécifique dans l'historique
-                    await supabase
-                        .from('user_achievement_history')
-                        .upsert(
-                            { user_id: this.user.id, achievement_code: code },
-                            { onConflict: 'user_id, achievement_code' }
-                        );
-                },
+            
 
                 // === CALCUL XP POUR NIVEAU SUIVANT ===
                 updateXPToNextLevel() {
