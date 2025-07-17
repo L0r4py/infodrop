@@ -2217,8 +2217,7 @@
                         // Enregistre l'événement dans l'historique
                         await supabase
                             .from('user_achievement_history')
-                            .insert({ user_id: this.user.id, achievement_code: code });
-
+                            .upsert({ user_id: this.user.id, achievement_code: code }, { onConflict: 'user_id, achievement_code' });
                         this.updateCurrentAchievement();
                     }
                 },
