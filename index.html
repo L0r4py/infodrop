@@ -1838,10 +1838,9 @@
         </svg>
     </button>
 
-    <!-- ======================================================================== -->
-    <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER AVEC GAMIFICATION                        -->
-    <!-- ======================================================================== -->
-    <!-- ======================================================================== -->
+
+
+    ======================================================================== -->
     <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER AVEC GAMIFICATION                        -->
     <!-- ======================================================================== -->
     <script>
@@ -1858,40 +1857,22 @@
            initializeSupabase — Appel unique au chargement, version propre
            ─────────────────────────────────────────────────────────────────── */
         async function initializeSupabase() {
-            if (supabase) {
-                dlog('👍 Supabase déjà initialisé, on ne fait rien.');
-                return true;
-            }
+            if (supabase) { return true; }
             dlog('🔐 initializeSupabase() lancé');
             try {
                 const res = await fetch('/api/config');
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 const cfg = await res.json();
-
                 ADMIN_EMAILS = cfg.adminEmails;
                 STRIPE_LINK = cfg.stripeLink;
-                dlog('⚙️  Config récupérée', cfg);
-
                 const { createClient } = window.supabase;
                 supabase = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
-
                 dlog('✅ Supabase initialisé');
                 return true;
             } catch (err) {
                 console.error('❌ Erreur initialisation:', err);
                 const errorDiv = document.createElement('div');
-                errorDiv.innerHTML = `
-            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: Arial;">
-                <div style="text-align: center; padding: 2rem;">
-                    <h2>❌ Erreur de configuration</h2>
-                    <p>Impossible de charger la configuration sécurisée.</p>
-                    <p>Veuillez contacter l'administrateur.</p>
-                    <button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3B82F6; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                        Recharger la page
-                    </button>
-                </div>
-            </div>
-        `;
+                errorDiv.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: Arial;"><div style="text-align: center; padding: 2rem;"><h2>❌ Erreur de configuration</h2><p>Impossible de charger la configuration sécurisée.</p><button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem;">Recharger</button></div></div>`;
                 document.body.appendChild(errorDiv);
                 return false;
             }
@@ -1901,184 +1882,77 @@
         // 🏗️ APPLICATION PRINCIPALE - GESTION DE L'ÉTAT ET LOGIQUE MÉTIER
         // ====================================================================
         function infodropApp() {
-            // === CONSTANTES DES ORIENTATIONS POLITIQUES ===
-            const ORIENTATION_DATA = {
-                'extrême-gauche': { class: 'bg-[#FF0000] text-white border-[#CC0000]', color: '#FF0000' },
-                'gauche': { class: 'bg-[#D42A2A] text-white border-[#A82020]', color: '#D42A2A' },
-                'centre-gauche': { class: 'bg-[#AA5555] text-white border-[#884444]', color: '#AA5555' },
-                'centre': { class: 'bg-[#808080] text-white border-[#666666]', color: '#808080' },
-                'centre-droit': { class: 'bg-[#5555AA] text-white border-[#444488]', color: '#5555AA' },
-                'droite': { class: 'bg-[#2A2AD4] text-white border-[#2020A8]', color: '#2A2AD4' },
-                'extrême-droite': { class: 'bg-[#0000FF] text-white border-[#0000CC]', color: '#0000FF' },
-                'gouvernement': { class: 'bg-blue-800 text-blue-100 border-blue-900', color: '#1e40af' },
-                'neutre': { class: 'bg-green-700 text-green-100 border-green-800', color: '#16a34a' }
-            };
+            const ORIENTATION_DATA = { 'extrême-gauche': { class: 'bg-[#FF0000] text-white border-[#CC0000]', color: '#FF0000' }, 'gauche': { class: 'bg-[#D42A2A] text-white border-[#A82020]', color: '#D42A2A' }, 'centre-gauche': { class: 'bg-[#AA5555] text-white border-[#884444]', color: '#AA5555' }, 'centre': { class: 'bg-[#808080] text-white border-[#666666]', color: '#808080' }, 'centre-droit': { class: 'bg-[#5555AA] text-white border-[#444488]', color: '#5555AA' }, 'droite': { class: 'bg-[#2A2AD4] text-white border-[#2020A8]', color: '#2A2AD4' }, 'extrême-droite': { class: 'bg-[#0000FF] text-white border-[#0000CC]', color: '#0000FF' }, 'gouvernement': { class: 'bg-blue-800 text-blue-100 border-blue-900', color: '#1e40af' }, 'neutre': { class: 'bg-green-700 text-green-100 border-green-800', color: '#16a34a' } };
 
             return {
-                // ============================================================
-                // 📊 ÉTAT DE L'APPLICATION - VARIABLES RÉACTIVES
-                // ============================================================
-                copied: false,
-                sessionLoaded: false,
-                user: null,
-                email: '',
-                loading: false,
-                message: '',
-                messageType: '',
-                inviteCode: '',
-                showShareModal: false,
-                achievementsData: [],
-                newsList: [],
-                loadingNews: true,
-                updateInterval: null,
-                latestNewsTimestamp: null,
-                isAdmin: false,
-                showAdminPanel: false,
-                addingNews: false,
-                newNews: { resume: '', source: '', url: '', orientation: '', tagsText: '' },
-                stats: { total_articles: 0, total_sources: 0 },
-                lastGeneratedCode: null,
-                generatingCode: false,
-                userInviteData: { code: null, is_used: false, parrainEmail: null, filleulEmail: null },
-                connectedUsers: 0,
-                socialBoost: 11,
-                realtimeChannel: null,
-                showEditPanel: false,
-                editingNews: { id: null, resume: '', source: '', url: '', orientation: '', tags: [], tagsText: '' },
-                showFilters: false,
-                activeFilter: 'all',
-                searchQuery: '',
-                allTags: [],
-                allOrientations: [],
-                allOtherTags: [],
-                activeOrientations: [],
-                activeTags: [],
-                userXP: 0,
-                userLevel: 1,
-                xpToNextLevel: 100,
-                readingStreak: 0,
-                unlockedAchievements: [],
-                lastReadDate: null,
-                currentAchievement: null,
-                showAchievementsModal: false,
-                readArticles: {},
-                totalReadCount: 0,
-                diversityScore: null,
-                readOrientations: [],
-                showDiversityChecker: true,
-                showReadArticles: false,
-                hideReadFromMain: true,
-                showAboutModal: false,
+                // --- ÉTAT DE L'APPLICATION ---
+                sessionLoaded: false, user: null, email: '', loading: false, message: '', messageType: '', inviteCode: '',
+                newsList: [], loadingNews: true, latestNewsTimestamp: null, updateInterval: null,
+                isAdmin: false, showAdminPanel: false, addingNews: false, newNews: { resume: '', url: '' },
+                stats: { total_articles: 0, total_sources: 0 }, lastGeneratedCode: null, generatingCode: false,
+                userInviteData: { code: null, parrainEmail: null, filleulEmail: null },
+                showEditPanel: false, editingNews: {}, showShareModal: false, copied: false,
+                // --- GAMIFICATION ---
+                achievementsData: [], userXP: 0, userLevel: 1, xpToNextLevel: 100, readingStreak: 0, unlockedAchievements: [], lastReadDate: null, currentAchievement: null, showAchievementsModal: false,
+                // --- FILTRES & DIVERSITÉ ---
+                activeFilter: 'all', searchQuery: '', allOrientations: [], allOtherTags: [], activeOrientations: [], activeTags: [],
+                diversityScore: null, readOrientations: [], showDiversityChecker: true,
+                // --- ARTICLES LUS ---
+                readArticles: {}, totalReadCount: 0, showReadArticles: false, hideReadFromMain: true,
+                // --- MODALES ---
+                showAboutModal: false, showFilters: false,
 
                 // ============================================================
                 // 🚀 INITIALISATION DE L'APPLICATION
                 // ============================================================
                 async init() {
-                    console.log('🚀 Alpine init() appelé.');
-                    if (window.infodropAppInitialized) {
-                        console.log('👍 App déjà initialisée. On ignore cet appel.');
-                        return;
-                    }
+                    if (window.infodropAppInitialized) return;
                     window.infodropAppInitialized = true;
-                    console.log('🏁 Première initialisation. Lancement du processus...');
+                    console.log('🚀 Alpine init() lancé.');
 
                     const isReady = await initializeSupabase();
-                    if (isReady && supabase) {
+                    if (isReady) {
                         supabase.auth.onAuthStateChange((event, session) => {
                             this.$nextTick(async () => {
                                 this.user = session?.user || null;
                                 this.sessionLoaded = true;
 
                                 if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-                                    if (!this.user) {
-                                        console.log('Session restaurée mais sans utilisateur. Arrêt.');
-                                        return;
-                                    }
-                                    console.log(`✅ Événement ${event} reçu ! Chargement des données...`);
+                                    if (!this.user) return;
                                     this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
-
                                     try {
-                                        await Promise.all([
-                                            this.loadAchievements(),
-                                            this.initGamification(),
-                                            this.loadReadArticlesFromDB(),
-                                            this.loadReadPreferences(),
-                                            this.calculateDiversityScore(),
-                                            this.loadUserInviteData()
-                                        ]);
-
-                                        // --- BLOC DE CORRECTION "localStorage" ---
+                                        await Promise.all([this.loadAchievements(), this.initGamification(), this.loadReadArticlesFromDB(), this.loadReadPreferences(), this.calculateDiversityScore(), this.loadUserInviteData()]);
                                         Object.keys(localStorage).forEach(key => {
                                             if (key.startsWith('infodrop_unlocking_')) {
                                                 const pendingCode = key.replace('infodrop_unlocking_', '');
-                                                if (!this.unlockedAchievements.includes(pendingCode)) {
-                                                    this.unlockedAchievements.push(pendingCode);
-                                                    console.log(`Succès en attente ${pendingCode} resynchronisé depuis le cache.`);
-                                                }
+                                                if (!this.unlockedAchievements.includes(pendingCode)) { this.unlockedAchievements.push(pendingCode); }
                                             }
                                         });
-
-                                        console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées.');
-                                   
-
                                         this.loadData(true);
                                         this.startAutoUpdate();
                                         this.setupRealtime(session);
-
-                                        try {
-                                            const celebrationKey = Object.keys(localStorage).find(key => key.startsWith('infodrop_celebration_pending_'));
-                                            if (celebrationKey) {
-                                                const count = parseInt(celebrationKey.split('_')[3]);
-                                                if (!isNaN(count)) {
-                                                    setTimeout(() => {
-                                                        this.showCelebration(count);
-                                                    }, 2000);
-                                                }
-                                            }
-                                        } catch (e) {
-                                            console.error("Erreur lors de la vérification des célébrations en attente:", e);
-                                        }
-
-                                    } catch (error) {
-                                        console.error('[FATAL] Une erreur a bloqué le chargement :', error);
-                                    }
+                                    } catch (error) { console.error('[FATAL] Erreur de chargement:', error); }
                                 } else if (event === 'SIGNED_OUT') {
-                                    console.log('🚪 Événement SIGNED_OUT reçu.');
                                     this.stopAutoUpdate();
-                                    if (this.realtimeChannel) {
-                                        supabase.removeChannel(this.realtimeChannel);
-                                        this.realtimeChannel = null;
-                                    }
+                                    if (this.realtimeChannel) { supabase.removeChannel(this.realtimeChannel); this.realtimeChannel = null; }
                                 }
                             });
                         });
                     }
 
-                    window.addEventListener('scroll', () => {
-                        document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
-                    });
-
                     document.addEventListener('visibilitychange', () => {
                         if (!document.hidden) {
-                            const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                            if (pendingXP.length > 0) {
-                                const recentXP = pendingXP.filter(xp => Date.now() - xp.timestamp < 5 * 60 * 1000);
-                                if (recentXP.length > 0) {
-                                    const totalXP = recentXP.reduce((sum, xp) => sum + xp.amount, 0);
-                                    setTimeout(() => { this.showXPAnimation(totalXP); }, 500);
-                                    localStorage.removeItem('infodrop_pending_xp');
-                                }
+                            const queue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
+                            if (queue.length > 0) {
+                                this.playAnimationQueue(queue);
+                                localStorage.removeItem('infodrop_animation_queue');
                             }
                         }
                     });
-
-                    const style = document.createElement('style');
-                    style.textContent = `@keyframes confetti-fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }`;
-                    document.head.appendChild(style);
                 },
 
                 // ============================================================
-                // 📚 ORCHESTRATEUR DE GAMIFICATION (Quand on lit un article)
+                // 📚 ORCHESTRATEUR DE GAMIFICATION
                 // ============================================================
                 async markAsRead(id) {
                     if (!this.user || this.readArticles[id]) return;
@@ -2087,100 +1961,69 @@
                     this.updateTotalReadCount();
 
                     const article = this.newsList.find(n => n.id === id);
+                    let animationQueue = [];
 
-                    this.updateXP(article);
+                    this.updateXP(article, animationQueue);
                     this.updateStreak();
                     await this.calculateDiversityScore();
-                    await this.checkAchievements();
+                    await this.checkAchievements(animationQueue);
 
                     await this.saveGamingData();
                     await this.saveReadArticleToDB(id);
                     await this.addToDiversityData(article);
 
-                    if (this.totalReadCount > 0 && this.totalReadCount % 20 === 0) {
-                        this.celebrateArticles(this.totalReadCount);
+                    if (animationQueue.length > 0) {
+                        localStorage.setItem('infodrop_animation_queue', JSON.stringify(animationQueue));
                     }
                 },
 
                 // ============================================================
                 // 🎮 SOUS-FONCTIONS DE GAMIFICATION
                 // ============================================================
-                updateXP(article) {
+                updateXP(article, queue) {
                     let xpGained = 10;
                     if (article) {
                         if (article.orientation && !this.readOrientations.includes(article.orientation)) xpGained += 20;
                         if (article.tags && article.tags.includes('🧨INFODROP')) xpGained += 5;
                     }
-
-                    const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                    pendingXP.push({ amount: xpGained, timestamp: Date.now() });
-                    localStorage.setItem('infodrop_pending_xp', JSON.stringify(pendingXP));
+                    if (xpGained > 0) queue.push({ type: 'xp', amount: xpGained });
 
                     this.userXP += xpGained;
                     while (this.userXP >= this.xpToNextLevel) {
                         this.userXP -= this.xpToNextLevel;
                         this.userLevel++;
                         this.updateXPToNextLevel();
-                        this.showLevelUpAnimation();
+                        queue.push({ type: 'level_up', newLevel: this.userLevel });
                     }
                 },
 
                 updateStreak() {
                     const today = new Date().toDateString();
                     if (this.lastReadDate === today) return;
-
                     const yesterday = new Date(Date.now() - 86400000).toDateString();
                     this.readingStreak = (this.lastReadDate === yesterday) ? this.readingStreak + 1 : 1;
                     this.lastReadDate = today;
                 },
 
-                async calculateDiversityScore() {
-                    if (!this.user) return;
-                    try {
-                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-                        const { data } = await supabase
-                            .from('user_diversity_data')
-                            .select('orientation, source')
-                            .eq('user_id', this.user.id)
-                            .gte('read_at', twentyFourHoursAgo.toISOString());
-
-                        if (!data || data.length === 0) {
-                            this.diversityScore = null;
-                            this.readOrientations = [];
-                            return;
-                        }
-
-                        const oSet = new Set(data.map(r => r.orientation).filter(Boolean));
-                        const sSet = new Set(data.map(r => r.source));
-                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
-                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
-                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
-
-                    } catch (error) {
-                        console.error('Erreur calcul diversité:', error);
-                    }
-                },
-
-                async checkAchievements() {
+                async checkAchievements(queue) {
                     if (!this.user || !this.achievementsData.length) return;
                     for (const achievement of this.achievementsData) {
                         if (this.unlockedAchievements.includes(achievement.code)) continue;
 
                         let shouldUnlock = false;
                         switch (achievement.condition_type) {
-                            case 'connection': shouldUnlock = true; break;
                             case 'articles_read': shouldUnlock = this.totalReadCount >= achievement.condition_value; break;
                             case 'streak_days': shouldUnlock = this.readingStreak >= achievement.condition_value; break;
                             case 'level_reached': shouldUnlock = this.userLevel >= achievement.condition_value; break;
                             case 'diversity_score': shouldUnlock = this.diversityScore >= achievement.condition_value; break;
                         }
                         if (shouldUnlock) {
-                            await this.unlockAchievement(achievement.code);
+                            await this.unlockAchievement(achievement.code, queue);
                         }
                     }
                 },
 
-                async unlockAchievement(code) {
+                async unlockAchievement(code, queue) {
                     if (this.unlockedAchievements.includes(code)) return;
 
                     localStorage.setItem(`infodrop_unlocking_${code}`, 'true');
@@ -2188,22 +2031,31 @@
 
                     const achievement = this.achievementsData.find(a => a.code === code);
                     if (achievement) {
-                        this.showAchievementPopup(achievement.icon_emoji, achievement.title);
+                        queue.push({ type: 'achievement', icon: achievement.icon_emoji, title: achievement.title });
                     }
                     this.updateCurrentAchievement();
 
                     try {
                         await this.saveGamingData();
-                        await supabase
-                            .from('user_achievement_history')
-                            .upsert(
-                                { user_id: this.user.id, achievement_code: code },
-                                { onConflict: 'user_id, achievement_code' }
-                            );
+                        await supabase.from('user_achievement_history').upsert({ user_id: this.user.id, achievement_code: code }, { onConflict: 'user_id, achievement_code' });
                         localStorage.removeItem(`infodrop_unlocking_${code}`);
                     } catch (error) {
-                        console.error(`Erreur lors de la sauvegarde du succès ${code}:`, error);
+                        console.error(`Erreur sauvegarde succès ${code}:`, error);
                     }
+                },
+
+                playAnimationQueue(queue) {
+                    let delay = 300;
+                    queue.forEach(animation => {
+                        setTimeout(() => {
+                            switch (animation.type) {
+                                case 'xp': this.showXPAnimation(animation.amount); break;
+                                case 'level_up': this.showLevelUpAnimation(animation.newLevel); break;
+                                case 'achievement': this.showAchievementPopup(animation.icon, animation.title); break;
+                            }
+                        }, delay);
+                        delay += (animation.type === 'achievement' || animation.type === 'level_up') ? 3200 : 1500;
+                    });
                 },
 
                 // ============================================================
