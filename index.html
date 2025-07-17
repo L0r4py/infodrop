@@ -2163,12 +2163,10 @@
                     } else {
                         this.readingStreak = 1;
                     }
-
                     this.lastReadDate = today;
-
-                    // On sauvegarde, PUIS on vérifie les succès. C'est tout.
-                    this.saveGamingData().then(() => this.checkAchievements());
                 },
+
+
 
 
                 // === GAGNER DE L'XP ===
@@ -2187,18 +2185,26 @@
                     this.saveGamingData().then(() => this.checkAchievements());
                 },
 
-                gainXPSilently(amount) {
-                    this.userXP += amount;
+                gainXPSilently(article) {
+                    let xpGained = 10;
+                    if (article) {
+                        if (article.orientation && !this.readOrientations.includes(article.orientation)) xpGained += 20;
+                        if (article.tags && article.tags.includes('🧨INFODROP')) xpGained += 5;
+                    }
 
+                    const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
+                    pendingXP.push({ amount: xpGained, timestamp: Date.now() });
+                    localStorage.setItem('infodrop_pending_xp', JSON.stringify(pendingXP));
+
+                    this.userXP += xpGained;
                     while (this.userXP >= this.xpToNextLevel) {
                         this.userXP -= this.xpToNextLevel;
                         this.userLevel++;
                         this.updateXPToNextLevel();
+                        this.showLevelUpAnimation();
                     }
-
-                    // On sauvegarde, PUIS on vérifie les succès. C'est tout.
-                    this.saveGamingData().then(() => this.checkAchievements());
                 },
+
 
                 // === DÉBLOQUER UN ACHIEVEMENT ===
                 async unlockAchievement(code) {
@@ -2212,6 +2218,8 @@
 
                         // Sauvegarde la nouvelle liste de succès dans les stats du joueur
                         await this.saveGamingData();
+                        await this.saveReadArticleToDB(id);
+                        await this.addToDiversityData(article);
 
                         // Enregistre l'événement dans l'historique
                         await supabase
@@ -3009,43 +3017,31 @@
                 async markAsRead(id) {
                     if (!this.user || this.readArticles[id]) return;
 
-                    // 1. Mise à jour de l'état local pour une UI réactive
+                    // --- ÉTAPE 1: Mise à jour de l'état local (ce que l'utilisateur voit) ---
                     this.readArticles[id] = new Date().toISOString();
                     this.updateTotalReadCount();
 
-                    // 2. Calcul de l'XP et mise en attente de l'animation
+                    // --- ÉTAPE 2: Calcul de toutes les nouvelles statistiques ---
                     const article = this.newsList.find(n => n.id === id);
-                    let xpGained = 10; // XP de base
 
-                    if (article) {
-                        // Bonus pour diversité
-                        if (article.orientation && !this.readOrientations.includes(article.orientation)) {
-                            xpGained += 20; // Bonus pour nouvelle orientation
-                        }
+                    // On met à jour l'XP
+                    this.gainXPSilently(article);
 
-                        // Bonus pour tags spéciaux
-                        if (article.tags && article.tags.includes('🧨INFODROP')) {
-                            xpGained += 5;
-                        }
-                    }
-
-                    const pendingXP = JSON.parse(localStorage.getItem('infodrop_pending_xp') || '[]');
-                    pendingXP.push({ amount: xpGained, timestamp: Date.now() });
-                    localStorage.setItem('infodrop_pending_xp', JSON.stringify(pendingXP));
-
-                    // Gagner l'XP "silencieusement" sur l'état local
-                    this.gainXPSilently(xpGained);
-
-                    // 3. Lancement des sauvegardes asynchrones vers Supabase
-                    this.saveReadArticleToDB(id);
-                    this.addToDiversityData(article); // Sauvegarde pour le calcul de diversité
-                    await this.saveGamingData();     // Met à jour XP/niveau dans la DB
-                    await this.checkAchievements();  // Vérifie si la lecture a débloqué un succès
-
-                    // Vérifier le streak quotidien
+                    // On met à jour le streak de lecture
                     this.checkDailyStreak();
 
-                    // Célébrations originales
+                    // On met à jour le score de diversité
+                    await this.calculateDiversityScore();
+
+                    // --- ÉTAPE 3: Maintenant que TOUT est à jour, on vérifie les succès une seule fois ---
+                    await this.checkAchievements();
+
+                    // --- ÉTAPE 4: On sauvegarde TOUT en base de données, une seule fois et à la fin ---
+                    await this.saveGamingData();
+                    await this.saveReadArticleToDB(id);
+                    await this.addToDiversityData(article);
+
+                    // Célébrations
                     if (this.totalReadCount % 20 === 0 && this.totalReadCount > 0) {
                         this.celebrateArticles(this.totalReadCount);
                     }
@@ -3195,9 +3191,6 @@
                         const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
                         this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
                         this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
-
-                        // On ne débloque plus le succès ici, on se contente de vérifier.
-                        await this.checkAchievements();
 
                     } catch (error) {
                         console.error('Erreur calcul diversité:', error);
