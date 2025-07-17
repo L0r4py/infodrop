@@ -2167,7 +2167,7 @@
                         }
                     }
                 },
-            
+
 
                 // === CALCUL XP POUR NIVEAU SUIVANT ===
                 updateXPToNextLevel() {
@@ -2363,34 +2363,44 @@
                     }
                 },
 
-                // `unlockAchievement` est maintenant propre et ne contient plus de code erroné.
+                // === DÉBLOCAGE SÉCURISÉ D'UN ACHIEVEMENT ===
                 async unlockAchievement(code) {
-                    // On vérifie une dernière fois si le succès n'est pas déjà dans la liste
+                    // GARDE-FOU : Si le succès est déjà dans la liste, on ne fait RIEN.
                     if (this.unlockedAchievements.includes(code)) return;
 
-                    // 1. Mise à jour de l'état local
+                    // --- DEBUT DE LA CORRECTION ---
+
+                    // 1. On laisse une trace dans le "mémo" du navigateur.
+                    localStorage.setItem(`infodrop_unlocking_${code}`, 'true');
+
+                    // 2. On met à jour l'état local IMMÉDIATEMENT pour la session actuelle.
                     this.unlockedAchievements.push(code);
 
-                    // 2. Affichage du popup
+                    // 3. On joue les animations et on met à jour l'UI.
                     const achievement = this.achievementsData.find(a => a.code === code);
                     if (achievement) {
                         this.showAchievementPopup(achievement.icon_emoji, achievement.title);
                     }
-
-                    // 3. Mise à jour de l'interface (comme le badge NIV)
                     this.updateCurrentAchievement();
 
-                    // 4. Mise à jour de la base de données
-                    // SAUVEGARDE LA LISTE COMPLÈTE DES SUCCÈS DANS LES STATS DU JOUEUR
-                    await this.saveGamingData();
+                    try {
+                        // 4. On sauvegarde les données en base.
+                        await this.saveGamingData();
+                        await supabase
+                            .from('user_achievement_history')
+                            .upsert(
+                                { user_id: this.user.id, achievement_code: code },
+                                { onConflict: 'user_id, achievement_code' }
+                            );
 
-                    // Enregistre cet événement de déblocage spécifique dans l'historique
-                    await supabase
-                        .from('user_achievement_history')
-                        .upsert(
-                            { user_id: this.user.id, achievement_code: code },
-                            { onConflict: 'user_id, achievement_code' }
-                        );
+                        // 5. SI ET SEULEMENT SI la sauvegarde réussit, on nettoie le mémo.
+                        localStorage.removeItem(`infodrop_unlocking_${code}`);
+
+                    } catch (error) {
+                        console.error(`Erreur lors de la sauvegarde du succès ${code}:`, error);
+                        // En cas d'erreur, on ne supprime PAS le mémo, pour pouvoir réessayer plus tard.
+                    }
+                    // --- FIN DE LA CORRECTION ---
                 },
 
                 // === OBTENIR LE TITRE D'UN ACHIEVEMENT ===
@@ -2594,6 +2604,19 @@
                                             this.calculateDiversityScore(),
                                             this.loadUserInviteData()
                                         ]);
+
+                                        // --- DEBUT DE LA CORRECTION ---
+                                        // On vérifie si des succès étaient en attente de sauvegarde lors du dernier rechargement
+                                        Object.keys(localStorage).forEach(key => {
+                                            if (key.startsWith('infodrop_unlocking_')) {
+                                                const pendingCode = key.replace('infodrop_unlocking_', '');
+                                                // Si le mémo existe mais que le succès n'est pas dans notre liste (à cause d'un rechargement), on le rajoute.
+                                                if (!this.unlockedAchievements.includes(pendingCode)) {
+                                                    this.unlockedAchievements.push(pendingCode);
+                                                    console.log(`Succès en attente ${pendingCode} resynchronisé depuis le cache.`);
+                                                }
+                                            }
+                                        });
 
                                         console.log('[DEBUG] ✅ Toutes les données utilisateur ont été chargées.');
                                         await this.checkAchievements();
