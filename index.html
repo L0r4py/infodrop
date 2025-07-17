@@ -1906,6 +1906,7 @@
                 // 🚀 INITIALISATION DE L'APPLICATION
                 // ============================================================
                 async init() {
+                    localStorage.removeItem('infodrop_animation_queue');
                     if (window.infodropAppInitialized) return;
                     window.infodropAppInitialized = true;
                     console.log('🚀 Alpine init() lancé.');
@@ -1967,10 +1968,15 @@
 
                     document.addEventListener('visibilitychange', () => {
                         if (!document.hidden) {
+                            // 1. On lit la file d'attente et on la stocke dans une variable temporaire.
                             const queue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
+
+                            // 2. On la supprime IMMÉDIATEMENT du localStorage.
+                            localStorage.removeItem('infodrop_animation_queue');
+
+                            // 3. Si la file n'était pas vide, on joue les animations depuis notre variable.
                             if (queue.length > 0) {
                                 this.playAnimationQueue(queue);
-                                localStorage.removeItem('infodrop_animation_queue');
                             }
                         }
                     });
