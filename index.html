@@ -1958,29 +1958,30 @@
 
                                     if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
                                         if (!this.user) return;
-
-                                        // --- DÉBUT DE LA CORRECTION ---
-                                        // Si les données sont déjà en cours de chargement ou chargées, on ne fait rien.
                                         if (this.isDataLoaded) return;
-                                        // On active le verrou.
                                         this.isDataLoaded = true;
-                                        // --- FIN DE LA CORRECTION ---
 
                                         this.loadingNews = true;
                                         this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
 
                                         try {
+                                            // ÉTAPE 1 : On charge TOUTES les données de l'utilisateur d'abord.
                                             await Promise.all([
                                                 this.loadAchievements(),
                                                 this.initGamification(),
-                                                this.loadReadArticlesFromDB(),
+                                                this.loadReadArticlesFromDB(), // <- Le plus important
                                                 this.loadReadPreferences(),
                                                 this.loadUserInviteData(),
                                                 this.loadStats(),
                                                 this.calculateDiversityScore()
                                             ]);
 
+                                            console.log(`[DEBUG] Données utilisateur chargées. ${Object.keys(this.readArticles).length} articles lus prêts pour l'affichage.`);
+
+                                            // ÉTAPE 2 : On synchronise les succès en silence.
                                             await this.synchronizeAchievements();
+
+                                            // ÉTAPE 3 : SEULEMENT MAINTENANT, on charge et affiche les actualités.
                                             await this.loadNews(this.activeFilter, true);
 
                                             this.startAutoUpdate();
@@ -1991,7 +1992,6 @@
                                             this.loadingNews = false;
                                         }
                                     } else if (event === 'SIGNED_OUT') {
-                                        // On réinitialise le verrou à la déconnexion
                                         this.isDataLoaded = false;
                                         this.stopAutoUpdate();
                                         if (this.realtimeChannel) { supabase.removeChannel(this.realtimeChannel); this.realtimeChannel = null; }
