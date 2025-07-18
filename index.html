@@ -2068,42 +2068,28 @@
                     // ============================================================
                     // 🎮 FONCTION checkAchievements - DOIT ÊTRE ICI
                     // ============================================================
-                    async checkAchievements(queue) {
+                    async checkAchievements(queue = null) {
                         if (!this.user || !this.achievementsData.length) return;
 
                         // Protection contre la boucle infinie pour la diversité
-                        const diversityAchievements = this.achievementsData.filter(a =>
-                            a.condition_type === 'diversity_score'
-                        );
-
-                        const allDiversityUnlocked = diversityAchievements.every(a =>
-                            this.unlockedAchievements.includes(a.code)
-                        );
-
-                        if (allDiversityUnlocked && this.diversityScore >= 90) {
-                            return;
-                        }
+                        const diversityAchievements = this.achievementsData.filter(a => a.condition_type === 'diversity_score');
+                        const allDiversityUnlocked = diversityAchievements.every(a => this.unlockedAchievements.includes(a.code));
+                        if (allDiversityUnlocked && this.diversityScore >= 90) { return; }
 
                         for (const achievement of this.achievementsData) {
                             if (this.unlockedAchievements.includes(achievement.code)) continue;
 
                             let shouldUnlock = false;
                             switch (achievement.condition_type) {
-                                case 'articles_read':
-                                    shouldUnlock = this.totalReadCount >= achievement.condition_value;
-                                    break;
-                                case 'streak_days':
-                                    shouldUnlock = this.readingStreak >= achievement.condition_value;
-                                    break;
-                                case 'level_reached':
-                                    shouldUnlock = this.userLevel >= achievement.condition_value;
-                                    break;
-                                case 'diversity_score':
-                                    shouldUnlock = this.diversityScore >= achievement.condition_value;
-                                    break;
+                                case 'connection': shouldUnlock = true; break; // On remet le cas 'connection'
+                                case 'articles_read': shouldUnlock = this.totalReadCount >= achievement.condition_value; break;
+                                case 'streak_days': shouldUnlock = this.readingStreak >= achievement.condition_value; break;
+                                case 'level_reached': shouldUnlock = this.userLevel >= achievement.condition_value; break;
+                                case 'diversity_score': shouldUnlock = this.diversityScore >= achievement.condition_value; break;
                             }
 
                             if (shouldUnlock) {
+                                // MODIFICATION : On passe la 'queue' à la fonction suivante
                                 await this.unlockAchievement(achievement.code, queue);
                             }
                         }
@@ -2145,14 +2131,17 @@
                     },
 
 
-                    async unlockAchievement(code, queue) {
+                    async unlockAchievement(code, queue = null) { // On rend la 'queue' optionnelle
                         if (this.unlockedAchievements.includes(code)) return;
                         this.unlockedAchievements.push(code);
 
                         const achievement = this.achievementsData.find(a => a.code === code);
-                        if (achievement) {
+
+                        // MODIFICATION : On ajoute une animation SEULEMENT si une 'queue' est présente
+                        if (achievement && queue) {
                             queue.push({ type: 'achievement', icon: achievement.icon_emoji, title: achievement.title });
                         }
+
                         this.updateCurrentAchievement();
 
                         try {
