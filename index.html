@@ -1878,43 +1878,72 @@
 
                 return {
                     // --- ÉTAT DE L'APPLICATION ---
-                    sessionLoaded: false, user: null, email: '', loading: false, message: '', messageType: '', inviteCode: '',
-                    newsList: [], loadingNews: true, latestNewsTimestamp: null, updateInterval: null,
-                    isAdmin: false, showAdminPanel: false, addingNews: false, newNews: { resume: '', url: '' },
-                    stats: { total_articles: 0, total_sources: 0 }, lastGeneratedCode: null, generatingCode: false,
-                    userInviteData: { code: null, parrainEmail: null, filleulEmail: null },
-                    showEditPanel: false, editingNews: {}, showShareModal: false, copied: false,
-                    // --- GAMIFICATION ---
-                    achievementsData: [], userXP: 0, userLevel: 1, xpToNextLevel: 100, readingStreak: 0, unlockedAchievements: [], lastReadDate: null, currentAchievement: null, showAchievementsModal: false,
-                    // --- FILTRES & DIVERSITÉ ---
-                    activeFilter: 'all', searchQuery: '', allOrientations: [], allOtherTags: [], activeOrientations: [], activeTags: [],
-                    diversityScore: null, readOrientations: [], showDiversityChecker: true,
-                    // --- ARTICLES LUS ---
-                    readArticles: {}, totalReadCount: 0, showReadArticles: false, hideReadFromMain: true,
-                    // --- MODALES ---
-                    showAboutModal: false, showFilters: false,
+                    isDataLoaded: false,
+                    sessionLoaded: false,
+                    user: null,
+                    email: '',
+                    loading: false,
+                    message: '',
+                    messageType: '',
+                    inviteCode: '',
+                    newsList: [],
+                    loadingNews: true,
+                    latestNewsTimestamp: null,
+                    updateInterval: null,
+                    realtimeChannel: null,
 
+                    // --- PANNEAU ADMIN ---
+                    isAdmin: false,
+                    showAdminPanel: false,
+                    addingNews: false,
+                    newNews: { resume: '', url: '' },
+                    lastGeneratedCode: null,
+                    generatingCode: false,
+                    editingNews: {},
+
+                    // --- MODALES & PANNEAUX UTILISATEUR ---
+                    showShareModal: false,
+                    copied: false,
+                    showAboutModal: false,
+                    showFilters: false,
+                    showAchievementsModal: false,
+                    showEditPanel: false,
                     showRewardModal: false,
                     rewardData: { icon: '', title: '', description: '' },
+
+                    // --- STATS & GAMIFICATION ---
+                    stats: { total_articles: 0, total_sources: 0 },
+                    achievementsData: [],
+                    userXP: 0,
+                    userLevel: 1,
+                    xpToNextLevel: 100,
+                    readingStreak: 0,
+                    unlockedAchievements: [],
+                    lastReadDate: null,
+                    currentAchievement: null,
+                    userInviteData: { code: null, parrainEmail: null, filleulEmail: null },
+
+                    // --- FILTRES & DIVERSITÉ ---
+                    activeFilter: 'all',
+                    searchQuery: '',
+                    allOrientations: [],
+                    allOtherTags: [],
+                    activeOrientations: [],
+                    activeTags: [],
+                    diversityScore: null,
+                    readOrientations: [],
+                    showDiversityChecker: true,
+
+                    // --- ARTICLES LUS ---
+                    readArticles: {},
+                    totalReadCount: 0,
+                    showReadArticles: false,
+                    hideReadFromMain: true,
 
                     // ============================================================
                     // 🚀 INITIALISATION DE L'APPLICATION
                     // ============================================================
                     async init() {
-                        // Nettoyer TOUT au démarrage pour éviter les bugs
-                        Object.keys(localStorage).forEach(key => {
-                            if (key.startsWith('infodrop_unlocking_')) {
-                                // IMPORTANT : Supprimer immédiatement la clé AVANT de faire quoi que ce soit
-                                localStorage.removeItem(key);
-
-                                const pendingCode = key.replace('infodrop_unlocking_', '');
-                                if (!this.unlockedAchievements.includes(pendingCode)) {
-                                    this.unlockedAchievements.push(pendingCode);
-                                    // NE PAS rejouer l'animation ici !
-                                }
-                            }
-                        });
-
                         localStorage.removeItem('infodrop_animation_queue');
                         if (window.infodropAppInitialized) return;
                         window.infodropAppInitialized = true;
@@ -1930,10 +1959,17 @@
                                     if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
                                         if (!this.user) return;
 
+                                        // --- DÉBUT DE LA CORRECTION ---
+                                        // Si les données sont déjà en cours de chargement ou chargées, on ne fait rien.
+                                        if (this.isDataLoaded) return;
+                                        // On active le verrou.
+                                        this.isDataLoaded = true;
+                                        // --- FIN DE LA CORRECTION ---
+
                                         this.loadingNews = true;
                                         this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+
                                         try {
-                                            // On charge toutes les données de base
                                             await Promise.all([
                                                 this.loadAchievements(),
                                                 this.initGamification(),
@@ -1944,10 +1980,7 @@
                                                 this.calculateDiversityScore()
                                             ]);
 
-                                            // MODIFICATION : On lance la synchronisation robuste
                                             await this.synchronizeAchievements();
-
-                                            // On charge les actualités APRES la synchronisation
                                             await this.loadNews(this.activeFilter, true);
 
                                             this.startAutoUpdate();
@@ -1958,6 +1991,8 @@
                                             this.loadingNews = false;
                                         }
                                     } else if (event === 'SIGNED_OUT') {
+                                        // On réinitialise le verrou à la déconnexion
+                                        this.isDataLoaded = false;
                                         this.stopAutoUpdate();
                                         if (this.realtimeChannel) { supabase.removeChannel(this.realtimeChannel); this.realtimeChannel = null; }
                                     }
