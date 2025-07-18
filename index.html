@@ -1930,12 +1930,10 @@
                                     if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
                                         if (!this.user) return;
 
-                                        // 1. On verrouille l'interface en affichant le spinner de chargement.
                                         this.loadingNews = true;
-
                                         this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
                                         try {
-                                            // 2. On charge TOUTES les données de base en parallèle et on attend qu'elles soient toutes là.
+                                            // On charge toutes les données de base
                                             await Promise.all([
                                                 this.loadAchievements(),
                                                 this.initGamification(),
@@ -1945,27 +1943,19 @@
                                                 this.loadStats(),
                                                 this.calculateDiversityScore()
                                             ]);
-                                            // 3. On fait la vérification de sécurité du localStorage (c'est rapide).
-                                            Object.keys(localStorage).forEach(key => {
-                                                if (key.startsWith('infodrop_unlocking_')) {
-                                                    const pendingCode = key.replace('infodrop_unlocking_', '');
-                                                    if (!this.unlockedAchievements.includes(pendingCode)) { this.unlockedAchievements.push(pendingCode); }
-                                                }
-                                            });
 
-                                            // 4. Maintenant que l'état du joueur est prêt, on charge les actualités.
-                                            await this.loadNews(this.activeFilter, true); // Le second paramètre est important
+                                            // MODIFICATION : On lance la synchronisation robuste
+                                            await this.synchronizeAchievements();
 
-                                            // 5. TOUT est chargé. On peut déverrouiller l'interface.
-                                            // la fonction loadNews(..., true) s'occupe de mettre loadingNews à false.
+                                            // On charge les actualités APRES la synchronisation
+                                            await this.loadNews(this.activeFilter, true);
 
-                                            // 6. On lance les tâches de fond.
                                             this.startAutoUpdate();
                                             this.setupRealtime(session);
 
                                         } catch (error) {
                                             console.error('[FATAL] Erreur de chargement:', error);
-                                            this.loadingNews = false; // On déverrouille aussi en cas d'erreur pour ne pas rester bloqué.
+                                            this.loadingNews = false;
                                         }
                                     } else if (event === 'SIGNED_OUT') {
                                         this.stopAutoUpdate();
@@ -2230,6 +2220,44 @@
 
                         } catch (error) {
                             console.error('Erreur calcul diversité:', error);
+                        }
+                    },
+
+                    // ============================================================
+                    // ⚙️ SYNCHRONISATION DES SUCCÈS (NOUVELLE FONCTION)
+                    // ============================================================
+                    async synchronizeAchievements() {
+                        if (!this.user || !this.achievementsData.length) return;
+
+                        console.log('[DEBUG] Lancement de la synchronisation des succès...');
+                        const originalUnlocks = new Set(this.unlockedAchievements);
+                        let needsSave = false;
+
+                        for (const achievement of this.achievementsData) {
+                            if (this.unlockedAchievements.includes(achievement.code)) continue;
+
+                            let shouldBeUnlocked = false;
+                            switch (achievement.condition_type) {
+                                case 'connection': shouldBeUnlocked = true; break;
+                                case 'articles_read': shouldBeUnlocked = this.totalReadCount >= achievement.condition_value; break;
+                                case 'streak_days': shouldBeUnlocked = this.readingStreak >= achievement.condition_value; break;
+                                case 'level_reached': shouldBeUnlocked = this.userLevel >= achievement.condition_value; break;
+                                case 'diversity_score': shouldBeUnlocked = this.diversityScore >= achievement.condition_value; break;
+                            }
+
+                            if (shouldBeUnlocked) {
+                                console.log(`[SYNC] Le succès '${achievement.title}' aurait dû être débloqué. Correction en cours.`);
+                                this.unlockedAchievements.push(achievement.code);
+                                needsSave = true;
+                            }
+                        }
+
+                        if (needsSave) {
+                            console.log('[SYNC] Des corrections ont été apportées. Sauvegarde des données...');
+                            await this.saveGamingData();
+                            this.updateCurrentAchievement(); // On met à jour le badge du niveau
+                        } else {
+                            console.log('[DEBUG] Aucune correction de succès nécessaire.');
                         }
                     },
 
