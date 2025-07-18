@@ -501,25 +501,32 @@
 
         /* === ACHIEVEMENT POPUP === */
         .achievement-popup-clash {
-            position: relative;
-            /* Important pour la nouvelle animation */
-            top: auto;
-            /* Annule les anciennes positions */
-            left: auto;
-            /* Annule les anciennes positions */
-            transform: none;
-            /* Annule les anciennes transformations */
-
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
             border: 4px solid var(--clash-gold);
             border-radius: 20px;
             padding: 30px;
             text-align: center;
             z-index: 9999;
-
-            /* On utilise la nouvelle animation, plus rapide et sobre */
             animation: reward-appear 0.3s ease-out;
+            /* On garde la nouvelle animation sobre */
+            box-shadow:
+                0 0 0 5px #D68910,
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 100px rgba(255, 215, 0, 0.3);
+        }
 
+        /* AJOUTEZ CETTE NOUVELLE CLASSE DÉDIÉE */
+        .reward-modal-card {
+            background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
+            border: 4px solid var(--clash-gold);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            animation: reward-appear 0.3s ease-out;
             box-shadow:
                 0 0 0 5px #D68910,
                 0 10px 40px rgba(0, 0, 0, 0.5),
@@ -1781,14 +1788,14 @@
             </div>
 
             <!-- ============================================================== -->
-            <!-- 💎 MODAL DE RÉCOMPENSE UNIFIÉ (TAILLE RÉDUITE)                   -->
+            <!-- 💎 MODAL DE RÉCOMPENSE UNIFIÉ (DESIGN CORRIGÉ)                   -->
             <!-- ============================================================== -->
             <div x-show="showRewardModal" x-transition @click="if ($event.target === $el) closeRewardModal()"
                 class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
                 style="display: none;">
 
-                <!-- MODIFICATION : La taille passe de 'max-w-xs' à 'max-w-2xs' -->
-                <div class="achievement-popup-clash w-full max-w-2xs" @click.stop>
+                <!-- MODIFICATION : On utilise une nouvelle classe 'reward-modal-card' et une taille 'max-w-xs' -->
+                <div class="reward-modal-card w-full max-w-xs" @click.stop>
                     <div class="text-6xl mb-3" x-text="rewardData.icon"></div>
                     <h3 class="text-2xl font-bold mb-2 text-white" x-text="rewardData.title"></h3>
                     <p class="text-lg text-blue-200" x-text="rewardData.description"></p>
@@ -2270,9 +2277,6 @@
                             console.error('Erreur sauvegarde gaming:', error);
                         }
                     },
-
-                    // Le reste des fonctions (login, loadNews, helpers, etc.) reste ici...
-                    // J'inclus toutes les fonctions pour que ce soit un remplacement complet et propre.
 
                     toggleFilter(filter) {
                         this.activeFilter = (this.activeFilter === filter) ? 'all' : filter;
