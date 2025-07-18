@@ -1701,18 +1701,17 @@
                 </div>
             </div>
 
-                  
-<!-- ============================================================== -->
-            <!-- ℹ️ MODAL À PROPOS (CORRIGÉE)                                    -->
+
+            <!-- ============================================================== -->
+            <!-- ℹ️ MODAL À PROPOS (CORRIGÉE AVEC FERMETURE EXTÉRIEURE)            -->
             <!-- ============================================================== -->
             <div x-show="showAboutModal" x-transition
-                @click.away="showAboutModal = false"
-                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" 
+                @click="if ($event.target === $el) showAboutModal = false"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50"
                 style="display: none;"
                 x-init="$watch('showAboutModal', value => document.body.style.overflow = value ? 'hidden' : '')">
 
-                <!-- Conteneur principal, on réutilise le style du modal des achievements -->
-                <!-- MODIFICATION 1: Ajout de 'flex flex-col' pour un layout vertical flexible -->
+                <!-- Ce @click.stop est crucial : il empêche un clic DANS la modale de la fermer -->
                 <div class="achievements-modal flex flex-col" @click.stop>
 
                     <!-- En-tête (inchangé) -->
@@ -1729,7 +1728,7 @@
                         <p class="text-xs sm:text-sm text-yellow-200">Version 4.0.0</p>
                     </div>
 
-                    <!-- MODIFICATION 2: Ajout de 'flex-grow overflow-y-auto' pour que seul le contenu défile -->
+                    <!-- Contenu scrollable (inchangé) -->
                     <div class="achievements-content modal-content flex-grow overflow-y-auto">
                         <div class="space-y-4">
                             <!-- Le Projet -->
@@ -1809,7 +1808,7 @@
                         </div>
                     </div>
 
-                    <!-- MODIFICATION 3: Augmentation du padding ('p-4') et bouton toujours visible -->
+                    <!-- Pied de page (inchangé) -->
                     <div class="p-4 text-center border-t-2 border-gray-700 flex-shrink-0">
                         <a href="mailto:l0r4.py@gmail.com" class="clash-btn px-4 py-1.5 text-sm text-white">
                             📧 Contactez-nous
@@ -1817,943 +1816,943 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ============================================================== -->
+            <!-- 🦶 FOOTER                                                     -->
+            <!-- ============================================================== -->
+            <footer class="text-center py-6 sm:py-8 text-xs text-gray-500 mt-auto border-t-2 border-gray-800">
+                <p>© 2025 INFODROP. Tous droits réservés.</p>
+                <p class="mt-1">Un projet 3C - By Emile Marclin & L0r4.py [AI]</p>
+            </footer>
         </div>
 
-        <!-- ============================================================== -->
-        <!-- 🦶 FOOTER                                                     -->
-        <!-- ============================================================== -->
-        <footer class="text-center py-6 sm:py-8 text-xs text-gray-500 mt-auto border-t-2 border-gray-800">
-            <p>© 2025 INFODROP. Tous droits réservés.</p>
-            <p class="mt-1">Un projet 3C - By Emile Marclin & L0r4.py [AI]</p>
-        </footer>
-    </div>
-
-    <!-- ======================================================================== -->
-    <!-- 🔝 BOUTON SCROLL TO TOP                                                 -->
-    <!-- ======================================================================== -->
-    <button x-data="{ show: false }" x-show="show" x-transition @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
-        x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
-        class="fixed bottom-6 right-6 z-40 clash-btn p-3 text-white" style="display: none;">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-                d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
-                clip-rule="evenodd" />
-        </svg>
-    </button>
-
-
-
-    <!-- ======================================================================== -->
-    <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER AVEC GAMIFICATION                        -->
-    <!-- ======================================================================== -->
-    <script>
-        /* ───── CONFIG DEBUG ───── */
-        const DEBUG = true;
-        const dlog = (...args) => DEBUG && console.log('[DEBUG]', ...args);
-
-        /* ───── Variables globales ───── */
-        let supabase = null;
-        let ADMIN_EMAILS = [];
-        let STRIPE_LINK = '';
-
-        /* ──────────────────────────────────────────────────────────────────────
-           initializeSupabase — Appel unique au chargement, version propre
-           ─────────────────────────────────────────────────────────────────── */
-        async function initializeSupabase() {
-            if (supabase) { return true; }
-            dlog('🔐 initializeSupabase() lancé');
-            try {
-                const res = await fetch('/api/config');
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const cfg = await res.json();
-                ADMIN_EMAILS = cfg.adminEmails;
-                STRIPE_LINK = cfg.stripeLink;
-                const { createClient } = window.supabase;
-                supabase = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
-                dlog('✅ Supabase initialisé');
-                return true;
-            } catch (err) {
-                console.error('❌ Erreur initialisation:', err);
-                const errorDiv = document.createElement('div');
-                errorDiv.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: Arial;"><div style="text-align: center; padding: 2rem;"><h2>❌ Erreur de configuration</h2><p>Impossible de charger la configuration sécurisée.</p><button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem;">Recharger</button></div></div>`;
-                document.body.appendChild(errorDiv);
-                return false;
-            }
-        }
-
-        // ====================================================================
-        // 🏗️ APPLICATION PRINCIPALE - GESTION DE L'ÉTAT ET LOGIQUE MÉTIER
-        // ====================================================================
-        function infodropApp() {
-            const ORIENTATION_DATA = { 'extrême-gauche': { class: 'bg-[#FF0000] text-white border-[#CC0000]', color: '#FF0000' }, 'gauche': { class: 'bg-[#D42A2A] text-white border-[#A82020]', color: '#D42A2A' }, 'centre-gauche': { class: 'bg-[#AA5555] text-white border-[#884444]', color: '#AA5555' }, 'centre': { class: 'bg-[#808080] text-white border-[#666666]', color: '#808080' }, 'centre-droit': { class: 'bg-[#5555AA] text-white border-[#444488]', color: '#5555AA' }, 'droite': { class: 'bg-[#2A2AD4] text-white border-[#2020A8]', color: '#2A2AD4' }, 'extrême-droite': { class: 'bg-[#0000FF] text-white border-[#0000CC]', color: '#0000FF' }, 'gouvernement': { class: 'bg-blue-800 text-blue-100 border-blue-900', color: '#1e40af' }, 'neutre': { class: 'bg-green-700 text-green-100 border-green-800', color: '#16a34a' } };
-
-            return {
-                // --- ÉTAT DE L'APPLICATION ---
-                sessionLoaded: false, user: null, email: '', loading: false, message: '', messageType: '', inviteCode: '',
-                newsList: [], loadingNews: true, latestNewsTimestamp: null, updateInterval: null,
-                isAdmin: false, showAdminPanel: false, addingNews: false, newNews: { resume: '', url: '' },
-                stats: { total_articles: 0, total_sources: 0 }, lastGeneratedCode: null, generatingCode: false,
-                userInviteData: { code: null, parrainEmail: null, filleulEmail: null },
-                showEditPanel: false, editingNews: {}, showShareModal: false, copied: false,
-                // --- GAMIFICATION ---
-                achievementsData: [], userXP: 0, userLevel: 1, xpToNextLevel: 100, readingStreak: 0, unlockedAchievements: [], lastReadDate: null, currentAchievement: null, showAchievementsModal: false,
-                // --- FILTRES & DIVERSITÉ ---
-                activeFilter: 'all', searchQuery: '', allOrientations: [], allOtherTags: [], activeOrientations: [], activeTags: [],
-                diversityScore: null, readOrientations: [], showDiversityChecker: true,
-                // --- ARTICLES LUS ---
-                readArticles: {}, totalReadCount: 0, showReadArticles: false, hideReadFromMain: true,
-                // --- MODALES ---
-                showAboutModal: false, showFilters: false,
-
-                // ============================================================
-                // 🚀 INITIALISATION DE L'APPLICATION
-                // ============================================================
-                async init() {
-                    // Nettoyer TOUT au démarrage pour éviter les bugs
-                    Object.keys(localStorage).forEach(key => {
-                        if (key.startsWith('infodrop_unlocking_')) {
-                            // IMPORTANT : Supprimer immédiatement la clé AVANT de faire quoi que ce soit
-                            localStorage.removeItem(key);
-
-                            const pendingCode = key.replace('infodrop_unlocking_', '');
-                            if (!this.unlockedAchievements.includes(pendingCode)) {
-                                this.unlockedAchievements.push(pendingCode);
-                                // NE PAS rejouer l'animation ici !
-                            }
-                        }
-                    });
-
-                    localStorage.removeItem('infodrop_animation_queue');
-                    if (window.infodropAppInitialized) return;
-                    window.infodropAppInitialized = true;
-                    console.log('🚀 Alpine init() lancé.');
-
-                    const isReady = await initializeSupabase();
-                    if (isReady) {
-                        supabase.auth.onAuthStateChange((event, session) => {
-                            this.$nextTick(async () => {
-                                this.user = session?.user || null;
-                                this.sessionLoaded = true;
-
-                                if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-                                    if (!this.user) return;
-
-                                    // 1. On verrouille l'interface en affichant le spinner de chargement.
-                                    this.loadingNews = true;
-
-                                    this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
-                                    try {
-                                        // 2. On charge TOUTES les données de base en parallèle et on attend qu'elles soient toutes là.
-                                        await Promise.all([
-                                            this.loadAchievements(),
-                                            this.initGamification(),
-                                            this.loadReadArticlesFromDB(),
-                                            this.loadReadPreferences(),
-                                            this.loadUserInviteData(),
-                                            this.loadStats()
-                                        ]);
-
-                                        // 3. On fait la vérification de sécurité du localStorage (c'est rapide).
-                                        Object.keys(localStorage).forEach(key => {
-                                            if (key.startsWith('infodrop_unlocking_')) {
-                                                const pendingCode = key.replace('infodrop_unlocking_', '');
-                                                if (!this.unlockedAchievements.includes(pendingCode)) { this.unlockedAchievements.push(pendingCode); }
-                                            }
-                                        });
-
-                                        // 4. Maintenant que l'état du joueur est prêt, on charge les actualités.
-                                        await this.loadNews(this.activeFilter, true); // Le second paramètre est important
-
-                                        // 5. TOUT est chargé. On peut déverrouiller l'interface.
-                                        // la fonction loadNews(..., true) s'occupe de mettre loadingNews à false.
-
-                                        // 6. On lance les tâches de fond.
-                                        this.startAutoUpdate();
-                                        this.setupRealtime(session);
-
-                                    } catch (error) {
-                                        console.error('[FATAL] Erreur de chargement:', error);
-                                        this.loadingNews = false; // On déverrouille aussi en cas d'erreur pour ne pas rester bloqué.
-                                    }
-                                } else if (event === 'SIGNED_OUT') {
-                                    this.stopAutoUpdate();
-                                    if (this.realtimeChannel) { supabase.removeChannel(this.realtimeChannel); this.realtimeChannel = null; }
-                                }
-                            });
-                        });
-                    }
-
-                    document.addEventListener('visibilitychange', () => {
-                        if (!document.hidden) {
-                            // 1. Récupérer la queue d'animations
-                            const queue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
-
-                            // 2. Supprimer immédiatement du localStorage
-                            localStorage.removeItem('infodrop_animation_queue');
-
-                            // 3. IMPORTANT : Filtrer la queue pour éviter les doublons
-                            if (queue.length > 0) {
-                                // Filtrer les achievements déjà débloqués
-                                const filteredQueue = queue.filter(animation => {
-                                    if (animation.type === 'achievement') {
-                                        // Vérifier si cet achievement n'a pas déjà été joué récemment
-                                        const recentKey = `recent_achievement_${animation.title}`;
-                                        const wasRecentlyShown = sessionStorage.getItem(recentKey);
-
-                                        if (wasRecentlyShown) {
-                                            console.log('Achievement déjà montré récemment:', animation.title);
-                                            return false; // Ne pas rejouer
-                                        }
-
-                                        // Marquer comme montré
-                                        sessionStorage.setItem(recentKey, 'true');
-
-                                        // Auto-nettoyer après 5 minutes
-                                        setTimeout(() => {
-                                            sessionStorage.removeItem(recentKey);
-                                        }, 300000);
-                                    }
-                                    return true; // Garder XP et level up
-                                });
-
-                                // 4. Jouer seulement les animations filtrées
-                                if (filteredQueue.length > 0) {
-                                    this.playAnimationQueue(filteredQueue);
-                                }
-                            }
-                        }
-                    });
-                },
-
-                // ============================================================
-                // 📚 ORCHESTRATEUR DE GAMIFICATION
-                // ============================================================
-                async markAsRead(id) {
-                    if (!this.user || this.readArticles[id]) return;
-
-                    this.readArticles[id] = new Date().toISOString();
-                    this.updateTotalReadCount();
-
-                    const article = this.newsList.find(n => n.id === id);
-                    let animationQueue = [];
-
-                    // Mettre à jour l'XP
-                    this.updateXP(article, animationQueue);
-                    this.updateStreak();
-                    await this.calculateDiversityScore();
-
-                    // IMPORTANT : Stocker les achievements actuels AVANT la vérification
-                    const achievementsBeforeCheck = [...this.unlockedAchievements];
-
-                    await this.checkAchievements(animationQueue);
-
-                    // Filtrer la queue pour ne garder que les NOUVEAUX achievements
-                    animationQueue = animationQueue.filter(anim => {
-                        if (anim.type === 'achievement') {
-                            // Vérifier si c'était vraiment un nouvel achievement
-                            const wasAlreadyUnlocked = achievementsBeforeCheck.some(code => {
-                                const achievement = this.achievementsData.find(a => a.code === code);
-                                return achievement && achievement.title === anim.title;
-                            });
-                            return !wasAlreadyUnlocked;
-                        }
-                        return true; // Garder XP et level up
-                    });
-
-                    await this.saveGamingData();
-                    await this.saveReadArticleToDB(id);
-                    await this.addToDiversityData(article);
-
-                    // Sauvegarder seulement si il y a de vraies nouvelles animations
-                    if (animationQueue.length > 0) {
-                        // Récupérer la queue existante et fusionner
-                        const existingQueue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
-                        const newQueue = [...existingQueue, ...animationQueue];
-                        localStorage.setItem('infodrop_animation_queue', JSON.stringify(newQueue));
-                    }
-                },
-
-                // ============================================================
-                // 🎮 FONCTION checkAchievements - DOIT ÊTRE ICI
-                // ============================================================
-                async checkAchievements(queue) {
-                    if (!this.user || !this.achievementsData.length) return;
-
-                    // Protection contre la boucle infinie pour la diversité
-                    const diversityAchievements = this.achievementsData.filter(a =>
-                        a.condition_type === 'diversity_score'
-                    );
-
-                    const allDiversityUnlocked = diversityAchievements.every(a =>
-                        this.unlockedAchievements.includes(a.code)
-                    );
-
-                    if (allDiversityUnlocked && this.diversityScore >= 90) {
-                        return;
-                    }
-
-                    for (const achievement of this.achievementsData) {
-                        if (this.unlockedAchievements.includes(achievement.code)) continue;
-
-                        let shouldUnlock = false;
-                        switch (achievement.condition_type) {
-                            case 'articles_read':
-                                shouldUnlock = this.totalReadCount >= achievement.condition_value;
-                                break;
-                            case 'streak_days':
-                                shouldUnlock = this.readingStreak >= achievement.condition_value;
-                                break;
-                            case 'level_reached':
-                                shouldUnlock = this.userLevel >= achievement.condition_value;
-                                break;
-                            case 'diversity_score':
-                                shouldUnlock = this.diversityScore >= achievement.condition_value;
-                                break;
-                        }
-
-                        if (shouldUnlock) {
-                            await this.unlockAchievement(achievement.code, queue);
-                        }
-                    }
-                },
-
-                // ============================================================
-                // 🎮 SOUS-FONCTIONS DE GAMIFICATION
-                // ============================================================
-                updateXP(article, queue) {
-                    let xpGained = 10;
-                    if (article) {
-                        if (article.orientation && !this.readOrientations.includes(article.orientation)) xpGained += 20;
-                        if (article.tags && article.tags.includes('🧨INFODROP')) xpGained += 5;
-                    }
-
-                    // Toujours ajouter l'XP à la queue
-                    if (xpGained > 0 && queue) {
-                        queue.push({ type: 'xp', amount: xpGained });
-                    }
-
-                    this.userXP += xpGained;
-                    while (this.userXP >= this.xpToNextLevel) {
-                        this.userXP -= this.xpToNextLevel;
-                        this.userLevel++;
-                        this.updateXPToNextLevel();
-                        if (queue) {
-                            queue.push({ type: 'level_up', newLevel: this.userLevel });
-                        }
-                    }
-                },
-
-
-                updateStreak() {
-                    const today = new Date().toDateString();
-                    if (this.lastReadDate === today) return;
-                    const yesterday = new Date(Date.now() - 86400000).toDateString();
-                    this.readingStreak = (this.lastReadDate === yesterday) ? this.readingStreak + 1 : 1;
-                    this.lastReadDate = today;
-                },
-
-
-                async unlockAchievement(code, queue) {
-                    if (this.unlockedAchievements.includes(code)) return;
-                    this.unlockedAchievements.push(code);
-
-                    const achievement = this.achievementsData.find(a => a.code === code);
-                    if (achievement) {
-                        queue.push({ type: 'achievement', icon: achievement.icon_emoji, title: achievement.title });
-                    }
-                    this.updateCurrentAchievement();
-
-                    try {
-                        await this.saveGamingData();
-                        await supabase.from('user_achievement_history').upsert({ user_id: this.user.id, achievement_code: code }, { onConflict: 'user_id, achievement_code' });
-                        localStorage.removeItem(`infodrop_unlocking_${code}`);
-                    } catch (error) {
-                        console.error(`Erreur sauvegarde succès ${code}:`, error);
-                    }
-                },
-
-                playAnimationQueue(queue) {
-                    let delay = 300;
-                    queue.forEach((animation, index) => {
-                        setTimeout(() => {
-                            switch (animation.type) {
-                                case 'xp':
-                                    this.showXPAnimation(animation.amount);
-                                    break;
-                                case 'level_up':
-                                    this.showLevelUpAnimation(animation.newLevel);
-                                    break;
-                                case 'achievement':
-                                    // Double vérification avant de montrer
-                                    const recentCheck = sessionStorage.getItem(`recent_achievement_${animation.title}`);
-                                    if (!recentCheck || index === 0) { // Toujours montrer la première
-                                        this.showAchievementPopup(animation.icon, animation.title);
-                                    }
-                                    break;
-                            }
-                        }, delay);
-
-                        // Augmenter le délai pour les prochaines animations
-                        delay += (animation.type === 'achievement' || animation.type === 'level_up') ? 3200 : 1500;
-                    });
-                },
-
-
-                async calculateDiversityScore() {
-                    if (!this.user) return;
-                    try {
-                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-                        const { data } = await supabase
-                            .from('user_diversity_data')
-                            .select('orientation, source')
-                            .eq('user_id', this.user.id)
-                            .gte('read_at', twentyFourHoursAgo.toISOString());
-
-                        if (!data || data.length === 0) {
-                            this.diversityScore = null;
-                            this.readOrientations = [];
-                            return;
-                        }
-
-                        const oSet = new Set(data.map(r => r.orientation).filter(Boolean));
-                        const sSet = new Set(data.map(r => r.source));
-                        const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
-                        this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
-                        this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
-
-                    } catch (error) {
-                        console.error('Erreur calcul diversité:', error);
-                    }
-                },
-
-                // ============================================================
-                // ⚙️ INITIALISATION & SAUVEGARDES
-                // ============================================================
-                async initGamification() {
-                    if (!this.user) return;
-                    try {
-                        let { data, error } = await supabase.from('user_gaming_stats').select('*').eq('user_id', this.user.id).single();
-                        if (error && error.code === 'PGRST116') {
-                            const { data: newStats } = await supabase.from('user_gaming_stats').insert({ user_id: this.user.id, xp: 0, level: 1, reading_streak: 0, unlocked_achievements: ['WELCOME'], last_read_date: null }).select().single();
-                            data = newStats;
-                        }
-                        this.userXP = data.xp || 0;
-                        this.userLevel = data.level || 1;
-                        this.readingStreak = data.reading_streak || 0;
-                        this.unlockedAchievements = data.unlocked_achievements && data.unlocked_achievements.length > 0 ? data.unlocked_achievements : ['WELCOME'];
-                        this.lastReadDate = data.last_read_date;
-                        this.updateXPToNextLevel();
-                        this.updateCurrentAchievement();
-                    } catch (error) {
-                        console.error('Erreur init gamification:', error);
-                    }
-                },
-
-                async saveGamingData() {
-                    if (!this.user) return;
-                    try {
-                        await supabase.from('user_gaming_stats').update({
-                            xp: this.userXP,
-                            level: this.userLevel,
-                            reading_streak: this.readingStreak,
-                            unlocked_achievements: this.unlockedAchievements,
-                            last_read_date: this.lastReadDate,
-                            updated_at: new Date().toISOString()
-                        }).eq('user_id', this.user.id);
-                    } catch (error) {
-                        console.error('Erreur sauvegarde gaming:', error);
-                    }
-                },
-
-                // Le reste des fonctions (login, loadNews, helpers, etc.) reste ici...
-                // J'inclus toutes les fonctions pour que ce soit un remplacement complet et propre.
-
-                toggleFilter(filter) {
-                    this.activeFilter = (this.activeFilter === filter) ? 'all' : filter;
-                    this.searchQuery = '';
-                    this.loadNews(this.activeFilter, true);
-                },
-
-                getOrientationDisplayName(orientation) {
-                    if (!orientation) return '';
-                    if (orientation === 'gouvernement') return '🇫🇷 Gouvernement';
-                    if (orientation === '🧨INFODROP') return orientation;
-                    return orientation.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                },
-
-                async loadAchievements() {
-                    try {
-                        const { data } = await supabase.from('achievements').select('*').eq('is_active', true).order('order_priority');
-                        this.achievementsData = data || [];
-                    } catch (error) {
-                        console.error('[ERREUR] Le chargement des achievements a échoué', error);
-                    }
-                },
-
-                updateCurrentAchievement() {
-                    const unlocked = this.achievementsData
-                        .filter(a => this.unlockedAchievements.includes(a.code))
-                        .sort((a, b) => b.order_priority - a.order_priority);
-                    this.currentAchievement = unlocked.length > 0 ? unlocked[0].icon_emoji : '⭐';
-                },
-
-                updateXPToNextLevel() {
-                    this.xpToNextLevel = this.userLevel * 100;
-                },
-
-                getAchievementTitle(iconOrCode) {
-                    const achievement = this.achievementsData.find(a => a.code === iconOrCode || a.icon_emoji === iconOrCode);
-                    return achievement ? achievement.title : 'Achievement mystère';
-                },
-
-                getAllAchievementsData() {
-                    if (!this.achievementsData) return [];
-                    return this.achievementsData.map(achievement => ({
-                        id: achievement.code,
-                        icon: achievement.icon_emoji,
-                        title: achievement.title,
-                        description: achievement.description,
-                        unlocked: this.unlockedAchievements.includes(achievement.code),
-                        progress: this.getAchievementProgress(achievement)
-                    }));
-                },
-
-                getAchievementProgress(achievement) {
-                    if (this.unlockedAchievements.includes(achievement.code)) return '✓ Complété';
-                    switch (achievement.condition_type) {
-                        case 'articles_read': return `${this.totalReadCount}/${achievement.condition_value} articles`;
-                        case 'streak_days': return `${this.readingStreak}/${achievement.condition_value} jours`;
-                        case 'level_reached': return `Niveau ${this.userLevel}/${achievement.condition_value}`;
-                        case 'diversity_score': return `Score: ${this.diversityScore || 0}%`;
-                        default: return '...';
-                    }
-                },
-
-                showXPAnimation(amount) {
-                    const popup = document.createElement('div');
-                    popup.className = 'xp-popup';
-                    popup.textContent = `+${amount} XP`;
-                    popup.style.left = '50%';
-                    popup.style.top = '200px';
-                    document.body.appendChild(popup);
-                    setTimeout(() => popup.remove(), 1500);
-                },
-
-                showLevelUpAnimation() {
-                    const levelUp = document.createElement('div');
-                    levelUp.style.cssText = `position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; font-weight: bold; color: var(--clash-gold); text-shadow: 0 0 30px var(--clash-gold); animation: level-up-clash 1.5s ease-out forwards; z-index: 9999; pointer-events: none;`;
-                    levelUp.textContent = `NIVEAU ${this.userLevel}!`;
-                    document.body.appendChild(levelUp);
-                    this.createGoldConfetti();
-                    setTimeout(() => levelUp.remove(), 1500);
-                },
-
-                showAchievementPopup(icon, title) {
-                    // Vérification anti-spam
-                    if (window.DISABLE_ANIMATIONS) return;
-
-                    // Vérifier qu'on n'est pas en train de charger la page
-                    if (document.readyState !== 'complete') return;
-
-                    // Vérifier qu'il n'y a pas déjà une popup
-                    if (document.querySelector('.achievement-popup-clash')) return;
-
-                    // Limiter à une popup toutes les 5 secondes
-                    const now = Date.now();
-
-                    if (window.lastAchievementPopup && (now - window.lastAchievementPopup) < 5000) return;
-                    window.lastAchievementPopup = now;
-                    const popup = document.createElement('div');
-                    popup.className = 'achievement-popup-clash';
-                    popup.innerHTML = `<div class="text-6xl mb-3">${icon}</div><h3 class="text-2xl font-bold mb-2 text-white">SUCCÈS DÉBLOQUÉ!</h3><p class="text-lg text-blue-200">${title}</p>`;
-                    document.body.appendChild(popup);
-                    setTimeout(() => {
-                        popup.style.animation = 'achievement-appear 0.5s ease-out reverse forwards';
-                        setTimeout(() => popup.remove(), 500);
-                    }, 3000);
-                },
-
-                createGoldConfetti() {
-                    const colors = ['#FFD700', '#FFA500', '#FFFF00', '#FFE4B5'];
-                    for (let i = 0; i < 30; i++) {
-                        setTimeout(() => {
-                            const conf = document.createElement('div');
-                            conf.style.cssText = `position: fixed; width: 15px; height: 15px; background: ${colors[i % colors.length]}; left: ${Math.random() * 100}%; top: -20px; opacity: ${Math.random() + 0.5}; transform: rotate(${Math.random() * 360}deg); animation: confetti-fall ${3 + Math.random() * 2}s linear forwards; pointer-events: none; z-index: 9999; box-shadow: 0 0 10px ${colors[i % colors.length]};`;
-                            document.body.appendChild(conf);
-                            setTimeout(() => conf.remove(), 5000);
-                        }, i * 50);
-                    }
-                },
-
-                get filteredNewsList() {
-                    if (!this.searchQuery || this.searchQuery.trim() === '') return this.newsList;
-                    const query = this.searchQuery.toLowerCase().trim();
-                    return this.newsList.filter(news => (news.resume && news.resume.toLowerCase().includes(query)) || (news.source && news.source.toLowerCase().includes(query)) || (news.tags && news.tags.some(tag => tag.toLowerCase().includes(query))) || (news.orientation && news.orientation.toLowerCase().includes(query)));
-                },
-
-                getOrientationColor(o) { return ORIENTATION_DATA[o]?.color || '#808080'; },
-                getOrientationClass(o) { return ORIENTATION_DATA[o]?.class || 'bg-gray-700 text-gray-200 border-gray-600'; },
-
-                async login() {
-                    if (this.loading) return;
-                    this.loading = true;
-                    this.message = '';
-                    this.messageType = '';
-                    try {
-                        const checkRes = await fetch('/api/check-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: this.email.toLowerCase() }) });
-                        if (!checkRes.ok) { const err = await checkRes.json(); throw new Error(err.error || 'Erreur de communication.'); }
-                        const { exists } = await checkRes.json();
-                        if (!exists) {
-                            if (!this.inviteCode) { this.message = "Code d'invitation requis pour les nouveaux utilisateurs."; this.messageType = 'error'; this.loading = false; return; }
-                            const validateRes = await fetch('/api/validate-invite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: this.inviteCode, email: this.email }) });
-                            const validationResult = await validateRes.json();
-                            if (!validationResult.success) { this.message = validationResult.error; this.messageType = 'error'; this.loading = false; return; }
-                        }
-                        const { error: otpError } = await supabase.auth.signInWithOtp({ email: this.email.toLowerCase(), options: { emailRedirectTo: window.location.origin } });
-                        if (otpError) throw otpError;
-                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
-                        this.messageType = 'success';
-                    } catch (error) {
-                        this.message = error.message || 'Une erreur est survenue.';
-                        this.messageType = 'error';
-                    } finally {
-                        this.loading = false;
-                    }
-                },
-
-                async loadUserInviteData() {
-                    if (!this.user || !this.user.email) return;
-                    if (this.isAdmin) {
-                        try {
-                            const { data: adminCode, error: adminError } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
-                            if (adminError && adminError.code !== 'PGRST116') { console.error('❌ Erreur requête admin:', adminError); return; }
-                            if (adminCode) {
-                                this.userInviteData.code = adminCode.code;
-                                this.userInviteData.is_used = adminCode.is_used || false;
-                                if (adminCode.is_used && adminCode.used_by_email) { this.userInviteData.filleulEmail = adminCode.used_by_email; }
-                            } else { this.userInviteData.code = null; }
-                            this.userInviteData.parrainEmail = null;
-                            return;
-                        } catch (error) { console.error('❌ Erreur traitement admin:', error); return; }
-                    }
-                    try {
-                        const { data: ownCode } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
-                        if (ownCode) {
-                            this.userInviteData.code = ownCode.code;
-                            this.userInviteData.is_used = ownCode.is_used || false;
-                            if (ownCode.is_used && ownCode.used_by_email) { this.userInviteData.filleulEmail = ownCode.used_by_email; }
-                        }
-                        const { data: usedCode } = await supabase.from('invitation_codes').select('owner_email').ilike('used_by_email', this.user.email.toLowerCase()).maybeSingle();
-                        if (usedCode) { this.userInviteData.parrainEmail = usedCode.owner_email; }
-                    } catch (error) {
-                        console.error("❌ Erreur chargement des données d'invitation:", error);
-                        this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null };
-                    }
-                },
-
-                setupRealtime(session) {
-                    this.realtimeChannel = supabase.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } });
-                    this.realtimeChannel.on('presence', { event: 'sync' }, () => {
-                        this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
-                    }).subscribe(async (status) => {
-                        if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); }
-                    });
-                },
-
-                openEditPanel(news) {
-                    this.editingNews = { ...JSON.parse(JSON.stringify(news)), tagsText: (news.tags || []).join(', ') };
-                    this.showEditPanel = true;
-                },
-
-                async updateNews() {
-                    const { id, resume, source, url, orientation, tagsText } = this.editingNews;
-                    const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
-                    try {
-                        await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id);
-                        const index = this.newsList.findIndex(n => n.id === id);
-                        if (index !== -1) { this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; }
-                        this.showEditPanel = false;
-                        this.updateTagsList();
-                    } catch (e) { alert("La mise à jour a échoué."); }
-                },
-
-                async deleteNews(id) {
-                    if (!confirm("Supprimer ?")) return;
-                    this.newsList = this.newsList.filter(n => n.id !== id);
-                    try {
-                        await supabase.from('actu').delete().eq('id', id);
-                        if (this.isAdmin) this.loadStats();
-                    } catch (e) { alert("La suppression a échoué."); this.loadNews(); }
-                },
-
-                async addManualNews() {
-                    this.addingNews = true;
-                    try {
-                        if (!this.newNews.resume || !this.newNews.resume.trim()) { throw new Error('Le résumé est obligatoire'); }
-                        if (!this.newNews.url || !this.newNews.url.trim()) { throw new Error('L\'URL est obligatoire'); }
-                        let tags = ['🧨INFODROP'];
-                        if (this.newNews.tagsText && this.newNews.tagsText.trim()) {
-                            const additionalTags = this.newNews.tagsText.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0 && tag !== '🧨INFODROP');
-                            tags = tags.concat(additionalTags);
-                        }
-                        const articleData = { resume: this.newNews.resume.trim(), source: '🧨INFODROP', url: this.newNews.url.trim(), heure: new Date().toISOString(), tags: tags, added_by: this.user.email };
-                        if (this.newNews.orientation && this.newNews.orientation.trim()) { articleData.orientation = this.newNews.orientation.trim(); }
-                        const { error } = await supabase.from('actu').insert(articleData).select('*');
-                        if (error) { throw new Error(`Erreur DB: ${error.message}`); }
-                        this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
-                        this.showAdminPanel = false;
-                        await this.loadData();
-                        alert('✅ Article ajouté avec succès !');
-                    } catch (error) {
-                        alert('Erreur lors de l\'ajout de l\'article: ' + error.message);
-                    } finally {
-                        this.addingNews = false;
-                    }
-                },
-
-                async generateInviteCode() {
-                    if (!this.isAdmin || this.generatingCode) return;
-                    this.generatingCode = true;
-                    try {
-                        const { data: { session } } = await supabase.auth.getSession();
-                        if (!session) throw new Error("Session introuvable");
-                        const response = await fetch('/api/generate-invite', { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' } });
-                        const result = await response.json();
-                        if (!result.success) throw new Error(result.error || 'Erreur lors de la génération');
-                        this.lastGeneratedCode = result.code;
-                        this.copyInviteMessage(result.code);
-                    } catch (error) {
-                        alert('Erreur lors de la génération du code: ' + error.message);
-                    } finally {
-                        this.generatingCode = false;
-                    }
-                },
-
-                async loadData(isInitial = false) {
-                    if (isInitial) this.loadingNews = true;
-                    await this.loadStats();
-                    if (isInitial) {
-                        await this.loadNews(this.activeFilter, true);
-                    }
-                    if (isInitial) this.loadingNews = false;
-                },
-
-                async loadNews(filter = null, isNewFilter = false) {
-                    if (isNewFilter) this.loadingNews = true;
-                    try {
-                        let query = supabase.from('actu').select('id, resume, url, heure, source, orientation, tags, added_by').order('heure', { ascending: false });
-                        if (filter && filter !== 'all') {
-                            if (this.allOrientations.includes(filter)) { query = query.eq('orientation', filter); }
-                            else { query = query.contains('tags', [filter]); }
-                        }
-                        if (!isNewFilter && this.latestNewsTimestamp) { query = query.gt('heure', this.latestNewsTimestamp); }
-                        else { query = query.limit(100); }
-
-                        const { data: newArticles, error } = await query;
-                        if (error) throw error;
-
-                        if (newArticles && newArticles.length > 0) {
-                            if (isNewFilter) { this.newsList = newArticles; }
-                            else { this.newsList = [...newArticles, ...this.newsList]; }
-                            this.latestNewsTimestamp = this.newsList[0].heure;
-                        } else if (isNewFilter) { this.newsList = []; }
-                    } catch (e) {
-                        console.error('Erreur dans loadNews:', e);
-                    } finally {
-                        if (isNewFilter) this.loadingNews = false;
-                    }
-                },
-
-                updateTagsList() {
-                    const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
-                    this.allOrientations = pol;
-                    this.allOtherTags = this.activeTags.filter(tag => !pol.includes(tag));
-                },
-
-                hasArticlesForOrientation(o) { return this.activeOrientations.includes(o); },
-                hasArticlesForTag(t) { return this.activeTags.includes(t); },
-
-                getEmptyFilterMessage() {
-                    if (this.allOrientations.includes(this.activeFilter)) return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`;
-                    return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`;
-                },
-
-                async loadStats() {
-                    try {
-                        const { data, error } = await supabase.rpc('get_live_stats');
-                        if (error) throw error;
-                        this.stats = { total_articles: data.total_articles || 0, total_sources: data.total_sources || 0 };
-                        this.activeOrientations = data.active_orientations || [];
-                        this.activeTags = data.active_tags || [];
-                        this.updateTagsList();
-                    } catch (e) {
-                        console.error('[ERREUR] Le chargement des statistiques et filtres a échoué :', e);
-                    }
-                },
-
-                async saveReadArticleToDB(articleId) {
-                    if (!this.user) return;
-                    try {
-                        await supabase.from('user_read_articles').upsert({ user_id: this.user.id, article_id: articleId, read_at: new Date().toISOString() }, { onConflict: 'user_id,article_id' });
-                    } catch (error) { console.error('Erreur sauvegarde article lu:', error); }
-                },
-
-                async loadReadArticlesFromDB() {
-                    if (!this.user) return;
-                    try {
-                        const { data } = await supabase.from('user_read_articles').select('article_id, read_at').eq('user_id', this.user.id);
-                        this.readArticles = {};
-                        if (data) { data.forEach(item => { this.readArticles[item.article_id] = item.read_at; }); }
-                        this.updateTotalReadCount();
-                    } catch (error) { console.error('Erreur chargement articles lus:', error); }
-                },
-
-                getReadArticlesList() {
-                    return this.newsList.filter(news => this.readArticles[news.id]).sort((a, b) => new Date(this.readArticles[b.id]) - new Date(this.readArticles[a.id]));
-                },
-
-                async saveReadPreferences() {
-                    if (!this.user) return;
-                    localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
-                    try {
-                        await supabase.from('user_preferences').upsert({ user_id: this.user.id, hide_read_articles: this.hideReadFromMain, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
-                    } catch (error) { console.error('Erreur sauvegarde préférences:', error); }
-                },
-
-                async loadReadPreferences() {
-                    if (!this.user) return;
-                    const localPref = localStorage.getItem('infodrop_hide_read_' + this.user.id);
-                    if (localPref !== null) { this.hideReadFromMain = localPref === 'true'; }
-                    try {
-                        const { data, error } = await supabase.from('user_preferences').select('hide_read_articles').eq('user_id', this.user.id).maybeSingle();
-                        if (error) throw error;
-                        if (data) {
-                            this.hideReadFromMain = data.hide_read_articles;
-                            localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
-                        }
-                    } catch (error) {
-                        console.error('[ERREUR] Chargement des préférences utilisateur échoué :', error);
-                    }
-                },
-
-                updateTotalReadCount() {
-                    this.totalReadCount = Object.keys(this.readArticles).length;
-                },
-
-                async addToDiversityData(article) {
-                    if (!this.user || !article) return;
-                    const orientation = article.tags?.includes('🧨INFODROP') ? '🧨INFODROP' : (article.orientation || 'neutre');
-                    try {
-                        await supabase.from('user_diversity_data').insert({ user_id: this.user.id, orientation: orientation, source: article.source, read_at: new Date().toISOString() });
-                        await this.calculateDiversityScore();
-                    } catch (error) { console.error('Erreur sauvegarde diversité:', error); }
-                },
-
-                getDiversityMessage() {
-                    if (this.diversityScore < 30) return "🔴 Bulle de filtre ! Explorez d'autres horizons";
-                    if (this.diversityScore < 50) return "🟡 Bon début ! Continuez à diversifier";
-                    if (this.diversityScore < 70) return "🟠 Bien ! Quelques perspectives en plus ?";
-                    if (this.diversityScore < 85) return "🟢 Très bien ! Vous êtes sur la bonne voie";
-                    return "🏆 Champion de la diversité !";
-                },
-
-                getDiversityTip() {
-                    const missing = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'].filter(o => !this.readOrientations.includes(o));
-                    if (missing.length === 0) return "🎉 Toutes les orientations explorées !";
-                    if (missing.length > 6) return "💡 Essayez de lire des perspectives variées";
-                    const suggestion = missing[Math.floor(Math.random() * missing.length)];
-                    return `💡 Essayez de lire du "${suggestion.replace('-', ' ')}"`;
-                },
-
-                celebrateArticles(count) {
-                    if (document.hidden) { localStorage.setItem(`infodrop_celebration_pending_${count}`, 'true'); return; }
-                    this.showCelebration(count);
-                },
-
-                showCelebration(count = 100) {
-                    const cont = document.createElement('div');
-                    cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:auto;z-index:9999;background:rgba(0,0,0,0.8);cursor:pointer;';
-                    this.startConfettiLoop(cont);
-                    const msg = document.createElement('div');
-                    msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
-                    const isSpecial = count === 100 || count % 100 === 0;
-                    const emoji = isSpecial ? '🏆' : '🎉';
-                    const title = isSpecial ? 'Incroyable !' : 'Bravo !';
-                    msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">${emoji} ${title} ${emoji}</h2><p class="text-lg mb-2">${count} articles lus !</p><p class="text-sm opacity-80">Cliquez pour continuer</p>`;
-                    cont.appendChild(msg);
-                    document.body.appendChild(cont);
-                    const closeAnimation = () => { cont.remove(); this.stopConfettiLoop(); localStorage.removeItem(`infodrop_celebration_pending_${count}`); };
-                    cont.addEventListener('click', closeAnimation);
-                    msg.addEventListener('click', closeAnimation);
-                },
-
-                startConfettiLoop(container) { this.confettiInterval = setInterval(() => { this.createConfettiBatch(container); }, 1000); },
-                stopConfettiLoop() { if (this.confettiInterval) { clearInterval(this.confettiInterval); this.confettiInterval = null; } },
-
-                createConfettiBatch(container) {
-                    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7'];
-                    for (let i = 0; i < 10; i++) {
-                        const conf = document.createElement('div');
-                        conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;pointer-events:none;`;
-                        container.appendChild(conf);
-                        setTimeout(() => conf.remove(), 5000);
-                    }
-                },
-
-                async logout() {
-                    if (this.realtimeChannel) await this.realtimeChannel.untrack();
-                    await supabase.auth.signOut();
-                },
-
-                startAutoUpdate() {
-                    if (this.updateInterval) clearInterval(this.updateInterval);
-                    this.updateInterval = setInterval(() => { this.loadNews(this.activeFilter, false); }, 30000);
-                },
-
-                stopAutoUpdate() {
-                    if (this.updateInterval) clearInterval(this.updateInterval);
-                },
-
-                formatTime(t) { return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); },
-
-                showStatTooltip(event, text) {
-                    event.stopPropagation();
-                    const existingTooltip = document.querySelector('.stat-tooltip');
-                    if (existingTooltip) existingTooltip.remove();
-                    const tooltip = document.createElement('div');
-                    tooltip.className = 'stat-tooltip';
-                    tooltip.textContent = text;
-                    document.body.appendChild(tooltip);
-                    const rect = event.currentTarget.getBoundingClientRect();
-                    const tooltipRect = tooltip.getBoundingClientRect();
-                    let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                    let top = rect.top - tooltipRect.height - 10;
-                    if (left < 10) left = 10;
-                    if (left + tooltipRect.width > window.innerWidth - 10) { left = window.innerWidth - tooltipRect.width - 10; }
-                    if (top < 10) { top = rect.bottom + 10; }
-                    tooltip.style.left = left + 'px';
-                    tooltip.style.top = top + 'px';
-                    const autoRemoveTimeout = setTimeout(() => tooltip.remove(), 2000);
-                    tooltip.dataset.timeout = autoRemoveTimeout;
-                    const removeTooltip = (e) => {
-                        if (!tooltip.contains(e.target) && !event.currentTarget.contains(e.target)) {
-                            clearTimeout(autoRemoveTimeout);
-                            tooltip.remove();
-                            document.removeEventListener('click', removeTooltip);
-                        }
-                    };
-                    setTimeout(() => { document.addEventListener('click', removeTooltip); }, 100);
-                },
-
-                copyInviteMessage(code) {
-                    const message = `Vous avez été invité à rejoindre le club privé INFODROP !\nAccédez à l'actu essentielle sur : https://infodrop.live\nUtilisez ce code lors de votre inscription : ${code}`;
-                    navigator.clipboard.writeText(message);
-                    this.copied = true;
-                    setTimeout(() => this.copied = false, 1500);
+        <!-- ======================================================================== -->
+        <!-- 🔝 BOUTON SCROLL TO TOP                                                 -->
+        <!-- ======================================================================== -->
+        <button x-data="{ show: false }" x-show="show" x-transition
+            @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
+            class="fixed bottom-6 right-6 z-40 clash-btn p-3 text-white" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd" />
+            </svg>
+        </button>
+
+
+
+        <!-- ======================================================================== -->
+        <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER AVEC GAMIFICATION                        -->
+        <!-- ======================================================================== -->
+        <script>
+            /* ───── CONFIG DEBUG ───── */
+            const DEBUG = true;
+            const dlog = (...args) => DEBUG && console.log('[DEBUG]', ...args);
+
+            /* ───── Variables globales ───── */
+            let supabase = null;
+            let ADMIN_EMAILS = [];
+            let STRIPE_LINK = '';
+
+            /* ──────────────────────────────────────────────────────────────────────
+               initializeSupabase — Appel unique au chargement, version propre
+               ─────────────────────────────────────────────────────────────────── */
+            async function initializeSupabase() {
+                if (supabase) { return true; }
+                dlog('🔐 initializeSupabase() lancé');
+                try {
+                    const res = await fetch('/api/config');
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    const cfg = await res.json();
+                    ADMIN_EMAILS = cfg.adminEmails;
+                    STRIPE_LINK = cfg.stripeLink;
+                    const { createClient } = window.supabase;
+                    supabase = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+                    dlog('✅ Supabase initialisé');
+                    return true;
+                } catch (err) {
+                    console.error('❌ Erreur initialisation:', err);
+                    const errorDiv = document.createElement('div');
+                    errorDiv.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: Arial;"><div style="text-align: center; padding: 2rem;"><h2>❌ Erreur de configuration</h2><p>Impossible de charger la configuration sécurisée.</p><button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem;">Recharger</button></div></div>`;
+                    document.body.appendChild(errorDiv);
+                    return false;
                 }
-            };
-        }
-    </script>
+            }
+
+            // ====================================================================
+            // 🏗️ APPLICATION PRINCIPALE - GESTION DE L'ÉTAT ET LOGIQUE MÉTIER
+            // ====================================================================
+            function infodropApp() {
+                const ORIENTATION_DATA = { 'extrême-gauche': { class: 'bg-[#FF0000] text-white border-[#CC0000]', color: '#FF0000' }, 'gauche': { class: 'bg-[#D42A2A] text-white border-[#A82020]', color: '#D42A2A' }, 'centre-gauche': { class: 'bg-[#AA5555] text-white border-[#884444]', color: '#AA5555' }, 'centre': { class: 'bg-[#808080] text-white border-[#666666]', color: '#808080' }, 'centre-droit': { class: 'bg-[#5555AA] text-white border-[#444488]', color: '#5555AA' }, 'droite': { class: 'bg-[#2A2AD4] text-white border-[#2020A8]', color: '#2A2AD4' }, 'extrême-droite': { class: 'bg-[#0000FF] text-white border-[#0000CC]', color: '#0000FF' }, 'gouvernement': { class: 'bg-blue-800 text-blue-100 border-blue-900', color: '#1e40af' }, 'neutre': { class: 'bg-green-700 text-green-100 border-green-800', color: '#16a34a' } };
+
+                return {
+                    // --- ÉTAT DE L'APPLICATION ---
+                    sessionLoaded: false, user: null, email: '', loading: false, message: '', messageType: '', inviteCode: '',
+                    newsList: [], loadingNews: true, latestNewsTimestamp: null, updateInterval: null,
+                    isAdmin: false, showAdminPanel: false, addingNews: false, newNews: { resume: '', url: '' },
+                    stats: { total_articles: 0, total_sources: 0 }, lastGeneratedCode: null, generatingCode: false,
+                    userInviteData: { code: null, parrainEmail: null, filleulEmail: null },
+                    showEditPanel: false, editingNews: {}, showShareModal: false, copied: false,
+                    // --- GAMIFICATION ---
+                    achievementsData: [], userXP: 0, userLevel: 1, xpToNextLevel: 100, readingStreak: 0, unlockedAchievements: [], lastReadDate: null, currentAchievement: null, showAchievementsModal: false,
+                    // --- FILTRES & DIVERSITÉ ---
+                    activeFilter: 'all', searchQuery: '', allOrientations: [], allOtherTags: [], activeOrientations: [], activeTags: [],
+                    diversityScore: null, readOrientations: [], showDiversityChecker: true,
+                    // --- ARTICLES LUS ---
+                    readArticles: {}, totalReadCount: 0, showReadArticles: false, hideReadFromMain: true,
+                    // --- MODALES ---
+                    showAboutModal: false, showFilters: false,
+
+                    // ============================================================
+                    // 🚀 INITIALISATION DE L'APPLICATION
+                    // ============================================================
+                    async init() {
+                        // Nettoyer TOUT au démarrage pour éviter les bugs
+                        Object.keys(localStorage).forEach(key => {
+                            if (key.startsWith('infodrop_unlocking_')) {
+                                // IMPORTANT : Supprimer immédiatement la clé AVANT de faire quoi que ce soit
+                                localStorage.removeItem(key);
+
+                                const pendingCode = key.replace('infodrop_unlocking_', '');
+                                if (!this.unlockedAchievements.includes(pendingCode)) {
+                                    this.unlockedAchievements.push(pendingCode);
+                                    // NE PAS rejouer l'animation ici !
+                                }
+                            }
+                        });
+
+                        localStorage.removeItem('infodrop_animation_queue');
+                        if (window.infodropAppInitialized) return;
+                        window.infodropAppInitialized = true;
+                        console.log('🚀 Alpine init() lancé.');
+
+                        const isReady = await initializeSupabase();
+                        if (isReady) {
+                            supabase.auth.onAuthStateChange((event, session) => {
+                                this.$nextTick(async () => {
+                                    this.user = session?.user || null;
+                                    this.sessionLoaded = true;
+
+                                    if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+                                        if (!this.user) return;
+
+                                        // 1. On verrouille l'interface en affichant le spinner de chargement.
+                                        this.loadingNews = true;
+
+                                        this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+                                        try {
+                                            // 2. On charge TOUTES les données de base en parallèle et on attend qu'elles soient toutes là.
+                                            await Promise.all([
+                                                this.loadAchievements(),
+                                                this.initGamification(),
+                                                this.loadReadArticlesFromDB(),
+                                                this.loadReadPreferences(),
+                                                this.loadUserInviteData(),
+                                                this.loadStats()
+                                            ]);
+
+                                            // 3. On fait la vérification de sécurité du localStorage (c'est rapide).
+                                            Object.keys(localStorage).forEach(key => {
+                                                if (key.startsWith('infodrop_unlocking_')) {
+                                                    const pendingCode = key.replace('infodrop_unlocking_', '');
+                                                    if (!this.unlockedAchievements.includes(pendingCode)) { this.unlockedAchievements.push(pendingCode); }
+                                                }
+                                            });
+
+                                            // 4. Maintenant que l'état du joueur est prêt, on charge les actualités.
+                                            await this.loadNews(this.activeFilter, true); // Le second paramètre est important
+
+                                            // 5. TOUT est chargé. On peut déverrouiller l'interface.
+                                            // la fonction loadNews(..., true) s'occupe de mettre loadingNews à false.
+
+                                            // 6. On lance les tâches de fond.
+                                            this.startAutoUpdate();
+                                            this.setupRealtime(session);
+
+                                        } catch (error) {
+                                            console.error('[FATAL] Erreur de chargement:', error);
+                                            this.loadingNews = false; // On déverrouille aussi en cas d'erreur pour ne pas rester bloqué.
+                                        }
+                                    } else if (event === 'SIGNED_OUT') {
+                                        this.stopAutoUpdate();
+                                        if (this.realtimeChannel) { supabase.removeChannel(this.realtimeChannel); this.realtimeChannel = null; }
+                                    }
+                                });
+                            });
+                        }
+
+                        document.addEventListener('visibilitychange', () => {
+                            if (!document.hidden) {
+                                // 1. Récupérer la queue d'animations
+                                const queue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
+
+                                // 2. Supprimer immédiatement du localStorage
+                                localStorage.removeItem('infodrop_animation_queue');
+
+                                // 3. IMPORTANT : Filtrer la queue pour éviter les doublons
+                                if (queue.length > 0) {
+                                    // Filtrer les achievements déjà débloqués
+                                    const filteredQueue = queue.filter(animation => {
+                                        if (animation.type === 'achievement') {
+                                            // Vérifier si cet achievement n'a pas déjà été joué récemment
+                                            const recentKey = `recent_achievement_${animation.title}`;
+                                            const wasRecentlyShown = sessionStorage.getItem(recentKey);
+
+                                            if (wasRecentlyShown) {
+                                                console.log('Achievement déjà montré récemment:', animation.title);
+                                                return false; // Ne pas rejouer
+                                            }
+
+                                            // Marquer comme montré
+                                            sessionStorage.setItem(recentKey, 'true');
+
+                                            // Auto-nettoyer après 5 minutes
+                                            setTimeout(() => {
+                                                sessionStorage.removeItem(recentKey);
+                                            }, 300000);
+                                        }
+                                        return true; // Garder XP et level up
+                                    });
+
+                                    // 4. Jouer seulement les animations filtrées
+                                    if (filteredQueue.length > 0) {
+                                        this.playAnimationQueue(filteredQueue);
+                                    }
+                                }
+                            }
+                        });
+                    },
+
+                    // ============================================================
+                    // 📚 ORCHESTRATEUR DE GAMIFICATION
+                    // ============================================================
+                    async markAsRead(id) {
+                        if (!this.user || this.readArticles[id]) return;
+
+                        this.readArticles[id] = new Date().toISOString();
+                        this.updateTotalReadCount();
+
+                        const article = this.newsList.find(n => n.id === id);
+                        let animationQueue = [];
+
+                        // Mettre à jour l'XP
+                        this.updateXP(article, animationQueue);
+                        this.updateStreak();
+                        await this.calculateDiversityScore();
+
+                        // IMPORTANT : Stocker les achievements actuels AVANT la vérification
+                        const achievementsBeforeCheck = [...this.unlockedAchievements];
+
+                        await this.checkAchievements(animationQueue);
+
+                        // Filtrer la queue pour ne garder que les NOUVEAUX achievements
+                        animationQueue = animationQueue.filter(anim => {
+                            if (anim.type === 'achievement') {
+                                // Vérifier si c'était vraiment un nouvel achievement
+                                const wasAlreadyUnlocked = achievementsBeforeCheck.some(code => {
+                                    const achievement = this.achievementsData.find(a => a.code === code);
+                                    return achievement && achievement.title === anim.title;
+                                });
+                                return !wasAlreadyUnlocked;
+                            }
+                            return true; // Garder XP et level up
+                        });
+
+                        await this.saveGamingData();
+                        await this.saveReadArticleToDB(id);
+                        await this.addToDiversityData(article);
+
+                        // Sauvegarder seulement si il y a de vraies nouvelles animations
+                        if (animationQueue.length > 0) {
+                            // Récupérer la queue existante et fusionner
+                            const existingQueue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
+                            const newQueue = [...existingQueue, ...animationQueue];
+                            localStorage.setItem('infodrop_animation_queue', JSON.stringify(newQueue));
+                        }
+                    },
+
+                    // ============================================================
+                    // 🎮 FONCTION checkAchievements - DOIT ÊTRE ICI
+                    // ============================================================
+                    async checkAchievements(queue) {
+                        if (!this.user || !this.achievementsData.length) return;
+
+                        // Protection contre la boucle infinie pour la diversité
+                        const diversityAchievements = this.achievementsData.filter(a =>
+                            a.condition_type === 'diversity_score'
+                        );
+
+                        const allDiversityUnlocked = diversityAchievements.every(a =>
+                            this.unlockedAchievements.includes(a.code)
+                        );
+
+                        if (allDiversityUnlocked && this.diversityScore >= 90) {
+                            return;
+                        }
+
+                        for (const achievement of this.achievementsData) {
+                            if (this.unlockedAchievements.includes(achievement.code)) continue;
+
+                            let shouldUnlock = false;
+                            switch (achievement.condition_type) {
+                                case 'articles_read':
+                                    shouldUnlock = this.totalReadCount >= achievement.condition_value;
+                                    break;
+                                case 'streak_days':
+                                    shouldUnlock = this.readingStreak >= achievement.condition_value;
+                                    break;
+                                case 'level_reached':
+                                    shouldUnlock = this.userLevel >= achievement.condition_value;
+                                    break;
+                                case 'diversity_score':
+                                    shouldUnlock = this.diversityScore >= achievement.condition_value;
+                                    break;
+                            }
+
+                            if (shouldUnlock) {
+                                await this.unlockAchievement(achievement.code, queue);
+                            }
+                        }
+                    },
+
+                    // ============================================================
+                    // 🎮 SOUS-FONCTIONS DE GAMIFICATION
+                    // ============================================================
+                    updateXP(article, queue) {
+                        let xpGained = 10;
+                        if (article) {
+                            if (article.orientation && !this.readOrientations.includes(article.orientation)) xpGained += 20;
+                            if (article.tags && article.tags.includes('🧨INFODROP')) xpGained += 5;
+                        }
+
+                        // Toujours ajouter l'XP à la queue
+                        if (xpGained > 0 && queue) {
+                            queue.push({ type: 'xp', amount: xpGained });
+                        }
+
+                        this.userXP += xpGained;
+                        while (this.userXP >= this.xpToNextLevel) {
+                            this.userXP -= this.xpToNextLevel;
+                            this.userLevel++;
+                            this.updateXPToNextLevel();
+                            if (queue) {
+                                queue.push({ type: 'level_up', newLevel: this.userLevel });
+                            }
+                        }
+                    },
+
+
+                    updateStreak() {
+                        const today = new Date().toDateString();
+                        if (this.lastReadDate === today) return;
+                        const yesterday = new Date(Date.now() - 86400000).toDateString();
+                        this.readingStreak = (this.lastReadDate === yesterday) ? this.readingStreak + 1 : 1;
+                        this.lastReadDate = today;
+                    },
+
+
+                    async unlockAchievement(code, queue) {
+                        if (this.unlockedAchievements.includes(code)) return;
+                        this.unlockedAchievements.push(code);
+
+                        const achievement = this.achievementsData.find(a => a.code === code);
+                        if (achievement) {
+                            queue.push({ type: 'achievement', icon: achievement.icon_emoji, title: achievement.title });
+                        }
+                        this.updateCurrentAchievement();
+
+                        try {
+                            await this.saveGamingData();
+                            await supabase.from('user_achievement_history').upsert({ user_id: this.user.id, achievement_code: code }, { onConflict: 'user_id, achievement_code' });
+                            localStorage.removeItem(`infodrop_unlocking_${code}`);
+                        } catch (error) {
+                            console.error(`Erreur sauvegarde succès ${code}:`, error);
+                        }
+                    },
+
+                    playAnimationQueue(queue) {
+                        let delay = 300;
+                        queue.forEach((animation, index) => {
+                            setTimeout(() => {
+                                switch (animation.type) {
+                                    case 'xp':
+                                        this.showXPAnimation(animation.amount);
+                                        break;
+                                    case 'level_up':
+                                        this.showLevelUpAnimation(animation.newLevel);
+                                        break;
+                                    case 'achievement':
+                                        // Double vérification avant de montrer
+                                        const recentCheck = sessionStorage.getItem(`recent_achievement_${animation.title}`);
+                                        if (!recentCheck || index === 0) { // Toujours montrer la première
+                                            this.showAchievementPopup(animation.icon, animation.title);
+                                        }
+                                        break;
+                                }
+                            }, delay);
+
+                            // Augmenter le délai pour les prochaines animations
+                            delay += (animation.type === 'achievement' || animation.type === 'level_up') ? 3200 : 1500;
+                        });
+                    },
+
+
+                    async calculateDiversityScore() {
+                        if (!this.user) return;
+                        try {
+                            const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                            const { data } = await supabase
+                                .from('user_diversity_data')
+                                .select('orientation, source')
+                                .eq('user_id', this.user.id)
+                                .gte('read_at', twentyFourHoursAgo.toISOString());
+
+                            if (!data || data.length === 0) {
+                                this.diversityScore = null;
+                                this.readOrientations = [];
+                                return;
+                            }
+
+                            const oSet = new Set(data.map(r => r.orientation).filter(Boolean));
+                            const sSet = new Set(data.map(r => r.source));
+                            const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
+                            this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
+                            this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
+
+                        } catch (error) {
+                            console.error('Erreur calcul diversité:', error);
+                        }
+                    },
+
+                    // ============================================================
+                    // ⚙️ INITIALISATION & SAUVEGARDES
+                    // ============================================================
+                    async initGamification() {
+                        if (!this.user) return;
+                        try {
+                            let { data, error } = await supabase.from('user_gaming_stats').select('*').eq('user_id', this.user.id).single();
+                            if (error && error.code === 'PGRST116') {
+                                const { data: newStats } = await supabase.from('user_gaming_stats').insert({ user_id: this.user.id, xp: 0, level: 1, reading_streak: 0, unlocked_achievements: ['WELCOME'], last_read_date: null }).select().single();
+                                data = newStats;
+                            }
+                            this.userXP = data.xp || 0;
+                            this.userLevel = data.level || 1;
+                            this.readingStreak = data.reading_streak || 0;
+                            this.unlockedAchievements = data.unlocked_achievements && data.unlocked_achievements.length > 0 ? data.unlocked_achievements : ['WELCOME'];
+                            this.lastReadDate = data.last_read_date;
+                            this.updateXPToNextLevel();
+                            this.updateCurrentAchievement();
+                        } catch (error) {
+                            console.error('Erreur init gamification:', error);
+                        }
+                    },
+
+                    async saveGamingData() {
+                        if (!this.user) return;
+                        try {
+                            await supabase.from('user_gaming_stats').update({
+                                xp: this.userXP,
+                                level: this.userLevel,
+                                reading_streak: this.readingStreak,
+                                unlocked_achievements: this.unlockedAchievements,
+                                last_read_date: this.lastReadDate,
+                                updated_at: new Date().toISOString()
+                            }).eq('user_id', this.user.id);
+                        } catch (error) {
+                            console.error('Erreur sauvegarde gaming:', error);
+                        }
+                    },
+
+                    // Le reste des fonctions (login, loadNews, helpers, etc.) reste ici...
+                    // J'inclus toutes les fonctions pour que ce soit un remplacement complet et propre.
+
+                    toggleFilter(filter) {
+                        this.activeFilter = (this.activeFilter === filter) ? 'all' : filter;
+                        this.searchQuery = '';
+                        this.loadNews(this.activeFilter, true);
+                    },
+
+                    getOrientationDisplayName(orientation) {
+                        if (!orientation) return '';
+                        if (orientation === 'gouvernement') return '🇫🇷 Gouvernement';
+                        if (orientation === '🧨INFODROP') return orientation;
+                        return orientation.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                    },
+
+                    async loadAchievements() {
+                        try {
+                            const { data } = await supabase.from('achievements').select('*').eq('is_active', true).order('order_priority');
+                            this.achievementsData = data || [];
+                        } catch (error) {
+                            console.error('[ERREUR] Le chargement des achievements a échoué', error);
+                        }
+                    },
+
+                    updateCurrentAchievement() {
+                        const unlocked = this.achievementsData
+                            .filter(a => this.unlockedAchievements.includes(a.code))
+                            .sort((a, b) => b.order_priority - a.order_priority);
+                        this.currentAchievement = unlocked.length > 0 ? unlocked[0].icon_emoji : '⭐';
+                    },
+
+                    updateXPToNextLevel() {
+                        this.xpToNextLevel = this.userLevel * 100;
+                    },
+
+                    getAchievementTitle(iconOrCode) {
+                        const achievement = this.achievementsData.find(a => a.code === iconOrCode || a.icon_emoji === iconOrCode);
+                        return achievement ? achievement.title : 'Achievement mystère';
+                    },
+
+                    getAllAchievementsData() {
+                        if (!this.achievementsData) return [];
+                        return this.achievementsData.map(achievement => ({
+                            id: achievement.code,
+                            icon: achievement.icon_emoji,
+                            title: achievement.title,
+                            description: achievement.description,
+                            unlocked: this.unlockedAchievements.includes(achievement.code),
+                            progress: this.getAchievementProgress(achievement)
+                        }));
+                    },
+
+                    getAchievementProgress(achievement) {
+                        if (this.unlockedAchievements.includes(achievement.code)) return '✓ Complété';
+                        switch (achievement.condition_type) {
+                            case 'articles_read': return `${this.totalReadCount}/${achievement.condition_value} articles`;
+                            case 'streak_days': return `${this.readingStreak}/${achievement.condition_value} jours`;
+                            case 'level_reached': return `Niveau ${this.userLevel}/${achievement.condition_value}`;
+                            case 'diversity_score': return `Score: ${this.diversityScore || 0}%`;
+                            default: return '...';
+                        }
+                    },
+
+                    showXPAnimation(amount) {
+                        const popup = document.createElement('div');
+                        popup.className = 'xp-popup';
+                        popup.textContent = `+${amount} XP`;
+                        popup.style.left = '50%';
+                        popup.style.top = '200px';
+                        document.body.appendChild(popup);
+                        setTimeout(() => popup.remove(), 1500);
+                    },
+
+                    showLevelUpAnimation() {
+                        const levelUp = document.createElement('div');
+                        levelUp.style.cssText = `position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; font-weight: bold; color: var(--clash-gold); text-shadow: 0 0 30px var(--clash-gold); animation: level-up-clash 1.5s ease-out forwards; z-index: 9999; pointer-events: none;`;
+                        levelUp.textContent = `NIVEAU ${this.userLevel}!`;
+                        document.body.appendChild(levelUp);
+                        this.createGoldConfetti();
+                        setTimeout(() => levelUp.remove(), 1500);
+                    },
+
+                    showAchievementPopup(icon, title) {
+                        // Vérification anti-spam
+                        if (window.DISABLE_ANIMATIONS) return;
+
+                        // Vérifier qu'on n'est pas en train de charger la page
+                        if (document.readyState !== 'complete') return;
+
+                        // Vérifier qu'il n'y a pas déjà une popup
+                        if (document.querySelector('.achievement-popup-clash')) return;
+
+                        // Limiter à une popup toutes les 5 secondes
+                        const now = Date.now();
+
+                        if (window.lastAchievementPopup && (now - window.lastAchievementPopup) < 5000) return;
+                        window.lastAchievementPopup = now;
+                        const popup = document.createElement('div');
+                        popup.className = 'achievement-popup-clash';
+                        popup.innerHTML = `<div class="text-6xl mb-3">${icon}</div><h3 class="text-2xl font-bold mb-2 text-white">SUCCÈS DÉBLOQUÉ!</h3><p class="text-lg text-blue-200">${title}</p>`;
+                        document.body.appendChild(popup);
+                        setTimeout(() => {
+                            popup.style.animation = 'achievement-appear 0.5s ease-out reverse forwards';
+                            setTimeout(() => popup.remove(), 500);
+                        }, 3000);
+                    },
+
+                    createGoldConfetti() {
+                        const colors = ['#FFD700', '#FFA500', '#FFFF00', '#FFE4B5'];
+                        for (let i = 0; i < 30; i++) {
+                            setTimeout(() => {
+                                const conf = document.createElement('div');
+                                conf.style.cssText = `position: fixed; width: 15px; height: 15px; background: ${colors[i % colors.length]}; left: ${Math.random() * 100}%; top: -20px; opacity: ${Math.random() + 0.5}; transform: rotate(${Math.random() * 360}deg); animation: confetti-fall ${3 + Math.random() * 2}s linear forwards; pointer-events: none; z-index: 9999; box-shadow: 0 0 10px ${colors[i % colors.length]};`;
+                                document.body.appendChild(conf);
+                                setTimeout(() => conf.remove(), 5000);
+                            }, i * 50);
+                        }
+                    },
+
+                    get filteredNewsList() {
+                        if (!this.searchQuery || this.searchQuery.trim() === '') return this.newsList;
+                        const query = this.searchQuery.toLowerCase().trim();
+                        return this.newsList.filter(news => (news.resume && news.resume.toLowerCase().includes(query)) || (news.source && news.source.toLowerCase().includes(query)) || (news.tags && news.tags.some(tag => tag.toLowerCase().includes(query))) || (news.orientation && news.orientation.toLowerCase().includes(query)));
+                    },
+
+                    getOrientationColor(o) { return ORIENTATION_DATA[o]?.color || '#808080'; },
+                    getOrientationClass(o) { return ORIENTATION_DATA[o]?.class || 'bg-gray-700 text-gray-200 border-gray-600'; },
+
+                    async login() {
+                        if (this.loading) return;
+                        this.loading = true;
+                        this.message = '';
+                        this.messageType = '';
+                        try {
+                            const checkRes = await fetch('/api/check-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: this.email.toLowerCase() }) });
+                            if (!checkRes.ok) { const err = await checkRes.json(); throw new Error(err.error || 'Erreur de communication.'); }
+                            const { exists } = await checkRes.json();
+                            if (!exists) {
+                                if (!this.inviteCode) { this.message = "Code d'invitation requis pour les nouveaux utilisateurs."; this.messageType = 'error'; this.loading = false; return; }
+                                const validateRes = await fetch('/api/validate-invite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: this.inviteCode, email: this.email }) });
+                                const validationResult = await validateRes.json();
+                                if (!validationResult.success) { this.message = validationResult.error; this.messageType = 'error'; this.loading = false; return; }
+                            }
+                            const { error: otpError } = await supabase.auth.signInWithOtp({ email: this.email.toLowerCase(), options: { emailRedirectTo: window.location.origin } });
+                            if (otpError) throw otpError;
+                            this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
+                            this.messageType = 'success';
+                        } catch (error) {
+                            this.message = error.message || 'Une erreur est survenue.';
+                            this.messageType = 'error';
+                        } finally {
+                            this.loading = false;
+                        }
+                    },
+
+                    async loadUserInviteData() {
+                        if (!this.user || !this.user.email) return;
+                        if (this.isAdmin) {
+                            try {
+                                const { data: adminCode, error: adminError } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
+                                if (adminError && adminError.code !== 'PGRST116') { console.error('❌ Erreur requête admin:', adminError); return; }
+                                if (adminCode) {
+                                    this.userInviteData.code = adminCode.code;
+                                    this.userInviteData.is_used = adminCode.is_used || false;
+                                    if (adminCode.is_used && adminCode.used_by_email) { this.userInviteData.filleulEmail = adminCode.used_by_email; }
+                                } else { this.userInviteData.code = null; }
+                                this.userInviteData.parrainEmail = null;
+                                return;
+                            } catch (error) { console.error('❌ Erreur traitement admin:', error); return; }
+                        }
+                        try {
+                            const { data: ownCode } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
+                            if (ownCode) {
+                                this.userInviteData.code = ownCode.code;
+                                this.userInviteData.is_used = ownCode.is_used || false;
+                                if (ownCode.is_used && ownCode.used_by_email) { this.userInviteData.filleulEmail = ownCode.used_by_email; }
+                            }
+                            const { data: usedCode } = await supabase.from('invitation_codes').select('owner_email').ilike('used_by_email', this.user.email.toLowerCase()).maybeSingle();
+                            if (usedCode) { this.userInviteData.parrainEmail = usedCode.owner_email; }
+                        } catch (error) {
+                            console.error("❌ Erreur chargement des données d'invitation:", error);
+                            this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null };
+                        }
+                    },
+
+                    setupRealtime(session) {
+                        this.realtimeChannel = supabase.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } });
+                        this.realtimeChannel.on('presence', { event: 'sync' }, () => {
+                            this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
+                        }).subscribe(async (status) => {
+                            if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); }
+                        });
+                    },
+
+                    openEditPanel(news) {
+                        this.editingNews = { ...JSON.parse(JSON.stringify(news)), tagsText: (news.tags || []).join(', ') };
+                        this.showEditPanel = true;
+                    },
+
+                    async updateNews() {
+                        const { id, resume, source, url, orientation, tagsText } = this.editingNews;
+                        const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
+                        try {
+                            await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id);
+                            const index = this.newsList.findIndex(n => n.id === id);
+                            if (index !== -1) { this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; }
+                            this.showEditPanel = false;
+                            this.updateTagsList();
+                        } catch (e) { alert("La mise à jour a échoué."); }
+                    },
+
+                    async deleteNews(id) {
+                        if (!confirm("Supprimer ?")) return;
+                        this.newsList = this.newsList.filter(n => n.id !== id);
+                        try {
+                            await supabase.from('actu').delete().eq('id', id);
+                            if (this.isAdmin) this.loadStats();
+                        } catch (e) { alert("La suppression a échoué."); this.loadNews(); }
+                    },
+
+                    async addManualNews() {
+                        this.addingNews = true;
+                        try {
+                            if (!this.newNews.resume || !this.newNews.resume.trim()) { throw new Error('Le résumé est obligatoire'); }
+                            if (!this.newNews.url || !this.newNews.url.trim()) { throw new Error('L\'URL est obligatoire'); }
+                            let tags = ['🧨INFODROP'];
+                            if (this.newNews.tagsText && this.newNews.tagsText.trim()) {
+                                const additionalTags = this.newNews.tagsText.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0 && tag !== '🧨INFODROP');
+                                tags = tags.concat(additionalTags);
+                            }
+                            const articleData = { resume: this.newNews.resume.trim(), source: '🧨INFODROP', url: this.newNews.url.trim(), heure: new Date().toISOString(), tags: tags, added_by: this.user.email };
+                            if (this.newNews.orientation && this.newNews.orientation.trim()) { articleData.orientation = this.newNews.orientation.trim(); }
+                            const { error } = await supabase.from('actu').insert(articleData).select('*');
+                            if (error) { throw new Error(`Erreur DB: ${error.message}`); }
+                            this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
+                            this.showAdminPanel = false;
+                            await this.loadData();
+                            alert('✅ Article ajouté avec succès !');
+                        } catch (error) {
+                            alert('Erreur lors de l\'ajout de l\'article: ' + error.message);
+                        } finally {
+                            this.addingNews = false;
+                        }
+                    },
+
+                    async generateInviteCode() {
+                        if (!this.isAdmin || this.generatingCode) return;
+                        this.generatingCode = true;
+                        try {
+                            const { data: { session } } = await supabase.auth.getSession();
+                            if (!session) throw new Error("Session introuvable");
+                            const response = await fetch('/api/generate-invite', { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' } });
+                            const result = await response.json();
+                            if (!result.success) throw new Error(result.error || 'Erreur lors de la génération');
+                            this.lastGeneratedCode = result.code;
+                            this.copyInviteMessage(result.code);
+                        } catch (error) {
+                            alert('Erreur lors de la génération du code: ' + error.message);
+                        } finally {
+                            this.generatingCode = false;
+                        }
+                    },
+
+                    async loadData(isInitial = false) {
+                        if (isInitial) this.loadingNews = true;
+                        await this.loadStats();
+                        if (isInitial) {
+                            await this.loadNews(this.activeFilter, true);
+                        }
+                        if (isInitial) this.loadingNews = false;
+                    },
+
+                    async loadNews(filter = null, isNewFilter = false) {
+                        if (isNewFilter) this.loadingNews = true;
+                        try {
+                            let query = supabase.from('actu').select('id, resume, url, heure, source, orientation, tags, added_by').order('heure', { ascending: false });
+                            if (filter && filter !== 'all') {
+                                if (this.allOrientations.includes(filter)) { query = query.eq('orientation', filter); }
+                                else { query = query.contains('tags', [filter]); }
+                            }
+                            if (!isNewFilter && this.latestNewsTimestamp) { query = query.gt('heure', this.latestNewsTimestamp); }
+                            else { query = query.limit(100); }
+
+                            const { data: newArticles, error } = await query;
+                            if (error) throw error;
+
+                            if (newArticles && newArticles.length > 0) {
+                                if (isNewFilter) { this.newsList = newArticles; }
+                                else { this.newsList = [...newArticles, ...this.newsList]; }
+                                this.latestNewsTimestamp = this.newsList[0].heure;
+                            } else if (isNewFilter) { this.newsList = []; }
+                        } catch (e) {
+                            console.error('Erreur dans loadNews:', e);
+                        } finally {
+                            if (isNewFilter) this.loadingNews = false;
+                        }
+                    },
+
+                    updateTagsList() {
+                        const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre', '🧨INFODROP'];
+                        this.allOrientations = pol;
+                        this.allOtherTags = this.activeTags.filter(tag => !pol.includes(tag));
+                    },
+
+                    hasArticlesForOrientation(o) { return this.activeOrientations.includes(o); },
+                    hasArticlesForTag(t) { return this.activeTags.includes(t); },
+
+                    getEmptyFilterMessage() {
+                        if (this.allOrientations.includes(this.activeFilter)) return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`;
+                        return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`;
+                    },
+
+                    async loadStats() {
+                        try {
+                            const { data, error } = await supabase.rpc('get_live_stats');
+                            if (error) throw error;
+                            this.stats = { total_articles: data.total_articles || 0, total_sources: data.total_sources || 0 };
+                            this.activeOrientations = data.active_orientations || [];
+                            this.activeTags = data.active_tags || [];
+                            this.updateTagsList();
+                        } catch (e) {
+                            console.error('[ERREUR] Le chargement des statistiques et filtres a échoué :', e);
+                        }
+                    },
+
+                    async saveReadArticleToDB(articleId) {
+                        if (!this.user) return;
+                        try {
+                            await supabase.from('user_read_articles').upsert({ user_id: this.user.id, article_id: articleId, read_at: new Date().toISOString() }, { onConflict: 'user_id,article_id' });
+                        } catch (error) { console.error('Erreur sauvegarde article lu:', error); }
+                    },
+
+                    async loadReadArticlesFromDB() {
+                        if (!this.user) return;
+                        try {
+                            const { data } = await supabase.from('user_read_articles').select('article_id, read_at').eq('user_id', this.user.id);
+                            this.readArticles = {};
+                            if (data) { data.forEach(item => { this.readArticles[item.article_id] = item.read_at; }); }
+                            this.updateTotalReadCount();
+                        } catch (error) { console.error('Erreur chargement articles lus:', error); }
+                    },
+
+                    getReadArticlesList() {
+                        return this.newsList.filter(news => this.readArticles[news.id]).sort((a, b) => new Date(this.readArticles[b.id]) - new Date(this.readArticles[a.id]));
+                    },
+
+                    async saveReadPreferences() {
+                        if (!this.user) return;
+                        localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
+                        try {
+                            await supabase.from('user_preferences').upsert({ user_id: this.user.id, hide_read_articles: this.hideReadFromMain, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+                        } catch (error) { console.error('Erreur sauvegarde préférences:', error); }
+                    },
+
+                    async loadReadPreferences() {
+                        if (!this.user) return;
+                        const localPref = localStorage.getItem('infodrop_hide_read_' + this.user.id);
+                        if (localPref !== null) { this.hideReadFromMain = localPref === 'true'; }
+                        try {
+                            const { data, error } = await supabase.from('user_preferences').select('hide_read_articles').eq('user_id', this.user.id).maybeSingle();
+                            if (error) throw error;
+                            if (data) {
+                                this.hideReadFromMain = data.hide_read_articles;
+                                localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
+                            }
+                        } catch (error) {
+                            console.error('[ERREUR] Chargement des préférences utilisateur échoué :', error);
+                        }
+                    },
+
+                    updateTotalReadCount() {
+                        this.totalReadCount = Object.keys(this.readArticles).length;
+                    },
+
+                    async addToDiversityData(article) {
+                        if (!this.user || !article) return;
+                        const orientation = article.tags?.includes('🧨INFODROP') ? '🧨INFODROP' : (article.orientation || 'neutre');
+                        try {
+                            await supabase.from('user_diversity_data').insert({ user_id: this.user.id, orientation: orientation, source: article.source, read_at: new Date().toISOString() });
+                            await this.calculateDiversityScore();
+                        } catch (error) { console.error('Erreur sauvegarde diversité:', error); }
+                    },
+
+                    getDiversityMessage() {
+                        if (this.diversityScore < 30) return "🔴 Bulle de filtre ! Explorez d'autres horizons";
+                        if (this.diversityScore < 50) return "🟡 Bon début ! Continuez à diversifier";
+                        if (this.diversityScore < 70) return "🟠 Bien ! Quelques perspectives en plus ?";
+                        if (this.diversityScore < 85) return "🟢 Très bien ! Vous êtes sur la bonne voie";
+                        return "🏆 Champion de la diversité !";
+                    },
+
+                    getDiversityTip() {
+                        const missing = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'].filter(o => !this.readOrientations.includes(o));
+                        if (missing.length === 0) return "🎉 Toutes les orientations explorées !";
+                        if (missing.length > 6) return "💡 Essayez de lire des perspectives variées";
+                        const suggestion = missing[Math.floor(Math.random() * missing.length)];
+                        return `💡 Essayez de lire du "${suggestion.replace('-', ' ')}"`;
+                    },
+
+                    celebrateArticles(count) {
+                        if (document.hidden) { localStorage.setItem(`infodrop_celebration_pending_${count}`, 'true'); return; }
+                        this.showCelebration(count);
+                    },
+
+                    showCelebration(count = 100) {
+                        const cont = document.createElement('div');
+                        cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:auto;z-index:9999;background:rgba(0,0,0,0.8);cursor:pointer;';
+                        this.startConfettiLoop(cont);
+                        const msg = document.createElement('div');
+                        msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
+                        const isSpecial = count === 100 || count % 100 === 0;
+                        const emoji = isSpecial ? '🏆' : '🎉';
+                        const title = isSpecial ? 'Incroyable !' : 'Bravo !';
+                        msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">${emoji} ${title} ${emoji}</h2><p class="text-lg mb-2">${count} articles lus !</p><p class="text-sm opacity-80">Cliquez pour continuer</p>`;
+                        cont.appendChild(msg);
+                        document.body.appendChild(cont);
+                        const closeAnimation = () => { cont.remove(); this.stopConfettiLoop(); localStorage.removeItem(`infodrop_celebration_pending_${count}`); };
+                        cont.addEventListener('click', closeAnimation);
+                        msg.addEventListener('click', closeAnimation);
+                    },
+
+                    startConfettiLoop(container) { this.confettiInterval = setInterval(() => { this.createConfettiBatch(container); }, 1000); },
+                    stopConfettiLoop() { if (this.confettiInterval) { clearInterval(this.confettiInterval); this.confettiInterval = null; } },
+
+                    createConfettiBatch(container) {
+                        const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7'];
+                        for (let i = 0; i < 10; i++) {
+                            const conf = document.createElement('div');
+                            conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;pointer-events:none;`;
+                            container.appendChild(conf);
+                            setTimeout(() => conf.remove(), 5000);
+                        }
+                    },
+
+                    async logout() {
+                        if (this.realtimeChannel) await this.realtimeChannel.untrack();
+                        await supabase.auth.signOut();
+                    },
+
+                    startAutoUpdate() {
+                        if (this.updateInterval) clearInterval(this.updateInterval);
+                        this.updateInterval = setInterval(() => { this.loadNews(this.activeFilter, false); }, 30000);
+                    },
+
+                    stopAutoUpdate() {
+                        if (this.updateInterval) clearInterval(this.updateInterval);
+                    },
+
+                    formatTime(t) { return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); },
+
+                    showStatTooltip(event, text) {
+                        event.stopPropagation();
+                        const existingTooltip = document.querySelector('.stat-tooltip');
+                        if (existingTooltip) existingTooltip.remove();
+                        const tooltip = document.createElement('div');
+                        tooltip.className = 'stat-tooltip';
+                        tooltip.textContent = text;
+                        document.body.appendChild(tooltip);
+                        const rect = event.currentTarget.getBoundingClientRect();
+                        const tooltipRect = tooltip.getBoundingClientRect();
+                        let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+                        let top = rect.top - tooltipRect.height - 10;
+                        if (left < 10) left = 10;
+                        if (left + tooltipRect.width > window.innerWidth - 10) { left = window.innerWidth - tooltipRect.width - 10; }
+                        if (top < 10) { top = rect.bottom + 10; }
+                        tooltip.style.left = left + 'px';
+                        tooltip.style.top = top + 'px';
+                        const autoRemoveTimeout = setTimeout(() => tooltip.remove(), 2000);
+                        tooltip.dataset.timeout = autoRemoveTimeout;
+                        const removeTooltip = (e) => {
+                            if (!tooltip.contains(e.target) && !event.currentTarget.contains(e.target)) {
+                                clearTimeout(autoRemoveTimeout);
+                                tooltip.remove();
+                                document.removeEventListener('click', removeTooltip);
+                            }
+                        };
+                        setTimeout(() => { document.addEventListener('click', removeTooltip); }, 100);
+                    },
+
+                    copyInviteMessage(code) {
+                        const message = `Vous avez été invité à rejoindre le club privé INFODROP !\nAccédez à l'actu essentielle sur : https://infodrop.live\nUtilisez ce code lors de votre inscription : ${code}`;
+                        navigator.clipboard.writeText(message);
+                        this.copied = true;
+                        setTimeout(() => this.copied = false, 1500);
+                    }
+                };
+            }
+        </script>
 </body>
 
 </html>
