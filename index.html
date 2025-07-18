@@ -1701,17 +1701,22 @@
                 </div>
             </div>
 
+                  
+<!-- ============================================================== -->
+            <!-- ℹ️ MODAL À PROPOS (CORRIGÉE)                                    -->
             <!-- ============================================================== -->
-            <!-- ℹ️ MODAL À PROPOS                                               -->
-            <!-- ============================================================== -->
-            <div x-show="showAboutModal" x-transition @click.away="showAboutModal = false"
-                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+            <div x-show="showAboutModal" x-transition
+                @click.away="showAboutModal = false"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" 
+                style="display: none;"
+                x-init="$watch('showAboutModal', value => document.body.style.overflow = value ? 'hidden' : '')">
 
                 <!-- Conteneur principal, on réutilise le style du modal des achievements -->
-                <div class="achievements-modal" @click.stop>
+                <!-- MODIFICATION 1: Ajout de 'flex flex-col' pour un layout vertical flexible -->
+                <div class="achievements-modal flex flex-col" @click.stop>
 
-                    <!-- En-tête avec le même style que le modal des achievements -->
-                    <div class="achievements-header relative">
+                    <!-- En-tête (inchangé) -->
+                    <div class="achievements-header relative flex-shrink-0">
                         <button @click="showAboutModal = false"
                             class="absolute top-3 right-3 clash-btn clash-btn-red p-1.5 w-8 h-8 flex items-center justify-center">
                             <span class="text-lg">✕</span>
@@ -1721,13 +1726,12 @@
                             <span class="text-2xl">📰</span>
                             <span>À propos d'INFODROP</span>
                         </h2>
-                        <p class="text-xs sm:text-sm text-yellow-200">Version 3.2.0</p>
+                        <p class="text-xs sm:text-sm text-yellow-200">Version 4.0.0</p>
                     </div>
 
-                    <!-- Contenu scrollable, comme pour les achievements -->
-                    <div class="achievements-content modal-content">
+                    <!-- MODIFICATION 2: Ajout de 'flex-grow overflow-y-auto' pour que seul le contenu défile -->
+                    <div class="achievements-content modal-content flex-grow overflow-y-auto">
                         <div class="space-y-4">
-
                             <!-- Le Projet -->
                             <div class="clash-card p-4">
                                 <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
@@ -1806,8 +1810,8 @@
                         </div>
                     </div>
 
-                    <!-- Pied de page avec le bouton fermer, pour une consistance parfaite -->
-                    <div class="p-3 text-center border-t-2 border-gray-700">
+                    <!-- MODIFICATION 3: Augmentation du padding ('p-4') et bouton toujours visible -->
+                    <div class="p-4 text-center border-t-2 border-gray-700 flex-shrink-0">
                         <a href="mailto:l0r4.py@gmail.com" class="clash-btn px-4 py-1.5 text-sm text-white">
                             📧 Contactez-nous
                         </a>
