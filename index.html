@@ -1248,9 +1248,10 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- 🌈 CHECKER DE DIVERSITÉ                                   -->
+                <!-- 🌈 CHECKER DE DIVERSITÉ (CORRIGÉ)                           -->
                 <!-- ========================================================== -->
-                <div x-show="!loadingNews && diversityScore !== null" x-transition class="clash-card mb-4 sm:mb-6">
+                <!-- MODIFICATION 1: La condition d'affichage est simplifiée pour toujours l'afficher, sauf à 100% -->
+                <div x-show="!loadingNews && diversityScore !== 100" x-transition class="clash-card mb-4 sm:mb-6">
                     <button @click="showDiversityChecker = !showDiversityChecker"
                         class="w-full flex items-center justify-between p-3 sm:p-4">
                         <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
@@ -1258,11 +1259,12 @@
                             <span>Score de diversité</span>
                         </h3>
                         <div class="flex items-center gap-3">
+                            <!-- MODIFICATION 2: Affiche '0%' si le score n'est pas encore calculé, pour éviter un 'null%' inesthétique -->
                             <div class="text-xl sm:text-2xl font-bold" :class="{
                                 'text-red-400': diversityScore < 30,
                                 'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
                                 'text-green-400': diversityScore >= 70
-                            }" x-text="diversityScore + '%'"></div>
+                            }" x-text="(diversityScore !== null ? diversityScore : 0) + '%'"></div>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform text-gray-400"
                                 :class="{ 'rotate-180': showDiversityChecker }" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -1275,7 +1277,8 @@
                     <div x-show="showDiversityChecker" x-transition class="p-3 sm:p-4 border-t-2 border-gray-700">
                         <div class="mb-3 sm:mb-4">
                             <div class="xp-bar-container">
-                                <div class="xp-bar-fill" :style="`width: ${diversityScore}%`" :class="{
+                                <!-- On utilise (diversityScore || 0) pour que la barre soit à 0% au lieu de ne pas s'afficher -->
+                                <div class="xp-bar-fill" :style="`width: ${diversityScore || 0}%`" :class="{
                                          'bg-gradient-to-r from-red-400 to-red-600': diversityScore < 30,
                                          'bg-gradient-to-r from-yellow-400 to-yellow-600': diversityScore >= 30 && diversityScore < 70,
                                          'bg-gradient-to-r from-green-400 to-green-600': diversityScore >= 70
