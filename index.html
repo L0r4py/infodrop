@@ -1681,9 +1681,9 @@
 
 
             <!-- ============================================================== -->
-            <!-- ℹ️ MODAL À PROPOS (CORRIGÉE AVEC FERMETURE EXTÉRIEURE)            -->
+            <!-- ℹ️ MODAL À PROPOS (AVEC REMERCIEMENTS)                          -->
             <!-- ============================================================== -->
-            <div x-show="showAboutModal" x-transition @click="if ($event.target === $el) showAboutModal = false" 
+            <div x-show="showAboutModal" x-transition @click="if ($event.target === $el) showAboutModal = false"
                 class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
                 style="display: none;"
                 x-init="$watch('showAboutModal', value => document.body.style.overflow = value ? 'hidden' : '')">
@@ -1771,8 +1771,9 @@
                                 </div>
                             </div>
 
-                            <!-- L'Équipe -->
+                            <!-- L'Équipe (MODIFIÉE POUR INCLURE LES REMERCIEMENTS) -->
                             <div class="clash-card p-4">
+                                <!-- Section Équipe (originale) -->
                                 <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
                                     <span class="text-red-400">👥</span>
                                     L'Équipe
@@ -1780,6 +1781,25 @@
                                 <p class="text-gray-300 text-center text-sm">
                                     Un projet 3C - By Emile Marclin & L0r4.py [AI]
                                 </p>
+
+                                <!-- Séparateur visuel -->
+                                <div class="border-t-2 border-gray-700/50 my-4"></div>
+
+                                <!-- Section Remerciements (nouvelle) -->
+                                <h4 class="text-lg font-bold text-white mb-2 flex items-center justify-center gap-2">
+                                    <span class="text-yellow-400">🛡️</span>
+                                    <span>Nos Bêta-Testeurs</span>
+                                </h4>
+                                <p class="text-gray-400 text-center text-xs mb-4">
+                                    Un immense merci pour leur aide précieuse et leurs retours avisés.
+                                </p>
+                                <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
+                                    <span class="font-medium text-gray-200">Alpha4</span>
+                                    <span class="font-medium text-gray-200">Coolmax</span>
+                                    <span class="font-medium text-gray-200">José</span>
+                                    <span class="font-medium text-gray-200">Yoz</span>
+                                    <span class="font-medium text-gray-200">Same</span>
+                                </div>
                             </div>
                         </div>
                     </div>
