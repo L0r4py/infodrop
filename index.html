@@ -1565,11 +1565,13 @@
             </div>
 
             <!-- ============================================================== -->
-            <!-- 🏆 MODAL ACHIEVEMENTS                                         -->
+            <!-- 🏆 MODAL MES SUCCÈS (AVEC FLOU)                                -->
             <!-- ============================================================== -->
             <div x-show="showAchievementsModal" x-transition
-                @click="if($event.target === $el) showAchievementsModal = false"
-                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+                @click="if($event.target === $el) showAchievementsModal = false" <!-- MODIFICATION : Ajout
+                de 'bg-black/50' et 'backdrop-blur-sm' pour l'effet de flou -->
+                class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                style="display: none;">
                 <div class="achievements-modal" @click.stop>
                     <div class="achievements-header relative">
                         <button @click="showAchievementsModal = false"
