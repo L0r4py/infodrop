@@ -1683,11 +1683,11 @@
             <!-- ============================================================== -->
             <!-- ℹ️ MODAL À PROPOS (CORRIGÉE AVEC FERMETURE EXTÉRIEURE)            -->
             <!-- ============================================================== -->
-            <div x-show="showAboutModal" x-transition @click="if ($event.target === $el) showAboutModal = false"
-                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;"
+            <div x-show="showAboutModal" x-transition @click="if ($event.target === $el) showAboutModal = false" 
+                class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                style="display: none;"
                 x-init="$watch('showAboutModal', value => document.body.style.overflow = value ? 'hidden' : '')">
 
-                <!-- Ce @click.stop est crucial : il empêche un clic DANS la modale de la fermer -->
                 <div class="achievements-modal flex flex-col" @click.stop>
 
                     <!-- En-tête (inchangé) -->
