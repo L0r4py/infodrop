@@ -124,6 +124,8 @@ const RSS_FEEDS = [
     { name: 'Geopolintel', url: 'https://geopolintel.fr/spip.php?page=backend', orientation: 'extrême-droite', tags: ['alternatif'] },
     { name: 'Nexus', url: 'https://nexus.fr/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
     { name: 'Enquête du Jour', url: 'https://enquetedujour.fr/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
+    { name: 'Le Média Positif', url: 'https://lemediapositif.com/feed', orientation: 'neutre', tags: ['positif'] },
+
 
     // --- EUROPÉEN / SCIENCE / COMMUNICATION ---
     { name: 'Le Grand Continent', url: 'https://legrandcontinent.eu/fr/feed/', orientation: 'centre-gauche', tags: ['europe'] },
