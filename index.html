@@ -2455,7 +2455,7 @@
                             }
                             const { error: otpError } = await supabase.auth.signInWithOtp({ email: this.email.toLowerCase(), options: { emailRedirectTo: window.location.origin } });
                             if (otpError) throw otpError;
-                            this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
+                            this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé. Pensez à vérifier vos spams si besoin.';
                             this.messageType = 'success';
                         } catch (error) {
                             this.message = error.message || 'Une erreur est survenue.';
