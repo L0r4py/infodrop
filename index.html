@@ -451,24 +451,6 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        /* === ANIMATIONS === */
-        @keyframes level-up-clash {
-            0% {
-                transform: scale(0) rotate(0deg);
-                opacity: 0;
-            }
-
-            50% {
-                transform: scale(1.3) rotate(180deg);
-                opacity: 1;
-            }
-
-            100% {
-                transform: scale(1) rotate(360deg);
-                opacity: 1;
-            }
-        }
-
         @keyframes float {
 
             0%,
@@ -514,32 +496,6 @@
         @keyframes spin {
             to {
                 transform: rotate(360deg);
-            }
-        }
-
-        /* === XP POPUP === */
-        .xp-popup {
-            position: fixed;
-            color: var(--clash-gold);
-            font-weight: 900;
-            font-size: 28px;
-            text-shadow:
-                0 2px 4px rgba(0, 0, 0, 0.5),
-                0 0 20px rgba(255, 215, 0, 0.5);
-            pointer-events: none;
-            animation: xp-gain 1.5s ease-out forwards;
-            z-index: 9999;
-        }
-
-        @keyframes xp-gain {
-            0% {
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(-80px) scale(1.5);
-                opacity: 0;
             }
         }
 
@@ -1705,10 +1661,8 @@
             <!-- ============================================================== -->
             <!-- ℹ️ MODAL À PROPOS (CORRIGÉE AVEC FERMETURE EXTÉRIEURE)            -->
             <!-- ============================================================== -->
-            <div x-show="showAboutModal" x-transition
-                @click="if ($event.target === $el) showAboutModal = false"
-                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50"
-                style="display: none;"
+            <div x-show="showAboutModal" x-transition @click="if ($event.target === $el) showAboutModal = false"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;"
                 x-init="$watch('showAboutModal', value => document.body.style.overflow = value ? 'hidden' : '')">
 
                 <!-- Ce @click.stop est crucial : il empêche un clic DANS la modale de la fermer -->
@@ -1818,6 +1772,19 @@
             </div>
 
             <!-- ============================================================== -->
+            <!-- 💎 MODAL DE RÉCOMPENSE UNIFIÉ                                   -->
+            <!-- ============================================================== -->
+            <div x-show="showRewardModal" x-transition @click="if ($event.target === $el) closeRewardModal()"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+
+                <div class="achievement-popup-clash w-full max-w-sm" @click.stop>
+                    <div class="text-6xl mb-3" x-text="rewardData.icon"></div>
+                    <h3 class="text-2xl font-bold mb-2 text-white" x-text="rewardData.title"></h3>
+                    <p class="text-lg text-blue-200" x-text="rewardData.description"></p>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
             <!-- 🦶 FOOTER                                                     -->
             <!-- ============================================================== -->
             <footer class="text-center py-6 sm:py-8 text-xs text-gray-500 mt-auto border-t-2 border-gray-800">
@@ -1903,6 +1870,9 @@
                     readArticles: {}, totalReadCount: 0, showReadArticles: false, hideReadFromMain: true,
                     // --- MODALES ---
                     showAboutModal: false, showFilters: false,
+
+                    showRewardModal: false,
+                    rewardData: { icon: '', title: '', description: '' },
 
                     // ============================================================
                     // 🚀 INITIALISATION DE L'APPLICATION
@@ -2172,29 +2142,55 @@
                     },
 
                     playAnimationQueue(queue) {
-                        let delay = 300;
-                        queue.forEach((animation, index) => {
-                            setTimeout(() => {
-                                switch (animation.type) {
-                                    case 'xp':
-                                        this.showXPAnimation(animation.amount);
-                                        break;
-                                    case 'level_up':
-                                        this.showLevelUpAnimation(animation.newLevel);
-                                        break;
-                                    case 'achievement':
-                                        // Double vérification avant de montrer
-                                        const recentCheck = sessionStorage.getItem(`recent_achievement_${animation.title}`);
-                                        if (!recentCheck || index === 0) { // Toujours montrer la première
-                                            this.showAchievementPopup(animation.icon, animation.title);
-                                        }
-                                        break;
-                                }
-                            }, delay);
+                        if (!queue || queue.length === 0) {
+                            this.showRewardModal = false;
+                            return;
+                        }
 
-                            // Augmenter le délai pour les prochaines animations
-                            delay += (animation.type === 'achievement' || animation.type === 'level_up') ? 3200 : 1500;
-                        });
+                        // On prend la première récompense de la liste
+                        const reward = queue[0];
+
+                        // On formate les données pour notre modal
+                        switch (reward.type) {
+                            case 'xp':
+                                this.rewardData = {
+                                    icon: '✨',
+                                    title: `+${reward.amount} XP`,
+                                    description: 'Pour votre lecture assidue !'
+                                };
+                                break;
+                            case 'level_up':
+                                this.rewardData = {
+                                    icon: '🚀',
+                                    title: `NIVEAU ${reward.newLevel} !`,
+                                    description: 'Votre perspicacité augmente !'
+                                };
+                                break;
+                            case 'achievement':
+                                this.rewardData = {
+                                    icon: reward.icon,
+                                    title: 'SUCCÈS DÉBLOQUÉ !',
+                                    description: reward.title
+                                };
+                                break;
+                        }
+
+                        // On affiche le modal
+                        this.showRewardModal = true;
+
+                        // On prépare la suite : on passe la file d'attente SANS le premier élément
+                        const remainingQueue = queue.slice(1);
+                        localStorage.setItem('infodrop_animation_queue', JSON.stringify(remainingQueue));
+                    },
+
+                    closeRewardModal() {
+                        this.showRewardModal = false;
+
+                        // On attend la fin de l'animation de fermeture
+                        setTimeout(() => {
+                            const remainingQueue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
+                            this.playAnimationQueue(remainingQueue);
+                        }, 300);
                     },
 
 
@@ -2326,50 +2322,6 @@
                             case 'diversity_score': return `Score: ${this.diversityScore || 0}%`;
                             default: return '...';
                         }
-                    },
-
-                    showXPAnimation(amount) {
-                        const popup = document.createElement('div');
-                        popup.className = 'xp-popup';
-                        popup.textContent = `+${amount} XP`;
-                        popup.style.left = '50%';
-                        popup.style.top = '200px';
-                        document.body.appendChild(popup);
-                        setTimeout(() => popup.remove(), 1500);
-                    },
-
-                    showLevelUpAnimation() {
-                        const levelUp = document.createElement('div');
-                        levelUp.style.cssText = `position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; font-weight: bold; color: var(--clash-gold); text-shadow: 0 0 30px var(--clash-gold); animation: level-up-clash 1.5s ease-out forwards; z-index: 9999; pointer-events: none;`;
-                        levelUp.textContent = `NIVEAU ${this.userLevel}!`;
-                        document.body.appendChild(levelUp);
-                        this.createGoldConfetti();
-                        setTimeout(() => levelUp.remove(), 1500);
-                    },
-
-                    showAchievementPopup(icon, title) {
-                        // Vérification anti-spam
-                        if (window.DISABLE_ANIMATIONS) return;
-
-                        // Vérifier qu'on n'est pas en train de charger la page
-                        if (document.readyState !== 'complete') return;
-
-                        // Vérifier qu'il n'y a pas déjà une popup
-                        if (document.querySelector('.achievement-popup-clash')) return;
-
-                        // Limiter à une popup toutes les 5 secondes
-                        const now = Date.now();
-
-                        if (window.lastAchievementPopup && (now - window.lastAchievementPopup) < 5000) return;
-                        window.lastAchievementPopup = now;
-                        const popup = document.createElement('div');
-                        popup.className = 'achievement-popup-clash';
-                        popup.innerHTML = `<div class="text-6xl mb-3">${icon}</div><h3 class="text-2xl font-bold mb-2 text-white">SUCCÈS DÉBLOQUÉ!</h3><p class="text-lg text-blue-200">${title}</p>`;
-                        document.body.appendChild(popup);
-                        setTimeout(() => {
-                            popup.style.animation = 'achievement-appear 0.5s ease-out reverse forwards';
-                            setTimeout(() => popup.remove(), 500);
-                        }, 3000);
                     },
 
                     createGoldConfetti() {
