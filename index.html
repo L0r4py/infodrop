@@ -2023,41 +2023,12 @@
 
                         document.addEventListener('visibilitychange', () => {
                             if (!document.hidden) {
-                                // 1. Récupérer la queue d'animations
+                                // On se contente de gérer la file d'attente des animations au retour.
                                 const queue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
-
-                                // 2. Supprimer immédiatement du localStorage
                                 localStorage.removeItem('infodrop_animation_queue');
 
-                                // 3. IMPORTANT : Filtrer la queue pour éviter les doublons
                                 if (queue.length > 0) {
-                                    // Filtrer les achievements déjà débloqués
-                                    const filteredQueue = queue.filter(animation => {
-                                        if (animation.type === 'achievement') {
-                                            // Vérifier si cet achievement n'a pas déjà été joué récemment
-                                            const recentKey = `recent_achievement_${animation.title}`;
-                                            const wasRecentlyShown = sessionStorage.getItem(recentKey);
-
-                                            if (wasRecentlyShown) {
-                                                console.log('Achievement déjà montré récemment:', animation.title);
-                                                return false; // Ne pas rejouer
-                                            }
-
-                                            // Marquer comme montré
-                                            sessionStorage.setItem(recentKey, 'true');
-
-                                            // Auto-nettoyer après 5 minutes
-                                            setTimeout(() => {
-                                                sessionStorage.removeItem(recentKey);
-                                            }, 300000);
-                                        }
-                                        return true; // Garder XP et level up
-                                    });
-
-                                    // 4. Jouer seulement les animations filtrées
-                                    if (filteredQueue.length > 0) {
-                                        this.playAnimationQueue(filteredQueue);
-                                    }
+                                    this.playAnimationQueue(queue);
                                 }
                             }
                         });
@@ -2749,13 +2720,29 @@
                         await supabase.auth.signOut();
                     },
 
+                    // ============================================================
+                    // 🔄 GESTION DES MISES À JOUR AUTOMATIQUES (VERSION FINALE)
+                    // ============================================================
+
                     startAutoUpdate() {
-                        if (this.updateInterval) clearInterval(this.updateInterval);
-                        this.updateInterval = setInterval(() => { this.loadNews(this.activeFilter, false); }, 30000);
+                        // Si un intervalle existe déjà, on le nettoie pour éviter les doublons.
+                        if (this.updateInterval) {
+                            clearInterval(this.updateInterval);
+                        }
+                        // On lance le nouvel intervalle.
+                        this.updateInterval = setInterval(() => {
+                            // On vérifie que la page est bien visible avant de lancer la requête.
+                            if (!document.hidden) {
+                                this.loadNews(this.activeFilter, false);
+                            }
+                        }, 30000); // 30 secondes
                     },
 
                     stopAutoUpdate() {
-                        if (this.updateInterval) clearInterval(this.updateInterval);
+                        if (this.updateInterval) {
+                            clearInterval(this.updateInterval);
+                            this.updateInterval = null;
+                        }
                     },
 
                     formatTime(t) { return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); },
