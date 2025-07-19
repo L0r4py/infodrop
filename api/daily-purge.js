@@ -23,7 +23,7 @@ export default async function handler(req, res) {
         const { data, error } = await supabase
             .from('actu')
             .delete()
-            .lt('heure', twentyFourHoursAgo.toISOString()) // La logique a changé ici
+            .lt('heure', twentyFourHoursAgo.toISOString())
             .select();
 
         if (error) throw error;
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
             executed_at: new Date().toISOString(),
             articles_deleted: deletedCount,
             status: 'success',
-            error_message: '24h sliding window' // On peut ajouter une note
+            error_message: '24h sliding window'
         });
 
         res.status(200).json({ success: true, deleted_count: deletedCount });
