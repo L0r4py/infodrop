@@ -113,6 +113,24 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
+        .clash-btn-green {
+            background: linear-gradient(180deg, #5CBF60 0%, var(--clash-green) 100%);
+            border-color: #388E3C;
+            box-shadow:
+                0 4px 0 #388E3C,
+                0 6px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .clash-btn-red {
+            background: linear-gradient(180deg, #FF6B6B 0%, var(--clash-red) 100%);
+            border-color: #C62828;
+            box-shadow:
+                0 4px 0 #C62828,
+                0 6px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
         /* === CARDS CLASH === */
         .clash-card {
             background: linear-gradient(180deg, #263859 0%, #17223B 100%);
@@ -135,6 +153,27 @@
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
             border-radius: 20px 20px 0 0;
             pointer-events: none;
+        }
+
+        /* === BADGES NIVEAU === */
+        .level-badge {
+            background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 50px;
+            padding: 6px 16px;
+            font-weight: 900;
+            color: #FFF;
+            text-shadow:
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                0 1px 0 #D68910;
+            box-shadow:
+                0 3px 0 #D68910,
+                0 5px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         /* === MENU DROPDOWN CLASH === */
@@ -170,6 +209,17 @@
             position: relative;
         }
 
+        .menu-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+
         .menu-items {
             padding: 8px;
         }
@@ -191,6 +241,17 @@
             color: inherit;
         }
 
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
         .menu-item:hover {
             background: linear-gradient(180deg, rgba(46, 123, 230, 0.3) 0%, rgba(46, 123, 230, 0.15) 100%);
             border-color: #2E7BE6;
@@ -198,6 +259,10 @@
             box-shadow:
                 0 4px 12px rgba(46, 123, 230, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item:hover::before {
+            left: 100%;
         }
 
         .menu-item-icon {
@@ -223,6 +288,16 @@
             font-size: 11px;
             color: #87CEEB;
             opacity: 0.8;
+        }
+
+        .menu-item-arrow {
+            font-size: 16px;
+            color: #4A9EFF;
+            transition: transform 0.2s ease;
+        }
+
+        .menu-item:hover .menu-item-arrow {
+            transform: translateX(4px);
         }
 
         .menu-separator {
@@ -257,6 +332,197 @@
 
         .menu-item-danger .menu-item-title {
             color: #FF6B6B;
+        }
+
+        .menu-item-danger .menu-item-desc {
+            color: #FF9999;
+        }
+
+        /* === MODAL PARTAGE === */
+        .share-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 4px solid var(--clash-gold);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            z-index: 9999;
+            max-width: 90%;
+            width: 400px;
+            box-shadow:
+                0 0 0 5px #D68910,
+                0 10px 40px rgba(0, 0, 0, 0.7),
+                0 0 100px rgba(255, 215, 0, 0.2);
+        }
+
+        /* === MODAL ACHIEVEMENTS === */
+        .achievements-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 4px solid var(--clash-gold);
+            border-radius: 20px;
+            padding: 0;
+            z-index: 9999;
+            max-width: 90%;
+            width: 450px;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 5px #D68910,
+                0 10px 40px rgba(0, 0, 0, 0.7),
+                0 0 100px rgba(255, 215, 0, 0.2);
+        }
+
+        @media (max-width: 640px) {
+            .achievements-modal {
+                max-height: 75vh;
+                width: 95%;
+                max-width: 400px;
+            }
+        }
+
+        .achievements-header {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.1) 100%);
+            padding: 16px;
+            border-bottom: 3px solid #D68910;
+            text-align: center;
+            position: relative;
+        }
+
+        .achievements-content {
+            padding: 16px;
+            max-height: calc(80vh - 100px);
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .achievements-header {
+                padding: 12px;
+            }
+
+            .achievements-content {
+                padding: 12px;
+                max-height: calc(75vh - 90px);
+            }
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: linear-gradient(180deg, rgba(46, 123, 230, 0.1) 0%, rgba(46, 123, 230, 0.05) 100%);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            transition: all 0.2s;
+        }
+
+        @media (max-width: 640px) {
+            .achievement-item {
+                gap: 10px;
+                padding: 10px;
+                margin-bottom: 6px;
+            }
+        }
+
+        .achievement-item.unlocked {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.1) 100%);
+            border-color: #D68910;
+        }
+
+        .achievement-item.locked {
+            opacity: 0.6;
+            filter: grayscale(0.5);
+        }
+
+        .achievement-icon-modal {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(180deg, #FFD700 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 640px) {
+            .achievement-icon-modal {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+                border-width: 2px;
+            }
+        }
+
+        .achievement-item.locked .achievement-icon-modal {
+            background: linear-gradient(180deg, #666 0%, #444 100%);
+            border-color: #333;
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .achievement-desc {
+            font-size: 12px;
+            color: #87CEEB;
+            margin-bottom: 2px;
+        }
+
+        .achievement-progress {
+            font-size: 11px;
+            color: #FFD700;
+            font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .achievement-title {
+                font-size: 14px;
+            }
+
+            .achievement-desc {
+                font-size: 11px;
+            }
+
+            .achievement-progress {
+                font-size: 10px;
+            }
+        }
+
+        .achievement-item.locked .achievement-progress {
+            color: #999;
+        }
+
+        /* === MODAL SCROLL === */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: #1a1a2e;
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #4A9EFF;
+            border-radius: 4px;
         }
 
         /* === PERSPECTIVE CARDS CLASH === */
@@ -484,6 +750,14 @@
             font-weight: 600;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
+
+        /* Ajouts pour optimisations mobiles */
+        @media (max-width: 640px) {
+            .level-badge {
+                padding: 4px 12px;
+                font-size: 11px;
+            }
+        }
     </style>
 
     <!-- === CONFIGURATION TAILWIND === -->
@@ -500,6 +774,7 @@
     <script>
         let supabase = null;
         let STRIPE_LINK = 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801';
+        let ADMIN_EMAILS = [];
 
         async function initializeSupabase() {
             try {
@@ -513,6 +788,7 @@
                 }
                 supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
                 STRIPE_LINK = config.stripeLink || '';
+                ADMIN_EMAILS = config.adminEmails || [];
                 return true;
             } catch (error) {
                 console.error('❌ Erreur initialisation:', error);
@@ -626,66 +902,95 @@
                                     class="text-[10px] sm:text-xs bg-blue-900/50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-blue-300 font-medium">v4.0.0</span>
                             </div>
 
-                            <!-- Menu -->
-                            <div class="relative" x-data="{ showMenu: false }">
-                                <div x-show="showMenu" x-transition.opacity
-                                    class="fixed inset-0 backdrop-blur-sm bg-black/20 z-40" @click="showMenu = false">
+                            <!-- Stats joueur + Menu -->
+                            <div class="flex items-center gap-1 sm:gap-4">
+                                <!-- Niveau + Achievement -->
+                                <div @click="showAchievementsModal = true"
+                                    class="level-badge cursor-pointer hover:scale-105 transition-transform"
+                                    :title="currentAchievement ? getAchievementTitle(currentAchievement) : 'Mes achievements'">
+                                    <span class="text-xs" x-text="currentAchievement || '⭐'"></span>
+                                    <span>NIV <span x-text="userLevel"></span></span>
                                 </div>
 
-                                <button @click="showMenu = !showMenu"
-                                    class="clash-btn p-2 w-10 h-10 flex items-center justify-center relative z-50">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4 6h16M4 12h16M4 18h16" />
-                                    </svg>
-                                </button>
-                                <div x-show="showMenu" x-transition
-                                    class="absolute top-full right-0 mt-3 w-64 clash-menu-dropdown z-50"
-                                    style="display: none;">
-                                    <div class="menu-header">
-                                        <span class="text-xs font-bold text-yellow-300">⚡ MENU PRINCIPAL</span>
+                                <!-- Menu -->
+                                <div class="relative" x-data="{ showMenu: false }">
+                                    <div x-show="showMenu" x-transition.opacity
+                                        class="fixed inset-0 backdrop-blur-sm bg-black/20 z-40"
+                                        @click="showMenu = false">
                                     </div>
 
-                                    <div class="menu-items">
-                                        <a href="/infodrop360.html" class="menu-item">
-                                            <div class="menu-item-icon">🌐</div>
-                                            <div class="menu-item-content">
-                                                <span class="menu-item-title">Analyses 360°</span>
-                                                <span class="menu-item-desc">Toutes les analyses</span>
-                                            </div>
-                                            <div class="text-blue-400">→</div>
-                                        </a>
-                                        <a href="/index.html" class="menu-item">
-                                            <div class="menu-item-icon">📰</div>
-                                            <div class="menu-item-content">
-                                                <span class="menu-item-title">Flux 24H</span>
-                                                <span class="menu-item-desc">Actualités temps réel</span>
-                                            </div>
-                                            <div class="text-blue-400">→</div>
-                                        </a>
+                                    <button @click="showMenu = !showMenu"
+                                        class="clash-btn p-2 w-10 h-10 flex items-center justify-center relative z-50">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M4 6h16M4 12h16M4 18h16" />
+                                        </svg>
+                                    </button>
+                                    <div x-show="showMenu" x-transition
+                                        class="absolute top-full right-0 mt-3 w-64 clash-menu-dropdown z-50"
+                                        style="display: none;">
+                                        <div class="menu-header">
+                                            <span class="text-xs font-bold text-yellow-300">⚡ MENU PRINCIPAL</span>
+                                        </div>
 
-                                        <div class="menu-separator"></div>
+                                        <div class="menu-items">
+                                            <a href="/index.html" class="menu-item">
+                                                <div class="menu-item-icon">📰</div>
+                                                <div class="menu-item-content">
+                                                    <span class="menu-item-title">Flux 24H</span>
+                                                    <span class="menu-item-desc">Actualités temps réel</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                            <a @click.prevent="loadAndShow360Modal()" href="#" class="menu-item">
+                                                <div class="menu-item-icon">🌐</div>
+                                                <div class="menu-item-content">
+                                                    <span class="menu-item-title">Analyses 360°</span>
+                                                    <span class="menu-item-desc">Vision complète</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                            <a @click.prevent="showShareModal = true" href="#" class="menu-item">
+                                                <div class="menu-item-icon">🎁</div>
+                                                <div class="menu-item-content">
+                                                    <span class="menu-item-title">Mon code d'invitation</span>
+                                                    <span class="menu-item-desc">Inviter des amis</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
 
-                                        <a :href="STRIPE_LINK" target="_blank" class="menu-item menu-item-special">
-                                            <div class="menu-item-icon">❤️</div>
-                                            <div class="menu-item-content">
-                                                <span class="menu-item-title">Soutenir</span>
-                                                <span class="menu-item-desc">Aidez-nous</span>
-                                            </div>
-                                            <div class="text-yellow-400">→</div>
-                                        </a>
+                                            <div class="menu-separator"></div>
 
-                                        <div class="menu-separator"></div>
+                                            <a @click.prevent="showAboutModal = true; showMenu = false" href="#"
+                                                class="menu-item">
+                                                <div class="menu-item-icon">ℹ️</div>
+                                                <div class="menu-item-content">
+                                                    <span class="menu-item-title">À propos</span>
+                                                    <span class="menu-item-desc">En savoir plus</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                            <a :href="STRIPE_LINK" target="_blank" class="menu-item menu-item-special">
+                                                <div class="menu-item-icon">❤️</div>
+                                                <div class="menu-item-content">
+                                                    <span class="menu-item-title">Soutenir</span>
+                                                    <span class="menu-item-desc">Aidez-nous</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
 
-                                        <a @click="logout()" href="#" class="menu-item menu-item-danger">
-                                            <div class="menu-item-icon">🚪</div>
-                                            <div class="menu-item-content">
-                                                <span class="menu-item-title">Déconnexion</span>
-                                                <span class="menu-item-desc">À bientôt !</span>
-                                            </div>
-                                            <div class="text-red-400">→</div>
-                                        </a>
+                                            <div class="menu-separator"></div>
+
+                                            <a @click="logout()" href="#" class="menu-item menu-item-danger">
+                                                <div class="menu-item-icon">🚪</div>
+                                                <div class="menu-item-content">
+                                                    <span class="menu-item-title">Déconnexion</span>
+                                                    <span class="menu-item-desc">À bientôt !</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1138,6 +1443,289 @@
             </main>
 
             <!-- ============================================================== -->
+            <!-- 🎁 MODAL CODE D'INVITATION                                    -->
+            <!-- ============================================================== -->
+            <div x-show="showShareModal" x-transition @click.away="showShareModal = false"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+                <div class="share-modal">
+                    <h3 class="text-2xl font-bold text-white mb-4">🎁 Mon code d'invitation</h3>
+
+                    <div x-show="userInviteData.code" class="mb-6">
+                        <p class="text-gray-300 mb-3">Partagez ce code avec vos proches :</p>
+                        <div class="font-mono bg-blue-900/50 px-4 py-3 rounded-lg cursor-pointer hover:bg-blue-900/70 transition text-white text-xl border-2 border-blue-600 font-bold"
+                            @click="copyInviteMessage(userInviteData.code)" title="Cliquez pour copier">
+                            <span x-text="userInviteData.code"></span>
+                        </div>
+                        <span x-show="copied" class="text-green-400 font-bold text-sm mt-2 inline-block">✓ Copié
+                            !</span>
+                    </div>
+
+                    <div x-show="!userInviteData.code" class="text-gray-400 mb-6">
+                        <p>Aucun code d'invitation disponible.</p>
+                    </div>
+
+                    <div class="space-y-2 text-sm">
+                        <div x-show="userInviteData.parrainEmail" class="flex items-center justify-center gap-2">
+                            <span class="text-green-400">👆</span>
+                            <span class="text-gray-400">Invité par :</span>
+                            <span class="font-mono text-white" x-text="userInviteData.parrainEmail"></span>
+                        </div>
+
+                        <div x-show="userInviteData.filleulEmail" class="flex items-center justify-center gap-2">
+                            <span class="text-purple-400">👇</span>
+                            <span class="text-gray-400">Votre filleul :</span>
+                            <span class="font-mono text-white" x-text="userInviteData.filleulEmail"></span>
+                        </div>
+                    </div>
+
+                    <button @click="showShareModal = false" class="clash-btn px-6 py-2 mt-6 text-white">
+                        Fermer
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- 🏆 MODAL MES SUCCÈS                                           -->
+            <!-- ============================================================== -->
+            <div x-show="showAchievementsModal" x-transition
+                @click="if($event.target === $el) showAchievementsModal = false"
+                class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                style="display: none;">
+                <div class="achievements-modal" @click.stop>
+                    <div class="achievements-header relative">
+                        <button @click="showAchievementsModal = false"
+                            class="absolute top-3 right-3 clash-btn clash-btn-red p-1.5 w-8 h-8 flex items-center justify-center">
+                            <span class="text-lg">✕</span>
+                        </button>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white mb-1">🏆 Mes Succès</h2>
+                        <p class="text-xs sm:text-sm text-yellow-200">Score de diversité : <span
+                                x-text="diversityScore || 0"></span>%</p>
+                    </div>
+                    <div class="achievements-content modal-content">
+                        <!-- Achievements débloqués -->
+                        <h3 class="text-base sm:text-lg font-bold text-white mb-2 flex items-center gap-2">
+                            <span>✅</span>
+                            <span>Débloqués</span>
+                        </h3>
+                        <template x-for="achievement in getAllAchievementsData().filter(a => a.unlocked)"
+                            :key="achievement.id">
+                            <div class="achievement-item unlocked">
+                                <div class="achievement-icon-modal">
+                                    <span x-text="achievement.icon"></span>
+                                </div>
+                                <div class="achievement-info">
+                                    <div class="achievement-title" x-text="achievement.title"></div>
+                                    <div class="achievement-desc" x-text="achievement.description"></div>
+                                    <div class="achievement-progress">✓ Complété</div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Achievements verrouillés -->
+                        <h3 class="text-base sm:text-lg font-bold text-white mb-2 mt-4 flex items-center gap-2">
+                            <span>🔒</span>
+                            <span>À débloquer</span>
+                        </h3>
+                        <template x-for="achievement in getAllAchievementsData().filter(a => !a.unlocked)"
+                            :key="achievement.id">
+                            <div class="achievement-item locked">
+                                <div class="achievement-icon-modal">
+                                    <span>🔒</span>
+                                </div>
+                                <div class="achievement-info">
+                                    <div class="achievement-title" x-text="achievement.title"></div>
+                                    <div class="achievement-desc" x-text="achievement.description"></div>
+                                    <div class="achievement-progress" x-text="achievement.progress"></div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="p-3 text-center border-t-2 border-gray-700">
+                        <button @click="showAchievementsModal = false" class="clash-btn px-4 py-1.5 text-sm text-white">
+                            Fermer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- ℹ️ MODAL À PROPOS                                            -->
+            <!-- ============================================================== -->
+            <div x-show="showAboutModal" x-transition @click="if ($event.target === $el) showAboutModal = false"
+                class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                style="display: none;"
+                x-init="$watch('showAboutModal', value => document.body.style.overflow = value ? 'hidden' : '')">
+
+                <div class="achievements-modal flex flex-col" @click.stop>
+
+                    <div class="achievements-header relative flex-shrink-0">
+                        <button @click="showAboutModal = false"
+                            class="absolute top-3 right-3 clash-btn clash-btn-red p-1.5 w-8 h-8 flex items-center justify-center">
+                            <span class="text-lg">✕</span>
+                        </button>
+                        <h2
+                            class="text-xl sm:text-2xl font-bold text-white mb-1 flex items-center justify-center gap-3">
+                            <span class="text-2xl">📰</span>
+                            <span>À propos d'INFODROP</span>
+                        </h2>
+                        <p class="text-xs sm:text-sm text-yellow-200">Version 4.0.0</p>
+                    </div>
+
+                    <div class="achievements-content modal-content flex-grow overflow-y-auto">
+                        <div class="space-y-4">
+                            <!-- Le Projet -->
+                            <div class="clash-card p-4">
+                                <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                                    <span class="text-yellow-400">⚡</span>
+                                    Le Projet
+                                </h3>
+                                <p class="text-gray-300 leading-relaxed text-sm">
+                                    INFODROP est un club privé d'actualités gamifiées qui transforme la consommation
+                                    d'information en mission d'intelligence. Notre objectif : vous aider à sortir de
+                                    votre bulle
+                                    de filtre et développer une vision équilibrée de l'actualité.
+                                </p>
+                            </div>
+
+                            <!-- Comment ça marche -->
+                            <div class="clash-card p-4">
+                                <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                                    <span class="text-green-400">🎮</span>
+                                    Comment ça marche ?
+                                </h3>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-blue-400">1.</span>
+                                        <span class="text-gray-300">Lisez des articles de sources variées pour gagner de
+                                            l'XP.</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-green-400">2.</span>
+                                        <span class="text-gray-300">Diversifiez vos lectures pour améliorer votre Score
+                                            de Diversité.</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-yellow-400">3.</span>
+                                        <span class="text-gray-300">Montez en niveau et débloquez des Succès.</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-purple-400">4.</span>
+                                        <span class="text-gray-300">Maintenez votre streak de lecture quotidien.</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-red-400">5.</span>
+                                        <span class="text-gray-300">Analysez les sujets sous tous les angles avec
+                                            INFODROP 360°.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Le Système de Parrainage -->
+                            <div class="clash-card p-4">
+                                <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                                    <span class="text-purple-400">🎁</span>
+                                    Le Système de Parrainage
+                                </h3>
+                                <p class="text-gray-300 mb-3 text-sm">
+                                    INFODROP fonctionne sur invitation uniquement. Chaque membre reçoit un code unique à
+                                    partager.
+                                </p>
+                                <div class="bg-green-900/30 border-2 border-green-600 rounded-lg p-3">
+                                    <p class="text-green-300 font-bold text-center text-sm">
+                                        Un code = Un filleul = Une communauté de qualité
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- L'Équipe -->
+                            <div class="clash-card p-4">
+                                <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                                    <span class="text-red-400">👥</span>
+                                    L'Équipe
+                                </h3>
+                                <p class="text-gray-300 text-center text-sm">
+                                    Un projet 3C - w/L0r4.py [AI]
+                                </p>
+
+                                <div class="border-t-2 border-gray-700/50 my-4"></div>
+
+                                <h4 class="text-lg font-bold text-white mb-2 flex items-center justify-center gap-2">
+                                    <span class="text-yellow-400">🛡️</span>
+                                    <span>Nos Bêta-Testeurs</span>
+                                </h4>
+                                <p class="text-gray-400 text-center text-xs mb-4">
+                                    Un immense merci pour leur aide précieuse et leurs retours avisés.
+                                </p>
+                                <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
+                                    <span class="font-medium text-gray-200">Alpha4</span>
+                                    <span class="font-medium text-gray-200">Coolmax</span>
+                                    <span class="font-medium text-gray-200">José</span>
+                                    <span class="font-medium text-gray-200">Yoz</span>
+                                    <span class="font-medium text-gray-200">Same</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 text-center border-t-2 border-gray-700 flex-shrink-0">
+                        <a href="mailto:lauranallim@protonmail.com" class="clash-btn px-4 py-1.5 text-sm text-white">
+                            📧 Contactez-nous
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- 🌐 MODAL POUR INFODROP 360°                                  -->
+            <!-- ============================================================== -->
+            <div x-show="show360Modal" x-transition @click="if ($event.target === $el) show360Modal = false"
+                class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                style="display: none;">
+
+                <div class="achievements-modal flex flex-col" @click.stop>
+                    <div class="achievements-header relative flex-shrink-0">
+                        <button @click="show360Modal = false"
+                            class="absolute top-3 right-3 clash-btn clash-btn-red p-1.5 w-8 h-8 flex items-center justify-center"><span
+                                class="text-lg">✕</span></button>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white mb-1">🌐 Analyses 360°</h2>
+                    </div>
+
+                    <div class="achievements-content modal-content flex-grow overflow-y-auto">
+                        <div x-show="loadingAnalyses" class="flex justify-center py-8">
+                            <div
+                                class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
+                            </div>
+                        </div>
+
+                        <div x-show="!loadingAnalyses" class="space-y-4">
+                            <template x-for="analyse in analyses" :key="analyse.slug">
+                                <a :href="analyse.status === 'published' ? `/analyses/${analyse.slug}.html` : '#'"
+                                    class="block clash-card p-4 transition-transform hover:scale-105"
+                                    :class="{ 'opacity-60 cursor-not-allowed': analyse.status === 'wip' }">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="text-sm text-yellow-400 font-semibold"
+                                                x-text="analyse.category"></span>
+                                            <span x-show="analyse.isNew"
+                                                class="text-xs bg-green-600 text-green-100 px-2 py-0.5 rounded-full">NOUVEAU</span>
+                                        </div>
+                                        <h3 class="text-base font-bold text-white mb-2" x-text="analyse.title"></h3>
+                                        <div class="text-xs text-gray-400 flex justify-between items-center">
+                                            <span x-text="analyse.date"></span>
+                                            <span x-show="analyse.status === 'published'"
+                                                class="text-blue-400 font-semibold">→ Lire l'analyse</span>
+                                            <span x-show="analyse.status === 'wip'"
+                                                class="text-gray-500">Bientôt...</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
             <!-- 🦶 FOOTER                                                     -->
             <!-- ============================================================== -->
             <footer class="text-center py-6 sm:py-8 text-xs text-gray-500 mt-auto border-t-2 border-gray-800">
@@ -1162,11 +1750,12 @@
     </div>
 
     <!-- ======================================================================== -->
-    <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER ALLÉGÉE                                  -->
+    <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER COMPLÈTE                                 -->
     <!-- ======================================================================== -->
     <script>
         function infodropApp() {
             return {
+                // États de base
                 sessionLoaded: false,
                 user: null,
                 email: '',
@@ -1174,6 +1763,31 @@
                 message: '',
                 messageType: '',
                 inviteCode: '',
+                isAdmin: false,
+
+                // États modals
+                showShareModal: false,
+                showAboutModal: false,
+                showAchievementsModal: false,
+                show360Modal: false,
+                copied: false,
+
+                // Données utilisateur
+                userInviteData: { code: null, parrainEmail: null, filleulEmail: null },
+
+                // Gamification
+                userLevel: 1,
+                currentAchievement: null,
+                achievementsData: [],
+                unlockedAchievements: [],
+                diversityScore: 0,
+                totalReadCount: 0,
+                readingStreak: 0,
+                userXP: 0,
+
+                // Analyses 360
+                analyses: [],
+                loadingAnalyses: false,
 
                 async init() {
                     const supabaseReady = await initializeSupabase();
@@ -1185,6 +1799,13 @@
                     supabase.auth.onAuthStateChange(async (event, session) => {
                         this.user = session?.user || null;
                         this.sessionLoaded = true;
+
+                        if (this.user) {
+                            this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+                            // Charger les données gamification
+                            await this.loadGamificationData();
+                            await this.loadUserInviteData();
+                        }
                     });
 
                     // Animations au scroll
@@ -1200,6 +1821,171 @@
                             observer.observe(card);
                         });
                     }, 100);
+                },
+
+                async loadGamificationData() {
+                    if (!this.user) return;
+
+                    try {
+                        // Charger les achievements
+                        const { data: achievementsData } = await supabase
+                            .from('achievements')
+                            .select('*')
+                            .eq('is_active', true)
+                            .order('order_priority');
+                        this.achievementsData = achievementsData || [];
+
+                        // Charger les stats gaming
+                        let { data: gamingStats, error } = await supabase
+                            .from('user_gaming_stats')
+                            .select('*')
+                            .eq('user_id', this.user.id)
+                            .single();
+
+                        if (error && error.code === 'PGRST116') {
+                            // Créer les stats si elles n'existent pas
+                            const { data: newStats } = await supabase
+                                .from('user_gaming_stats')
+                                .insert({
+                                    user_id: this.user.id,
+                                    xp: 0,
+                                    level: 1,
+                                    reading_streak: 0,
+                                    unlocked_achievements: ['WELCOME'],
+                                    last_read_date: null
+                                })
+                                .select()
+                                .single();
+                            gamingStats = newStats;
+                        }
+
+                        if (gamingStats) {
+                            this.userXP = gamingStats.xp || 0;
+                            this.userLevel = gamingStats.level || 1;
+                            this.readingStreak = gamingStats.reading_streak || 0;
+                            this.unlockedAchievements = gamingStats.unlocked_achievements || ['WELCOME'];
+                        }
+
+                        // Charger le nombre d'articles lus
+                        const { count } = await supabase
+                            .from('user_read_articles')
+                            .select('*', { count: 'exact', head: true })
+                            .eq('user_id', this.user.id);
+                        this.totalReadCount = count || 0;
+
+                        // Calculer le score de diversité
+                        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                        const { data: diversityData } = await supabase
+                            .from('user_diversity_data')
+                            .select('orientation')
+                            .eq('user_id', this.user.id)
+                            .gte('read_at', twentyFourHoursAgo.toISOString());
+
+                        if (diversityData && diversityData.length > 0) {
+                            const uniqueOrientations = new Set(diversityData.map(d => d.orientation).filter(Boolean));
+                            this.diversityScore = Math.round((uniqueOrientations.size / 9) * 100);
+                        }
+
+                        this.updateCurrentAchievement();
+
+                    } catch (error) {
+                        console.error('Erreur chargement gamification:', error);
+                    }
+                },
+
+                updateCurrentAchievement() {
+                    if (!this.achievementsData.length) return;
+
+                    const unlocked = this.achievementsData
+                        .filter(a => this.unlockedAchievements.includes(a.code))
+                        .sort((a, b) => b.order_priority - a.order_priority);
+
+                    this.currentAchievement = unlocked.length > 0 ? unlocked[0].icon_emoji : '⭐';
+                },
+
+                getAchievementTitle(iconOrCode) {
+                    const achievement = this.achievementsData.find(a => a.code === iconOrCode || a.icon_emoji === iconOrCode);
+                    return achievement ? achievement.title : 'Achievement mystère';
+                },
+
+                getAllAchievementsData() {
+                    if (!this.achievementsData) return [];
+                    return this.achievementsData.map(achievement => ({
+                        id: achievement.code,
+                        icon: achievement.icon_emoji,
+                        title: achievement.title,
+                        description: achievement.description,
+                        unlocked: this.unlockedAchievements.includes(achievement.code),
+                        progress: this.getAchievementProgress(achievement)
+                    }));
+                },
+
+                getAchievementProgress(achievement) {
+                    if (this.unlockedAchievements.includes(achievement.code)) return '✓ Complété';
+                    switch (achievement.condition_type) {
+                        case 'articles_read': return `${this.totalReadCount}/${achievement.condition_value} articles`;
+                        case 'streak_days': return `${this.readingStreak}/${achievement.condition_value} jours`;
+                        case 'level_reached': return `Niveau ${this.userLevel}/${achievement.condition_value}`;
+                        case 'diversity_score': return `Score: ${this.diversityScore || 0}%`;
+                        default: return '...';
+                    }
+                },
+
+                async loadUserInviteData() {
+                    if (!this.user || !this.user.email) return;
+
+                    try {
+                        const { data: ownCode } = await supabase
+                            .from('invitation_codes')
+                            .select('*')
+                            .ilike('owner_email', this.user.email.toLowerCase())
+                            .maybeSingle();
+
+                        if (ownCode) {
+                            this.userInviteData.code = ownCode.code;
+                            if (ownCode.is_used && ownCode.used_by_email) {
+                                this.userInviteData.filleulEmail = ownCode.used_by_email;
+                            }
+                        }
+
+                        const { data: usedCode } = await supabase
+                            .from('invitation_codes')
+                            .select('owner_email')
+                            .ilike('used_by_email', this.user.email.toLowerCase())
+                            .maybeSingle();
+
+                        if (usedCode) {
+                            this.userInviteData.parrainEmail = usedCode.owner_email;
+                        }
+                    } catch (error) {
+                        console.error("Erreur chargement des données d'invitation:", error);
+                    }
+                },
+
+                copyInviteMessage(code) {
+                    const message = `Vous avez été invité à rejoindre le club privé INFODROP !\nAccédez à l'actu essentielle sur : https://infodrop.live\nUtilisez ce code lors de votre inscription : ${code}`;
+                    navigator.clipboard.writeText(message);
+                    this.copied = true;
+                    setTimeout(() => this.copied = false, 1500);
+                },
+
+                async loadAndShow360Modal() {
+                    this.show360Modal = true;
+                    this.showMenu = false;
+
+                    if (this.analyses.length > 0) {
+                        return;
+                    }
+
+                    this.loadingAnalyses = true;
+                    try {
+                        const response = await fetch('/analyses-list.json');
+                        this.analyses = await response.json();
+                    } catch (error) {
+                        console.error("Erreur lors du chargement des analyses :", error);
+                    } finally {
+                        this.loadingAnalyses = false;
+                    }
                 },
 
                 async login() {
