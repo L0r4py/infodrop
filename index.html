@@ -1086,7 +1086,7 @@
                                                 </div>
                                                 <div class="menu-item-arrow">→</div>
                                             </a>
-                                            <a href="/infodrop360.html" class="menu-item">
+                                            <a @click.prevent="loadAndShow360Modal()" href="#" class="menu-item">
                                                 <div class="menu-item-icon">🌐</div>
                                                 <div class="menu-item-content">
                                                     <span class="menu-item-title">Analyses 360°</span>
@@ -1814,6 +1814,56 @@
             </div>
 
             <!-- ============================================================== -->
+            <!-- 🌐 MODAL POUR INFODROP 360° (CHARGE LES DONNÉES DYNAMIQUEMENT) -->
+            <!-- ============================================================== -->
+            <div x-show="show360Modal" x-transition @click.away="show360Modal = false"
+                class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                style="display: none;">
+
+                <div class="achievements-modal flex flex-col" @click.stop>
+                    <div class="achievements-header relative flex-shrink-0">
+                        <button @click="show360Modal = false"
+                            class="absolute top-3 right-3 clash-btn clash-btn-red p-1.5 w-8 h-8 flex items-center justify-center"><span
+                                class="text-lg">✕</span></button>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white mb-1">🌐 Analyses 360°</h2>
+                    </div>
+
+                    <div class="achievements-content modal-content flex-grow overflow-y-auto">
+                        <!-- Affiche un spinner pendant le chargement -->
+                        <div x-show="loadingAnalyses" class="flex justify-center py-8">
+                            <div class="loading-spinner"></div>
+                        </div>
+
+                        <!-- Affiche la liste une fois chargée -->
+                        <div x-show="!loadingAnalyses" class="space-y-4">
+                            <template x-for="analyse in analyses" :key="analyse.slug">
+                                <a :href="analyse.status === 'published' ? `/analyses/${analyse.slug}.html` : '#'"
+                                    class="block clash-card p-4 transition-transform hover:scale-105"
+                                    :class="{ 'opacity-60 cursor-not-allowed': analyse.status === 'wip' }">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="text-sm text-yellow-400 font-semibold"
+                                                x-text="analyse.category"></span>
+                                            <span x-show="analyse.isNew"
+                                                class="text-xs bg-green-600 text-green-100 px-2 py-0.5 rounded-full">NOUVEAU</span>
+                                        </div>
+                                        <h3 class="text-base font-bold text-white mb-2" x-text="analyse.title"></h3>
+                                        <div class="text-xs text-gray-400 flex justify-between items-center">
+                                            <span x-text="analyse.date"></span>
+                                            <span x-show="analyse.status === 'published'"
+                                                class="text-blue-400 font-semibold">→ Lire l'analyse</span>
+                                            <span x-show="analyse.status === 'wip'"
+                                                class="text-gray-500">Bientôt...</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
             <!-- 💎 MODAL DE RÉCOMPENSE UNIFIÉ (DESIGN CORRIGÉ)                   -->
             <!-- ============================================================== -->
             <div x-show="showRewardModal" x-transition @click="if ($event.target === $el) closeRewardModal()"
@@ -1929,8 +1979,12 @@
                     showFilters: false,
                     showAchievementsModal: false,
                     showEditPanel: false,
+                    show360Modal: false,
+                    analyses: [],
+                    loadingAnalyses: false,
                     showRewardModal: false,
                     rewardData: { icon: '', title: '', description: '' },
+
 
                     // --- STATS & GAMIFICATION ---
                     stats: { total_articles: 0, total_sources: 0 },
@@ -2726,6 +2780,26 @@
                         if (this.realtimeChannel) await this.realtimeChannel.untrack();
                         await supabase.auth.signOut();
                     },
+
+                    async loadAndShow360Modal() {
+                        this.show360Modal = true;
+                        this.showMenu = false;
+
+                        if (this.analyses.length > 0) {
+                            return;
+                        }
+
+                        this.loadingAnalyses = true;
+                        try {
+                            const response = await fetch('/analyses-list.json');
+                            this.analyses = await response.json();
+                        } catch (error) {
+                            console.error("Erreur lors du chargement des analyses :", error);
+                        } finally {
+                            this.loadingAnalyses = false;
+                        }
+                    },
+
 
                     // ============================================================
                     // 🔄 GESTION DES MISES À JOUR AUTOMATIQUES (VERSION FINALE)

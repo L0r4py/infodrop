@@ -1,0 +1,32 @@
+[
+    {
+        "slug": "les-terres-rares-en-ukraine",
+        "category": "Géopolitique & Ressources",
+        "isNew": true,
+        "title": "Terres rares en Ukraine : le trésor de guerre caché du conflit",
+        "description": "Analyse de l'enjeu des ressources minérales critiques dans le conflit...",
+        "date": "5 juillet 2025",
+        "sourcesCount": 9,
+        "status": "published"
+    },
+    {
+        "slug": "DEMO-crise-eau-mayotte",
+        "category": "Crise Sociale",
+        "isNew": false,
+        "title": "Crise de l'eau à Mayotte : la République oubliée ?",
+        "description": "Analyse des différentes perspectives médiatiques sur la crise de l'eau...",
+        "date": "29 juin 2025",
+        "sourcesCount": 6,
+        "status": "published"
+    },
+    {
+        "slug": "reforme-audiovisuel-public",
+        "category": "Politique & Médias",
+        "isNew": false,
+        "title": "Réforme de l'audiovisuel public : la création controversée de \"France Médias\"",
+        "description": "Décryptage des positions politiques et médiatiques sur la restructuration...",
+        "date": "30 juin 2025",
+        "sourcesCount": 6,
+        "status": "wip"
+    }
+]
