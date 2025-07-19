@@ -2303,7 +2303,14 @@
                             this.userLevel = data.level || 1;
                             this.readingStreak = data.reading_streak || 0;
                             this.unlockedAchievements = data.unlocked_achievements && data.unlocked_achievements.length > 0 ? data.unlocked_achievements : ['WELCOME'];
-                            this.lastReadDate = data.last_read_date;
+
+                            // --- DÉBUT DE LA CORRECTION ---
+                            if (data.last_read_date) {
+                                this.lastReadDate = new Date(data.last_read_date).toDateString();
+                            } else {
+                                this.lastReadDate = null;
+                            }
+                            // --- FIN DE LA CORRECTION ---
                             this.updateXPToNextLevel();
                             this.updateCurrentAchievement();
                         } catch (error) {
