@@ -3,7 +3,7 @@
         "slug": "les-terres-rares-en-ukraine",
         "category": "Géopolitique & Ressources",
         "isNew": true,
-        "title": "Terres rares en Ukraine : le trésor de guerre caché du conflit",
+        "title": "DEMO - Terres rares en Ukraine",
         "description": "Analyse de l'enjeu des ressources minérales critiques dans le conflit...",
         "date": "5 juillet 2025",
         "sourcesCount": 9,
@@ -13,9 +13,9 @@
         "slug": "DEMO-crise-eau-mayotte",
         "category": "Crise Sociale",
         "isNew": false,
-        "title": "Crise de l'eau à Mayotte : la République oubliée ?",
+        "title": "DEMO - Crise de l'eau à Mayotte",
         "description": "Analyse des différentes perspectives médiatiques sur la crise de l'eau...",
-        "date": "29 juin 2025",
+        "date": "30 juin 2025",
         "sourcesCount": 6,
         "status": "published"
     },
@@ -23,9 +23,9 @@
         "slug": "reforme-audiovisuel-public",
         "category": "Politique & Médias",
         "isNew": false,
-        "title": "Réforme de l'audiovisuel public : la création controversée de \"France Médias\"",
+        "title": "DEMO - Réforme de l'audiovisuel public",
         "description": "Décryptage des positions politiques et médiatiques sur la restructuration...",
-        "date": "30 juin 2025",
+        "date": "29 juin 2025",
         "sourcesCount": 6,
         "status": "wip"
     }
