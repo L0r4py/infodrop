@@ -1814,9 +1814,10 @@
             </div>
 
             <!-- ============================================================== -->
-            <!-- 🌐 MODAL POUR INFODROP 360° (CHARGE LES DONNÉES DYNAMIQUEMENT) -->
+            <!-- 🌐 MODAL POUR INFODROP 360° (FERMETURE CORRIGÉE)                -->
             <!-- ============================================================== -->
-            <div x-show="show360Modal" x-transition @click.away="show360Modal = false"
+            <div x-show="show360Modal" x-transition
+                @click="if ($event.target === $el) show360Modal = false"
                 class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
                 style="display: none;">
 
