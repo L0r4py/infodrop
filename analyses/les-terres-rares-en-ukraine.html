@@ -11,7 +11,8 @@
 
     <!-- === OPEN GRAPH ET RÉSEAUX SOCIAUX === -->
     <meta property="og:title" content="INFODROP 360° - Les terres rares en Ukraine" />
-    <meta property="og:description" content="Analyse multi-perspectives des enjeux des ressources minérales dans le conflit ukrainien" />
+    <meta property="og:description"
+        content="Analyse multi-perspectives des enjeux des ressources minérales dans le conflit ukrainien" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.infodrop.live/analyses/les-terres-rares-en-ukraine.html" />
     <meta property="og:image" content="https://infodrop.live/images/infodrop-share.png" />
@@ -19,7 +20,8 @@
     <!-- === TWITTER CARD === -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="INFODROP 360° - Les terres rares en Ukraine">
-    <meta name="twitter:description" content="Analyse multi-perspectives des enjeux des ressources minérales dans le conflit ukrainien">
+    <meta name="twitter:description"
+        content="Analyse multi-perspectives des enjeux des ressources minérales dans le conflit ukrainien">
     <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png">
 
     <title>INFODROP 360° - Les terres rares en Ukraine : enjeux géopolitiques</title>
@@ -39,64 +41,400 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="INFODROP 360°">
 
-    <!-- === AMÉLIORATION PWA === -->
-    <meta name="apple-itunes-app" content="app-id=com.infodrop.app">
-    <link rel="alternate" href="app://infodrop.live">
-    <meta name="format-detection" content="telephone=no">
-
-    <!-- === URL SCHEME PERSONNALISÉ === -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-
     <!-- === BIBLIOTHÈQUES EXTERNES === -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
+    <!-- === FONT GAMING === -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet">
+
     <!-- ======================================================================== -->
-    <!-- 🎨 STYLES CSS PERSONNALISÉS                                             -->
+    <!-- 🎮 STYLES CSS CLASH OF CLANS                                             -->
     <!-- ======================================================================== -->
     <style>
-        /* === ANIMATIONS ET TRANSITIONS PRINCIPALES === */
-        .perspective-card {
-            background: linear-gradient(145deg, #1e293b, #334155);
-            border-radius: 16px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
+        /* === VARIABLES CLASH === */
+        :root {
+            --clash-blue: #2E7BE6;
+            --clash-dark-blue: #1B4F91;
+            --clash-light-blue: #4A9EFF;
+            --clash-sky: #87CEEB;
+            --clash-gold: #FFD700;
+            --clash-silver: #C0C0C0;
+            --clash-bronze: #CD7F32;
+            --clash-green: #4CAF50;
+            --clash-red: #F44336;
+            --clash-purple: #9C27B0;
+            --clash-gray: #424242;
+            --clash-light-gray: #616161;
+            --clash-bg: #1a1a2e;
+            --clash-card: #16213e;
         }
 
-        .perspective-card::before {
+        /* === FONT CLASH === */
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: #0f1419;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(46, 123, 230, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(74, 158, 255, 0.1) 0%, transparent 50%);
+        }
+
+        /* === BOUTONS 3D CLASH === */
+        .clash-btn {
+            background: linear-gradient(180deg, var(--clash-light-blue) 0%, var(--clash-blue) 100%);
+            border: 3px solid var(--clash-dark-blue);
+            border-radius: 15px;
+            box-shadow:
+                0 4px 0 var(--clash-dark-blue),
+                0 6px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: translateY(0);
+            transition: all 0.1s;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .clash-btn:hover {
+            transform: translateY(1px);
+            box-shadow:
+                0 3px 0 var(--clash-dark-blue),
+                0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .clash-btn:active {
+            transform: translateY(3px);
+            box-shadow:
+                0 1px 0 var(--clash-dark-blue),
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* === CARDS CLASH === */
+        .clash-card {
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 3px solid #1B4F91;
+            border-radius: 20px;
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clash-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient);
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+            border-radius: 20px 20px 0 0;
+            pointer-events: none;
+        }
+
+        /* === MENU DROPDOWN CLASH === */
+        .clash-menu-dropdown {
+            background: linear-gradient(180deg, #1E3A5F 0%, #0D1929 100%);
+            border: 4px solid #1B4F91;
+            border-radius: 20px;
+            box-shadow:
+                0 8px 24px rgba(0, 0, 0, 0.5),
+                0 0 0 6px rgba(27, 79, 145, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            animation: menuDrop 0.3s ease-out;
+        }
+
+        @keyframes menuDrop {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-header {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.05) 100%);
+            padding: 12px 16px;
+            border-bottom: 2px solid #1B4F91;
+            text-align: center;
+            position: relative;
+        }
+
+        .menu-items {
+            padding: 8px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin: 4px 0;
+            background: linear-gradient(180deg, rgba(46, 123, 230, 0.15) 0%, rgba(46, 123, 230, 0.05) 100%);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .menu-item:hover {
+            background: linear-gradient(180deg, rgba(46, 123, 230, 0.3) 0%, rgba(46, 123, 230, 0.15) 100%);
+            border-color: #2E7BE6;
+            transform: translateX(4px);
+            box-shadow:
+                0 4px 12px rgba(46, 123, 230, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item-icon {
+            font-size: 24px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .menu-item-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .menu-item-title {
+            font-weight: 700;
+            color: white;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-item-desc {
+            font-size: 11px;
+            color: #87CEEB;
             opacity: 0.8;
         }
 
-        .perspective-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        .menu-separator {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #1B4F91, transparent);
+            margin: 12px 8px;
         }
 
-        .consensus-meter {
-            height: 8px;
-            background: #334155;
-            border-radius: 4px;
-            overflow: hidden;
+        .menu-item-special {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%);
+        }
+
+        .menu-item-special:hover {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.15) 100%);
+            border-color: #FFD700;
+            box-shadow:
+                0 4px 12px rgba(255, 215, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-item-danger {
+            background: linear-gradient(180deg, rgba(244, 67, 54, 0.15) 0%, rgba(244, 67, 54, 0.05) 100%);
+        }
+
+        .menu-item-danger:hover {
+            background: linear-gradient(180deg, rgba(244, 67, 54, 0.3) 0%, rgba(244, 67, 54, 0.15) 100%);
+            border-color: #F44336;
+            box-shadow:
+                0 4px 12px rgba(244, 67, 54, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item-danger .menu-item-title {
+            color: #FF6B6B;
+        }
+
+        /* === PERSPECTIVE CARDS CLASH === */
+        .perspective-card-clash {
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 3px solid #1B4F91;
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s ease;
             position: relative;
+            cursor: pointer;
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .perspective-card-clash:hover {
+            transform: translateY(-4px);
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: var(--clash-light-blue);
+        }
+
+        /* === BADGES ORIENTATIONS POLITIQUES === */
+        .badge-gauche {
+            background: linear-gradient(180deg, #E53E3E 0%, #D42A2A 100%);
+            border: 2px solid #B91C1C;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .badge-extreme-gauche {
+            background: linear-gradient(180deg, #FF3333 0%, #FF0000 100%);
+            border: 2px solid #CC0000;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .badge-centre-gauche {
+            background: linear-gradient(180deg, #C05555 0%, #AA5555 100%);
+            border: 2px solid #884444;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .badge-centre {
+            background: linear-gradient(180deg, #9CA3AF 0%, #808080 100%);
+            border: 2px solid #666666;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .badge-centre-droit {
+            background: linear-gradient(180deg, #6B6BBB 0%, #5555AA 100%);
+            border: 2px solid #444488;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .badge-droite {
+            background: linear-gradient(180deg, #4040E8 0%, #2A2AD4 100%);
+            border: 2px solid #2020A8;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .badge-extreme-droite {
+            background: linear-gradient(180deg, #3333FF 0%, #0000FF 100%);
+            border: 2px solid #0000CC;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Badges non-politiques */
+        .badge-ong,
+        .badge-international {
+            background: linear-gradient(180deg, #60A5FA 0%, #3B82F6 100%);
+            border: 2px solid #2563EB;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .badge-expert {
+            background: linear-gradient(180deg, #8B5CF6 0%, #7C3AED 100%);
+            border: 2px solid #6D28D9;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* === STATS CARDS === */
+        .stat-card {
+            background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
+            border: 2px solid #1B4F91;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            box-shadow:
+                0 2px 0 #0D47A1,
+                0 3px 6px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === CONSENSUS METER === */
+        .consensus-meter {
+            height: 12px;
+            background: #0D1929;
+            border: 2px solid #1B4F91;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .consensus-fill {
             height: 100%;
-            background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+            background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 100%);
             transition: width 0.5s ease;
+            box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.2);
         }
 
+        /* === INFO CARDS === */
+        .info-card-clash {
+            background: linear-gradient(180deg, #1E40AF 0%, #1E3A8A 100%);
+            border: 3px solid #1E40AF;
+            border-radius: 15px;
+            padding: 16px;
+            box-shadow:
+                0 3px 0 #1E3A8A,
+                0 5px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* === SCROLLBAR === */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0D1929;
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--clash-light-blue) 0%, var(--clash-blue) 100%);
+            border-radius: 6px;
+            border: 2px solid #0D1929;
+        }
+
+        /* === ANIMATIONS === */
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
@@ -113,96 +451,38 @@
             }
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        /* === TAGS === */
+        .tag-clash {
+            background: linear-gradient(180deg, #374151 0%, #1F2937 100%);
+            border: 2px solid #374151;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: inline-block;
         }
 
-        .slide-in {
-            animation: slideIn 0.5s ease-out forwards;
+        .fact-badge-clash {
+            background: linear-gradient(180deg, #34D399 0%, #10B981 100%);
+            border: 2px solid #059669;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        .fact-badge,
-        .warning-badge,
-        .tag-item {
-            backdrop-filter: blur(10px);
-        }
-
-        .fact-badge {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #6ee7b7; /* text-green-300 */
-        }
-
-        .warning-badge {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            color: #fcd34d; /* text-yellow-300 */
-        }
-
-        .info-card {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            backdrop-filter: blur(10px);
-        }
-
-        .metric-card {
-            background: linear-gradient(145deg, #1e293b, #2d3748);
-            border: 1px solid #334155;
-        }
-        
-        /* === BADGES POLITIQUES (HARMONISÉS AVEC INDEX.HTML) === */
-        .badge-gauche { background-color: #D42A2A; color: white; }
-        .badge-extreme-gauche { background-color: #FF0000; color: white; }
-        .badge-centre-gauche { background-color: #AA5555; color: white; }
-        .badge-centre { background-color: #808080; color: white; }
-        .badge-centre-droit { background-color: #5555AA; color: white; }
-        .badge-droite { background-color: #2A2AD4; color: white; }
-        .badge-extreme-droite { background-color: #0000FF; color: white; } /* Mappé à Pro-Russe */
-        
-        /* Badges non-politiques, style cohérent */
-        .badge-syndicat, .badge-ong { background-color: #16a34a; color: white; } /* Vert neutre */
-        .badge-international { background-color: #1e40af; color: white; } /* Bleu institutionnel */
-        .badge-expert { background-color: #6C5CE7; color: white; } /* Violet distinctif */
-        
-        /* === SCROLLBAR PERSONNALISÉE === */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #111827;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #4b5563;
-        }
-
-        /* === ANIMATION DU BANDEAU DÉFILANT (MOBILE) === */
-        .ticker-train {
-            display: inline-flex;
-            animation: scroll-left 20s linear infinite;
-        }
-
-        @keyframes scroll-left {
-            from {
-                transform: translateX(0%);
-            }
-
-            to {
-                transform: translateX(-50%);
-            }
-        }
-
-        .ticker-train:hover {
-            animation-play-state: paused;
+        .warning-badge-clash {
+            background: linear-gradient(180deg, #FBBF24 0%, #F59E0B 100%);
+            border: 2px solid #D97706;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
     </style>
 
@@ -212,20 +492,17 @@
     </script>
 </head>
 
-<body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
+<body class="text-gray-200 min-h-screen">
 
     <!-- ======================================================================== -->
     <!-- 🔐 CONFIGURATION SÉCURISÉE ET INITIALISATION SUPABASE                  -->
     <!-- ======================================================================== -->
     <script>
-        // === VARIABLES GLOBALES (SANS VALEURS PAR DÉFAUT) ===
         let supabase = null;
         let STRIPE_LINK = 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801';
 
-        // === FONCTION D'INITIALISATION SÉCURISÉE ===
         async function initializeSupabase() {
             try {
-                console.log('🔐 Récupération de la configuration sécurisée...');
                 const response = await fetch('/api/config');
                 if (!response.ok) {
                     throw new Error(`Erreur API: ${response.status}`);
@@ -236,9 +513,7 @@
                 }
                 supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
                 STRIPE_LINK = config.stripeLink || '';
-                console.log('✅ Configuration complète initialisée de manière sécurisée');
                 return true;
-
             } catch (error) {
                 console.error('❌ Erreur initialisation:', error);
                 const errorDiv = document.createElement('div');
@@ -247,7 +522,6 @@
                         <div style="text-align: center; padding: 2rem;">
                             <h2>❌ Erreur de configuration</h2>
                             <p>Impossible de charger la configuration sécurisée.</p>
-                            <p>Veuillez contacter l'administrateur.</p>
                             <button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3B82F6; color: white; border: none; border-radius: 4px; cursor: pointer;">
                                 Recharger la page
                             </button>
@@ -268,49 +542,59 @@
         <!-- ================================================================== -->
         <!-- ⏳ ÉCRAN DE CHARGEMENT                                            -->
         <!-- ================================================================== -->
-        <div x-show="!sessionLoaded" class="min-h-screen flex items-center justify-center bg-gray-900">
-            <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <div x-show="!sessionLoaded" class="min-h-screen flex items-center justify-center">
+            <div class="text-center">
+                <div
+                    class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4">
+                </div>
+                <p class="text-xl font-bold" style="color: var(--clash-light-blue);">Chargement...</p>
+            </div>
         </div>
 
         <!-- ================================================================== -->
         <!-- 🔑 PAGE DE CONNEXION                                              -->
         <!-- ================================================================== -->
-        <div x-show="sessionLoaded && !user" x-transition
-            class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
-            <div
-                class="max-w-sm w-full bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-2xl p-8 border border-gray-700">
-                <h1 class="text-3xl font-bold text-center text-white mb-2">📰 INFODROP</h1>
-                <p class="text-gray-400 text-center mb-8">Le Club privé de l'actu centralisée</p>
+        <div x-show="sessionLoaded && !user" x-transition class="min-h-screen flex items-center justify-center p-4">
+            <div class="max-w-sm w-full clash-card p-8">
+                <div class="text-center mb-8">
+                    <div
+                        class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-b from-blue-400 to-blue-600 rounded-full mb-4 shadow-lg">
+                        <span class="text-4xl">📰</span>
+                    </div>
+                    <h1 class="text-3xl font-bold mb-2 text-white">INFODROP</h1>
+                    <p class="text-gray-400">Le Club privé de l'actu centralisée</p>
+                </div>
 
                 <!-- === FORMULAIRE DE CONNEXION === -->
                 <form @submit.prevent="login()" class="space-y-4">
                     <div>
                         <input x-model="email" type="email" required @input="email = email.toLowerCase()"
-                            class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-500 text-white"
+                            class="w-full px-4 py-2 bg-gray-900 border-2 border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-500 text-white"
                             placeholder="votre@email.com">
                     </div>
-                    <!-- === CHAMP CODE D'INVITATION === -->
                     <div>
                         <input x-model="inviteCode" type="text"
-                            class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-500 text-white"
+                            class="w-full px-4 py-2 bg-gray-900 border-2 border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-500 text-white"
                             placeholder="Code d'invitation (si nouveau)">
                     </div>
                     <button type="submit" :disabled="loading"
-                        class="w-full bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span x-show="!loading">Recevoir le lien magique</span>
-                        <span x-show="loading">Envoi en cours...</span>
+                        class="w-full clash-btn text-white py-3 px-6 font-bold transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-show="!loading">⚡ Recevoir le lien magique</span>
+                        <span x-show="loading" class="flex items-center justify-center gap-2">
+                            <span
+                                class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                            Envoi en cours...
+                        </span>
                     </button>
                 </form>
 
-                <!-- === LIEN D'AIDE === -->
-                <p class="text-xs text-center text-gray-500 mt-4">
-                    💡 Pas de code ? Suivez <a href="https://x.com/LOR4_14" target="_blank"
-                        class="text-blue-400 hover:underline">nos annonces</a> pour en gagner un !
+                <p class="text-xs text-center text-gray-400 mt-6">
+                    🎁 Pas de code ? Suivez <a href="https://x.com/LOR4_14" target="_blank"
+                        class="text-blue-400 hover:text-blue-300 underline">nos annonces</a> pour en gagner un !
                 </p>
 
-                <!-- === MESSAGES DE RETOUR === -->
                 <div x-show="message" class="mt-4 p-3 rounded-lg text-sm"
-                    :class="messageType === 'error' ? 'bg-red-900/50 text-red-300 border border-red-700' : 'bg-green-900/50 text-green-300 border border-green-700'"
+                    :class="messageType === 'error' ? 'bg-red-900/20 border-2 border-red-500 text-red-300' : 'bg-green-900/20 border-2 border-green-500 text-green-300'"
                     x-text="message"></div>
             </div>
         </div>
@@ -321,258 +605,93 @@
         <div x-show="sessionLoaded && user" x-transition.opacity class="min-h-screen flex flex-col">
 
             <!-- ============================================================== -->
-            <!-- 📱 HEADER UNIFIÉ AVEC NAVIGATION ET BANDEAUX                -->
+            <!-- 📱 HEADER CLASH OF CLANS                                      -->
             <!-- ============================================================== -->
-            <div class="sticky top-0 z-40 transition-shadow duration-300" id="stickyHeader">
-
-                <!-- === HEADER PRINCIPAL === -->
-                <header class="relative z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
-                    <div class="max-w-7xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
-                        <!-- === LOGO === -->
-                        <div class="justify-self-start">
-                            <a href="/index.html"
-                                class="flex items-center gap-2 text-xl font-bold text-white hover:text-blue-400 transition whitespace-nowrap"
-                                style="line-height:1;">
-                                <span class="text-lg md:text-xl"
-                                    style="display:inline-block;vertical-align:middle;">📰</span>
-                                <span class="tracking-tight"
-                                    style="display:inline-block;vertical-align:middle;">INFODROP</span>
-                                <span class="text-blue-400 font-bold"
-                                    style="display:inline-block;vertical-align:middle;margin-left:0.2em;">360°</span>
-                                <!-- === VERSION TAG === -->
+            <div class="sticky top-0 z-40" id="stickyHeader">
+                <header class="bg-gradient-to-b from-gray-900 to-gray-950 border-b-4 border-blue-900">
+                    <div class="max-w-7xl mx-auto px-4">
+                        <div class="py-2 sm:py-3 flex items-center justify-between">
+                            <div class="flex items-center gap-1 sm:gap-4">
+                                <a href="/index.html"
+                                    class="flex items-center gap-1.5 sm:gap-2 hover:scale-105 transition">
+                                    <div
+                                        class="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-b from-blue-400 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+                                        <span class="text-lg sm:text-2xl">📰</span>
+                                    </div>
+                                    <span
+                                        class="text-sm sm:text-xl font-bold text-white whitespace-nowrap">INFODROP</span>
+                                    <span class="text-blue-400 font-bold">360°</span>
+                                </a>
                                 <span
-                                    class="ml-2 text-xs font-medium text-gray-400 bg-slate-700 px-2 py-0.5 rounded-full">3.0.0-beta</span>
-                            </a>
-                        </div>
+                                    class="text-[10px] sm:text-xs bg-blue-900/50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-blue-300 font-medium">v4.0.0</span>
+                            </div>
 
-                        <div class="justify-self-center"></div>
-
-                        <!-- === MENU HAMBURGER === -->
-                        <div class="justify-self-end relative" x-data="{ showMenu: false }">
-                            <button @click="showMenu = !showMenu" class="p-2 rounded-full hover:bg-gray-700 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
-
-                            <!-- === DROPDOWN MENU === -->
-                            <div x-show="showMenu" @click.away="showMenu = false" x-transition
-                                class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-[100]"
-                                style="display: none;">
-
-                                <!-- === ANALYSES 360° === -->
-                                <div class="px-4 py-2 border-b border-gray-700">
-                                    <a href="/infodrop360.html"
-                                        class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">🌐
-                                        Analyses 360°</a>
+                            <!-- Menu -->
+                            <div class="relative" x-data="{ showMenu: false }">
+                                <div x-show="showMenu" x-transition.opacity
+                                    class="fixed inset-0 backdrop-blur-sm bg-black/20 z-40" @click="showMenu = false">
                                 </div>
 
-                                <!-- === FLUX PRINCIPAL === -->
-                                <div class="px-4 py-2 border-b border-gray-700">
-                                    <a href="/index.html"
-                                        class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">📰
-                                        Le Flux 24h</a>
+                                <button @click="showMenu = !showMenu"
+                                    class="clash-btn p-2 w-10 h-10 flex items-center justify-center relative z-50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M4 6h16M4 12h16M4 18h16" />
+                                    </svg>
+                                </button>
+                                <div x-show="showMenu" x-transition
+                                    class="absolute top-full right-0 mt-3 w-64 clash-menu-dropdown z-50"
+                                    style="display: none;">
+                                    <div class="menu-header">
+                                        <span class="text-xs font-bold text-yellow-300">⚡ MENU PRINCIPAL</span>
+                                    </div>
+
+                                    <div class="menu-items">
+                                        <a href="/infodrop360.html" class="menu-item">
+                                            <div class="menu-item-icon">🌐</div>
+                                            <div class="menu-item-content">
+                                                <span class="menu-item-title">Analyses 360°</span>
+                                                <span class="menu-item-desc">Toutes les analyses</span>
+                                            </div>
+                                            <div class="text-blue-400">→</div>
+                                        </a>
+                                        <a href="/index.html" class="menu-item">
+                                            <div class="menu-item-icon">📰</div>
+                                            <div class="menu-item-content">
+                                                <span class="menu-item-title">Flux 24H</span>
+                                                <span class="menu-item-desc">Actualités temps réel</span>
+                                            </div>
+                                            <div class="text-blue-400">→</div>
+                                        </a>
+
+                                        <div class="menu-separator"></div>
+
+                                        <a :href="STRIPE_LINK" target="_blank" class="menu-item menu-item-special">
+                                            <div class="menu-item-icon">❤️</div>
+                                            <div class="menu-item-content">
+                                                <span class="menu-item-title">Soutenir</span>
+                                                <span class="menu-item-desc">Aidez-nous</span>
+                                            </div>
+                                            <div class="text-yellow-400">→</div>
+                                        </a>
+
+                                        <div class="menu-separator"></div>
+
+                                        <a @click="logout()" href="#" class="menu-item menu-item-danger">
+                                            <div class="menu-item-icon">🚪</div>
+                                            <div class="menu-item-content">
+                                                <span class="menu-item-title">Déconnexion</span>
+                                                <span class="menu-item-desc">À bientôt !</span>
+                                            </div>
+                                            <div class="text-red-400">→</div>
+                                        </a>
+                                    </div>
                                 </div>
-
-                                <!-- === ITEMS DE MENU === -->
-                                <a href="/apropos.html"
-                                    class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">ℹ️
-                                    À propos</a>
-                                <a :href="STRIPE_LINK" target="_blank"
-                                    class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-700">❤️
-                                    Soutenir</a>
-
-                                <!-- === DÉCONNEXION === -->
-                                <div class="border-t border-gray-700 my-1"></div>
-                                <a @click="logout()" href="#"
-                                    class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">🚪
-                                    Déconnexion</a>
                             </div>
                         </div>
                     </div>
                 </header>
-
-                <!-- ========================================================== -->
-                <!-- 📰 BANDEAU CONTEXTUEL (DATE, MÉTÉO, PHASE LUNAIRE...)    -->
-                <!-- ========================================================== -->
-                <div x-data="contextTicker()" x-init="initTicker()" class="bg-gray-800/95 border-b border-gray-700 h-8">
-
-                    <!-- === VERSION MOBILE (Défilante) === -->
-                    <div class="md:hidden h-full overflow-hidden relative">
-                        <div class="ticker-train absolute flex items-center h-full" style="width: max-content;">
-                            <!-- === COPIE 1 === -->
-                            <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
-                                <span class="flex items-center gap-1">
-                                    <span class="text-yellow-400">📅</span>
-                                    <span x-text="dateInfo.fullDate"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span class="text-blue-400">📊</span>
-                                    Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365
-                                </span>
-                                <span x-show="todayFeast" class="flex items-center gap-1">
-                                    <span class="text-red-400">🎉</span>
-                                    <span class="font-semibold text-white" x-text="todayFeast"></span>
-                                </span>
-                                <span x-show="weather.temperature !== null" class="flex items-center gap-1">
-                                    <span x-text="weather.icon"></span>
-                                    <span class="font-semibold text-white"><span
-                                            x-text="weather.temperature"></span>°C</span>
-                                    <span class="text-gray-400" x-text="weather.description"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span x-text="moonPhase.icon"></span>
-                                    <span x-text="moonPhase.name"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span class="text-green-400">⏳</span>
-                                    <span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span>
-                                    jours avant 2026
-                                </span>
-                                <span class="text-gray-600 mx-4">•</span>
-                            </div>
-
-                            <!-- === COPIE 2 (IDENTIQUE POUR L'ANIMATION) === -->
-                            <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
-                                <span class="flex items-center gap-1">
-                                    <span class="text-yellow-400">📅</span>
-                                    <span x-text="dateInfo.fullDate"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span class="text-blue-400">📊</span>
-                                    Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365
-                                </span>
-                                <span x-show="todayFeast" class="flex items-center gap-1">
-                                    <span class="text-red-400">🎉</span>
-                                    <span class="font-semibold text-white" x-text="todayFeast"></span>
-                                </span>
-                                <span x-show="weather.temperature !== null" class="flex items-center gap-1">
-                                    <span x-text="weather.icon"></span>
-                                    <span class="font-semibold text-white"><span
-                                            x-text="weather.temperature"></span>°C</span>
-                                    <span class="text-gray-400" x-text="weather.description"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span x-text="moonPhase.icon"></span>
-                                    <span x-text="moonPhase.name"></span>
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span class="text-green-400">⏳</span>
-                                    <span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span>
-                                    jours avant 2026
-                                </span>
-                                <span class="text-gray-600 mx-4">•</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- === VERSION DESKTOP (Statique) === -->
-                    <div class="hidden md:flex items-center justify-center h-full">
-                        <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
-                            <span class="flex items-center gap-1">
-                                <span class="text-yellow-400">📅</span>
-                                <span x-text="dateInfo.fullDate"></span>
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <span class="text-blue-400">📊</span>
-                                Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365
-                            </span>
-                            <span x-show="todayFeast" class="flex items-center gap-1">
-                                <span class="text-red-400">🎉</span>
-                                <span class="font-semibold text-white" x-text="todayFeast"></span>
-                            </span>
-                            <span x-show="weather.temperature !== null" class="flex items-center gap-1">
-                                <span x-text="weather.icon"></span>
-                                <span class="font-semibold text-white"><span
-                                        x-text="weather.temperature"></span>°C</span>
-                                <span class="text-gray-400" x-text="weather.description"></span>
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <span x-text="moonPhase.icon"></span>
-                                <span x-text="moonPhase.name"></span>
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <span class="text-green-400">⏳</span>
-                                <span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span> jours
-                                avant 2026
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ========================================================== -->
-                <!-- 👤 BARRE UTILISATEUR (PARRAINAGE SEULEMENT)               -->
-                <!-- ========================================================== -->
-                <div x-show="userInviteData.code || userInviteData.parrainEmail || userInviteData.filleulEmail" 
-                     x-transition class="bg-gray-800/95 border-b border-gray-700 px-4 py-3 flex items-center">
-                    <div class="max-w-7xl mx-auto w-full">
-
-                        <!-- === CARTE PARRAINAGE PLIABLE === -->
-                        <div x-data="{ showParrainage: false }" class="bg-gray-800/50 border border-gray-700 rounded-lg my-1">
-
-                            <!-- Header pliable avec code CENTRÉ -->
-                            <button @click="showParrainage = !showParrainage" class="w-full py-1.5 px-3">
-                                <div class="flex items-center justify-center relative">
-                                    <!-- Code à partager CENTRÉ -->
-                                    <div x-show="userInviteData.code" class="flex items-center gap-2">
-                                        <span class="text-yellow-400 text-xs">🎁</span>
-                                        <span class="text-gray-300 text-xs">Code à partager :</span>
-                                        <span
-                                            class="font-mono bg-gray-900 px-1.5 py-0.5 rounded cursor-pointer hover:bg-gray-700 transition text-white text-xs border border-gray-600"
-                                            @click.stop="copyInviteMessage(userInviteData.code)"
-                                            title="Cliquez pour copier" x-text="userInviteData.code">
-                                        </span>
-                                        <span x-show="copied"
-                                            class="text-green-400 font-semibold transition bg-green-900/20 px-1.5 py-0.5 rounded text-xs">Copié
-                                            !</span>
-                                    </div>
-
-                                    <!-- Placeholder si pas de code -->
-                                    <div x-show="!userInviteData.code" class="text-xs text-gray-400">
-                                        👥 Infos parrainage
-                                    </div>
-
-                                    <!-- Icône dépliage (position absolue à droite) -->
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-3 w-3 transition-transform text-gray-400 absolute right-0"
-                                        :class="{ 'rotate-180': showParrainage }" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                            </button>
-
-                            <!-- Contenu dépliable - Relations -->
-                            <div x-show="showParrainage" x-transition
-                                x-show="userInviteData.parrainEmail || userInviteData.filleulEmail"
-                                class="px-3 pb-2 space-y-2 text-center border-t border-gray-700 pt-2">
-
-                                <!-- Parrain -->
-                                <div x-show="userInviteData.parrainEmail"
-                                    class="flex items-center justify-center gap-2 text-xs">
-                                    <span class="text-green-400">👆</span>
-                                    <span class="text-gray-400">Invité par :</span>
-                                    <span class="font-mono text-white" x-text="userInviteData.parrainEmail"></span>
-                                </div>
-
-                                <!-- Filleul -->
-                                <div x-show="userInviteData.filleulEmail"
-                                    class="flex items-center justify-center gap-2 text-xs">
-                                    <span class="text-purple-400">👇</span>
-                                    <span class="text-gray-400">Votre filleul :</span>
-                                    <span class="font-mono text-white" x-text="userInviteData.filleulEmail"></span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
             </div>
 
             <!-- ============================================================== -->
@@ -580,89 +699,102 @@
             <!-- ============================================================== -->
             <main class="flex-grow w-full">
                 <div class="max-w-7xl mx-auto px-4 py-8">
-        
+
                     <!-- Note de contexte -->
-                    <div class="info-card rounded-lg p-4 mb-6 text-center">
-                        <p class="text-sm"><span class="font-bold">Analyse 360° :</span> Cette analyse présente différentes perspectives médiatiques sur la question des terres rares ukrainiennes dans le contexte du conflit actuel.</p>
+                    <div class="info-card-clash rounded-lg p-4 mb-6 text-center fade-in">
+                        <p class="text-sm text-white"><span class="font-bold">Analyse 360° :</span> Cette analyse
+                            présente différentes perspectives médiatiques sur la question des terres rares ukrainiennes
+                            dans le contexte du conflit actuel.</p>
                     </div>
-            
+
                     <!-- Sujet principal -->
                     <section class="mb-8">
-                        <div class="bg-gray-800 rounded-2xl p-6 mb-6 border border-gray-700">
+                        <div class="clash-card p-6 mb-6 fade-in">
                             <div class="flex items-start justify-between gap-4 mb-4">
                                 <div>
-                                    <h1 class="text-2xl sm:text-3xl font-bold mb-2">⚡ Les terres rares en Ukraine : un enjeu caché du conflit ?</h1>
-                                    <p class="text-gray-400 text-sm">Analyse multi-perspectives • 9 sources • Mise à jour : 7 juillet 2025</p>
+                                    <h1 class="text-2xl sm:text-3xl font-bold mb-2 text-white">⚡ Les terres rares en
+                                        Ukraine : un enjeu caché du conflit ?</h1>
+                                    <p class="text-gray-400 text-sm">Analyse multi-perspectives • 9 sources • Mise à
+                                        jour : 7 juillet 2025</p>
                                 </div>
-                                <span class="hidden sm:inline-flex items-center gap-2 px-3 py-1 bg-red-900 bg-opacity-30 text-red-400 rounded-full text-sm font-semibold whitespace-nowrap">🔥 Débat intense</span>
+                                <span
+                                    class="hidden sm:inline-flex items-center gap-2 px-3 py-1 bg-red-900 bg-opacity-30 text-red-400 rounded-full text-sm font-semibold whitespace-nowrap">🔥
+                                    Débat intense</span>
                             </div>
-                            
+
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                                <div class="metric-card rounded-lg p-3 text-center">
-                                    <div class="text-2xl font-bold text-blue-400">5%</div>
-                                    <div class="text-xs text-gray-400">Réserves mondiales</div>
+                                <div class="stat-card">
+                                    <div class="text-2xl font-bold text-white">5%</div>
+                                    <div class="text-xs text-gray-300">Réserves mondiales</div>
                                 </div>
-                                <div class="metric-card rounded-lg p-3 text-center">
-                                    <div class="text-2xl font-bold text-red-400">40%</div>
-                                    <div class="text-xs text-gray-400">Sous contrôle russe</div>
+                                <div class="stat-card">
+                                    <div class="text-2xl font-bold text-white">40%</div>
+                                    <div class="text-xs text-gray-300">Sous contrôle russe</div>
                                 </div>
-                                <div class="metric-card rounded-lg p-3 text-center">
-                                    <div class="text-2xl font-bold text-yellow-400">10-15 ans</div>
-                                    <div class="text-xs text-gray-400">Pour exploitation</div>
+                                <div class="stat-card">
+                                    <div class="text-2xl font-bold text-white">10-15 ans</div>
+                                    <div class="text-xs text-gray-300">Pour exploitation</div>
                                 </div>
-                                <div class="metric-card rounded-lg p-3 text-center">
-                                    <div class="text-2xl font-bold text-green-400">$15 Mds</div>
-                                    <div class="text-xs text-gray-400">Valeur estimée</div>
+                                <div class="stat-card">
+                                    <div class="text-2xl font-bold text-white">$15 Mds</div>
+                                    <div class="text-xs text-gray-300">Valeur estimée</div>
                                 </div>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <div class="flex justify-between items-center text-sm text-gray-400 mb-2">
                                     <span>Consensus sur l'importance stratégique des ressources</span>
-                                    <span class="font-semibold">35% - Forte divergence</span>
+                                    <span class="font-semibold text-white">35% - Forte divergence</span>
                                 </div>
                                 <div class="consensus-meter">
                                     <div class="consensus-fill" style="width: 35%"></div>
                                 </div>
                             </div>
-                            
+
                             <div class="flex flex-wrap gap-2">
-                                <span class="fact-badge px-3 py-1 rounded-full text-xs">✅ Ressources confirmées</span>
-                                <span class="warning-badge px-3 py-1 rounded-full text-xs">⚠️ Exploitation complexe</span>
-                                <span class="px-1.5 py-0.5 rounded-full font-normal text-xs capitalize bg-gray-700 text-gray-300 border border-gray-600">#TerresRares</span>
-                                <span class="px-1.5 py-0.5 rounded-full font-normal text-xs capitalize bg-gray-700 text-gray-300 border border-gray-600">#Ukraine</span>
-                                <span class="px-1.5 py-0.5 rounded-full font-normal text-xs capitalize bg-gray-700 text-gray-300 border border-gray-600">#Géopolitique</span>
-                                <span class="px-1.5 py-0.5 rounded-full font-normal text-xs capitalize bg-gray-700 text-gray-300 border border-gray-600">#Trump</span>
+                                <span class="fact-badge-clash">✅ Ressources confirmées</span>
+                                <span class="warning-badge-clash">⚠️ Exploitation complexe</span>
+                                <span class="tag-clash text-gray-300">#TerresRares</span>
+                                <span class="tag-clash text-gray-300">#Ukraine</span>
+                                <span class="tag-clash text-gray-300">#Géopolitique</span>
+                                <span class="tag-clash text-gray-300">#Trump</span>
                             </div>
                         </div>
                     </section>
-            
+
                     <!-- Alerte divergence -->
-                    <div class="info-card rounded-lg p-4 mb-6 flex items-center gap-3">
+                    <div class="info-card-clash rounded-lg p-4 mb-6 flex items-center gap-3 fade-in">
                         <span class="text-2xl">🔍</span>
                         <div>
-                            <div class="font-bold">Divergences majeures détectées</div>
-                            <div class="text-sm text-gray-300">Les médias présentent des visions très différentes du rôle des ressources minérales dans le conflit</div>
+                            <div class="font-bold text-white">Divergences majeures détectées</div>
+                            <div class="text-sm text-gray-300">Les médias présentent des visions très différentes du
+                                rôle des ressources minérales dans le conflit</div>
                         </div>
                     </div>
-            
+
                     <!-- Perspectives multiples -->
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        
+
                         <!-- 1. Reporterre (Gauche écologique) -->
-                        <article class="perspective-card p-6" onclick="window.open('https://reporterre.net/Un-enjeu-cache-de-la-guerre-en-Ukraine-les-matieres-premieres', '_blank')">
+                        <article class="perspective-card-clash fade-in"
+                            onclick="window.open('https://reporterre.net/Un-enjeu-cache-de-la-guerre-en-Ukraine-les-matieres-premieres', '_blank')">
                             <div class="flex items-center justify-between mb-3">
                                 <div>
-                                    <h3 class="font-bold text-lg">Reporterre</h3>
+                                    <h3 class="font-bold text-lg text-white">Reporterre</h3>
                                     <span class="text-xs text-gray-400">Média écologique</span>
                                 </div>
-                                <span class="badge-gauche text-xs px-2 py-1 rounded">Gauche</span>
+                                <span class="badge-gauche text-xs">Gauche</span>
                             </div>
-                            <blockquote class="text-gray-300 mb-4 italic text-sm">"L'accaparement des matières premières enfouies sous le sol ukrainien est à la racine d'un conflit où les voix des puissances nationales et industrielles priment sur celles des Ukrainiens."</blockquote>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"L'accaparement des matières premières
+                                enfouies sous le sol ukrainien est à la racine d'un conflit où les voix des puissances
+                                nationales et industrielles priment sur celles des Ukrainiens."</blockquote>
                             <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span class="text-red-400">🎯</span><span class="text-gray-400">Focus : Impérialisme économique</span></div>
-                                <div class="flex items-center gap-2"><span class="text-red-400">🌍</span><span class="text-gray-400">Ton : Critique anticapitaliste</span></div>
-                                <div class="flex items-center gap-2"><span class="text-red-400">🏭</span><span class="text-gray-400">Contexte : Pollution minière</span></div>
+                                <div class="flex items-center gap-2"><span class="text-red-400">🎯</span><span
+                                        class="text-gray-400">Focus : Impérialisme économique</span></div>
+                                <div class="flex items-center gap-2"><span class="text-red-400">🌍</span><span
+                                        class="text-gray-400">Ton : Critique anticapitaliste</span></div>
+                                <div class="flex items-center gap-2"><span class="text-red-400">🏭</span><span
+                                        class="text-gray-400">Contexte : Pollution minière</span></div>
                             </div>
                             <div class="mt-4 pt-4 border-t border-gray-600">
                                 <div class="text-xs text-gray-500">Points clés :</div>
@@ -674,21 +806,27 @@
                                 </ul>
                             </div>
                         </article>
-            
+
                         <!-- 2. France Info (Service public) -->
-                        <article class="perspective-card p-6" onclick="window.open('https://www.franceinfo.fr/monde/europe/manifestations-en-ukraine/en-ukraine-l-exploitation-des-minerais-et-terres-rares-au-c-ur-des-negociations-entre-donald-trump-et-volodymyr-zelensky_7068212.html', '_blank')">
+                        <article class="perspective-card-clash fade-in"
+                            onclick="window.open('https://www.franceinfo.fr/monde/europe/manifestations-en-ukraine/en-ukraine-l-exploitation-des-minerais-et-terres-rares-au-c-ur-des-negociations-entre-donald-trump-et-volodymyr-zelensky_7068212.html', '_blank')">
                             <div class="flex items-center justify-between mb-3">
                                 <div>
-                                    <h3 class="font-bold text-lg">France Info</h3>
+                                    <h3 class="font-bold text-lg text-white">France Info</h3>
                                     <span class="text-xs text-gray-400">Service public</span>
                                 </div>
-                                <span class="badge-centre-gauche text-xs px-2 py-1 rounded">Centre-gauche</span>
+                                <span class="badge-centre-gauche text-xs">Centre-gauche</span>
                             </div>
-                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Washington veut conditionner l'aide militaire apportée à Kiev à l'obtention de contrats d'exploitation des ressources naturelles ukrainiennes. Le président ukrainien n'a rien contre."</blockquote>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Washington veut conditionner l'aide
+                                militaire apportée à Kiev à l'obtention de contrats d'exploitation des ressources
+                                naturelles ukrainiennes. Le président ukrainien n'a rien contre."</blockquote>
                             <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span class="text-orange-400">🎯</span><span class="text-gray-400">Focus : Négociations diplomatiques</span></div>
-                                <div class="flex items-center gap-2"><span class="text-orange-400">📊</span><span class="text-gray-400">Ton : Factuel, équilibré</span></div>
-                                <div class="flex items-center gap-2"><span class="text-orange-400">🏛️</span><span class="text-gray-400">Contexte : Approche institutionnelle</span></div>
+                                <div class="flex items-center gap-2"><span class="text-orange-400">🎯</span><span
+                                        class="text-gray-400">Focus : Négociations diplomatiques</span></div>
+                                <div class="flex items-center gap-2"><span class="text-orange-400">📊</span><span
+                                        class="text-gray-400">Ton : Factuel, équilibré</span></div>
+                                <div class="flex items-center gap-2"><span class="text-orange-400">🏛️</span><span
+                                        class="text-gray-400">Contexte : Approche institutionnelle</span></div>
                             </div>
                             <div class="mt-4 pt-4 border-t border-gray-600">
                                 <div class="text-xs text-gray-500">Points clés :</div>
@@ -700,21 +838,27 @@
                                 </ul>
                             </div>
                         </article>
-            
+
                         <!-- 3. Le Monde/France 24 (Centre) -->
-                        <article class="perspective-card p-6" onclick="window.open('https://www.france24.com/fr/europe/20250225-ukraine-richesses-mini%C3%A8res-convoit%C3%A9es-donald-trump-terres-rares-mati%C3%A8res-premi%C3%A8res-critiques-russie', '_blank')">
+                        <article class="perspective-card-clash fade-in"
+                            onclick="window.open('https://www.france24.com/fr/europe/20250225-ukraine-richesses-mini%C3%A8res-convoit%C3%A9es-donald-trump-terres-rares-mati%C3%A8res-premi%C3%A8res-critiques-russie', '_blank')">
                             <div class="flex items-center justify-between mb-3">
                                 <div>
-                                    <h3 class="font-bold text-lg">France 24</h3>
+                                    <h3 class="font-bold text-lg text-white">France 24</h3>
                                     <span class="text-xs text-gray-400">Média international</span>
                                 </div>
-                                <span class="badge-centre text-xs px-2 py-1 rounded">Centre</span>
+                                <span class="badge-centre text-xs">Centre</span>
                             </div>
-                            <blockquote class="text-gray-300 mb-4 italic text-sm">"L'Ukraine estime que des ressources naturelles 'critiques' d'une valeur de 350 milliards de dollars se trouvent dans les territoires occupés par la Russie."</blockquote>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"L'Ukraine estime que des ressources
+                                naturelles 'critiques' d'une valeur de 350 milliards de dollars se trouvent dans les
+                                territoires occupés par la Russie."</blockquote>
                             <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span class="text-gray-400">🎯</span><span class="text-gray-400">Focus : Analyse géostratégique</span></div>
-                                <div class="flex items-center gap-2"><span class="text-gray-400">🌐</span><span class="text-gray-400">Ton : Neutre, informatif</span></div>
-                                <div class="flex items-center gap-2"><span class="text-gray-400">📍</span><span class="text-gray-400">Contexte : Dimension internationale</span></div>
+                                <div class="flex items-center gap-2"><span class="text-gray-400">🎯</span><span
+                                        class="text-gray-400">Focus : Analyse géostratégique</span></div>
+                                <div class="flex items-center gap-2"><span class="text-gray-400">🌐</span><span
+                                        class="text-gray-400">Ton : Neutre, informatif</span></div>
+                                <div class="flex items-center gap-2"><span class="text-gray-400">📍</span><span
+                                        class="text-gray-400">Contexte : Dimension internationale</span></div>
                             </div>
                             <div class="mt-4 pt-4 border-t border-gray-600">
                                 <div class="text-xs text-gray-500">Points clés :</div>
@@ -726,21 +870,27 @@
                                 </ul>
                             </div>
                         </article>
-            
+
                         <!-- 4. Le Figaro (Centre-droit) -->
-                        <article class="perspective-card p-6" onclick="window.open('https://www.revueconflits.com/carte-les-ressources-de-lukraine-en-minerais-strategiques/', '_blank')">
+                        <article class="perspective-card-clash fade-in"
+                            onclick="window.open('https://www.revueconflits.com/carte-les-ressources-de-lukraine-en-minerais-strategiques/', '_blank')">
                             <div class="flex items-center justify-between mb-3">
                                 <div>
-                                    <h3 class="font-bold text-lg">Revue Conflits</h3>
+                                    <h3 class="font-bold text-lg text-white">Revue Conflits</h3>
                                     <span class="text-xs text-gray-400">Géopolitique</span>
                                 </div>
-                                <span class="badge-centre-droit text-xs px-2 py-1 rounded">Centre-droit</span>
+                                <span class="badge-centre-droit text-xs">Centre-droit</span>
                             </div>
-                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Le contrôle de ces ressources par la Russie vise à renforcer son autonomie industrielle et à priver l'Europe de matières premières cruciales."</blockquote>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Le contrôle de ces ressources par la
+                                Russie vise à renforcer son autonomie industrielle et à priver l'Europe de matières
+                                premières cruciales."</blockquote>
                             <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span class="text-purple-400">🎯</span><span class="text-gray-400">Focus : Enjeux stratégiques</span></div>
-                                <div class="flex items-center gap-2"><span class="text-purple-400">🗺️</span><span class="text-gray-400">Ton : Analytique</span></div>
-                                <div class="flex items-center gap-2"><span class="text-purple-400">⚔️</span><span class="text-gray-400">Contexte : Guerre économique</span></div>
+                                <div class="flex items-center gap-2"><span class="text-purple-400">🎯</span><span
+                                        class="text-gray-400">Focus : Enjeux stratégiques</span></div>
+                                <div class="flex items-center gap-2"><span class="text-purple-400">🗺️</span><span
+                                        class="text-gray-400">Ton : Analytique</span></div>
+                                <div class="flex items-center gap-2"><span class="text-purple-400">⚔️</span><span
+                                        class="text-gray-400">Contexte : Guerre économique</span></div>
                             </div>
                             <div class="mt-4 pt-4 border-t border-gray-600">
                                 <div class="text-xs text-gray-500">Points clés :</div>
@@ -752,21 +902,27 @@
                                 </ul>
                             </div>
                         </article>
-            
+
                         <!-- 5. RTBF (International neutre) -->
-                        <article class="perspective-card p-6" onclick="window.open('https://www.rtbf.be/article/au-c-ur-des-negociations-sur-la-paix-en-ukraine-le-dossier-des-terres-rares-11507050', '_blank')">
+                        <article class="perspective-card-clash fade-in"
+                            onclick="window.open('https://www.rtbf.be/article/au-c-ur-des-negociations-sur-la-paix-en-ukraine-le-dossier-des-terres-rares-11507050', '_blank')">
                             <div class="flex items-center justify-between mb-3">
                                 <div>
-                                    <h3 class="font-bold text-lg">RTBF</h3>
+                                    <h3 class="font-bold text-lg text-white">RTBF</h3>
                                     <span class="text-xs text-gray-400">Belgique</span>
                                 </div>
-                                <span class="badge-international text-xs px-2 py-1 rounded">International</span>
+                                <span class="badge-international text-xs">International</span>
                             </div>
-                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Trump veut des terres rares parce que l'économie américaine dépend fortement des ressources chinoises, et cela représente un risque économique et de sécurité."</blockquote>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Trump veut des terres rares parce que
+                                l'économie américaine dépend fortement des ressources chinoises, et cela représente un
+                                risque économique et de sécurité."</blockquote>
                             <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span class="text-blue-400">🎯</span><span class="text-gray-400">Focus : Enjeux globaux</span></div>
-                                <div class="flex items-center gap-2"><span class="text-blue-400">🤝</span><span class="text-gray-400">Ton : Pédagogique</span></div>
-                                <div class="flex items-center gap-2"><span class="text-blue-400">🌍</span><span class="text-gray-400">Contexte : Rivalité USA-Chine</span></div>
+                                <div class="flex items-center gap-2"><span class="text-blue-400">🎯</span><span
+                                        class="text-gray-400">Focus : Enjeux globaux</span></div>
+                                <div class="flex items-center gap-2"><span class="text-blue-400">🤝</span><span
+                                        class="text-gray-400">Ton : Pédagogique</span></div>
+                                <div class="flex items-center gap-2"><span class="text-blue-400">🌍</span><span
+                                        class="text-gray-400">Contexte : Rivalité USA-Chine</span></div>
                             </div>
                             <div class="mt-4 pt-4 border-t border-gray-600">
                                 <div class="text-xs text-gray-500">Points clés :</div>
@@ -778,21 +934,27 @@
                                 </ul>
                             </div>
                         </article>
-            
+
                         <!-- 6. Pravda FR (Perspective russe) -->
-                        <article class="perspective-card p-6" onclick="window.open('https://francais.news-pravda.com/world/2025/02/04/340269.html', '_blank')">
+                        <article class="perspective-card-clash fade-in"
+                            onclick="window.open('https://francais.news-pravda.com/world/2025/02/04/340269.html', '_blank')">
                             <div class="flex items-center justify-between mb-3">
                                 <div>
-                                    <h3 class="font-bold text-lg">Pravda FR</h3>
+                                    <h3 class="font-bold text-lg text-white">Pravda FR</h3>
                                     <span class="text-xs text-gray-400">Média russe</span>
                                 </div>
-                                <span class="badge-extreme-droite text-xs px-2 py-1 rounded">Pro-russe</span>
+                                <span class="badge-extreme-droite text-xs">Pro-russe</span>
                             </div>
-                            <blockquote class="text-gray-300 mb-4 italic text-sm">"L'Ukraine perd les réserves de terres rares promises à Trump par Zelensky. 70% du montant provient de la RPD, de la RPL et de la région de Dniepropetrovsk."</blockquote>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"L'Ukraine perd les réserves de terres
+                                rares promises à Trump par Zelensky. 70% du montant provient de la RPD, de la RPL et de
+                                la région de Dniepropetrovsk."</blockquote>
                             <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span class="text-blue-800">🎯</span><span class="text-gray-400">Focus : Victoire territoriale russe</span></div>
-                                <div class="flex items-center gap-2"><span class="text-blue-800">🚩</span><span class="text-gray-400">Ton : Propagandiste</span></div>
-                                <div class="flex items-center gap-2"><span class="text-blue-800">💰</span><span class="text-gray-400">Contexte : Pillage occidental</span></div>
+                                <div class="flex items-center gap-2"><span class="text-blue-800">🎯</span><span
+                                        class="text-gray-400">Focus : Victoire territoriale russe</span></div>
+                                <div class="flex items-center gap-2"><span class="text-blue-800">🚩</span><span
+                                        class="text-gray-400">Ton : Propagandiste</span></div>
+                                <div class="flex items-center gap-2"><span class="text-blue-800">💰</span><span
+                                        class="text-gray-400">Contexte : Pillage occidental</span></div>
                             </div>
                             <div class="mt-4 pt-4 border-t border-gray-600">
                                 <div class="text-xs text-gray-500">Points clés :</div>
@@ -804,21 +966,27 @@
                                 </ul>
                             </div>
                         </article>
-            
+
                         <!-- 7. ONU Info (Organisation internationale) -->
-                        <article class="perspective-card p-6" onclick="window.open('https://unric.org/fr/terres-rares-et-mineraux-strategiques-en-ukraine/', '_blank')">
+                        <article class="perspective-card-clash fade-in"
+                            onclick="window.open('https://unric.org/fr/terres-rares-et-mineraux-strategiques-en-ukraine/', '_blank')">
                             <div class="flex items-center justify-between mb-3">
                                 <div>
-                                    <h3 class="font-bold text-lg">ONU Info</h3>
+                                    <h3 class="font-bold text-lg text-white">ONU Info</h3>
                                     <span class="text-xs text-gray-400">Organisation internationale</span>
                                 </div>
-                                <span class="badge-ong text-xs px-2 py-1 rounded">ONG/ONU</span>
+                                <span class="badge-ong text-xs">ONG/ONU</span>
                             </div>
-                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Les gisements ukrainiens de 21 éléments représentent environ 5% des réserves mondiales. Ces matériaux sont essentiels à la production d'appareils destinés à l'énergie verte."</blockquote>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Les gisements ukrainiens de 21
+                                éléments représentent environ 5% des réserves mondiales. Ces matériaux sont essentiels à
+                                la production d'appareils destinés à l'énergie verte."</blockquote>
                             <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span class="text-green-400">🎯</span><span class="text-gray-400">Focus : Transition énergétique</span></div>
-                                <div class="flex items-center gap-2"><span class="text-green-400">🌱</span><span class="text-gray-400">Ton : Institutionnel</span></div>
-                                <div class="flex items-center gap-2"><span class="text-green-400">📈</span><span class="text-gray-400">Contexte : Besoins mondiaux</span></div>
+                                <div class="flex items-center gap-2"><span class="text-green-400">🎯</span><span
+                                        class="text-gray-400">Focus : Transition énergétique</span></div>
+                                <div class="flex items-center gap-2"><span class="text-green-400">🌱</span><span
+                                        class="text-gray-400">Ton : Institutionnel</span></div>
+                                <div class="flex items-center gap-2"><span class="text-green-400">📈</span><span
+                                        class="text-gray-400">Contexte : Besoins mondiaux</span></div>
                             </div>
                             <div class="mt-4 pt-4 border-t border-gray-600">
                                 <div class="text-xs text-gray-500">Points clés :</div>
@@ -830,21 +998,27 @@
                                 </ul>
                             </div>
                         </article>
-            
+
                         <!-- 8. Radio-Canada (Perspective canadienne) -->
-                        <article class="perspective-card p-6" onclick="window.open('https://ici.radio-canada.ca/nouvelle/2143588/trump-ukraine-mineraux-strategiques-fillion', '_blank')">
+                        <article class="perspective-card-clash fade-in"
+                            onclick="window.open('https://ici.radio-canada.ca/nouvelle/2143588/trump-ukraine-mineraux-strategiques-fillion', '_blank')">
                             <div class="flex items-center justify-between mb-3">
                                 <div>
-                                    <h3 class="font-bold text-lg">Radio-Canada</h3>
+                                    <h3 class="font-bold text-lg text-white">Radio-Canada</h3>
                                     <span class="text-xs text-gray-400">Canada</span>
                                 </div>
-                                <span class="badge-international text-xs px-2 py-1 rounded">International</span>
+                                <span class="badge-international text-xs">International</span>
                             </div>
-                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Ce n'est pas tant l'Ukraine que le président américain vise avec sa volonté de conclure une entente sur les minéraux critiques, mais plutôt la Chine."</blockquote>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Ce n'est pas tant l'Ukraine que le
+                                président américain vise avec sa volonté de conclure une entente sur les minéraux
+                                critiques, mais plutôt la Chine."</blockquote>
                             <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span class="text-blue-400">🎯</span><span class="text-gray-400">Focus : Rivalité USA-Chine</span></div>
-                                <div class="flex items-center gap-2"><span class="text-blue-400">🌏</span><span class="text-gray-400">Ton : Analyse distanciée</span></div>
-                                <div class="flex items-center gap-2"><span class="text-blue-400">⚖️</span><span class="text-gray-400">Contexte : Souveraineté économique</span></div>
+                                <div class="flex items-center gap-2"><span class="text-blue-400">🎯</span><span
+                                        class="text-gray-400">Focus : Rivalité USA-Chine</span></div>
+                                <div class="flex items-center gap-2"><span class="text-blue-400">🌏</span><span
+                                        class="text-gray-400">Ton : Analyse distanciée</span></div>
+                                <div class="flex items-center gap-2"><span class="text-blue-400">⚖️</span><span
+                                        class="text-gray-400">Contexte : Souveraineté économique</span></div>
                             </div>
                             <div class="mt-4 pt-4 border-t border-gray-600">
                                 <div class="text-xs text-gray-500">Points clés :</div>
@@ -856,21 +1030,27 @@
                                 </ul>
                             </div>
                         </article>
-            
+
                         <!-- 9. IRIS/Experts (Think tank) -->
-                        <article class="perspective-card p-6" onclick="window.open('https://vert.eco/articles/quelles-sont-ces-terres-rares-au-coeur-des-difficiles-negociations-de-paix-en-ukraine', '_blank')">
+                        <article class="perspective-card-clash fade-in"
+                            onclick="window.open('https://vert.eco/articles/quelles-sont-ces-terres-rares-au-coeur-des-difficiles-negociations-de-paix-en-ukraine', '_blank')">
                             <div class="flex items-center justify-between mb-3">
                                 <div>
-                                    <h3 class="font-bold text-lg">IRIS/Vert</h3>
+                                    <h3 class="font-bold text-lg text-white">IRIS/Vert</h3>
                                     <span class="text-xs text-gray-400">Analyse experte</span>
                                 </div>
-                                <span class="badge-expert text-xs px-2 py-1 rounded">Expert</span>
+                                <span class="badge-expert text-xs">Expert</span>
                             </div>
-                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Ces deals intéressent davantage les États-Unis pour développer le lithium, l'uranium et le graphite, plutôt que les terres rares. Trump ne verra aucune production avant la fin de son mandat."</blockquote>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Ces deals intéressent davantage les
+                                États-Unis pour développer le lithium, l'uranium et le graphite, plutôt que les terres
+                                rares. Trump ne verra aucune production avant la fin de son mandat."</blockquote>
                             <div class="text-sm space-y-2">
-                                <div class="flex items-center gap-2"><span class="text-purple-400">🎯</span><span class="text-gray-400">Focus : Réalité technique</span></div>
-                                <div class="flex items-center gap-2"><span class="text-purple-400">🔬</span><span class="text-gray-400">Ton : Scientifique</span></div>
-                                <div class="flex items-center gap-2"><span class="text-purple-400">⏱️</span><span class="text-gray-400">Contexte : Faisabilité long terme</span></div>
+                                <div class="flex items-center gap-2"><span class="text-purple-400">🎯</span><span
+                                        class="text-gray-400">Focus : Réalité technique</span></div>
+                                <div class="flex items-center gap-2"><span class="text-purple-400">🔬</span><span
+                                        class="text-gray-400">Ton : Scientifique</span></div>
+                                <div class="flex items-center gap-2"><span class="text-purple-400">⏱️</span><span
+                                        class="text-gray-400">Contexte : Faisabilité long terme</span></div>
                             </div>
                             <div class="mt-4 pt-4 border-t border-gray-600">
                                 <div class="text-xs text-gray-500">Points clés :</div>
@@ -882,12 +1062,13 @@
                                 </ul>
                             </div>
                         </article>
-            
+
                     </div>
-            
+
                     <!-- Synthèse IA -->
-                    <section class="mt-8 bg-gray-800 rounded-2xl p-6 border border-gray-700">
-                        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">🤖 Analyse INFODROP 360°</h3>
+                    <section class="mt-8 clash-card p-6 fade-in">
+                        <h3 class="text-xl font-bold mb-4 flex items-center gap-2 text-white">🤖 Analyse INFODROP 360°
+                        </h3>
                         <div class="grid md:grid-cols-3 gap-6">
                             <div>
                                 <h4 class="font-bold mb-3 text-green-400">✅ Faits établis</h4>
@@ -914,19 +1095,20 @@
                             <div>
                                 <h4 class="font-bold mb-3 text-blue-400">📊 Analyse des biais</h4>
                                 <div class="space-y-3 text-sm">
-                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded-lg border border-gray-700">
                                         <div class="font-semibold text-red-400">Médias occidentaux</div>
-                                        <div class="text-xs">Focus géopolitique USA-Chine, minimisation aspects russes</div>
+                                        <div class="text-xs">Focus géopolitique USA-Chine, minimisation aspects russes
+                                        </div>
                                     </div>
-                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded-lg border border-gray-700">
                                         <div class="font-semibold text-blue-400">Médias russes</div>
                                         <div class="text-xs">Victimisation Ukraine, diabolisation Occident</div>
                                     </div>
-                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded-lg border border-gray-700">
                                         <div class="font-semibold text-green-400">Experts/ONG</div>
                                         <div class="text-xs">Prudence technique, focus environnement</div>
                                     </div>
-                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded-lg border border-gray-700">
                                         <div class="font-semibold text-yellow-400">Angle manquant</div>
                                         <div class="text-xs">Voix populations locales, impact écologique réel</div>
                                     </div>
@@ -934,15 +1116,23 @@
                             </div>
                         </div>
                         <div class="mt-6 p-4 bg-gray-900 bg-opacity-50 rounded-lg border border-gray-700">
-                            <p class="text-sm mb-2"><span class="font-bold text-yellow-400">⚠️ Alerte :</span> Le traitement médiatique révèle une instrumentalisation du sujet selon les agendas géopolitiques. Les médias pro-occidentaux minimisent les difficultés techniques, tandis que les médias pro-russes exagèrent la valeur des ressources.</p>
-                            <p class="text-sm text-gray-400">💡 <b>Recommandation :</b> Privilégier les analyses d'experts indépendants pour la faisabilité technique. Croiser les sources pour les aspects géopolitiques. Rester vigilant sur l'absence de voix ukrainiennes locales dans le débat.</p>
+                            <p class="text-sm mb-2"><span class="font-bold text-yellow-400">⚠️ Alerte :</span> Le
+                                traitement médiatique révèle une instrumentalisation du sujet selon les agendas
+                                géopolitiques. Les médias pro-occidentaux minimisent les difficultés techniques, tandis
+                                que les médias pro-russes exagèrent la valeur des ressources.</p>
+                            <p class="text-sm text-gray-400">💡 <b>Recommandation :</b> Privilégier les analyses
+                                d'experts indépendants pour la faisabilité technique. Croiser les sources pour les
+                                aspects géopolitiques. Rester vigilant sur l'absence de voix ukrainiennes locales dans
+                                le débat.</p>
                         </div>
                     </section>
-            
+
                     <!-- Conclusion -->
                     <div class="mt-6 text-center text-xs text-gray-500">
-                        <p>Cette analyse 360° révèle comment la question des terres rares est devenue un enjeu de communication dans le conflit ukrainien,</p>
-                        <p>avec des narratifs divergents selon les intérêts géopolitiques de chaque acteur médiatique.</p>
+                        <p>Cette analyse 360° révèle comment la question des terres rares est devenue un enjeu de
+                            communication dans le conflit ukrainien,</p>
+                        <p>avec des narratifs divergents selon les intérêts géopolitiques de chaque acteur médiatique.
+                        </p>
                     </div>
                 </div>
             </main>
@@ -950,9 +1140,9 @@
             <!-- ============================================================== -->
             <!-- 🦶 FOOTER                                                     -->
             <!-- ============================================================== -->
-            <footer class="text-center py-8 text-xs text-gray-500">
+            <footer class="text-center py-6 sm:py-8 text-xs text-gray-500 mt-auto border-t-2 border-gray-800">
                 <p>© 2025 INFODROP. Tous droits réservés.</p>
-                <p class="mt-1">Un projet 3C - EM&LPy</p>
+                <p class="mt-1">Un projet 3C - By Emile Marclin & L0r4.py [AI]</p>
             </footer>
         </div>
 
@@ -962,8 +1152,7 @@
         <button x-data="{ show: false }" x-show="show" x-transition
             @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
             x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
-            class="fixed bottom-6 right-6 z-40 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110 border border-gray-700"
-            style="display: none;">
+            class="fixed bottom-6 right-6 z-40 clash-btn p-3 text-white" style="display: none;">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd"
                     d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
@@ -973,117 +1162,102 @@
     </div>
 
     <!-- ======================================================================== -->
-    <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER ALLÉGÉE POUR DÉMO                        -->
+    <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER ALLÉGÉE                                  -->
     <!-- ======================================================================== -->
     <script>
-        // ====================================================================
-        // 📅 FONCTION BANDEAU CONTEXTUEL (DATE, MÉTÉO, LUNE...)
-        // ====================================================================
-        function contextTicker() {
-            return {
-                dateInfo: { fullDate: '', dayOfYear: 0, daysUntilNewYear: 0 },
-                todayFeast: '',
-                weather: { temperature: null, description: '', icon: '🌡️' },
-                moonPhase: { name: '', icon: '🌙' },
-                feasts: { '01-01': 'Jour de l\'an', '01-06': 'Épiphanie', '02-02': 'Chandeleur', '02-14': 'Saint-Valentin', '03-17': 'Saint-Patrick', '04-01': 'Poisson d\'avril', '05-01': 'Fête du travail', '05-08': 'Victoire 1945', '06-21': 'Fête de la musique', '07-14': 'Fête nationale', '08-15': 'Assomption', '10-31': 'Halloween', '11-01': 'Toussaint', '11-11': 'Armistice 1918', '12-25': 'Noël', '12-31': 'Saint-Sylvestre' },
-                async initTicker() {
-                    this.updateDateInfo(); this.updateMoonPhase(); await this.getWeather();
-                    const now = new Date(); const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1); tomorrow.setHours(0, 0, 0, 0); const msUntilMidnight = tomorrow - now;
-                    setTimeout(() => { this.updateDateInfo(); this.updateMoonPhase(); setInterval(() => { this.updateDateInfo(); this.updateMoonPhase(); }, 86400000); }, msUntilMidnight);
-                    setInterval(() => this.getWeather(), 600000);
-                },
-                updateDateInfo() {
-                    const now = new Date(); const options = { weekday: 'long', day: 'numeric', month: 'long' }; this.dateInfo.fullDate = now.toLocaleDateString('fr-FR', options); this.dateInfo.fullDate = this.dateInfo.fullDate.charAt(0).toUpperCase() + this.dateInfo.fullDate.slice(1);
-                    const start = new Date(now.getFullYear(), 0, 0); const diff = now - start; this.dateInfo.dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const nextYear = new Date(now.getFullYear() + 1, 0, 1); this.dateInfo.daysUntilNewYear = Math.ceil((nextYear - now) / (1000 * 60 * 60 * 24));
-                    const monthDay = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`; this.todayFeast = this.feasts[monthDay] || '';
-                },
-                updateMoonPhase() {
-                    const now = new Date(); const refNewMoon = new Date(2000, 0, 6); const lunarCycle = 29.53058867;
-                    const daysSinceRef = (now - refNewMoon) / (1000 * 60 * 60 * 24); const moonAge = daysSinceRef % lunarCycle;
-                    if (moonAge < 1.84566) { this.moonPhase.name = 'Nouvelle lune'; this.moonPhase.icon = '🌑'; } else if (moonAge < 5.53699) { this.moonPhase.name = 'Premier croissant'; this.moonPhase.icon = '🌒'; } else if (moonAge < 9.22831) { this.moonPhase.name = 'Premier quartier'; this.moonPhase.icon = '🌓'; } else if (moonAge < 12.91963) { this.moonPhase.name = 'Gibbeuse croissante'; this.moonPhase.icon = '🌔'; } else if (moonAge < 16.61096) { this.moonPhase.name = 'Pleine lune'; this.moonPhase.icon = '🌕'; } else if (moonAge < 20.30228) { this.moonPhase.name = 'Gibbeuse décroissante'; this.moonPhase.icon = '🌖'; } else if (moonAge < 23.99361) { this.moonPhase.name = 'Dernier quartier'; this.moonPhase.icon = '🌗'; } else { this.moonPhase.name = 'Dernier croissant'; this.moonPhase.icon = '🌘'; }
-                },
-                async getWeather() {
-                    try {
-                        const position = await new Promise((resolve, reject) => { navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 }); });
-                        const { latitude, longitude } = position.coords;
-                        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}¤t_weather=true&timezone=auto`);
-                        const data = await response.json(); const current = data.current_weather; this.weather.temperature = Math.round(current.temperature);
-                        const weatherCode = current.weathercode; if (weatherCode === 0) { this.weather.description = 'Ciel dégagé'; this.weather.icon = '☀️'; } else if (weatherCode <= 3) { this.weather.description = 'Partiellement nuageux'; this.weather.icon = '⛅'; } else if (weatherCode <= 48) { this.weather.description = 'Nuageux'; this.weather.icon = '☁️'; } else if (weatherCode <= 67) { this.weather.description = 'Pluie'; this.weather.icon = '🌧️'; } else if (weatherCode <= 77) { this.weather.description = 'Neige'; this.weather.icon = '❄️'; } else if (weatherCode <= 99) { this.weather.description = 'Orage'; this.weather.icon = '⛈️'; }
-                    } catch (error) {
-                        try {
-                            const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=48.8566&longitude=2.3522¤t_weather=true&timezone=Europe/Paris');
-                            const data = await response.json(); const current = data.current_weather; this.weather.temperature = Math.round(current.temperature);
-                            const weatherCode = current.weathercode; if (weatherCode === 0) { this.weather.icon = '☀️'; } else if (weatherCode <= 3) { this.weather.icon = '⛅'; } else if (weatherCode <= 48) { this.weather.icon = '☁️'; } else if (weatherCode <= 67) { this.weather.icon = '🌧️'; } else if (weatherCode <= 77) { this.weather.icon = '❄️'; } else { this.weather.icon = '⛈️'; }
-                            this.weather.description = 'Paris';
-                        } catch (err) { console.error('Erreur météo:', err); }
-                    }
-                }
-            };
-        }
-
-        // ====================================================================
-        // 🏗️ APPLICATION PRINCIPALE - VERSION ALLÉGÉE POUR PAGE DÉMO
-        // ====================================================================
         function infodropApp() {
             return {
-                copied: false, sessionLoaded: false, user: null, email: '', loading: false, message: '', messageType: '', inviteCode: '',
-                userInviteData: { code: null, is_used: false, parrainEmail: null, filleulEmail: null },
+                sessionLoaded: false,
+                user: null,
+                email: '',
+                loading: false,
+                message: '',
+                messageType: '',
+                inviteCode: '',
+
                 async init() {
-                    console.log('🚀 Initialisation de la page démo...');
                     const supabaseReady = await initializeSupabase();
-                    if (!supabaseReady) { this.sessionLoaded = true; return; }
+                    if (!supabaseReady) {
+                        this.sessionLoaded = true;
+                        return;
+                    }
+
                     supabase.auth.onAuthStateChange(async (event, session) => {
-                        this.user = session?.user || null; this.sessionLoaded = true;
-                        if (event === 'SIGNED_IN') { console.log('✅ Utilisateur connecté sur page démo'); this.loadUserInviteData(); }
-                        if (event === 'SIGNED_OUT') { this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null }; }
+                        this.user = session?.user || null;
+                        this.sessionLoaded = true;
                     });
-                    window.addEventListener('scroll', () => { document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10); });
-                    this.initPerspectiveAnimations();
-                },
-                initPerspectiveAnimations() {
+
+                    // Animations au scroll
                     setTimeout(() => {
                         const observer = new IntersectionObserver((entries) => {
-                            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('slide-in'); } });
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    entry.target.classList.add('fade-in');
+                                }
+                            });
                         });
-                        document.querySelectorAll('.perspective-card').forEach(card => { observer.observe(card); });
+                        document.querySelectorAll('.perspective-card-clash, .clash-card, .info-card-clash').forEach(card => {
+                            observer.observe(card);
+                        });
                     }, 100);
                 },
+
                 async login() {
-                    if (this.loading) return; this.loading = true; this.message = ''; this.messageType = '';
+                    if (this.loading) return;
+                    this.loading = true;
+                    this.message = '';
+                    this.messageType = '';
                     try {
-                        const checkRes = await fetch('/api/check-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: this.email.toLowerCase() }) });
-                        if (!checkRes.ok) { const err = await checkRes.json(); throw new Error(err.error || 'Erreur de communication.'); }
-                        const { exists } = await checkRes.json();
-                        if (!exists) {
-                            if (!this.inviteCode) { this.message = "Code d'invitation requis pour les nouveaux utilisateurs."; this.messageType = 'error'; this.loading = false; return; }
-                            const validateRes = await fetch('/api/validate-invite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: this.inviteCode, email: this.email }) });
-                            const validationResult = await validateRes.json();
-                            if (!validationResult.success) { this.message = validationResult.error; this.messageType = 'error'; this.loading = false; return; }
+                        const checkRes = await fetch('/api/check-email', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: this.email.toLowerCase() })
+                        });
+                        if (!checkRes.ok) {
+                            const err = await checkRes.json();
+                            throw new Error(err.error || 'Erreur de communication.');
                         }
-                        const { error: otpError } = await supabase.auth.signInWithOtp({ email: this.email.toLowerCase(), options: { emailRedirectTo: window.location.origin } });
+                        const { exists } = await checkRes.json();
+
+                        if (!exists) {
+                            if (!this.inviteCode) {
+                                this.message = "Code d'invitation requis pour les nouveaux utilisateurs.";
+                                this.messageType = 'error';
+                                this.loading = false;
+                                return;
+                            }
+                            const validateRes = await fetch('/api/validate-invite', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ code: this.inviteCode, email: this.email })
+                            });
+                            const validationResult = await validateRes.json();
+                            if (!validationResult.success) {
+                                this.message = validationResult.error;
+                                this.messageType = 'error';
+                                this.loading = false;
+                                return;
+                            }
+                        }
+
+                        const { error: otpError } = await supabase.auth.signInWithOtp({
+                            email: this.email.toLowerCase(),
+                            options: { emailRedirectTo: window.location.origin }
+                        });
                         if (otpError) throw otpError;
-                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.'; this.messageType = 'success';
-                    } catch (error) { this.message = error.message || 'Une erreur est survenue.'; this.messageType = 'error'; } finally { this.loading = false; }
-                },
-                async loadUserInviteData() {
-                    if (!this.user || !this.user.email) { console.log('❌ Pas d\'utilisateur pour charger les données d\'invitation'); return; }
-                    try {
-                        console.log('🔄 Chargement des données d\'invitation pour:', this.user.email);
-                        const { data: ownCode, error: ownCodeError } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
-                        if (ownCodeError && ownCodeError.code !== 'PGRST116') { console.error('❌ Erreur récupération code proprio:', ownCodeError); } else if (ownCode) { this.userInviteData.code = ownCode.code; this.userInviteData.is_used = ownCode.is_used || false; if (ownCode.is_used && ownCode.used_by_email) { this.userInviteData.filleulEmail = ownCode.used_by_email; } }
-                        const { data: usedCode, error: usedCodeError } = await supabase.from('invitation_codes').select('owner_email').ilike('used_by_email', this.user.email.toLowerCase()).maybeSingle();
-                        if (usedCodeError && usedCodeError.code !== 'PGRST116') { console.error('❌ Erreur récupération parrain:', usedCodeError); } else if (usedCode) { this.userInviteData.parrainEmail = usedCode.owner_email; }
-                        console.log('✅ Données d\'invitation finales:', this.userInviteData);
+
+                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
+                        this.messageType = 'success';
                     } catch (error) {
-                        console.error("❌ Erreur générale chargement données d'invitation:", error);
-                        this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null };
+                        this.message = error.message || 'Une erreur est survenue.';
+                        this.messageType = 'error';
+                    } finally {
+                        this.loading = false;
                     }
                 },
-                async logout() { await supabase.auth.signOut(); },
-                copyInviteMessage(code) {
-                    const message = `Vous avez été invité à rejoindre le club privé INFODROP !\nAccédez à l'actu essentielle sur : https://infodrop.live\nUtilisez ce code lors de votre inscription : ${code}`;
-                    navigator.clipboard.writeText(message); this.copied = true; setTimeout(() => this.copied = false, 1500);
+
+                async logout() {
+                    await supabase.auth.signOut();
                 }
             };
         }
