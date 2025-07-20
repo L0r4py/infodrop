@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+
+<!-- ============================================================================ -->
+<!-- 📋 HEAD - MÉTADONNÉES ET CONFIGURATION                                      -->
+<!-- ============================================================================ -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- === OPEN GRAPH ET RÉSEAUX SOCIAUX === -->
+    <meta property="og:title" content="INFODROP 360° - Réforme de l'audiovisuel public" />
+    <meta property="og:description"
+        content="Analyse multi-perspectives de la réforme de l'audiovisuel public. Toutes les voix médiatiques." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://infodrop.live/analyses/reforme-audiovisuel-public.html" />
+    <meta property="og:image" content="https://infodrop.live/images/infodrop-share.png" />
+
+    <!-- === TWITTER CARD === -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="INFODROP 360° - Réforme de l'audiovisuel public">
+    <meta name="twitter:description"
+        content="Analyse multi-perspectives de la réforme de l'audiovisuel public. Toutes les voix médiatiques.">
+    <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png">
+
+    <title>INFODROP 360° - Réforme de l'audiovisuel public</title>
+
+    <!-- === FAVICON ET ICÔNES MOBILES HD === -->
+    <link rel="icon" type="image/png" href="/images/infodrop-favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="/images/apple-touch-icon-167x167.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-touch-icon-120x120.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/images/android-chrome-512x512.png">
+
+    <!-- Meta tags PWA -->
+    <meta name="theme-color" content="#111827">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="INFODROP 360°">
+
+    <!-- === AMÉLIORATION PWA === -->
+    <meta name="apple-itunes-app" content="app-id=com.infodrop.app">
+    <link rel="alternate" href="app://infodrop.live">
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- === URL SCHEME PERSONNALISÉ === -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- === BIBLIOTHÈQUES EXTERNES === -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    <!-- ======================================================================== -->
+    <!-- 🎨 STYLES CSS PERSONNALISÉS                                             -->
+    <!-- ======================================================================== -->
+    <style>
+        /* === ANIMATIONS ET TRANSITIONS PRINCIPALES === */
+        .perspective-card {
+            background: linear-gradient(145deg, #1e293b, #334155);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid #334155;
+        }
+
+        .perspective-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--badge-color, #808080);
+            opacity: 0.8;
+        }
+
+        .perspective-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border-color: #4f46e5;
+        }
+
+        .consensus-meter {
+            height: 8px;
+            background: #334155;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .consensus-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #D42A2A, #808080, #2A2AD4);
+            transition: width 0.5s ease;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        .fact-badge,
+        .warning-badge,
+        .tag-item {
+            backdrop-filter: blur(10px);
+        }
+
+        .fact-badge {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .warning-badge {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .info-card {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .metric-card {
+            background: linear-gradient(145deg, #1e293b, #2d3748);
+            border: 1px solid #334155;
+        }
+
+        /* BADGES SPÉCIFIQUES POUR LA PAGE AUDIOVISUEL */
+        .badge-gauche {
+            background-color: rgba(212, 42, 42, 0.5);
+            color: #fca5a5;
+        }
+
+        .badge-extreme-droite, .badge-droite {
+            background-color: rgba(42, 42, 212, 0.5);
+            color: #c7d2fe;
+        }
+
+        .badge-centre-droit {
+            background-color: rgba(55, 48, 163, 0.5);
+            color: #c7d2fe;
+        }
+
+        .badge-syndicat {
+            background-color: rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+        }
+
+        .badge-neutre {
+            background-color: rgba(34, 139, 34, 0.5);
+            color: #e2e8f0;
+        }
+
+        .badge-international {
+            background-color: rgba(59, 130, 246, 0.5);
+            color: #bfdbfe;
+        }
+
+
+        /* === SCROLLBAR PERSONNALISÉE === */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111827;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+        }
+
+        /* === ANIMATION DU BANDEAU DÉFILANT (MOBILE) === */
+        .ticker-train {
+            display: inline-flex;
+            animation: scroll-left 20s linear infinite;
+        }
+
+        @keyframes scroll-left {
+            from {
+                transform: translateX(0%);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .ticker-train:hover {
+            animation-play-state: paused;
+        }
+    </style>
+
+    <!-- === CONFIGURATION TAILWIND === -->
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: {} } }
+    </script>
+</head>
+
+<body class="bg-gray-900 text-gray-300 min-h-screen font-sans">
+
+    <!-- ======================================================================== -->
+    <!-- 🔐 CONFIGURATION SÉCURISÉE ET INITIALISATION SUPABASE                  -->
+    <!-- ======================================================================== -->
+    <script>
+        // === VARIABLES GLOBALES (SANS VALEURS PAR DÉFAUT) ===
+        let supabase = null;
+        let STRIPE_LINK = 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801';
+
+        // === FONCTION D'INITIALISATION SÉCURISÉE ===
+        async function initializeSupabase() {
+            try {
+                console.log('🔐 Récupération de la configuration sécurisée...');
+
+                // Récupérer TOUTE la configuration depuis l'API sécurisée
+                const response = await fetch('/api/config');
+
+                if (!response.ok) {
+                    throw new Error(`Erreur API: ${response.status}`);
+                }
+
+                const config = await response.json();
+
+                // Vérifier que toutes les données sont présentes
+                if (!config.supabaseUrl || !config.supabaseAnonKey) {
+                    throw new Error('Configuration Supabase incomplète');
+                }
+
+                // Initialiser Supabase avec les clés récupérées
+                supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+
+                // Mettre à jour TOUTES les constantes sécurisées
+                STRIPE_LINK = config.stripeLink || '';
+
+                console.log('✅ Configuration complète initialisée de manière sécurisée');
+                console.log('💳 Stripe link récupéré: ✓');
+
+                return true;
+
+            } catch (error) {
+                console.error('❌ Erreur initialisation:', error);
+
+                // Affichage d'erreur utilisateur plus informatif
+                const errorDiv = document.createElement('div');
+                errorDiv.innerHTML = `
+                    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: Arial;">
+                        <div style="text-align: center; padding: 2rem;">
+                            <h2>❌ Erreur de configuration</h2>
+                            <p>Impossible de charger la configuration sécurisée.</p>
+                            <p>Veuillez contacter l'administrateur.</p>
+                            <button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3B82F6; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                Recharger la page
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(errorDiv);
+
+                return false;
+            }
+        }
+    </script>
+
+    <!-- ======================================================================== -->
+    <!-- 🏗️ STRUCTURE PRINCIPALE DE L'APPLICATION                               -->
+    <!-- ======================================================================== -->
+    <div x-data="infodropApp()" x-init="init()" class="w-full">
+
+        <!-- ================================================================== -->
+        <!-- ⏳ ÉCRAN DE CHARGEMENT                                            -->
+        <!-- ================================================================== -->
+        <div x-show="!sessionLoaded" class="min-h-screen flex items-center justify-center bg-gray-900">
+            <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- 🔑 PAGE DE CONNEXION                                              -->
+        <!-- ================================================================== -->
+        <div x-show="sessionLoaded && !user" x-transition
+            class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
+            <div
+                class="max-w-sm w-full bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-2xl p-8 border border-gray-700">
+                <h1 class="text-3xl font-bold text-center text-white mb-2">📰 INFODROP</h1>
+                <p class="text-gray-400 text-center mb-8">Le Club privé de l'actu centralisée</p>
+
+                <!-- === FORMULAIRE DE CONNEXION === -->
+                <form @submit.prevent="login()" class="space-y-4">
+                    <div>
+                        <input x-model="email" type="email" required @input="email = email.toLowerCase()"
+                            class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-500 text-white"
+                            placeholder="votre@email.com">
+                    </div>
+                    <!-- === CHAMP CODE D'INVITATION === -->
+                    <div>
+                        <input x-model="inviteCode" type="text"
+                            class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-500 text-white"
+                            placeholder="Code d'invitation (si nouveau)">
+                    </div>
+                    <button type="submit" :disabled="loading"
+                        class="w-full bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-show="!loading">Recevoir le lien magique</span>
+                        <span x-show="loading">Envoi en cours...</span>
+                    </button>
+                </form>
+
+                <!-- === LIEN D'AIDE === -->
+                <p class="text-xs text-center text-gray-500 mt-4">
+                    💡 Pas de code ? Suivez <a href="https://x.com/LOR4_14" target="_blank"
+                        class="text-blue-400 hover:underline">nos annonces</a> pour en gagner un !
+                </p>
+
+                <!-- === MESSAGES DE RETOUR === -->
+                <div x-show="message" class="mt-4 p-3 rounded-lg text-sm"
+                    :class="messageType === 'error' ? 'bg-red-900/50 text-red-300 border border-red-700' : 'bg-green-900/50 text-green-300 border border-green-700'"
+                    x-text="message"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- 🏠 APPLICATION PRINCIPALE (UTILISATEUR CONNECTÉ)                  -->
+        <!-- ================================================================== -->
+        <div x-show="sessionLoaded && user" x-transition.opacity class="min-h-screen flex flex-col">
+
+            <!-- ============================================================== -->
+            <!-- 📱 HEADER UNIFIÉ AVEC NAVIGATION ET BANDEAUX                -->
+            <!-- ============================================================== -->
+            <div class="sticky top-0 z-40 transition-shadow duration-300" id="stickyHeader">
+
+                <!-- === HEADER PRINCIPAL === -->
+                <header class="relative z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
+                    <div class="max-w-7xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
+                        <!-- === LOGO === -->
+                        <div class="justify-self-start">
+                            <a href="/index.html"
+                                class="flex items-center gap-2 text-xl font-bold text-white hover:text-blue-400 transition whitespace-nowrap"
+                                style="line-height:1;">
+                                <span class="text-lg md:text-xl"
+                                    style="display:inline-block;vertical-align:middle;">📰</span>
+                                <span class="tracking-tight"
+                                    style="display:inline-block;vertical-align:middle;">INFODROP</span>
+                                <span class="text-blue-400 font-bold"
+                                    style="display:inline-block;vertical-align:middle;margin-left:0.2em;">360°</span>
+                                <!-- === VERSION TAG === -->
+                                <span
+                                    class="ml-2 text-xs font-medium text-gray-400 bg-slate-700 px-2 py-0.5 rounded-full">3.0.0-beta</span>
+                            </a>
+                        </div>
+
+                        <div class="justify-self-center"></div>
+
+                        <!-- === MENU HAMBURGER === -->
+                        <div class="justify-self-end relative" x-data="{ showMenu: false }">
+                            <button @click="showMenu = !showMenu" class="p-2 rounded-full hover:bg-gray-700 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+
+                            <!-- === DROPDOWN MENU === -->
+                            <div x-show="showMenu" @click.away="showMenu = false" x-transition
+                                class="absolute top-full right-0 mt-2 w-52 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-[100]"
+                                style="display: none;">
+
+                                <!-- === ANALYSES 360° === -->
+                                <div class="px-4 py-2 border-b border-gray-700">
+                                    <a href="/infodrop360.html"
+                                        class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">🌐
+                                        Analyses 360°</a>
+                                </div>
+
+                                <!-- === FLUX PRINCIPAL === -->
+                                <div class="px-4 py-2 border-b border-gray-700">
+                                    <a href="/index.html"
+                                        class="flex items-center gap-3 text-base font-semibold text-blue-300 hover:text-white transition">📰
+                                        Le Flux 24h</a>
+                                </div>
+
+                                <!-- === ITEMS DE MENU === -->
+                                <a href="/apropos.html"
+                                    class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">ℹ️
+                                    À propos</a>
+                                <a :href="STRIPE_LINK" target="_blank"
+                                    class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-700">❤️
+                                    Soutenir</a>
+
+                                <!-- === DÉCONNEXION === -->
+                                <div class="border-t border-gray-700 my-1"></div>
+                                <a @click="logout()" href="#"
+                                    class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">🚪
+                                    Déconnexion</a>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- ========================================================== -->
+                <!-- 📰 BANDEAU CONTEXTUEL (DATE, MÉTÉO, PHASE LUNAIRE...)    -->
+                <!-- ========================================================== -->
+                <div x-data="contextTicker()" x-init="initTicker()" class="bg-gray-800/95 border-b border-gray-700 h-8">
+
+                    <!-- === VERSION MOBILE (Défilante) === -->
+                    <div class="md:hidden h-full overflow-hidden relative">
+                        <div class="ticker-train absolute flex items-center h-full" style="width: max-content;">
+                            <!-- === COPIE 1 === -->
+                            <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
+                                <span class="flex items-center gap-1">
+                                    <span class="text-yellow-400">📅</span>
+                                    <span x-text="dateInfo.fullDate"></span>
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <span class="text-blue-400">📊</span>
+                                    Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365
+                                </span>
+                                <span x-show="todayFeast" class="flex items-center gap-1">
+                                    <span class="text-red-400">🎉</span>
+                                    <span class="font-semibold text-white" x-text="todayFeast"></span>
+                                </span>
+                                <span x-show="weather.temperature !== null" class="flex items-center gap-1">
+                                    <span x-text="weather.icon"></span>
+                                    <span class="font-semibold text-white"><span
+                                            x-text="weather.temperature"></span>°C</span>
+                                    <span class="text-gray-400" x-text="weather.description"></span>
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <span x-text="moonPhase.icon"></span>
+                                    <span x-text="moonPhase.name"></span>
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <span class="text-green-400">⏳</span>
+                                    <span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span>
+                                    jours avant 2026
+                                </span>
+                                <span class="text-gray-600 mx-4">•</span>
+                            </div>
+
+                            <!-- === COPIE 2 (IDENTIQUE POUR L'ANIMATION) === -->
+                            <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
+                                <span class="flex items-center gap-1">
+                                    <span class="text-yellow-400">📅</span>
+                                    <span x-text="dateInfo.fullDate"></span>
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <span class="text-blue-400">📊</span>
+                                    Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365
+                                </span>
+                                <span x-show="todayFeast" class="flex items-center gap-1">
+                                    <span class="text-red-400">🎉</span>
+                                    <span class="font-semibold text-white" x-text="todayFeast"></span>
+                                </span>
+                                <span x-show="weather.temperature !== null" class="flex items-center gap-1">
+                                    <span x-text="weather.icon"></span>
+                                    <span class="font-semibold text-white"><span
+                                            x-text="weather.temperature"></span>°C</span>
+                                    <span class="text-gray-400" x-text="weather.description"></span>
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <span x-text="moonPhase.icon"></span>
+                                    <span x-text="moonPhase.name"></span>
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <span class="text-green-400">⏳</span>
+                                    <span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span>
+                                    jours avant 2026
+                                </span>
+                                <span class="text-gray-600 mx-4">•</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- === VERSION DESKTOP (Statique) === -->
+                    <div class="hidden md:flex items-center justify-center h-full">
+                        <div class="flex items-center gap-8 text-sm text-gray-300 whitespace-nowrap px-4">
+                            <span class="flex items-center gap-1">
+                                <span class="text-yellow-400">📅</span>
+                                <span x-text="dateInfo.fullDate"></span>
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <span class="text-blue-400">📊</span>
+                                Jour <span class="font-semibold text-white" x-text="dateInfo.dayOfYear"></span>/365
+                            </span>
+                            <span x-show="todayFeast" class="flex items-center gap-1">
+                                <span class="text-red-400">🎉</span>
+                                <span class="font-semibold text-white" x-text="todayFeast"></span>
+                            </span>
+                            <span x-show="weather.temperature !== null" class="flex items-center gap-1">
+                                <span x-text="weather.icon"></span>
+                                <span class="font-semibold text-white"><span
+                                        x-text="weather.temperature"></span>°C</span>
+                                <span class="text-gray-400" x-text="weather.description"></span>
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <span x-text="moonPhase.icon"></span>
+                                <span x-text="moonPhase.name"></span>
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <span class="text-green-400">⏳</span>
+                                <span class="font-semibold text-white" x-text="dateInfo.daysUntilNewYear"></span> jours
+                                avant 2026
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- 👤 BARRE UTILISATEUR (PARRAINAGE SEULEMENT)               -->
+                <!-- ========================================================== -->
+                <div x-show="userInviteData.code || userInviteData.parrainEmail || userInviteData.filleulEmail"
+                    x-transition class="bg-gray-800/95 border-b border-gray-700 px-4 py-3 flex items-center">
+                    <div class="max-w-7xl mx-auto w-full">
+
+                        <!-- === CARTE PARRAINAGE PLIABLE === -->
+                        <div x-data="{ showParrainage: false }"
+                            class="bg-gray-800/50 border border-gray-700 rounded-lg my-1">
+
+                            <!-- Header pliable avec code CENTRÉ -->
+                            <button @click="showParrainage = !showParrainage" class="w-full py-1.5 px-3">
+                                <div class="flex items-center justify-center relative">
+                                    <!-- Code à partager CENTRÉ -->
+                                    <div x-show="userInviteData.code" class="flex items-center gap-2">
+                                        <span class="text-yellow-400 text-xs">🎁</span>
+                                        <span class="text-gray-300 text-xs">Code à partager :</span>
+                                        <span
+                                            class="font-mono bg-gray-900 px-1.5 py-0.5 rounded cursor-pointer hover:bg-gray-700 transition text-white text-xs border border-gray-600"
+                                            @click.stop="copyInviteMessage(userInviteData.code)"
+                                            title="Cliquez pour copier" x-text="userInviteData.code">
+                                        </span>
+                                        <span x-show="copied"
+                                            class="text-green-400 font-semibold transition bg-green-900/20 px-1.5 py-0.5 rounded text-xs">Copié
+                                            !</span>
+                                    </div>
+
+                                    <!-- Placeholder si pas de code -->
+                                    <div x-show="!userInviteData.code" class="text-xs text-gray-400">
+                                        👥 Infos parrainage
+                                    </div>
+
+                                    <!-- Icône dépliage (position absolue à droite) -->
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="h-3 w-3 transition-transform text-gray-400 absolute right-0"
+                                        :class="{ 'rotate-180': showParrainage }" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+
+                            <!-- Contenu dépliable - Relations -->
+                            <div x-show="showParrainage" x-transition
+                                x-show="userInviteData.parrainEmail || userInviteData.filleulEmail"
+                                class="px-3 pb-2 space-y-2 text-center border-t border-gray-700 pt-2">
+
+                                <!-- Parrain -->
+                                <div x-show="userInviteData.parrainEmail"
+                                    class="flex items-center justify-center gap-2 text-xs">
+                                    <span class="text-green-400">👆</span>
+                                    <span class="text-gray-400">Invité par :</span>
+                                    <span class="font-mono text-white" x-text="userInviteData.parrainEmail"></span>
+                                </div>
+
+                                <!-- Filleul -->
+                                <div x-show="userInviteData.filleulEmail"
+                                    class="flex items-center justify-center gap-2 text-xs">
+                                    <span class="text-purple-400">👇</span>
+                                    <span class="text-gray-400">Votre filleul :</span>
+                                    <span class="font-mono text-white" x-text="userInviteData.filleulEmail"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- 📊 CONTENU PRINCIPAL - PAGE RÉFORME AUDIOVISUEL                -->
+            <!-- ============================================================== -->
+            <main class="flex-grow w-full">
+                <!-- Note de démo -->
+                <div class="max-w-7xl mx-auto px-4 mt-6">
+                    <div class="info-card rounded-lg p-4 text-center text-sm sm:text-base">
+                        <p><span class="font-bold">Note :</span> Analyse multi-perspectives de la réforme de l'audiovisuel
+                            public portée par Rachida Dati. Ceci est une démonstration de la fonctionnalité INFODROP 360°.</p>
+                    </div>
+                </div>
+
+                <!-- Sujet principal -->
+                <div class="max-w-7xl mx-auto px-4 py-6">
+                    <section class="mb-8">
+                        <div class="bg-gray-800 rounded-2xl p-6 mb-6 border border-gray-700">
+                            <div class="flex items-start justify-between gap-4 mb-4">
+                                <div>
+                                    <h2 class="text-xl sm:text-2xl font-bold mb-2">📺 Réforme de l'audiovisuel public :
+                                        Rachida Dati à l'épreuve du feu</h2>
+                                    <p class="text-gray-400 text-xs sm:text-sm">Analyse multi-perspectives • 6 sources •
+                                        Dernière mise à jour : 30 juin 2025</p>
+                                </div>
+                                <span
+                                    class="hidden sm:inline-flex items-center gap-2 px-3 py-1 bg-red-900 bg-opacity-30 text-red-400 rounded-full text-sm font-semibold whitespace-nowrap">🔴
+                                    Sujet brûlant</span>
+                            </div>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                                <div class="metric-card rounded-lg p-3 text-center">
+                                    <div class="text-xl sm:text-2xl font-bold text-blue-400">4 Mds€</div>
+                                    <div class="text-xs text-gray-400">Budget annuel</div>
+                                </div>
+                                <div class="metric-card rounded-lg p-3 text-center">
+                                    <div class="text-xl sm:text-2xl font-bold text-red-400">16 000</div>
+                                    <div class="text-xs text-gray-400">Salariés concernés</div>
+                                </div>
+                                <div class="metric-card rounded-lg p-3 text-center">
+                                    <div class="text-xl sm:text-2xl font-bold text-yellow-400">935</div>
+                                    <div class="text-xs text-gray-400">Amendements déposés</div>
+                                </div>
+                                <div class="metric-card rounded-lg p-3 text-center">
+                                    <div class="text-xl sm:text-2xl font-bold text-green-400">25%</div>
+                                    <div class="text-xs text-gray-400">Consensus média</div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-400 mb-2">
+                                    <span>Consensus sur la nécessité de la réforme</span>
+                                    <span class="font-semibold text-right">25% - Divergence très forte</span>
+                                </div>
+                                <div class="consensus-meter">
+                                    <div class="consensus-fill" style="width: 25%"></div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="fact-badge px-3 py-1 rounded-full text-xs sm:text-sm">✅ Holding France
+                                    Médias</span>
+                                <span class="warning-badge px-3 py-1 rounded-full text-xs sm:text-sm">⚠️ Grève
+                                    illimitée</span>
+                                <span
+                                    class="tag-item text-xs sm:text-sm px-3 py-1 bg-gray-700 rounded-full">#RachidaDati</span>
+                                <span
+                                    class="tag-item text-xs sm:text-sm px-3 py-1 bg-gray-700 rounded-full">#FranceMédias</span>
+                                <span
+                                    class="tag-item text-xs sm:text-sm px-3 py-1 bg-gray-700 rounded-full">#ServicePublic</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Alerte divergence -->
+                    <div class="info-card rounded-lg p-4 mb-6 flex items-center gap-3">
+                        <span class="text-2xl">🔍</span>
+                        <div>
+                            <div class="font-bold">Divergence extrême détectée</div>
+                            <div class="text-sm text-gray-300">Les positions vont d'un soutien institutionnel à une
+                                opposition frontale, avec des visions radicalement opposées sur l'avenir du service public.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Perspectives multiples -->
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- 1 -->
+                        <article class="perspective-card p-6" style="--badge-color: #228B22;"
+                            onclick="window.open('https://www.franceinfo.fr/economie/medias/france-televisions/l-article-a-lire-pour-comprendre-la-reforme-de-l-audiovisuel-public-dont-l-examen-en-commission-a-l-assemblee-reprend-mardi_7175706.html', '_blank')">
+                            <div class="flex items-center justify-between mb-3">
+                                <div>
+                                    <h3 class="font-bold text-lg">France Info</h3>
+                                    <span class="text-xs text-gray-400">Service public</span>
+                                </div>
+                                <span class="badge-neutre text-xs px-2 py-1 rounded">Neutre</span>
+                            </div>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Le texte prévoit de créer une holding,
+                                France Médias, qui chapeauterait France Télévisions, Radio France et l'INA. La ministre
+                                juge la réforme 'indispensable' face à la concurrence des plateformes."</blockquote>
+                            <div class="text-sm space-y-2">
+                                <div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus :
+                                        Explication factuelle</span></div>
+                                <div class="flex items-center gap-2"><span>📊</span><span class="text-gray-400">Ton :
+                                        Informatif, équilibré</span></div>
+                                <div class="flex items-center gap-2"><span>📋</span><span class="text-gray-400">Contexte
+                                        détaillé</span></div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-600">
+                                <div class="text-xs text-gray-500">Points clés :</div>
+                                <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                                    <li>• Holding au 1er janvier 2026</li>
+                                    <li>• 80M€ de budget en moins</li>
+                                    <li>• France Médias Monde incertain</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <!-- 2 -->
+                        <article class="perspective-card p-6" style="--badge-color: #3730a3;"
+                            onclick="window.open('https://www.lejdd.fr/Societe/france-medias-la-reforme-explosive-de-rachida-dati-secoue-laudiovisuel-public-156777', '_blank')">
+                            <div class="flex items-center justify-between mb-3">
+                                <div>
+                                    <h3 class="font-bold text-lg">Le JDD</h3>
+                                    <span class="text-xs text-gray-400">National</span>
+                                </div>
+                                <span class="badge-centre-droit text-xs px-2 py-1 rounded">Extrême droite</span>
+                            </div>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Les critiques se multiplient contre une
+                                information publique perçue comme idéologiquement marquée. La réforme marque une tentative
+                                sérieuse de réformer l'audiovisuel public."</blockquote>
+                            <div class="text-sm space-y-2">
+                                <div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus :
+                                        Efficacité économique</span></div>
+                                <div class="flex items-center gap-2"><span>💬</span><span class="text-gray-400">Ton :
+                                        Critique mesuré</span></div>
+                                <div class="flex items-center gap-2"><span>📈</span><span class="text-gray-400">Biais
+                                        idéologique dénoncé</span></div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-600">
+                                <div class="text-xs text-gray-500">Points clés :</div>
+                                <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                                    <li>• 4 milliards € de budget</li>
+                                    <li>• Pluralisme contesté</li>
+                                    <li>• Gouvernance à clarifier</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <!-- 3 -->
+                        <article class="perspective-card p-6" style="--badge-color: #D42A2A;"
+                            onclick="window.open('https://www.mediapart.fr/journal/culture-et-idees/260625/rachida-dati-deteste-l-audiovisuel-public', '_blank')">
+                            <div class="flex items-center justify-between mb-3">
+                                <div>
+                                    <h3 class="font-bold text-lg">Mediapart</h3>
+                                    <span class="text-xs text-gray-400">National</span>
+                                </div>
+                                <span class="badge-gauche text-xs px-2 py-1 rounded">Gauche</span>
+                            </div>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Rachida Dati déteste l'audiovisuel
+                                public. C'est un retour à l'ORTF, une attaque directe contre la diversité culturelle et le
+                                pluralisme de l'information."</blockquote>
+                            <div class="text-sm space-y-2">
+                                <div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus :
+                                        Indépendance menacée</span></div>
+                                <div class="flex items-center gap-2"><span>✊</span><span class="text-gray-400">Ton :
+                                        Dénonciation</span></div>
+                                <div class="flex items-center gap-2"><span>🚨</span><span class="text-gray-400">Alerte
+                                        démocratique</span></div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-600">
+                                <div class="text-xs text-gray-500">Points clés :</div>
+                                <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                                    <li>• Retour à l'ORTF dénoncé</li>
+                                    <li>• Contrôle politique accru</li>
+                                    <li>• Attaque contre le pluralisme</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <!-- 4 -->
+                        <article class="perspective-card p-6" style="--badge-color: #2A2AD4;"
+                            onclick="window.open('https://www.europe1.fr/politique/audiovisuel-public-rachida-dati-presente-son-projet-de-reforme-de-linstitution-ce-lundi-a-lassemblee-nationale-761511', '_blank')">
+                            <div class="flex items-center justify-between mb-3">
+                                <div>
+                                    <h3 class="font-bold text-lg">Europe 1</h3>
+                                    <span class="text-xs text-gray-400">National</span>
+                                </div>
+                                <span class="badge-droite text-xs px-2 py-1 rounded">Droite</span>
+                            </div>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"4 milliards d'euros pour un service
+                                public peu pluraliste. Le RN favorable à la privatisation partielle. Combien de temps
+                                encore justifier un tel coût ?"</blockquote>
+                            <div class="text-sm space-y-2">
+                                <div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus :
+                                        Coût exorbitant</span></div>
+                                <div class="flex items-center gap-2"><span>💸</span><span class="text-gray-400">Ton :
+                                        Critique économique</span></div>
+                                <div class="flex items-center gap-2"><span>📉</span><span class="text-gray-400">Privatisation
+                                        évoquée</span></div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-600">
+                                <div class="text-xs text-gray-500">Points clés :</div>
+                                <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                                    <li>• Empire coûteux</li>
+                                    <li>• Doublons permanents</li>
+                                    <li>• Gouvernance opaque</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <!-- 5 -->
+                        <article class="perspective-card p-6" style="--badge-color: #ef4444;"
+                            onclick="window.open('https://snjcgt.fr/2025/06/23/france-medias-monde-preavis-de-greve-intersyndical-contre-le-projet-de-reforme-de-laudiovisuel-public/', '_blank')">
+                            <div class="flex items-center justify-between mb-3">
+                                <div>
+                                    <h3 class="font-bold text-lg">CGT / Intersyndicale</h3>
+                                    <span class="text-xs text-gray-400">Syndicats</span>
+                                </div>
+                                <span class="badge-syndicat text-xs px-2 py-1 rounded">Opposition</span>
+                            </div>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"Projet extrêmement dangereux pour
+                                l'indépendance de l'information. Démantèlement de Radio France sous tutelle de France TV.
+                                Grève illimitée pour sauver l'audiovisuel public!"</blockquote>
+                            <div class="text-sm space-y-2">
+                                <div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus :
+                                        Défense des emplois</span></div>
+                                <div class="flex items-center gap-2"><span>⚡</span><span class="text-gray-400">Ton :
+                                        Mobilisation totale</span></div>
+                                <div class="flex items-center gap-2"><span>🛑</span><span class="text-gray-400">Grève
+                                        illimitée</span></div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-600">
+                                <div class="text-xs text-gray-500">Points clés :</div>
+                                <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                                    <li>• 16 000 emplois menacés</li>
+                                    <li>• Indépendance éditoriale</li>
+                                    <li>• Étranglement budgétaire</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <!-- 6 -->
+                        <article class="perspective-card p-6" style="--badge-color: #3b82f6;"
+                            onclick="window.open('https://www.france24.com/fr/france/20240523-projet-de-fusion-de-l-audiovisuel-public-france-24-en-gr%C3%A8ve', '_blank')">
+                            <div class="flex items-center justify-between mb-3">
+                                <div>
+                                    <h3 class="font-bold text-lg">France 24</h3>
+                                    <span class="text-xs text-gray-400">International</span>
+                                </div>
+                                <span class="badge-international text-xs px-2 py-1 rounded">Mondial</span>
+                            </div>
+                            <blockquote class="text-gray-300 mb-4 italic text-sm">"France Médias Monde face à des enjeux
+                                géopolitiques spécifiques. Notre exclusion de la réforme fait débat. L'influence française
+                                dans le monde en jeu."</blockquote>
+                            <div class="text-sm space-y-2">
+                                <div class="flex items-center gap-2"><span>🎯</span><span class="text-gray-400">Focus :
+                                        Rayonnement France</span></div>
+                                <div class="flex items-center gap-2"><span>🌍</span><span class="text-gray-400">Ton :
+                                        Inquiétude diplomatique</span></div>
+                                <div class="flex items-center gap-2"><span>🇫🇷</span><span class="text-gray-400">Soft
+                                        power menacé</span></div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-600">
+                                <div class="text-xs text-gray-500">Points clés :</div>
+                                <ul class="text-xs text-gray-400 mt-1 space-y-1">
+                                    <li>• Exclusion du périmètre ?</li>
+                                    <li>• Enjeux géopolitiques</li>
+                                    <li>• Influence internationale</li>
+                                </ul>
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- Synthèse IA -->
+                    <section class="mt-8 bg-gray-800 rounded-2xl p-6 border border-gray-700">
+                        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">🤖 Analyse INFODROP IA</h3>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div>
+                                <h4 class="font-bold mb-3 text-green-400">✅ Faits établis</h4>
+                                <ul class="space-y-2 text-sm">
+                                    <li>• Holding France Médias prévue</li>
+                                    <li>• 16 000 salariés concernés</li>
+                                    <li>• Budget : 4 milliards €/an</li>
+                                    <li>• Examen lundi-mardi Assemblée</li>
+                                    <li>• Grève illimitée en cours</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold mb-3 text-orange-400">⚡ Points de divergence</h4>
+                                <ul class="space-y-2 text-sm">
+                                    <li>• <b>Objectif :</b> "Modernisation" vs "Démantèlement"</li>
+                                    <li>• <b>Indépendance :</b> "Garantie" vs "Menacée"</li>
+                                    <li>• <b>Économies :</b> "Efficacité" vs "Casse sociale"</li>
+                                    <li>• <b>Pluralisme :</b> "Biaisé" vs "À protéger"</li>
+                                    <li>• <b>Modèle :</b> "BBC française" vs "Retour ORTF"</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold mb-3 text-blue-400">📊 Analyse des biais</h4>
+                                <div class="space-y-3 text-sm">
+                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                                        <div class="font-semibold text-red-400">Gauche/Syndicats</div>
+                                        <div class="text-xs">Défense du service public, alerte démocratique</div>
+                                    </div>
+                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                                        <div class="font-semibold text-blue-400">Droite/Centre-droit</div>
+                                        <div class="text-xs">Critique des coûts, biais idéologique dénoncé</div>
+                                    </div>
+                                    <div class="p-3 bg-gray-900 bg-opacity-50 rounded">
+                                        <div class="font-semibold text-yellow-400">RN position clé</div>
+                                        <div class="text-xs">Abstention annoncée, privatisation souhaitée</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 p-4 bg-gray-900 bg-opacity-50 rounded-lg border border-gray-700">
+                            <p class="text-sm mb-2"><span class="font-bold text-yellow-400">⚠️ Alerte :</span>
+                                Polarisation extrême du débat. La réforme cristallise les tensions sur l'avenir du service
+                                public, avec des visions irréconciliables entre "modernisation nécessaire" et "attaque
+                                contre l'indépendance".
+                            </p>
+                            <p class="text-sm text-gray-400">💡 <b>Recommandation :</b> Suivre les débats parlementaires en
+                                direct pour se faire sa propre opinion. Le RN en position d'arbitre pourrait faire basculer
+                                le vote.</p>
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <!-- ============================================================== -->
+            <!-- 🦶 FOOTER                                                     -->
+            <!-- ============================================================== -->
+            <footer class="text-center py-8 text-xs text-gray-500">
+                <p>© 2025 INFODROP. Tous droits réservés.</p>
+                <p class="mt-1">Un projet 3C - EM&LPy</p>
+            </footer>
+        </div>
+
+        <!-- ======================================================================== -->
+        <!-- 🔝 BOUTON SCROLL TO TOP                                                 -->
+        <!-- ======================================================================== -->
+        <button x-data="{ show: false }" x-show="show" x-transition
+            @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
+            class="fixed bottom-6 right-6 z-40 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110 border border-gray-700"
+            style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER                                          -->
+    <!-- ======================================================================== -->
+    <script>
+        // ====================================================================
+        // 📅 FONCTION BANDEAU CONTEXTUEL (DATE, MÉTÉO, LUNE...)
+        // ====================================================================
+        function contextTicker() {
+            return {
+                // === DONNÉES DE BASE ===
+                dateInfo: {
+                    fullDate: '',
+                    dayOfYear: 0,
+                    daysUntilNewYear: 0
+                },
+                todayFeast: '',
+                weather: {
+                    temperature: null,
+                    description: '',
+                    icon: '🌡️'
+                },
+                moonPhase: {
+                    name: '',
+                    icon: '🌙'
+                },
+
+                // === DICTIONNAIRE DES FÊTES ===
+                feasts: {
+                    '01-01': 'Jour de l\'an',
+                    '01-06': 'Épiphanie',
+                    '02-02': 'Chandeleur',
+                    '02-14': 'Saint-Valentin',
+                    '03-17': 'Saint-Patrick',
+                    '04-01': 'Poisson d\'avril',
+                    '05-01': 'Fête du travail',
+                    '05-08': 'Victoire 1945',
+                    '06-21': 'Fête de la musique',
+                    '07-14': 'Fête nationale',
+                    '08-15': 'Assomption',
+                    '10-31': 'Halloween',
+                    '11-01': 'Toussaint',
+                    '11-11': 'Armistice 1918',
+                    '12-25': 'Noël',
+                    '12-31': 'Saint-Sylvestre'
+                },
+
+                // === INITIALISATION DU TICKER ===
+                async initTicker() {
+                    this.updateDateInfo();
+                    this.updateMoonPhase();
+                    await this.getWeather();
+
+                    const now = new Date();
+                    const tomorrow = new Date(now);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    tomorrow.setHours(0, 0, 0, 0);
+                    const msUntilMidnight = tomorrow - now;
+
+                    setTimeout(() => {
+                        this.updateDateInfo();
+                        this.updateMoonPhase();
+                        setInterval(() => {
+                            this.updateDateInfo();
+                            this.updateMoonPhase();
+                        }, 86400000);
+                    }, msUntilMidnight);
+
+                    setInterval(() => this.getWeather(), 600000);
+                },
+
+                // === MISE À JOUR DES INFORMATIONS DE DATE ===
+                updateDateInfo() {
+                    const now = new Date();
+                    const options = { weekday: 'long', day: 'numeric', month: 'long' };
+                    this.dateInfo.fullDate = now.toLocaleDateString('fr-FR', options);
+                    this.dateInfo.fullDate = this.dateInfo.fullDate.charAt(0).toUpperCase() + this.dateInfo.fullDate.slice(1);
+
+                    const start = new Date(now.getFullYear(), 0, 0);
+                    const diff = now - start;
+                    this.dateInfo.dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+                    const nextYear = new Date(now.getFullYear() + 1, 0, 1);
+                    this.dateInfo.daysUntilNewYear = Math.ceil((nextYear - now) / (1000 * 60 * 60 * 24));
+
+                    const monthDay = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+                    this.todayFeast = this.feasts[monthDay] || '';
+                },
+
+                // === CALCUL DE LA PHASE LUNAIRE ===
+                updateMoonPhase() {
+                    const now = new Date();
+                    const refNewMoon = new Date(2000, 0, 6);
+                    const lunarCycle = 29.53058867;
+
+                    const daysSinceRef = (now - refNewMoon) / (1000 * 60 * 60 * 24);
+                    const moonAge = daysSinceRef % lunarCycle;
+
+                    if (moonAge < 1.84566) {
+                        this.moonPhase.name = 'Nouvelle lune';
+                        this.moonPhase.icon = '🌑';
+                    } else if (moonAge < 5.53699) {
+                        this.moonPhase.name = 'Premier croissant';
+                        this.moonPhase.icon = '🌒';
+                    } else if (moonAge < 9.22831) {
+                        this.moonPhase.name = 'Premier quartier';
+                        this.moonPhase.icon = '🌓';
+                    } else if (moonAge < 12.91963) {
+                        this.moonPhase.name = 'Gibbeuse croissante';
+                        this.moonPhase.icon = '🌔';
+                    } else if (moonAge < 16.61096) {
+                        this.moonPhase.name = 'Pleine lune';
+                        this.moonPhase.icon = '🌕';
+                    } else if (moonAge < 20.30228) {
+                        this.moonPhase.name = 'Gibbeuse décroissante';
+                        this.moonPhase.icon = '🌖';
+                    } else if (moonAge < 23.99361) {
+                        this.moonPhase.name = 'Dernier quartier';
+                        this.moonPhase.icon = '🌗';
+                    } else {
+                        this.moonPhase.name = 'Dernier croissant';
+                        this.moonPhase.icon = '🌘';
+                    }
+                },
+
+                // === RÉCUPÉRATION DES DONNÉES MÉTÉO ===
+                async getWeather() {
+                    try {
+                        const position = await new Promise((resolve, reject) => {
+                            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+                        });
+
+                        const { latitude, longitude } = position.coords;
+
+                        const response = await fetch(
+                            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}¤t_weather=true&timezone=auto`
+                        )
+
+                        const data = await response.json();
+                        const current = data.current_weather;
+
+                        this.weather.temperature = Math.round(current.temperature);
+
+                        const weatherCode = current.weathercode;
+                        if (weatherCode === 0) {
+                            this.weather.description = 'Ciel dégagé';
+                            this.weather.icon = '☀️';
+                        } else if (weatherCode <= 3) {
+                            this.weather.description = 'Partiellement nuageux';
+                            this.weather.icon = '⛅';
+                        } else if (weatherCode <= 48) {
+                            this.weather.description = 'Nuageux';
+                            this.weather.icon = '☁️';
+                        } else if (weatherCode <= 67) {
+                            this.weather.description = 'Pluie';
+                            this.weather.icon = '🌧️';
+                        } else if (weatherCode <= 77) {
+                            this.weather.description = 'Neige';
+                            this.weather.icon = '❄️';
+                        } else if (weatherCode <= 99) {
+                            this.weather.description = 'Orage';
+                            this.weather.icon = '⛈️';
+                        }
+
+                    } catch (error) {
+                        try {
+                            const response = await fetch(
+                                'https://api.open-meteo.com/v1/forecast?latitude=48.8566&longitude=2.3522¤t_weather=true&timezone=Europe/Paris'
+                            );
+                            const data = await response.json();
+                            const current = data.current_weather;
+
+                            this.weather.temperature = Math.round(current.temperature);
+
+                            const weatherCode = current.weathercode;
+                            if (weatherCode === 0) {
+                                this.weather.icon = '☀️';
+                            } else if (weatherCode <= 3) {
+                                this.weather.icon = '⛅';
+                            } else if (weatherCode <= 48) {
+                                this.weather.icon = '☁️';
+                            } else if (weatherCode <= 67) {
+                                this.weather.icon = '🌧️';
+                            } else if (weatherCode <= 77) {
+                                this.weather.icon = '❄️';
+                            } else {
+                                this.weather.icon = '⛈️';
+                            }
+
+                            this.weather.description = 'Paris';
+                        } catch (err) {
+                            console.error('Erreur météo:', err);
+                        }
+                    }
+                }
+            };
+        }
+
+        // ====================================================================
+        // 🏗️ APPLICATION PRINCIPALE
+        // ====================================================================
+        function infodropApp() {
+            return {
+                // ============================================================
+                // 📊 ÉTAT DE L'APPLICATION
+                // ============================================================
+
+                // === INTERFACE UTILISATEUR ===
+                copied: false,
+                sessionLoaded: false,
+                user: null,
+                email: '',
+                loading: false,
+                message: '',
+                messageType: '',
+                inviteCode: '',
+
+                // === SYSTÈME D'INVITATIONS ===
+                userInviteData: {
+                    code: null,
+                    is_used: false,
+                    parrainEmail: null,
+                    filleulEmail: null
+                },
+
+                // ============================================================
+                // 🚀 INITIALISATION
+                // ============================================================
+                async init() {
+                    console.log('🚀 Initialisation de la page...');
+                    const supabaseReady = await initializeSupabase();
+                    if (!supabaseReady) {
+                        this.sessionLoaded = true;
+                        return;
+                    }
+
+                    // === GESTION DES ÉVÉNEMENTS D'AUTHENTIFICATION ===
+                    supabase.auth.onAuthStateChange(async (event, session) => {
+                        this.user = session?.user || null;
+                        this.sessionLoaded = true;
+                        if (event === 'SIGNED_IN') {
+                            console.log('✅ Utilisateur connecté');
+                            this.loadUserInviteData();
+                        }
+                        if (event === 'SIGNED_OUT') {
+                            this.userInviteData = {
+                                code: null,
+                                is_used: false,
+                                parrainEmail: null,
+                                filleulEmail: null
+                            };
+                        }
+                    });
+
+                    // === GESTION DE L'INTERFACE ===
+                    window.addEventListener('scroll', () => {
+                        document.getElementById('stickyHeader')?.classList.toggle('shadow-xl', window.scrollY > 10);
+                    });
+
+                    // === ANIMATION PERSPECTIVES ===
+                    this.initPerspectiveAnimations();
+                },
+
+                // === ANIMATION DES CARTES PERSPECTIVES ===
+                initPerspectiveAnimations() {
+                    setTimeout(() => {
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    entry.target.classList.add('slide-in');
+                                }
+                            });
+                        });
+                        document.querySelectorAll('.perspective-card').forEach(card => {
+                            observer.observe(card);
+                        });
+                    }, 100);
+                },
+
+                // ============================================================
+                // 🔐 SYSTÈME D'AUTHENTIFICATION
+                // ============================================================
+
+                // === PROCESSUS DE CONNEXION ===
+                async login() {
+                    if (this.loading) return;
+                    this.loading = true;
+                    this.message = '';
+                    this.messageType = '';
+                    try {
+                        const checkRes = await fetch('/api/check-email', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: this.email.toLowerCase() })
+                        });
+                        if (!checkRes.ok) {
+                            const err = await checkRes.json();
+                            throw new Error(err.error || 'Erreur de communication.');
+                        }
+                        const { exists } = await checkRes.json();
+
+                        if (!exists) {
+                            if (!this.inviteCode) {
+                                this.message = "Code d'invitation requis pour les nouveaux utilisateurs.";
+                                this.messageType = 'error';
+                                this.loading = false;
+                                return;
+                            }
+                            const validateRes = await fetch('/api/validate-invite', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ code: this.inviteCode, email: this.email })
+                            });
+                            const validationResult = await validateRes.json();
+                            if (!validationResult.success) {
+                                this.message = validationResult.error;
+                                this.messageType = 'error';
+                                this.loading = false;
+                                return;
+                            }
+                        }
+
+                        const { error: otpError } = await supabase.auth.signInWithOtp({
+                            email: this.email.toLowerCase(),
+                            options: { emailRedirectTo: window.location.origin }
+                        });
+                        if (otpError) throw otpError;
+
+                        this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé.';
+                        this.messageType = 'success';
+                    } catch (error) {
+                        this.message = error.message || 'Une erreur est survenue.';
+                        this.messageType = 'error';
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                // === CHARGEMENT DES DONNÉES D'INVITATION ===
+                async loadUserInviteData() {
+                    if (!this.user || !this.user.email) {
+                        console.log('❌ Pas d\'utilisateur connecté pour charger les données d\'invitation');
+                        return;
+                    }
+
+                    try {
+                        console.log('🔄 Chargement des données d\'invitation pour:', this.user.email);
+
+                        // Récupérer le code d'invitation du compte connecté
+                        const { data: ownCode, error: ownCodeError } = await supabase
+                            .from('invitation_codes')
+                            .select('*')
+                            .ilike('owner_email', this.user.email.toLowerCase())
+                            .maybeSingle();
+
+                        if (ownCodeError && ownCodeError.code !== 'PGRST116') {
+                            console.error('❌ Erreur récupération code proprio:', ownCodeError);
+                        } else if (ownCode) {
+                            console.log('✅ Code proprio récupéré:', ownCode);
+                            this.userInviteData.code = ownCode.code;
+                            this.userInviteData.is_used = ownCode.is_used || false;
+
+                            if (ownCode.is_used && ownCode.used_by_email) {
+                                this.userInviteData.filleulEmail = ownCode.used_by_email;
+                            }
+                        }
+
+                        // Récupérer le parrain (qui a invité cet utilisateur)
+                        const { data: usedCode, error: usedCodeError } = await supabase
+                            .from('invitation_codes')
+                            .select('owner_email')
+                            .ilike('used_by_email', this.user.email.toLowerCase())
+                            .maybeSingle();
+
+                        if (usedCodeError && usedCodeError.code !== 'PGRST116') {
+                            console.error('❌ Erreur récupération parrain:', usedCodeError);
+                        } else if (usedCode) {
+                            console.log('✅ Parrain récupéré:', usedCode);
+                            this.userInviteData.parrainEmail = usedCode.owner_email;
+                        }
+
+                        console.log('✅ Données d\'invitation finales:', this.userInviteData);
+
+                    } catch (error) {
+                        console.error("❌ Erreur générale lors du chargement des données d'invitation:", error);
+                        this.userInviteData = {
+                            code: null,
+                            is_used: false,
+                            parrainEmail: null,
+                            filleulEmail: null
+                        };
+                    }
+                },
+
+                // ============================================================
+                // 🔧 UTILITAIRES ESSENTIELS
+                // ============================================================
+
+                async logout() {
+                    await supabase.auth.signOut();
+                },
+
+                copyInviteMessage(code) {
+                    const message = `Vous avez été invité à rejoindre le club privé INFODROP !
+Accédez à l'actu essentielle sur : https://infodrop.live
+Utilisez ce code lors de votre inscription : ${code}`;
+
+                    navigator.clipboard.writeText(message);
+                    this.copied = true;
+                    setTimeout(() => this.copied = false, 1500);
+                }
+            };
+        }
+    </script>
+</body>
+
+</html>
