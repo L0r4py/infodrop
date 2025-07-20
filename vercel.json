@@ -1,13 +1,13 @@
 {
-  "headers": [
+  "redirects": [
     {
-      "source": "/.well-known/apple-app-site-association",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/json"
-        }
-      ]
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
     }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "status": 404, "dest": "/404.html" }
   ]
 }
