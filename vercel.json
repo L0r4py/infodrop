@@ -1,13 +1,20 @@
 {
+  "version": 2,
   "redirects": [
     {
-      "source": "/index.html",
-      "destination": "/",
+      "source": "/ancien-lien",
+      "destination": "/nouveau-lien",
       "permanent": true
     }
   ],
   "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "status": 404, "dest": "/404.html" }
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/.*",
+      "status": 404,
+      "dest": "/404.html"
+    }
   ]
 }
