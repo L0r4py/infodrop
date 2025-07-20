@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Perdu dans le flux | INFODROP</title>
+
+    <link rel="icon" type="image/png" href="/images/infodrop-favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --clash-blue: #2E7BE6;
+            --clash-dark-blue: #1B4F91;
+            --clash-light-blue: #4A9EFF;
+            --clash-gold: #FFD700;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: #0f1419;
+            background-image: radial-gradient(circle at 20% 50%, rgba(46, 123, 230, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(74, 158, 255, 0.1) 0%, transparent 50%);
+        }
+
+        .clash-btn {
+            background: linear-gradient(180deg, var(--clash-light-blue) 0%, var(--clash-blue) 100%);
+            border: 3px solid var(--clash-dark-blue);
+            border-radius: 15px;
+            box-shadow: 0 4px 0 var(--clash-dark-blue), 0 6px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: translateY(0);
+            transition: all 0.1s;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .clash-btn:hover {
+            transform: translateY(1px);
+            box-shadow: 0 3px 0 var(--clash-dark-blue), 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .clash-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 var(--clash-dark-blue), 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .clash-card {
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 3px solid #1B4F91;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clash-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+            border-radius: 20px 20px 0 0;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .float-animation {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .text-glitch {
+            font-size: 6rem;
+            font-weight: 900;
+            line-height: 1;
+            text-shadow: 0 0 15px var(--clash-gold);
+        }
+
+        @media (min-width: 640px) {
+            .text-glitch {
+                font-size: 8rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-200 min-h-screen flex items-center justify-center p-4">
+    <div class="text-center">
+        <!-- Logo flottant (légèrement modifié pour le style) -->
+        <div class="float-animation mb-8">
+            <div
+                class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-b from-blue-400 to-blue-600 rounded-full shadow-2xl border-2 border-blue-300/50">
+                <span class="text-5xl">🧭</span>
+            </div>
+        </div>
+
+        <!-- Card d'erreur (style .clash-card) -->
+        <div class="clash-card max-w-md mx-auto p-8">
+            <h1 class="text-glitch mb-4 text-white">404</h1>
+            <h2 class="text-2xl font-bold text-white mb-2">Signal Perdu</h2>
+            <p class="text-gray-400 mb-8">Cette page n'existe pas ou a été archivée. Impossible de trianguler sa
+                position.</p>
+
+            <a href="/index.html" class="clash-btn inline-block px-8 py-3 text-white">
+                <span>← Retour au QG</span>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
