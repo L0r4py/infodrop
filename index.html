@@ -1012,7 +1012,6 @@
         }
 
         /* === BOUTON QUIZ ICÔNE DANS LE HEADER === */
-        /* === BOUTON QUIZ ICÔNE DANS LE HEADER === */
         .quiz-icon-btn {
             position: relative;
             display: flex;
@@ -1078,32 +1077,39 @@
             }
         }
 
-        /* === NOUVEAU : BADGE DE NIVEAU RECTANGULAIRE === */
+        /* === BADGE DE NIVEAU RECTANGULAIRE === */
         .level-badge-rect {
             display: inline-flex;
             align-items: center;
             gap: 6px;
             height: 40px;
-            /* Même hauteur que les autres boutons */
             padding: 0 16px;
-
             background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
             border: 3px solid #D68910;
             border-radius: 12px;
-            /* Même radius que les autres boutons */
-
-            box-shadow:
-                0 3px 0 #D68910,
-                0 5px 10px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-
+            box-shadow: 0 3px 0 #D68910, 0 5px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             font-weight: 900;
             color: #FFF;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
             font-size: 14px;
         }
 
-        /* === NOUVEAU : STYLE UNIFIÉ POUR LES BOUTONS D'ACTION (QUIZ & MENU) === */
+        @media (max-width: 640px) {
+            .level-badge-rect {
+                padding: 0 10px;
+                /* Réduit le padding horizontal */
+                font-size: 13px;
+                /* Réduit légèrement la police */
+                gap: 4px;
+                /* Réduit l'espacement intérieur */
+            }
+        }
+
+
+
+        IGNORE_WHEN_COPYING_START Use code with caution.
+
+        /* === STYLE UNIFIÉ POUR LES BOUTONS D'ACTION DU HEADER === */
         .action-btn-header {
             position: relative;
             display: flex;
@@ -1111,19 +1117,61 @@
             justify-content: center;
             width: 40px;
             height: 40px;
-
             border-radius: 12px;
             text-decoration: none;
             transition: all 0.15s ease-out;
         }
 
-        /* Style spécifique pour le bouton Quiz */
-        .action-btn-header:nth-child(2) {
-            /* Cible le bouton quiz */
+        /* Style pour le bouton Quiz Doré */
+        .quiz-btn-gold {
             background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
             border: 3px solid #D68910;
             box-shadow: 0 3px 0 #D68910, 0 5px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             font-size: 20px;
+        }
+
+        .quiz-btn-gold:hover {
+            transform: translateY(-2px);
+        }
+
+        .quiz-btn-gold:active {
+            transform: translateY(1px);
+        }
+
+        /* Style pour le bouton Menu Bleu */
+        .action-btn-header.clash-btn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+        }
+
+        /* Badge "NEW" sous forme de point qui pulse */
+        .new-badge-dot {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--clash-red);
+            border-radius: 50%;
+            border: 2px solid #0f1419;
+            /* Couleur du fond du header */
+            box-shadow: 0 0 10px var(--clash-red);
+            animation: pulse-dot 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                transform: scale(0.9);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
         }
 
         /* Style spécifique pour le bouton Menu (qui hérite de clash-btn) */
@@ -1265,11 +1313,11 @@
                                         class="text-sm sm:text-xl font-bold text-white whitespace-nowrap">INFODROP</span>
                                 </a>
                                 <span
-                                    class="text-[10px] sm:text-xs bg-blue-900/50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-blue-300 font-medium">v4.0.0</span>
+                                    class="hidden sm:inline-flex text-[10px] sm:text-xs bg-blue-900/50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-blue-300 font-medium">v4.0.1</span>
                             </div>
 
                             <!-- Stats joueur (VERSION FINALE CORRIGÉE) -->
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-1.5">
 
                                 <!-- 1. Le Niveau (Rectangulaire avec l'étoile) -->
                                 <div @click="showAchievementsModal = true"
