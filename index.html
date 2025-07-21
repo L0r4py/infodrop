@@ -59,7 +59,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- ======================================================================== -->
-    <!-- 🎮 STYLES CSS CLASH OF CLANS                                             -->
+    <!-- 🎮 STYLES CSS                                  -->
     <!-- ======================================================================== -->
     <style>
         /* === VARIABLES CLASH === */
@@ -622,7 +622,7 @@
             border-radius: 4px;
         }
 
-        /* === MENU DROPDOWN CLASH OF CLANS === */
+        /* === MENU DROPDOWN === */
         .clash-menu-dropdown {
             background: linear-gradient(180deg, #1E3A5F 0%, #0D1929 100%);
             border: 4px solid #1B4F91;
@@ -935,6 +935,81 @@
         .achievement-item.locked .achievement-progress {
             color: #999;
         }
+
+        /* === BOUTON QUIZ DANS LA BARRE HEADER === */
+        .quiz-btn-bar {
+            position: relative;
+            /* Essentiel pour le positionnement du badge 'NEW' */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            /* Centre le contenu du bouton */
+            gap: 10px;
+
+            background: linear-gradient(180deg, #FFD700 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 15px;
+            padding: 10px 24px;
+
+            box-shadow:
+                0 4px 0 #D68910,
+                0 8px 20px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+            color: white;
+            font-weight: 900;
+            font-size: 15px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+            text-decoration: none;
+
+            transform: translateY(0);
+            transition: all 0.1s;
+        }
+
+        .quiz-btn-bar:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 6px 0 #D68910,
+                0 12px 30px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .quiz-btn-bar:active {
+            transform: translateY(2px);
+            box-shadow:
+                0 2px 0 #D68910,
+                0 4px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Badge NEW */
+        .new-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #F44336;
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+            padding: 3px 7px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
     </style>
 
     <!-- === CONFIGURATION TAILWIND === -->
@@ -1014,13 +1089,13 @@
         <div x-show="sessionLoaded && user" x-transition.opacity class="min-h-screen flex flex-col">
 
             <!-- ============================================================== -->
-            <!-- 📱 HEADER CLASH OF CLANS                                      -->
+            <!-- 📱 HEADER            -->
             <!-- ============================================================== -->
             <div class="sticky top-0 z-40" id="stickyHeader">
 
-                <!-- === HEADER PRINCIPAL === -->
                 <header class="bg-gradient-to-b from-gray-900 to-gray-950 border-b-4 border-blue-900">
                     <div class="max-w-6xl mx-auto px-4">
+
                         <!-- Ligne supérieure avec niveau et XP -->
                         <div class="py-2 sm:py-3 flex items-center justify-between">
                             <div class="flex items-center gap-1 sm:gap-4">
@@ -1044,22 +1119,17 @@
 
                             <!-- Stats joueur -->
                             <div class="flex items-center gap-1 sm:gap-4">
-                                <!-- Niveau + Achievement fusionnés -->
                                 <div @click="showAchievementsModal = true"
                                     class="level-badge cursor-pointer hover:scale-105 transition-transform"
-                                    :title="currentAchievement ? getAchievementTitle(currentAchievement) : 'Mes achievements'">
+                                    :title="currentAchievement ? getAchievementTitle(currentAchievement) : 'Mes Succès'">
                                     <span class="text-xs" x-text="currentAchievement || '⭐'"></span>
                                     <span>NIV <span x-text="userLevel"></span></span>
                                 </div>
-
-                                <!-- Menu -->
                                 <div class="relative" x-data="{ showMenu: false }">
-                                    <!-- Overlay flou -->
                                     <div x-show="showMenu" x-transition.opacity
                                         class="fixed inset-0 backdrop-blur-sm bg-black/20 z-40"
                                         @click="showMenu = false">
                                     </div>
-
                                     <button @click="showMenu = !showMenu"
                                         class="clash-btn p-2 w-10 h-10 flex items-center justify-center relative z-50">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none"
@@ -1071,67 +1141,54 @@
                                     <div x-show="showMenu" x-transition
                                         class="absolute top-full right-0 mt-3 w-64 clash-menu-dropdown z-50"
                                         style="display: none;">
-                                        <!-- Header du menu -->
                                         <div class="menu-header">
                                             <span class="text-xs font-bold text-yellow-300">⚡ MENU PRINCIPAL</span>
                                         </div>
-
-                                        <!-- Items du menu -->
                                         <div class="menu-items">
                                             <a href="/index.html" class="menu-item">
                                                 <div class="menu-item-icon">📰</div>
-                                                <div class="menu-item-content">
-                                                    <span class="menu-item-title">Flux 24H</span>
-                                                    <span class="menu-item-desc">Actualités temps réel</span>
-                                                </div>
+                                                <div class="menu-item-content"><span class="menu-item-title">Flux
+                                                        24H</span><span class="menu-item-desc">Actualités temps
+                                                        réel</span></div>
                                                 <div class="menu-item-arrow">→</div>
                                             </a>
                                             <a @click.prevent="loadAndShow360Modal()" href="#" class="menu-item">
                                                 <div class="menu-item-icon">🌐</div>
-                                                <div class="menu-item-content">
-                                                    <span class="menu-item-title">Analyses 360°</span>
-                                                    <span class="menu-item-desc">Vision complète</span>
+                                                <div class="menu-item-content"><span class="menu-item-title">Analyses
+                                                        360°</span><span class="menu-item-desc">Vision complète</span>
                                                 </div>
                                                 <div class="menu-item-arrow">→</div>
                                             </a>
                                             <a @click.prevent="showShareModal = true" href="#" class="menu-item">
                                                 <div class="menu-item-icon">🎁</div>
-                                                <div class="menu-item-content">
-                                                    <span class="menu-item-title">Mon code d'invitation</span>
-                                                    <span class="menu-item-desc">Inviter des amis</span>
-                                                </div>
+                                                <div class="menu-item-content"><span class="menu-item-title">Mon code
+                                                        d'invitation</span><span class="menu-item-desc">Inviter des
+                                                        amis</span></div>
                                                 <div class="menu-item-arrow">→</div>
                                             </a>
-
                                             <div class="menu-separator"></div>
-
                                             <a @click.prevent="showAboutModal = true; showMenu = false" href="#"
                                                 class="menu-item">
                                                 <div class="menu-item-icon">ℹ️</div>
-                                                <div class="menu-item-content">
-                                                    <span class="menu-item-title">À propos</span>
-                                                    <span class="menu-item-desc">En savoir plus</span>
+                                                <div class="menu-item-content"><span class="menu-item-title">À
+                                                        propos</span><span class="menu-item-desc">En savoir plus</span>
                                                 </div>
                                                 <div class="menu-item-arrow">→</div>
                                             </a>
                                             <a href="https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801" target="_blank"
                                                 class="menu-item menu-item-special">
                                                 <div class="menu-item-icon">❤️</div>
-                                                <div class="menu-item-content">
-                                                    <span class="menu-item-title">Soutenir</span>
-                                                    <span class="menu-item-desc">Aidez-nous</span>
-                                                </div>
+                                                <div class="menu-item-content"><span
+                                                        class="menu-item-title">Soutenir</span><span
+                                                        class="menu-item-desc">Aidez-nous</span></div>
                                                 <div class="menu-item-arrow">→</div>
                                             </a>
-
                                             <div class="menu-separator"></div>
-
                                             <a @click="logout()" href="#" class="menu-item menu-item-danger">
                                                 <div class="menu-item-icon">🚪</div>
-                                                <div class="menu-item-content">
-                                                    <span class="menu-item-title">Déconnexion</span>
-                                                    <span class="menu-item-desc">À bientôt !</span>
-                                                </div>
+                                                <div class="menu-item-content"><span
+                                                        class="menu-item-title">Déconnexion</span><span
+                                                        class="menu-item-desc">À bientôt !</span></div>
                                                 <div class="menu-item-arrow">→</div>
                                             </a>
                                         </div>
@@ -1140,7 +1197,7 @@
                             </div>
                         </div>
 
-                        <!-- Barre XP -->
+                        <!-- Barre XP (INCHANGÉE) -->
                         <div class="pb-2 sm:pb-3">
                             <div class="flex items-center gap-2 sm:gap-3">
                                 <span class="text-xs font-bold text-blue-300">XP</span>
@@ -1152,9 +1209,18 @@
                                 </span>
                             </div>
                         </div>
+
+                        <!-- NOUVELLE BARRE POUR LE QUIZ -->
+                        <div class="py-2 flex justify-center">
+                            <a href="/quiz.html" class="quiz-btn-bar w-full sm:w-auto">
+                                <span class="new-badge">NEW</span>
+                                <span>🎯</span>
+                                <span>Défi de la Semaine</span>
+                            </a>
+                        </div>
+
                     </div>
                 </header>
-
             </div>
 
             <!-- ============================================================== -->

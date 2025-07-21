@@ -1,0 +1,226 @@
+{
+    "title": "Actualité Française : Politique et People Juin-Juillet 2025",
+    "xpPerQuestion": 1,
+    "questions": [
+        {
+            "question": "Quel Premier ministre français a annoncé des mesures d'économies pour le budget 2026, incluant la suppression de jours fériés ?",
+            "options": [
+                "Michel Barnier",
+                "François Bayrou",
+                "Édouard Philippe",
+                "Gabriel Attal"
+            ],
+            "correctAnswer": "François Bayrou",
+            "explanation": "François Bayrou a dévoilé le 15 juillet 2025 les grandes orientations du budget 2026, visant 44 milliards d'euros d'économies, incluant la suppression de jours fériés comme le 8 mai et le lundi de Pâques, suscitant de vives réactions."
+        },
+        {
+            "question": "Quel député LR a tragiquement été retrouvé mort à son domicile en juillet 2025 ?",
+            "options": [
+                "Laurent Wauquiez",
+                "Olivier Marleix",
+                "Éric Ciotti",
+                "Bruno Retailleau"
+            ],
+            "correctAnswer": "Olivier Marleix",
+            "explanation": "Le député LR Olivier Marleix a été retrouvé mort à son domicile à Anet le 7 juillet 2025, la thèse du suicide étant privilégiée par les enquêteurs, provoquant une onde de choc à l'Assemblée nationale."
+        },
+        {
+            "question": "Quelle personnalité politique a vu sa cote de popularité chuter fortement en juillet 2025 selon le baromètre Elabe ?",
+            "options": [
+                "Raphaël Glucksmann",
+                "Olivier Faure",
+                "Marine Le Pen",
+                "Édouard Philippe"
+            ],
+            "correctAnswer": "Olivier Faure",
+            "explanation": "Olivier Faure, premier secrétaire du Parti socialiste, a enregistré un recul de 23 points (24%) dans le baromètre Elabe de juillet 2025, chutant à la 10ème place après une forte progression le mois précédent."
+        },
+        {
+            "question": "Quel événement a marqué la visite d'Emmanuel Macron au Royaume-Uni en juillet 2025 ?",
+            "options": [
+                "Signature d'un accord commercial",
+                "Discours sur le Brexit au Parlement",
+                "Rencontre avec le roi Charles III",
+                "Annonce d'un partenariat militaire"
+            ],
+            "correctAnswer": "Discours sur le Brexit au Parlement",
+            "explanation": "Lors de sa visite d'État au Royaume-Uni le 8 juillet 2025, Emmanuel Macron s'est exprimé sur le Brexit lors d'un discours au palais de Westminster, abordant également les liens économiques et diplomatiques."
+        },
+        {
+            "question": "Quelle mesure controversée de la loi Duplomb a suscité une pétition citoyenne de 700 000 signatures en juillet 2025 ?",
+            "options": [
+                "Réintroduction de pesticides néonicotinoïdes",
+                "Suppression de subventions agricoles",
+                "Augmentation des taxes sur les carburants",
+                "Réforme du code du travail"
+            ],
+            "correctAnswer": "Réintroduction de pesticides néonicotinoïdes",
+            "explanation": "La loi Duplomb, votée le 8 juillet 2025, a permis la réintroduction de pesticides néonicotinoïdes, provoquant une pétition citoyenne atteignant 700 000 signatures pour demander son abrogation."
+        },
+        {
+            "question": "Quel événement culturel majeur a eu lieu à Bordeaux du 19 au 22 juin 2025 ?",
+            "options": [
+                "Festival du film",
+                "Fête du vin",
+                "Exposition d'art contemporain",
+                "Marathon international"
+            ],
+            "correctAnswer": "Fête du vin",
+            "explanation": "La Fête du Vin de Bordeaux, un événement annuel de quatre jours, s'est tenue du 19 au 22 juin 2025, attirant des visiteurs pour des dégustations le long des quais de la Garonne."
+        },
+        {
+            "question": "Quelle personnalité politique a appelé à des manifestations contre le budget 2025 en juillet ?",
+            "options": [
+                "Marine Le Pen",
+                "Jean-Luc Mélenchon",
+                "Éric Ciotti",
+                "François Ruffin"
+            ],
+            "correctAnswer": "Marine Le Pen",
+            "explanation": "Marine Le Pen a menacé de faire tomber le gouvernement Bayrou en juillet 2025 si les coupes budgétaires, notamment la suppression de jours fériés, n'étaient pas abandonnées."
+        },
+        {
+            "question": "Quel syndicat a appelé à une grève le 1er octobre 2024 pour protester contre le budget du gouvernement ?",
+            "options": [
+                "CFDT",
+                "CGT",
+                "FO",
+                "CFE-CGC"
+            ],
+            "correctAnswer": "CGT",
+            "explanation": "La CGT, plus grand syndicat français, a dénoncé un 'coup de force' de Macron et a appelé à une grève le 1er octobre 2024 contre le budget annoncé par le gouvernement intérimaire."
+        },
+        {
+            "question": "Quel événement sportif a attiré l'attention à Le Mans les 14 et 15 juin 2025 ?",
+            "options": [
+                "Grand Prix de France",
+                "24 Heures du Mans",
+                "Tour de France",
+                "Marathon de la Liberté"
+            ],
+            "correctAnswer": "24 Heures du Mans",
+            "explanation": "Les 24 Heures du Mans, course automobile d'endurance, se sont tenues les 14 et 15 juin 2025, attirant des milliers de spectateurs près de la ville médiévale du Mans."
+        },
+        {
+            "question": "Quelle personnalité française a refusé la Légion d'honneur en janvier 2025 ?",
+            "options": [
+                "Marjane Satrapi",
+                "Thomas Piketty",
+                "Léa Salamé",
+                "Yannick Noah"
+            ],
+            "correctAnswer": "Marjane Satrapi",
+            "explanation": "La réalisatrice et autrice de bande dessinée Marjane Satrapi a refusé la Légion d'honneur le 13 janvier 2025, marquant un geste symbolique contre les honneurs officiels."
+        },
+        {
+            "question": "Quel parti politique a remporté le plus de sièges aux élections européennes de 2024 ?",
+            "options": [
+                "Renaissance",
+                "Rassemblement National",
+                "La France Insoumise",
+                "Les Républicains"
+            ],
+            "correctAnswer": "Rassemblement National",
+            "explanation": "Le Rassemblement National, dirigé par Jordan Bardella, a remporté 30 sièges sur 80 lors des élections européennes de 2024, devançant largement les autres partis."
+        },
+        {
+            "question": "Quel ancien président français a qualifié la crise politique de 2024 d''erreur institutionnelle' ?",
+            "options": [
+                "Nicolas Sarkozy",
+                "François Hollande",
+                "Jacques Chirac",
+                "Valéry Giscard d'Estaing"
+            ],
+            "correctAnswer": "François Hollande",
+            "explanation": "François Hollande, membre du NFP, a qualifié la crise politique de 2024 d''erreur institutionnelle' le 28 août 2024, critiquant la gestion de Macron."
+        },
+        {
+            "question": "Quelle mesure a été instaurée le 1er juin 2025 concernant les chômeurs en France ?",
+            "options": [
+                "Augmentation des allocations chômage",
+                "Nouveau système de sanctions",
+                "Suppression des aides au logement",
+                "Réduction des cotisations sociales"
+            ],
+            "correctAnswer": "Nouveau système de sanctions",
+            "explanation": "À partir du 1er juin 2025, un nouveau système de sanctions a été mis en place pour les chômeurs manquant leurs rendez-vous à France Travail, dans le cadre d'une réforme du système d'allocations."
+        },
+        {
+            "question": "Quel ministre français a appelé à renforcer l'indépendance militaire de l'Europe en mars 2025 ?",
+            "options": [
+                "Bruno Le Maire",
+                "Benjamin Haddad",
+                "Gérald Darmanin",
+                "Amélie Oudéa-Castéra"
+            ],
+            "correctAnswer": "Benjamin Haddad",
+            "explanation": "Benjamin Haddad, ministre des Affaires européennes, a déclaré en mars 2025 que l'Europe devait renforcer son indépendance militaire face au retrait de l'aide américaine à l'Ukraine."
+        },
+        {
+            "question": "Quel lieu emblématique a célébré les 150 ans de la IIIe République en avril 2025 ?",
+            "options": [
+                "Panthéon",
+                "Château de Versailles",
+                "Arc de Triomphe",
+                "Hôtel des Invalides"
+            ],
+            "correctAnswer": "Château de Versailles",
+            "explanation": "Le château de Versailles a célébré les 150 ans de la IIIe République en avril 2025, mettant en avant son rôle symbolique dans l'histoire démocratique française."
+        },
+        {
+            "question": "Quel député a refusé de serrer la main d'un représentant d'extrême droite à l'Assemblée en 2024 ?",
+            "options": [
+                "François Piquemal",
+                "Aurélien Pradié",
+                "Raphaël Glucksmann",
+                "Olivier Faure"
+            ],
+            "correctAnswer": "François Piquemal",
+            "explanation": "François Piquemal a fait un geste symbolique en jouant à 'pierre-papier-ciseaux' pour éviter de serrer la main d'un représentant RN lors d'une procédure à l'Assemblée en 2024."
+        },
+        {
+            "question": "Quel événement naturel a causé des inondations à Paris le 26 juin 2025 ?",
+            "options": [
+                "Tempête",
+                "Canicule",
+                "Séisme",
+                "Éruption volcanique"
+            ],
+            "correctAnswer": "Tempête",
+            "explanation": "Une tempête le 26 juin 2025 a causé des inondations à Paris, faisant deux morts, dont un enfant, et 17 blessés à l'échelle nationale."
+        },
+        {
+            "question": "Quel média a vu ses abonnements augmenter grâce à la crise politique en 2024-2025 ?",
+            "options": [
+                "Le Figaro",
+                "Le Monde",
+                "Médiapart",
+                "Libération"
+            ],
+            "correctAnswer": "Le Monde",
+            "explanation": "Le Monde a vu ses abonnements numériques augmenter, atteignant 580 000 abonnés, en partie grâce à l'intérêt suscité par la crise politique de 2024-2025."
+        },
+        {
+            "question": "Quel eurodéputé a demandé le retour de la Statue de la Liberté à la France en mars 2025 ?",
+            "options": [
+                "Jordan Bardella",
+                "Raphaël Glucksmann",
+                "Manon Aubry",
+                "François-Xavier Bellamy"
+            ],
+            "correctAnswer": "Raphaël Glucksmann",
+            "explanation": "Raphaël Glucksmann a créé la polémique en mars 2025 en demandant le retour de la Statue de la Liberté à la France, suscitant une réponse virulente de la Maison Blanche."
+        },
+        {
+            "question": "Quel parti a tenté un compromis avec le gouvernement Bayrou sur le budget 2025 ?",
+            "options": [
+                "La France Insoumise",
+                "Parti socialiste",
+                "Rassemblement National",
+                "Les Républicains"
+            ],
+            "correctAnswer": "Parti socialiste",
+            "explanation": "Le Parti socialiste, via Olivier Faure, a proposé un compromis au gouvernement Bayrou en janvier 2025 pour éviter une motion de censure sur le budget."
+        }
+    ]
+}
