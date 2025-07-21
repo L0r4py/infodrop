@@ -1055,6 +1055,7 @@
         }
 
         /* Badge "NEW" sous forme de point qui pulse */
+        /* Badge "NEW" sous forme de point qui pulse (INCHANGÉ) */
         .new-badge-dot {
             position: absolute;
             top: 4px;
@@ -1064,9 +1065,78 @@
             background-color: var(--clash-red);
             border-radius: 50%;
             border: 2px solid #0f1419;
-            /* Couleur du fond du header */
             box-shadow: 0 0 10px var(--clash-red);
             animation: pulse-dot 1.5s infinite ease-in-out;
+        }
+
+        /* === NOUVEAU : BADGE DE NIVEAU RECTANGULAIRE === */
+        .level-badge-rect {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            height: 40px;
+            /* Même hauteur que les autres boutons */
+            padding: 0 16px;
+
+            background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 12px;
+            /* Même radius que les autres boutons */
+
+            box-shadow:
+                0 3px 0 #D68910,
+                0 5px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+            font-weight: 900;
+            color: #FFF;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            font-size: 14px;
+        }
+
+        /* === NOUVEAU : STYLE UNIFIÉ POUR LES BOUTONS D'ACTION (QUIZ & MENU) === */
+        .action-btn-header {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.15s ease-out;
+        }
+
+        /* Style spécifique pour le bouton Quiz */
+        .action-btn-header:nth-child(2) {
+            /* Cible le bouton quiz */
+            background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            box-shadow: 0 3px 0 #D68910, 0 5px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+        }
+
+        /* Style spécifique pour le bouton Menu (qui hérite de clash-btn) */
+        .action-btn-header.clash-btn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 12px;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                transform: scale(0.9);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
         }
 
         @keyframes pulse-dot {
