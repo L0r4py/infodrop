@@ -12,7 +12,9 @@
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-    <!-- STYLES CSS (Fusion des styles de l'index et du quiz) -->
+    <!-- ======================================================================== -->
+    <!-- 🎮 STYLES CSS (Fusionnés & Corrigés)                                  -->
+    <!-- ======================================================================== -->
     <style>
         :root {
             --clash-blue: #2E7BE6;
@@ -36,6 +38,10 @@
         }
 
         .clash-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             background: linear-gradient(180deg, #4A9EFF 0%, #2E7BE6 100%);
             border: 3px solid #1B4F91;
             border-radius: 15px;
@@ -43,10 +49,13 @@
             font-weight: 700;
             color: white;
             transition: all 0.1s;
+            text-decoration: none;
+            transform: translateY(0);
         }
 
         .clash-btn:hover {
             transform: translateY(-1px);
+            box-shadow: 0 5px 0 #1B4F91;
         }
 
         .clash-btn:active {
@@ -69,24 +78,23 @@
             }
         }
 
-        /* STYLES SPÉCIFIQUES AU QUIZ */
+        /* === STYLES SPÉCIFIQUES AU QUIZ (CORRIGÉS) === */
         .quiz-option-btn {
-            background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
-            border: 3px solid #4b5563;
-            border-radius: 15px;
-            box-shadow: 0 4px 0 #4b5563;
+            background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            box-shadow: 0 4px 0 #D68910;
         }
 
         .quiz-option-btn.correct {
-            background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
-            border-color: #15803d;
-            box-shadow: 0 4px 0 #15803d;
+            background: linear-gradient(180deg, #5CBF60 0%, var(--clash-green) 100%);
+            border-color: #388E3C;
+            box-shadow: 0 4px 0 #388E3C;
         }
 
         .quiz-option-btn.incorrect {
-            background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
-            border-color: #b91c1c;
-            box-shadow: 0 4px 0 #b91c1c;
+            background: linear-gradient(180deg, #FF6B6B 0%, var(--clash-red) 100%);
+            border-color: #C62828;
+            box-shadow: 0 4px 0 #C62828;
         }
 
         .quiz-option-btn:disabled {
@@ -115,7 +123,7 @@
 
     <div x-data="quizApp()" x-init="init()" class="w-full min-h-screen flex flex-col">
 
-        <!-- HEADER UNIFIÉ (VERSION ALLÉGÉE SANS GAMIFICATION) -->
+        <!-- HEADER UNIFIÉ -->
         <header class="sticky top-0 z-40 bg-gradient-to-b from-gray-900 to-gray-950 border-b-4 border-blue-900">
             <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
                 <a href="/index.html" class="flex items-center gap-2 hover:scale-105 transition">
@@ -129,139 +137,127 @@
         </header>
 
         <!-- CONTENU PRINCIPAL DU QUIZ -->
-        <main class="flex-grow flex items-center justify-center w-full max-w-2xl mx-auto px-4">
-            <!-- Écran de Chargement -->
-            <div x-show="isLoading" class="text-center">
-                <div class="loading-spinner mx-auto"></div>
-                <p class="mt-4 text-gray-400">Chargement du défi...</p>
-            </div>
+        <main class="flex-grow flex items-center justify-center w-full max-w-2xl mx-auto px-4 py-8">
+            <div class="w-full">
+                <!-- DISCLAIMER IA -->
+                <div class="clash-card border-yellow-500/50 p-4 mb-6 text-center">
+                    <div class="text-2xl mb-2">🤖</div>
+                    <p class="text-sm text-white font-bold">Quiz généré par Intelligence Artificielle</p>
+                    <p class="text-xs text-gray-400 mt-1">Les questions sont basées sur les actualités récentes.
+                        Certaines peuvent contenir des imprécisions.</p>
+                </div>
 
-            <!-- Écran du Quiz -->
-            <div x-show="!isLoading && !isFinished" x-transition.opacity class="w-full">
-                <div class="clash-card p-6">
-                    <!-- Header du Quiz -->
-                    <div class="text-center mb-6">
-                        <h1 class="text-2xl font-bold text-white" x-text="quizTitle"></h1>
-                        <p class="text-sm text-[var(--clash-gold)]"
-                            x-text="'Question ' + (currentQuestionIndex + 1) + ' / ' + questions.length"></p>
-                        <div class="progress-bar-container mt-2">
-                            <div class="progress-bar-fill"
-                                :style="`width: ${((currentQuestionIndex + 1) / questions.length) * 100}%`"></div>
+                <!-- Écran de Chargement -->
+                <div x-show="isLoading" class="text-center">
+                    <div class="loading-spinner mx-auto"></div>
+                </div>
+
+                <!-- Écran du Quiz -->
+                <div x-show="!isLoading && !isFinished" x-transition.opacity class="w-full">
+                    <div class="clash-card p-6">
+                        <div class="text-center mb-6">
+                            <h1 class="text-2xl font-bold text-white" x-text="quizTitle"></h1>
+                            <p class="text-sm text-[var(--clash-gold)]"
+                                x-text="'Question ' + (currentQuestionIndex + 1) + ' / ' + questions.length"></p>
+                            <div class="progress-bar-container mt-2">
+                                <div class="progress-bar-fill"
+                                    :style="`width: ${((currentQuestionIndex + 1) / questions.length) * 100}%`"></div>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Question Actuelle -->
-                    <div x-show="currentQuestion">
-                        <p class="text-lg text-center text-white mb-6" x-text="currentQuestion.question"></p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <template x-for="option in currentQuestion.options" :key="option">
-                                <button @click="selectAnswer(option)" :disabled="isAnswered"
-                                    class="quiz-option-btn p-4 text-white font-semibold transition disabled:cursor-not-allowed"
-                                    :class="{
-                                        'correct': isAnswered && option === currentQuestion.correctAnswer,
-                                        'incorrect': isAnswered && selectedAnswer === option && option !== currentQuestion.correctAnswer
-                                    }">
-                                    <span x-text="option"></span>
+                        <div x-show="currentQuestion">
+                            <p class="text-lg text-center text-white mb-6" x-text="currentQuestion.question"></p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <template x-for="option in currentQuestion.options" :key="option">
+                                    <button @click="selectAnswer(option)" :disabled="isAnswered"
+                                        class="clash-btn quiz-option-btn p-4 text-white font-semibold w-full"
+                                        :class="{ 'correct': isAnswered && option === currentQuestion.correctAnswer, 'incorrect': isAnswered && selectedAnswer === option && option !== currentQuestion.correctAnswer }">
+                                        <span x-text="option"></span>
+                                    </button>
+                                </template>
+                            </div>
+                            <div x-show="isAnswered" x-transition class="mt-6 text-center">
+                                <p class="text-sm text-gray-400 mb-4" x-text="currentQuestion.explanation"></p>
+                                <button @click="nextQuestion()" class="clash-btn px-8 py-3 font-bold">
+                                    <span
+                                        x-text="isLastQuestion() ? 'Voir les résultats' : 'Question suivante →'"></span>
                                 </button>
-                            </template>
-                        </div>
-
-                        <!-- Feedback & Bouton Suivant -->
-                        <div x-show="isAnswered" x-transition class="mt-6 text-center">
-                            <p class="text-sm text-gray-400 mb-4" x-text="currentQuestion.explanation"></p>
-                            <button @click="nextQuestion()" class="clash-btn px-8 py-3 text-white font-bold">
-                                <span x-text="isLastQuestion() ? 'Voir les résultats' : 'Question suivante →'"></span>
-                            </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Écran des Résultats -->
-            <div x-show="isFinished" x-transition.opacity class="w-full">
-                <div class="clash-card p-8 text-center">
-                    <h2 class="text-3xl font-bold text-[var(--clash-gold)] mb-2">Défi Terminé !</h2>
-                    <p class="text-gray-400 mb-6">Voici votre performance :</p>
-                    <div class="text-6xl font-black text-white mb-4" x-text="score + ' / ' + questions.length"></div>
-                    <div class="bg-gray-900/50 rounded-lg p-4 mb-8">
-                        <p class="text-lg font-bold text-[var(--clash-gold)]" x-text="'+' + totalXpGained + ' XP'"></p>
-                        <p class="text-sm text-gray-400">Points d'expérience gagnés !</p>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button @click="restartQuiz()" class="clash-btn px-6 py-3 text-white font-bold">Rejouer</button>
-                        <a href="/index.html" class="clash-btn px-6 py-3 text-white font-bold">Retour au Flux</a>
+                <!-- Écran des Résultats -->
+                <div x-show="isFinished" x-transition.opacity class="w-full">
+                    <div class="clash-card p-8 text-center">
+                        <h2 class="text-3xl font-bold text-[var(--clash-gold)] mb-2">Défi Terminé !</h2>
+                        <p class="text-gray-400 mb-6">Voici votre performance :</p>
+                        <div class="text-6xl font-black text-white mb-4" x-text="score + ' / ' + questions.length">
+                        </div>
+                        <div class="bg-gray-900/50 rounded-lg p-4 mb-8">
+                            <p class="text-lg font-bold text-[var(--clash-gold)]" x-text="'+' + totalXpGained + ' XP'">
+                            </p>
+                            <p class="text-sm text-gray-400">Points d'expérience gagnés !</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <button @click="restartQuiz()" class="clash-btn px-6 py-3 font-bold">Rejouer</button>
+                            <a href="/index.html" class="clash-btn px-6 py-3 font-bold">Retour au Flux</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
 
+        <!-- FOOTER COMPLET -->
         <footer class="text-center py-6 text-xs text-gray-500">
-            <p>© 2025 INFODROP</p>
+            <p>© 2025 INFODROP. Tous droits réservés.</p>
+            <p class="mt-1">Un projet 3C - L0r4.py [AI]</p>
         </footer>
     </div>
 
     <script>
-        // === INITIALISATION SUPABASE (Nécessaire pour sauvegarder l'XP) ===
         let supabase = null;
         async function initializeSupabase() {
             try {
                 const res = await fetch('/api/config');
-                if (!res.ok) throw new Error('Erreur de config');
+                if (!res.ok) throw new Error('Erreur config');
                 const cfg = await res.json();
                 supabase = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
                 return true;
-            } catch (err) {
-                console.error('Erreur init Supabase:', err);
-                return false;
-            }
+            } catch (err) { console.error('Erreur init Supabase:', err); return false; }
         }
 
         function quizApp() {
             return {
-                // ÉTAT DU JEU
-                isLoading: true, isFinished: false, isAnswered: false,
-                quizTitle: '', questions: [], currentQuestionIndex: 0,
+                isLoading: true, isFinished: false, isAnswered: false, quizTitle: '', questions: [], currentQuestionIndex: 0,
                 selectedAnswer: null, score: 0, xpPerQuestion: 2, totalXpGained: 0,
-
-                // DONNÉES UTILISATEUR (pour la sauvegarde de l'XP)
-                user: null, userXP: 0, xpToNextLevel: 100, userLevel: 1,
-
-                get currentQuestion() {
-                    return this.questions[this.currentQuestionIndex];
-                },
+                user: null, userXP: 0,
 
                 async init() {
                     const supabaseReady = await initializeSupabase();
                     if (supabaseReady) {
                         const { data: { session } } = await supabase.auth.getSession();
                         this.user = session?.user;
-                        if (this.user) await this.loadUserStats();
+                        if (this.user) await this.loadUserXp();
                     }
                     await this.loadQuiz();
                 },
 
-                async loadUserStats() {
-                    let { data } = await supabase.from('user_gaming_stats').select('xp, level').eq('user_id', this.user.id).single();
-                    if (data) {
-                        this.userXP = data.xp;
-                        this.userLevel = data.level;
-                        this.xpToNextLevel = this.userLevel * 100;
-                    }
+                async loadUserXp() {
+                    if (!this.user) return;
+                    let { data } = await supabase.from('user_gaming_stats').select('xp').eq('user_id', this.user.id).single();
+                    if (data) this.userXP = data.xp;
                 },
 
                 async loadQuiz() {
+                    this.isLoading = true;
                     try {
                         const response = await fetch(`/quizzes/current-quiz.json?v=${Date.now()}`);
                         const data = await response.json();
                         this.quizTitle = data.title;
-                        this.questions = this.shuffleArray([...data.questions]);
+                        this.questions = this.shuffleArray(data.questions);
                         this.xpPerQuestion = data.xpPerQuestion || 2;
-                    } catch (error) {
-                        console.error("Erreur chargement du quiz:", error);
-                        this.quizTitle = "Erreur de chargement";
-                    } finally {
-                        this.isLoading = false;
-                    }
+                    } catch (error) { console.error("Erreur chargement quiz:", error); this.quizTitle = "Erreur de chargement"; }
+                    finally { this.isLoading = false; }
                 },
 
                 async selectAnswer(option) {
@@ -271,11 +267,11 @@
                     if (option === this.currentQuestion.correctAnswer) {
                         this.score++;
                         this.totalXpGained += this.xpPerQuestion;
-
                         if (this.user) {
-                            this.userXP += this.xpPerQuestion;
-                            // Pas de gestion de level up ici pour garder la page simple. L'XP sera juste ajouté.
-                            await supabase.from('user_gaming_stats').update({ xp: this.userXP }).eq('user_id', this.user.id);
+                            const newXp = (this.userXP || 0) + this.xpPerQuestion;
+                            const { error } = await supabase.from('user_gaming_stats').update({ xp: newXp }).eq('user_id', this.user.id);
+                            if (error) console.error("Erreur sauvegarde XP:", error);
+                            else this.userXP = newXp;
                         }
                     }
                 },
@@ -290,28 +286,27 @@
                     }
                 },
 
+                restartQuiz() {
+                    this.isFinished = false; this.isAnswered = false; this.currentQuestionIndex = 0;
+                    this.selectedAnswer = null; this.score = 0; this.totalXpGained = 0;
+                    this.questions = this.shuffleArray(this.questions);
+                },
+
+                shuffleArray(array) {
+                    for (let i = array.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [array[i], array[j]] = [array[j], array[i]];
+                    }
+                    return array;
+                },
+
                 isLastQuestion() {
                     return this.currentQuestionIndex === this.questions.length - 1;
                 },
 
-                restartQuiz() {
-                    this.isFinished = false;
-                    this.isAnswered = false;
-                    this.currentQuestionIndex = 0;
-                    this.selectedAnswer = null;
-                    this.score = 0;
-                    this.totalXpGained = 0;
-                    this.questions = this.shuffleArray([...this.questions]);
+                get currentQuestion() {
+                    return this.questions[this.currentQuestionIndex];
                 },
-
-                shuffleArray(array) {
-                    const shuffled = [...array];
-                    for (let i = shuffled.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-                    }
-                    return shuffled;
-                }
             }
         }
     </script>
