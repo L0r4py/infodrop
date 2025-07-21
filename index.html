@@ -1094,21 +1094,6 @@
             font-size: 14px;
         }
 
-        @media (max-width: 640px) {
-            .level-badge-rect {
-                padding: 0 10px;
-                /* Réduit le padding horizontal */
-                font-size: 13px;
-                /* Réduit légèrement la police */
-                gap: 4px;
-                /* Réduit l'espacement intérieur */
-            }
-        }
-
-
-
-        IGNORE_WHEN_COPYING_START Use code with caution.
-
         /* === STYLE UNIFIÉ POUR LES BOUTONS D'ACTION DU HEADER === */
         .action-btn-header {
             position: relative;
@@ -1317,7 +1302,7 @@
                             </div>
 
                             <!-- Stats joueur (VERSION FINALE CORRIGÉE) -->
-                            <div class="flex items-center gap-1.5">
+                            <div class="flex items-center gap-2">
 
                                 <!-- 1. Le Niveau (Rectangulaire avec l'étoile) -->
                                 <div @click="showAchievementsModal = true"
