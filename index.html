@@ -1268,31 +1268,32 @@
                                     class="text-[10px] sm:text-xs bg-blue-900/50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-blue-300 font-medium">v4.0.0</span>
                             </div>
 
-                            <!-- Stats joueur -->
-                            <div class="flex items-center gap-2 sm:gap-4">
+                            <!-- Stats joueur (VERSION FINALE CORRIGÉE) -->
+                            <div class="flex items-center gap-2">
 
-                                <!-- 1. Le Niveau (INCHANGÉ) -->
+                                <!-- 1. Le Niveau (Rectangulaire avec l'étoile) -->
                                 <div @click="showAchievementsModal = true"
-                                    class="level-badge cursor-pointer hover:scale-105 transition-transform"
+                                    class="level-badge-rect cursor-pointer hover:scale-105 transition-transform"
                                     :title="currentAchievement ? getAchievementTitle(currentAchievement) : 'Mes Succès'">
-                                    <span class="text-xs" x-text="currentAchievement || '⭐'"></span>
+                                    <!-- On force l'icône étoile pour la cohérence -->
+                                    <span class="text-xs">⭐</span>
                                     <span>NIV <span x-text="userLevel"></span></span>
                                 </div>
 
-                                <!-- 2. Le Bouton Quiz -->
-                                <a @click.prevent="handleQuizClick()" href="/quiz.html" class="quiz-icon-btn">
+                                <!-- 2. Le Bouton Quiz (Bonne icône et badge NEW) -->
+                                <a @click.prevent="handleQuizClick()" href="/quiz.html"
+                                    class="action-btn-header quiz-btn-gold">
                                     <span x-show="showNewQuizBadge" class="new-badge-dot"></span>
-                                    <span>🎮</span>
+                                    <span>🎯</span>
                                 </a>
 
-                                <!-- 3. Le Menu Hamburger -->
+                                <!-- 3. Le Menu Hamburger (Style harmonisé) -->
                                 <div class="relative" x-data="{ showMenu: false }">
                                     <div x-show="showMenu" x-transition.opacity
                                         class="fixed inset-0 backdrop-blur-sm bg-black/20 z-40"
-                                        @click="showMenu = false">
-                                    </div>
+                                        @click="showMenu = false"></div>
                                     <button @click="showMenu = !showMenu"
-                                        class="clash-btn p-2 w-10 h-10 flex items-center justify-center relative z-50">
+                                        class="action-btn-header clash-btn relative z-50">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -1474,7 +1475,7 @@
                     <button @click="showDiversityChecker = !showDiversityChecker"
                         class="w-full flex items-center justify-between p-3 sm:p-4">
                         <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                            <span>🎯</span>
+                            <span>🎲</span>
                             <span>Score de diversité</span>
                         </h3>
                         <div class="flex items-center gap-3">
