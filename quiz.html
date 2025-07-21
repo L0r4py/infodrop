@@ -129,7 +129,8 @@
                 <a href="/index.html" class="flex items-center gap-2 hover:scale-105 transition">
                     <div
                         class="w-10 h-10 bg-gradient-to-b from-blue-400 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-                        <span class="text-xl">📰</span></div>
+                        <span class="text-xl">📰</span>
+                    </div>
                     <span class="text-xl font-bold text-white">INFODROP</span>
                 </a>
                 <a href="/index.html" class="clash-btn px-4 py-2 text-sm">← Retour au Flux</a>
@@ -198,9 +199,8 @@
                             </p>
                             <p class="text-sm text-gray-400">Points d'expérience gagnés !</p>
                         </div>
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                            <button @click="restartQuiz()" class="clash-btn px-6 py-3 font-bold">Rejouer</button>
-                            <a href="/index.html" class="clash-btn px-6 py-3 font-bold">Retour au Flux</a>
+                        <div class="mt-2">
+                            <a href="/index.html" class="clash-btn px-8 py-4 font-bold text-lg">Retour au Flux</a>
                         </div>
                     </div>
                 </div>
@@ -284,12 +284,6 @@
                     } else {
                         this.isFinished = true;
                     }
-                },
-
-                restartQuiz() {
-                    this.isFinished = false; this.isAnswered = false; this.currentQuestionIndex = 0;
-                    this.selectedAnswer = null; this.score = 0; this.totalXpGained = 0;
-                    this.questions = this.shuffleArray(this.questions);
                 },
 
                 shuffleArray(array) {
