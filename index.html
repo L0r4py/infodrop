@@ -1010,6 +1010,78 @@
                 transform: scale(1.1);
             }
         }
+
+        /* === BOUTON QUIZ ICÔNE DANS LE HEADER === */
+        .quiz-icon-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            /* 10 (h-10) */
+            height: 40px;
+            /* 10 (h-10) */
+
+            background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 12px;
+            /* Un peu moins arrondi qu'un cercle complet */
+
+            box-shadow:
+                0 3px 0 #D68910,
+                0 5px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.15s ease-out;
+        }
+
+        .quiz-icon-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow:
+                0 5px 0 #D68910,
+                0 8px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .quiz-icon-btn:active {
+            transform: translateY(1px) scale(1);
+            box-shadow:
+                0 2px 0 #D68910,
+                0 3px 6px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Badge "NEW" sous forme de point qui pulse */
+        .new-badge-dot {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--clash-red);
+            border-radius: 50%;
+            border: 2px solid #0f1419;
+            /* Couleur du fond du header */
+            box-shadow: 0 0 10px var(--clash-red);
+            animation: pulse-dot 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                transform: scale(0.9);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
     </style>
 
     <!-- === CONFIGURATION TAILWIND === -->
@@ -1119,6 +1191,15 @@
 
                             <!-- Stats joueur -->
                             <div class="flex items-center gap-1 sm:gap-4">
+                                <!-- ============================================ -->
+                                <!-- ✅ NOUVEAU BOUTON QUIZ -->
+                                <!-- ============================================ -->
+                                <a @click.prevent="handleQuizClick()" href="/quiz.html" class="quiz-icon-btn">
+                                    <span x-show="showNewQuizBadge" class="new-badge-dot"></span>
+                                    <span>🎯</span>
+                                </a>
+
+                                <!-- Niveau + Succès (INCHANGÉ) -->
                                 <div @click="showAchievementsModal = true"
                                     class="level-badge cursor-pointer hover:scale-105 transition-transform"
                                     :title="currentAchievement ? getAchievementTitle(currentAchievement) : 'Mes Succès'">
@@ -1208,18 +1289,6 @@
                                     <span x-text="userXP"></span> / <span x-text="xpToNextLevel"></span>
                                 </span>
                             </div>
-                        </div>
-
-                        <!-- ============================================= -->
-                        <!-- ✅ NOUVELLE BARRE POUR LE QUIZ (MISE À JOUR) -->
-                        <!-- ============================================= -->
-                        <div class="py-3 flex items-center justify-center">
-                            <a @click.prevent="handleQuizClick()" href="/quiz.html"
-                                class="quiz-btn-bar w-full sm:w-auto">
-                                <span x-show="showNewQuizBadge" class="new-badge">NEW</span>
-                                <span>🎯</span>
-                                <span>Défi de la Semaine</span>
-                            </a>
                         </div>
 
                     </div>
