@@ -1214,8 +1214,9 @@
                         <!-- ✅ NOUVELLE BARRE POUR LE QUIZ (MISE À JOUR) -->
                         <!-- ============================================= -->
                         <div class="py-3 flex items-center justify-center">
-                            <a href="/quiz.html" class="quiz-btn-bar w-full sm:w-auto">
-                                <span class="new-badge">NEW</span>
+                            <a @click.prevent="handleQuizClick()" href="/quiz.html"
+                                class="quiz-btn-bar w-full sm:w-auto">
+                                <span x-show="showNewQuizBadge" class="new-badge">NEW</span>
                                 <span>🎯</span>
                                 <span>Défi de la Semaine</span>
                             </a>
@@ -2052,6 +2053,7 @@
                     loadingAnalyses: false,
                     showRewardModal: false,
                     rewardData: { icon: '', title: '', description: '' },
+                    showNewQuizBadge: true,
 
 
                     // --- STATS & GAMIFICATION ---
@@ -2106,6 +2108,11 @@
 
                                         this.loadingNews = true;
                                         this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+
+                                        const week = this.getWeekNumber(new Date());
+                                        if (localStorage.getItem(`infodrop_quiz_seen_week_${week}`)) {
+                                            this.showNewQuizBadge = false;
+                                        }
 
                                         try {
                                             // ÉTAPE 1 : On charge TOUTES les données de l'utilisateur d'abord.
@@ -2847,6 +2854,21 @@
                     async logout() {
                         if (this.realtimeChannel) await this.realtimeChannel.untrack();
                         await supabase.auth.signOut();
+                    },
+
+                    getWeekNumber(d) {
+                        d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+                        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+                        const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+                        const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+                        return weekNo;
+                    },
+
+                    handleQuizClick() {
+                        const week = this.getWeekNumber(new Date());
+                        localStorage.setItem(`infodrop_quiz_seen_week_${week}`, 'true');
+                        this.showNewQuizBadge = false;
+                        window.location.href = '/quiz.html';
                     },
 
                     async loadAndShow360Modal() {
