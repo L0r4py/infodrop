@@ -29,6 +29,7 @@ const RSS_FEEDS = [
     { name: "L'Obs", url: 'https://www.nouvelobs.com/rss.xml', orientation: 'centre-gauche', tags: ['national'] },
     { name: "France Info", url: 'https://www.francetvinfo.fr/titres.rss', orientation: 'centre', tags: ['national'] },
     { name: 'Euronews', url: 'https://fr.euronews.com/rss', orientation: 'centre', tags: ['international'] },
+    { name: 'L’Express', url: 'https://www.lexpress.fr/rss/alaune.xml', orientation: 'centre-droit', tags: ['politique'] },
 
     // === RÉGIONALES ===
     { name: "La Depeche", url: 'https://www.ladepeche.fr/rss.xml', orientation: 'centre-gauche', tags: ['regional'] },
@@ -58,6 +59,8 @@ const RSS_FEEDS = [
     { name: 'Zataz', url: 'https://www.zataz.com/feed/', orientation: 'neutre', tags: ['tech'] },
     { name: 'Reflets', url: 'https://reflets.info/feeds/public', orientation: 'gauche', tags: ['hacktivisme'] },
     { name: 'Journal du Geek', url: 'https://www.journaldugeek.com/feed/', orientation: 'neutre', tags: ['tech'] },
+    { name: 'Presse-citron', url: 'https://www.presse-citron.net/feed/', orientation: 'neutre', tags: ['tech'] },
+
 
 
     // === ECO & CRYPTO ===
@@ -123,7 +126,6 @@ const RSS_FEEDS = [
     { name: 'Le Saker Francophone', url: 'https://lesakerfrancophone.fr/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
     { name: 'Geopolintel', url: 'https://geopolintel.fr/spip.php?page=backend', orientation: 'extrême-droite', tags: ['alternatif'] },
     { name: 'Nexus', url: 'https://nexus.fr/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
-    { name: 'Enquête du Jour', url: 'https://enquetedujour.fr/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
     { name: 'Le Média Positif', url: 'https://lemediapositif.com/feed', orientation: 'neutre', tags: ['positif'] },
 
 
