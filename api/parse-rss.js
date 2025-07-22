@@ -127,6 +127,8 @@ const RSS_FEEDS = [
     { name: 'Geopolintel', url: 'https://geopolintel.fr/spip.php?page=backend', orientation: 'extrême-droite', tags: ['alternatif'] },
     { name: 'Nexus', url: 'https://nexus.fr/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
     { name: 'Le Média Positif', url: 'https://lemediapositif.com/feed', orientation: 'neutre', tags: ['positif'] },
+    { name: 'Géopolitique Profonde', url: 'https://geopolitique-profonde.com/feed', orientation: 'droite', tags: ['alternatif'] },
+
 
 
     // --- EUROPÉEN / SCIENCE / COMMUNICATION ---
