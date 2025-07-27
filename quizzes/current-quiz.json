@@ -1,226 +1,226 @@
 {
-    "title": "Quiz #01 - Juillet 2025",
+    "title": "Quiz #02 - Juillet 2025",
     "xpPerQuestion": 1,
     "questions": [
         {
-            "question": "Quel Premier ministre français a annoncé des mesures d'économies pour le budget 2026, incluant la suppression de jours fériés ?",
+            "question": "Quelle ministre a été renvoyée en procès le 22 juillet 2025 pour corruption dans l'affaire Carlos Ghosn ?",
             "options": [
-                "Michel Barnier",
-                "François Bayrou",
-                "Édouard Philippe",
-                "Gabriel Attal"
+                "Agnès Pannier-Runacher",
+                "Rachida Dati",
+                "Sophie Primas",
+                "Prisca Thevenot"
             ],
-            "correctAnswer": "François Bayrou",
-            "explanation": "François Bayrou a dévoilé le 15 juillet 2025 les grandes orientations du budget 2026, visant 44 milliards d'euros d'économies, incluant la suppression de jours fériés comme le 8 mai et le lundi de Pâques, suscitant de vives réactions."
+            "correctAnswer": "Rachida Dati",
+            "explanation": "Rachida Dati, ministre de la Culture, a été renvoyée devant le tribunal correctionnel le 22 juillet 2025 pour 'corruption et trafic d'influence passifs' dans l'affaire Carlos Ghosn. Elle a fait appel et refuse de démissionner."
         },
         {
-            "question": "Quel député LR a tragiquement été retrouvé mort à son domicile en juillet 2025 ?",
+            "question": "Quel montant d'économies François Bayrou a-t-il annoncé dans son plan budgétaire le 15 juillet 2025 ?",
             "options": [
-                "Laurent Wauquiez",
-                "Olivier Marleix",
-                "Éric Ciotti",
-                "Bruno Retailleau"
+                "38,4 milliards d'euros",
+                "41,2 milliards d'euros",
+                "43,8 milliards d'euros",
+                "45,6 milliards d'euros"
             ],
-            "correctAnswer": "Olivier Marleix",
-            "explanation": "Le député LR Olivier Marleix a été retrouvé mort à son domicile à Anet le 7 juillet 2025, la thèse du suicide étant privilégiée par les enquêteurs, provoquant une onde de choc à l'Assemblée nationale."
+            "correctAnswer": "43,8 milliards d'euros",
+            "explanation": "François Bayrou a présenté le 15 juillet 2025 un plan pluriannuel visant 43,8 milliards d'euros d'économies pour ramener le déficit public à 4,6% en 2026, incluant une 'année blanche' pour 2026."
         },
         {
-            "question": "Quelle personnalité politique a vu sa cote de popularité chuter fortement en juillet 2025 selon le baromètre Elabe ?",
+            "question": "Quel célèbre animateur français est décédé le 14 juillet 2025 à l'âge de 76 ans ?",
             "options": [
+                "Michel Drucker",
+                "Patrick Sabatier",
+                "Thierry Ardisson",
+                "Nagui"
+            ],
+            "correctAnswer": "Thierry Ardisson",
+            "explanation": "Thierry Ardisson, surnommé 'l'homme en noir', est décédé le 14 juillet 2025 à Paris des suites d'un cancer du foie. Il était connu pour ses émissions comme 'Tout le monde en parle' et 'Salut les Terriens'."
+        },
+        {
+            "question": "Quels deux jours fériés François Bayrou propose-t-il de supprimer pour augmenter la production ?",
+            "options": [
+                "Le 1er mai et l'Ascension",
+                "Le lundi de Pâques et le 8 mai",
+                "Le 15 août et la Toussaint",
+                "Le lundi de Pentecôte et le 11 novembre"
+            ],
+            "correctAnswer": "Le lundi de Pâques et le 8 mai",
+            "explanation": "Dans son plan budgétaire du 15 juillet 2025, François Bayrou a proposé de supprimer deux jours fériés - le lundi de Pâques et le 8 mai - pour augmenter l'activité et la production du pays."
+        },
+        {
+            "question": "Quel acteur français fête ses 57 ans le 26 juillet 2025 ?",
+            "options": [
+                "Jean Reno",
+                "Frédéric Diefenthal",
+                "Vincent Cassel",
+                "Gad Elmaleh"
+            ],
+            "correctAnswer": "Frédéric Diefenthal",
+            "explanation": "Frédéric Diefenthal, connu notamment pour son rôle dans la saga 'Taxi' et la série 'Ici tout commence', a fêté ses 57 ans le 26 juillet 2025."
+        },
+        {
+            "question": "Selon le baromètre Elabe de juillet 2025, quel homme politique de gauche a enregistré la plus forte chute ?",
+            "options": [
+                "Jean-Luc Mélenchon",
                 "Raphaël Glucksmann",
                 "Olivier Faure",
-                "Marine Le Pen",
-                "Édouard Philippe"
-            ],
-            "correctAnswer": "Olivier Faure",
-            "explanation": "Olivier Faure, premier secrétaire du Parti socialiste, a enregistré un recul de 23 points (24%) dans le baromètre Elabe de juillet 2025, chutant à la 10ème place après une forte progression le mois précédent."
-        },
-        {
-            "question": "Quel événement a marqué la visite d'Emmanuel Macron au Royaume-Uni en juillet 2025 ?",
-            "options": [
-                "Signature d'un accord commercial",
-                "Discours sur le Brexit au Parlement",
-                "Rencontre avec le roi Charles III",
-                "Annonce d'un partenariat militaire"
-            ],
-            "correctAnswer": "Discours sur le Brexit au Parlement",
-            "explanation": "Lors de sa visite d'État au Royaume-Uni le 8 juillet 2025, Emmanuel Macron s'est exprimé sur le Brexit lors d'un discours au palais de Westminster, abordant également les liens économiques et diplomatiques."
-        },
-        {
-            "question": "Quelle mesure controversée de la loi Duplomb a suscité une pétition citoyenne de 700 000 signatures en juillet 2025 ?",
-            "options": [
-                "Réintroduction de pesticides néonicotinoïdes",
-                "Suppression de subventions agricoles",
-                "Augmentation des taxes sur les carburants",
-                "Réforme du code du travail"
-            ],
-            "correctAnswer": "Réintroduction de pesticides néonicotinoïdes",
-            "explanation": "La loi Duplomb, votée le 8 juillet 2025, a permis la réintroduction de pesticides néonicotinoïdes, provoquant une pétition citoyenne atteignant 700 000 signatures pour demander son abrogation."
-        },
-        {
-            "question": "Quel événement culturel majeur a eu lieu à Bordeaux du 19 au 22 juin 2025 ?",
-            "options": [
-                "Festival du film",
-                "Fête du vin",
-                "Exposition d'art contemporain",
-                "Marathon international"
-            ],
-            "correctAnswer": "Fête du vin",
-            "explanation": "La Fête du Vin de Bordeaux, un événement annuel de quatre jours, s'est tenue du 19 au 22 juin 2025, attirant des visiteurs pour des dégustations le long des quais de la Garonne."
-        },
-        {
-            "question": "Quelle personnalité politique a appelé à des manifestations contre le budget 2025 en juillet ?",
-            "options": [
-                "Marine Le Pen",
-                "Jean-Luc Mélenchon",
-                "Éric Ciotti",
                 "François Ruffin"
             ],
-            "correctAnswer": "Marine Le Pen",
-            "explanation": "Marine Le Pen a menacé de faire tomber le gouvernement Bayrou en juillet 2025 si les coupes budgétaires, notamment la suppression de jours fériés, n'étaient pas abandonnées."
+            "correctAnswer": "Olivier Faure",
+            "explanation": "Olivier Faure, premier secrétaire du Parti socialiste, a enregistré un très fort recul de 23 points dans le baromètre Elabe de juillet 2025, chutant à la 10ème place après une forte progression le mois précédent."
         },
         {
-            "question": "Quel syndicat a appelé à une grève le 1er octobre 2024 pour protester contre le budget du gouvernement ?",
+            "question": "Quelle actrice française a fêté ses 49 ans le 26 juillet 2025 ?",
             "options": [
-                "CFDT",
-                "CGT",
-                "FO",
-                "CFE-CGC"
+                "Marion Cotillard",
+                "Audrey Tautou",
+                "Alice Taglioni",
+                "Mélanie Laurent"
             ],
-            "correctAnswer": "CGT",
-            "explanation": "La CGT, plus grand syndicat français, a dénoncé un 'coup de force' de Macron et a appelé à une grève le 1er octobre 2024 contre le budget annoncé par le gouvernement intérimaire."
+            "correctAnswer": "Alice Taglioni",
+            "explanation": "Alice Taglioni a célébré ses 49 ans le 26 juillet 2025. L'actrice est connue pour de nombreux films français et sa carrière au cinéma."
         },
         {
-            "question": "Quel événement sportif a attiré l'attention à Le Mans les 14 et 15 juin 2025 ?",
+            "question": "Quel ministre a critiqué ouvertement le macronisme cette semaine selon les médias ?",
             "options": [
-                "Grand Prix de France",
-                "24 Heures du Mans",
-                "Tour de France",
-                "Marathon de la Liberté"
-            ],
-            "correctAnswer": "24 Heures du Mans",
-            "explanation": "Les 24 Heures du Mans, course automobile d'endurance, se sont tenues les 14 et 15 juin 2025, attirant des milliers de spectateurs près de la ville médiévale du Mans."
-        },
-        {
-            "question": "Quelle personnalité française a refusé la Légion d'honneur en janvier 2025 ?",
-            "options": [
-                "Marjane Satrapi",
-                "Thomas Piketty",
-                "Léa Salamé",
-                "Yannick Noah"
-            ],
-            "correctAnswer": "Marjane Satrapi",
-            "explanation": "La réalisatrice et autrice de bande dessinée Marjane Satrapi a refusé la Légion d'honneur le 13 janvier 2025, marquant un geste symbolique contre les honneurs officiels."
-        },
-        {
-            "question": "Quel parti politique a remporté le plus de sièges aux élections européennes de 2024 ?",
-            "options": [
-                "Renaissance",
-                "Rassemblement National",
-                "La France Insoumise",
-                "Les Républicains"
-            ],
-            "correctAnswer": "Rassemblement National",
-            "explanation": "Le Rassemblement National, dirigé par Jordan Bardella, a remporté 30 sièges sur 80 lors des élections européennes de 2024, devançant largement les autres partis."
-        },
-        {
-            "question": "Quel ancien président français a qualifié la crise politique de 2024 d''erreur institutionnelle' ?",
-            "options": [
-                "Nicolas Sarkozy",
-                "François Hollande",
-                "Jacques Chirac",
-                "Valéry Giscard d'Estaing"
-            ],
-            "correctAnswer": "François Hollande",
-            "explanation": "François Hollande, membre du NFP, a qualifié la crise politique de 2024 d''erreur institutionnelle' le 28 août 2024, critiquant la gestion de Macron."
-        },
-        {
-            "question": "Quelle mesure a été instaurée le 1er juin 2025 concernant les chômeurs en France ?",
-            "options": [
-                "Augmentation des allocations chômage",
-                "Nouveau système de sanctions",
-                "Suppression des aides au logement",
-                "Réduction des cotisations sociales"
-            ],
-            "correctAnswer": "Nouveau système de sanctions",
-            "explanation": "À partir du 1er juin 2025, un nouveau système de sanctions a été mis en place pour les chômeurs manquant leurs rendez-vous à France Travail, dans le cadre d'une réforme du système d'allocations."
-        },
-        {
-            "question": "Quel ministre français a appelé à renforcer l'indépendance militaire de l'Europe en mars 2025 ?",
-            "options": [
-                "Bruno Le Maire",
-                "Benjamin Haddad",
                 "Gérald Darmanin",
-                "Amélie Oudéa-Castéra"
+                "Bruno Retailleau",
+                "Benjamin Haddad",
+                "Jean-Noël Barrot"
             ],
-            "correctAnswer": "Benjamin Haddad",
-            "explanation": "Benjamin Haddad, ministre des Affaires européennes, a déclaré en mars 2025 que l'Europe devait renforcer son indépendance militaire face au retrait de l'aide américaine à l'Ukraine."
+            "correctAnswer": "Bruno Retailleau",
+            "explanation": "Bruno Retailleau, ministre de l'Intérieur, a critiqué le macronisme en estimant qu'il 's'achèvera avec Emmanuel Macron', provoquant des réactions du parti Renaissance qui déplore des 'petits calculs politiques'."
         },
         {
-            "question": "Quel lieu emblématique a célébré les 150 ans de la IIIe République en avril 2025 ?",
+            "question": "Quel événement a marqué le 26 juillet 2025 en termes d'anniversaire sportif ?",
             "options": [
-                "Panthéon",
-                "Château de Versailles",
-                "Arc de Triomphe",
-                "Hôtel des Invalides"
+                "Anniversaire de l'Euro 2024",
+                "Anniversaire des JO de Paris 2024",
+                "Anniversaire de la Coupe du Monde 2022",
+                "Anniversaire de Roland-Garros 2024"
             ],
-            "correctAnswer": "Château de Versailles",
-            "explanation": "Le château de Versailles a célébré les 150 ans de la IIIe République en avril 2025, mettant en avant son rôle symbolique dans l'histoire démocratique française."
+            "correctAnswer": "Anniversaire des JO de Paris 2024",
+            "explanation": "Le 26 juillet 2025 a marqué le tout premier anniversaire de la mythique cérémonie d'ouverture des Jeux Olympiques de Paris 2024, l'occasion pour Tony Estanguet de revenir sur cet événement."
         },
         {
-            "question": "Quel député a refusé de serrer la main d'un représentant d'extrême droite à l'Assemblée en 2024 ?",
+            "question": "Qui a soutenu publiquement Rachida Dati après son renvoi en procès ?",
             "options": [
-                "François Piquemal",
-                "Aurélien Pradié",
-                "Raphaël Glucksmann",
-                "Olivier Faure"
+                "Emmanuel Macron directement",
+                "Gérald Darmanin",
+                "François Bayrou",
+                "Gabriel Attal"
             ],
-            "correctAnswer": "François Piquemal",
-            "explanation": "François Piquemal a fait un geste symbolique en jouant à 'pierre-papier-ciseaux' pour éviter de serrer la main d'un représentant RN lors d'une procédure à l'Assemblée en 2024."
+            "correctAnswer": "Gérald Darmanin",
+            "explanation": "Gérald Darmanin, ministre de la Justice, a soutenu Rachida Dati sur TF1 en déclarant : 'Nous soutenons Rachida Dati pour être une grande ministre de la Culture, une maire de Paris, et laissons la justice faire son travail.'"
         },
         {
-            "question": "Quel événement naturel a causé des inondations à Paris le 26 juin 2025 ?",
+            "question": "Quel pourcentage de confiance Emmanuel Macron obtient-il selon le baromètre Elabe de juillet 2025 ?",
             "options": [
-                "Tempête",
-                "Canicule",
-                "Séisme",
-                "Éruption volcanique"
+                "18%",
+                "22%",
+                "26%",
+                "30%"
             ],
-            "correctAnswer": "Tempête",
-            "explanation": "Une tempête le 26 juin 2025 a causé des inondations à Paris, faisant deux morts, dont un enfant, et 17 blessés à l'échelle nationale."
+            "correctAnswer": "22%",
+            "explanation": "Selon le baromètre Elabe de juillet 2025, Emmanuel Macron obtient 22% de confiance (-2 points en un mois), poursuivant sa baisse et effaçant la progression observée après son allocution sur la guerre en Ukraine."
         },
         {
-            "question": "Quel média a vu ses abonnements augmenter grâce à la crise politique en 2024-2025 ?",
+            "question": "Quel animateur célèbre fait ses adieux à l'émission 'Fort Boyard' après plus de 20 ans ?",
             "options": [
-                "Le Figaro",
-                "Le Monde",
-                "Médiapart",
-                "Libération"
+                "Denis Brogniart",
+                "Olivier Minne",
+                "Christophe Beaugrand",
+                "Cyril Féraud"
             ],
-            "correctAnswer": "Le Monde",
-            "explanation": "Le Monde a vu ses abonnements numériques augmenter, atteignant 580 000 abonnés, en partie grâce à l'intérêt suscité par la crise politique de 2024-2025."
+            "correctAnswer": "Olivier Minne",
+            "explanation": "Olivier Minne a officialisé son départ de 'Fort Boyard' après plus de deux décennies aux commandes de l'émission culte de France 2, marquant la fin d'une ère pour le programme."
         },
         {
-            "question": "Quel eurodéputé a demandé le retour de la Statue de la Liberté à la France en mars 2025 ?",
+            "question": "Quelle était la profession de Thierry Ardisson avant la télévision ?",
             "options": [
-                "Jordan Bardella",
-                "Raphaël Glucksmann",
-                "Manon Aubry",
-                "François-Xavier Bellamy"
+                "Journaliste",
+                "Publicitaire",
+                "Avocat",
+                "Professeur"
             ],
-            "correctAnswer": "Raphaël Glucksmann",
-            "explanation": "Raphaël Glucksmann a créé la polémique en mars 2025 en demandant le retour de la Statue de la Liberté à la France, suscitant une réponse virulente de la Maison Blanche."
+            "correctAnswer": "Publicitaire",
+            "explanation": "Thierry Ardisson a commencé sa carrière dans la publicité, créant son agence 'Business' et inventant des slogans cultes comme 'Lapeyre, y'en a pas deux' ou 'Quand c'est trop, c'est Tropico' avant de se tourner vers la télévision."
         },
         {
-            "question": "Quel parti a tenté un compromis avec le gouvernement Bayrou sur le budget 2025 ?",
+            "question": "Quel déficit François Bayrou vise-t-il pour 2026 dans son plan budgétaire ?",
             "options": [
-                "La France Insoumise",
-                "Parti socialiste",
-                "Rassemblement National",
-                "Les Républicains"
+                "3,8% du PIB",
+                "4,2% du PIB",
+                "4,6% du PIB",
+                "5,1% du PIB"
             ],
-            "correctAnswer": "Parti socialiste",
-            "explanation": "Le Parti socialiste, via Olivier Faure, a proposé un compromis au gouvernement Bayrou en janvier 2025 pour éviter une motion de censure sur le budget."
+            "correctAnswer": "4,6% du PIB",
+            "explanation": "Le plan budgétaire de François Bayrou vise à ramener le déficit public à 4,6% du PIB en 2026, puis à 4,1% en 2027, 3,4% en 2028 pour atteindre 2,8% en 2029."
+        },
+        {
+            "question": "Combien d'honoraires Rachida Dati aurait-elle perçus dans l'affaire Carlos Ghosn ?",
+            "options": [
+                "700 000 euros",
+                "800 000 euros",
+                "900 000 euros",
+                "1 million d'euros"
+            ],
+            "correctAnswer": "900 000 euros",
+            "explanation": "Rachida Dati est soupçonnée d'avoir perçu 900 000 euros d'honoraires entre 2010 et 2012 pour des prestations de conseil présumées fictives auprès de Renault-Nissan, alors qu'elle était eurodéputée."
+        },
+        {
+            "question": "Quel jour de la semaine Thierry Ardisson est-il décédé ?",
+            "options": [
+                "Dimanche",
+                "Lundi",
+                "Mardi",
+                "Mercredi"
+            ],
+            "correctAnswer": "Lundi",
+            "explanation": "Thierry Ardisson est décédé le lundi 14 juillet 2025 à l'hôpital de la Pitié-Salpêtrière à Paris, entouré de sa famille selon le communiqué d'Audrey Crespo-Mara, sa veuve."
+        },
+        {
+            "question": "Quelle mesure controversée François Bayrou a-t-il annoncée pour 2026 ?",
+            "options": [
+                "Hausse de la TVA",
+                "Gel des salaires publics",
+                "Année blanche",
+                "Suppression d'allocations"
+            ],
+            "correctAnswer": "Année blanche",
+            "explanation": "François Bayrou a annoncé une 'année blanche' pour 2026, où les prestations et les barèmes ne seront pas augmentés, tout comme le montant des retraites, dans le cadre de son plan d'économies."
+        },
+        {
+            "question": "Quelle émission emblématique Thierry Ardisson a-t-il créée en 1998 ?",
+            "options": [
+                "Salut les Terriens",
+                "Tout le monde en parle",
+                "Lunettes noires pour nuits blanches",
+                "Paris Dernière"
+            ],
+            "correctAnswer": "Tout le monde en parle",
+            "explanation": "Thierry Ardisson a lancé 'Tout le monde en parle' en 1998 sur France 2, talk-show qui mélangeait actualité culturelle et confessions de célébrités avec son complice Laurent Baffie, popularisant l'expression 'Magnéto Serge'."
+        },
+        {
+            "question": "Quel conseil extraordinaire s'est tenu le 23 juillet 2025 selon l'agenda présidentiel ?",
+            "options": [
+                "Conseil de défense économique",
+                "Conseil des ministres",
+                "Conseil de sécurité nationale",
+                "Conseil européen"
+            ],
+            "correctAnswer": "Conseil des ministres",
+            "explanation": "Le compte-rendu du Conseil des ministres du 23 juillet 2025 a été publié, traitant notamment du bilan de la session parlementaire 2024-2025 et de diverses nominations au sein de l'administration."
+        },
+        {
+            "question": "À quel âge exact Thierry Ardisson est-il décédé ?",
+            "options": [
+                "74 ans",
+                "75 ans",
+                "76 ans",
+                "77 ans"
+            ],
+            "correctAnswer": "76 ans",
+            "explanation": "Thierry Ardisson, né le 6 janvier 1949 à Bourganeuf (Creuse), est décédé le 14 juillet 2025 à l'âge de 76 ans des suites d'un cancer du foie, laissant derrière lui un patrimoine télévisuel de 35 émissions."
         }
     ]
 }
