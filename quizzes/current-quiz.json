@@ -1,226 +1,226 @@
 {
-    "title": "Quiz #02 - Juillet 2025",
+    "title": "Quiz #03 - Première semaine d'août 2025",
     "xpPerQuestion": 1,
     "questions": [
         {
-            "question": "Quelle ministre a été renvoyée en procès le 22 juillet 2025 pour corruption dans l'affaire Carlos Ghosn ?",
+            "question": "Quel montant de fraude sociale Catherine Vautrin souhaite-t-elle récupérer selon ses annonces du 2 août 2025 ?",
             "options": [
-                "Agnès Pannier-Runacher",
-                "Rachida Dati",
-                "Sophie Primas",
-                "Prisca Thevenot"
+                "10 milliards d'euros",
+                "13 milliards d'euros",
+                "15 milliards d'euros",
+                "18 milliards d'euros"
             ],
-            "correctAnswer": "Rachida Dati",
-            "explanation": "Rachida Dati, ministre de la Culture, a été renvoyée devant le tribunal correctionnel le 22 juillet 2025 pour 'corruption et trafic d'influence passifs' dans l'affaire Carlos Ghosn. Elle a fait appel et refuse de démissionner."
+            "correctAnswer": "13 milliards d'euros",
+            "explanation": "Catherine Vautrin, ministre du Travail et de la Santé, a annoncé le 2 août 2025 un projet de loi pour lutter contre la fraude sociale estimée à 13 milliards d'euros par an, qu'elle qualifie de 'trahison'."
         },
         {
-            "question": "Quel montant d'économies François Bayrou a-t-il annoncé dans son plan budgétaire le 15 juillet 2025 ?",
+            "question": "Quel acteur emblématique de 'Caméra Café' est décédé le 2 août 2025 ?",
             "options": [
-                "38,4 milliards d'euros",
-                "41,2 milliards d'euros",
-                "43,8 milliards d'euros",
-                "45,6 milliards d'euros"
+                "Bruno Solo",
+                "Yvan Le Bolloc'h",
+                "Gérard Chaillou",
+                "Alain Chabat"
             ],
-            "correctAnswer": "43,8 milliards d'euros",
-            "explanation": "François Bayrou a présenté le 15 juillet 2025 un plan pluriannuel visant 43,8 milliards d'euros d'économies pour ramener le déficit public à 4,6% en 2026, incluant une 'année blanche' pour 2026."
+            "correctAnswer": "Gérard Chaillou",
+            "explanation": "Gérard Chaillou, qui incarnait Jean-Guy Lecointre, le DRH de 'Caméra Café', est décédé le 2 août 2025 à l'âge de 79 ans des suites d'une longue maladie."
         },
         {
-            "question": "Quel célèbre animateur français est décédé le 14 juillet 2025 à l'âge de 76 ans ?",
+            "question": "Quel pourcentage la TVA sur le gaz et l'électricité a-t-elle atteint au 1er août 2025 ?",
             "options": [
-                "Michel Drucker",
-                "Patrick Sabatier",
-                "Thierry Ardisson",
-                "Nagui"
-            ],
-            "correctAnswer": "Thierry Ardisson",
-            "explanation": "Thierry Ardisson, surnommé 'l'homme en noir', est décédé le 14 juillet 2025 à Paris des suites d'un cancer du foie. Il était connu pour ses émissions comme 'Tout le monde en parle' et 'Salut les Terriens'."
-        },
-        {
-            "question": "Quels deux jours fériés François Bayrou propose-t-il de supprimer pour augmenter la production ?",
-            "options": [
-                "Le 1er mai et l'Ascension",
-                "Le lundi de Pâques et le 8 mai",
-                "Le 15 août et la Toussaint",
-                "Le lundi de Pentecôte et le 11 novembre"
-            ],
-            "correctAnswer": "Le lundi de Pâques et le 8 mai",
-            "explanation": "Dans son plan budgétaire du 15 juillet 2025, François Bayrou a proposé de supprimer deux jours fériés - le lundi de Pâques et le 8 mai - pour augmenter l'activité et la production du pays."
-        },
-        {
-            "question": "Quel acteur français fête ses 57 ans le 26 juillet 2025 ?",
-            "options": [
-                "Jean Reno",
-                "Frédéric Diefenthal",
-                "Vincent Cassel",
-                "Gad Elmaleh"
-            ],
-            "correctAnswer": "Frédéric Diefenthal",
-            "explanation": "Frédéric Diefenthal, connu notamment pour son rôle dans la saga 'Taxi' et la série 'Ici tout commence', a fêté ses 57 ans le 26 juillet 2025."
-        },
-        {
-            "question": "Selon le baromètre Elabe de juillet 2025, quel homme politique de gauche a enregistré la plus forte chute ?",
-            "options": [
-                "Jean-Luc Mélenchon",
-                "Raphaël Glucksmann",
-                "Olivier Faure",
-                "François Ruffin"
-            ],
-            "correctAnswer": "Olivier Faure",
-            "explanation": "Olivier Faure, premier secrétaire du Parti socialiste, a enregistré un très fort recul de 23 points dans le baromètre Elabe de juillet 2025, chutant à la 10ème place après une forte progression le mois précédent."
-        },
-        {
-            "question": "Quelle actrice française a fêté ses 49 ans le 26 juillet 2025 ?",
-            "options": [
-                "Marion Cotillard",
-                "Audrey Tautou",
-                "Alice Taglioni",
-                "Mélanie Laurent"
-            ],
-            "correctAnswer": "Alice Taglioni",
-            "explanation": "Alice Taglioni a célébré ses 49 ans le 26 juillet 2025. L'actrice est connue pour de nombreux films français et sa carrière au cinéma."
-        },
-        {
-            "question": "Quel ministre a critiqué ouvertement le macronisme cette semaine selon les médias ?",
-            "options": [
-                "Gérald Darmanin",
-                "Bruno Retailleau",
-                "Benjamin Haddad",
-                "Jean-Noël Barrot"
-            ],
-            "correctAnswer": "Bruno Retailleau",
-            "explanation": "Bruno Retailleau, ministre de l'Intérieur, a critiqué le macronisme en estimant qu'il 's'achèvera avec Emmanuel Macron', provoquant des réactions du parti Renaissance qui déplore des 'petits calculs politiques'."
-        },
-        {
-            "question": "Quel événement a marqué le 26 juillet 2025 en termes d'anniversaire sportif ?",
-            "options": [
-                "Anniversaire de l'Euro 2024",
-                "Anniversaire des JO de Paris 2024",
-                "Anniversaire de la Coupe du Monde 2022",
-                "Anniversaire de Roland-Garros 2024"
-            ],
-            "correctAnswer": "Anniversaire des JO de Paris 2024",
-            "explanation": "Le 26 juillet 2025 a marqué le tout premier anniversaire de la mythique cérémonie d'ouverture des Jeux Olympiques de Paris 2024, l'occasion pour Tony Estanguet de revenir sur cet événement."
-        },
-        {
-            "question": "Qui a soutenu publiquement Rachida Dati après son renvoi en procès ?",
-            "options": [
-                "Emmanuel Macron directement",
-                "Gérald Darmanin",
-                "François Bayrou",
-                "Gabriel Attal"
-            ],
-            "correctAnswer": "Gérald Darmanin",
-            "explanation": "Gérald Darmanin, ministre de la Justice, a soutenu Rachida Dati sur TF1 en déclarant : 'Nous soutenons Rachida Dati pour être une grande ministre de la Culture, une maire de Paris, et laissons la justice faire son travail.'"
-        },
-        {
-            "question": "Quel pourcentage de confiance Emmanuel Macron obtient-il selon le baromètre Elabe de juillet 2025 ?",
-            "options": [
+                "15%",
                 "18%",
-                "22%",
-                "26%",
-                "30%"
+                "20%",
+                "22%"
             ],
-            "correctAnswer": "22%",
-            "explanation": "Selon le baromètre Elabe de juillet 2025, Emmanuel Macron obtient 22% de confiance (-2 points en un mois), poursuivant sa baisse et effaçant la progression observée après son allocution sur la guerre en Ukraine."
+            "correctAnswer": "20%",
+            "explanation": "Dès le 1er août 2025, la TVA sur les abonnements de gaz et d'électricité est passée de 5,5% à 20%, entraînant une hausse significative des prix de l'énergie."
         },
         {
-            "question": "Quel animateur célèbre fait ses adieux à l'émission 'Fort Boyard' après plus de 20 ans ?",
+            "question": "Quelle célébrité française a fêté ses 69 ans le 2 août 2025 ?",
+            "options": [
+                "Josiane Balasko",
+                "Michèle Bernier",
+                "Muriel Robin",
+                "Valérie Lemercier"
+            ],
+            "correctAnswer": "Michèle Bernier",
+            "explanation": "Michèle Bernier, humoriste et actrice française, a célébré ses 69 ans le 2 août 2025. Elle est connue pour ses sketches et ses rôles au cinéma et à la télévision."
+        },
+        {
+            "question": "Quel âge Charlotte Casiraghi a-t-elle fêté le 3 août 2025 ?",
+            "options": [
+                "37 ans",
+                "38 ans",
+                "39 ans",
+                "40 ans"
+            ],
+            "correctAnswer": "39 ans",
+            "explanation": "Charlotte Casiraghi, fille de Caroline de Monaco, a fêté ses 39 ans le 3 août 2025. Née le 3 août 1986 à Monaco, elle est une figure de la famille princière monégasque."
+        },
+        {
+            "question": "Quelle mesure controversée Catherine Vautrin propose-t-elle contre les trafiquants de drogue ?",
+            "options": [
+                "CSG à 35%",
+                "CSG à 40%",
+                "CSG à 45%",
+                "CSG à 50%"
+            ],
+            "correctAnswer": "CSG à 45%",
+            "explanation": "Catherine Vautrin a proposé de porter la CSG sur les revenus illicites (comme le trafic de drogue) de 9% à 45%, permettant de récupérer 45 000 euros au lieu de 9 200 euros sur 100 000 euros de revenus illégaux."
+        },
+        {
+            "question": "Quel journaliste sportif de France Télévisions a fêté ses 58 ans le 4 août 2025 ?",
             "options": [
                 "Denis Brogniart",
-                "Olivier Minne",
-                "Christophe Beaugrand",
-                "Cyril Féraud"
+                "Laurent Luyat",
+                "Stéphane Bern",
+                "Harry Roselmack"
             ],
-            "correctAnswer": "Olivier Minne",
-            "explanation": "Olivier Minne a officialisé son départ de 'Fort Boyard' après plus de deux décennies aux commandes de l'émission culte de France 2, marquant la fin d'une ère pour le programme."
+            "correctAnswer": "Laurent Luyat",
+            "explanation": "Laurent Luyat, célèbre journaliste sportif de France Télévisions, a soufflé ses 58 bougies le 4 août 2025. Il est une figure emblématique du journalisme sportif français."
         },
         {
-            "question": "Quelle était la profession de Thierry Ardisson avant la télévision ?",
+            "question": "Quel personnage Gérard Chaillou incarnait-il dans 'Caméra Café' ?",
             "options": [
-                "Journaliste",
-                "Publicitaire",
-                "Avocat",
-                "Professeur"
+                "Jean-Claude Convenant",
+                "Hervé Dumont",
+                "Jean-Guy Lecointre",
+                "Philippe Katz"
             ],
-            "correctAnswer": "Publicitaire",
-            "explanation": "Thierry Ardisson a commencé sa carrière dans la publicité, créant son agence 'Business' et inventant des slogans cultes comme 'Lapeyre, y'en a pas deux' ou 'Quand c'est trop, c'est Tropico' avant de se tourner vers la télévision."
+            "correctAnswer": "Jean-Guy Lecointre",
+            "explanation": "Gérard Chaillou incarnait Jean-Guy Lecointre, le directeur des ressources humaines (DRH) dans la série 'Caméra Café', personnage fervent catholique et coureur de jupons resté dans les mémoires."
         },
         {
-            "question": "Quel déficit François Bayrou vise-t-il pour 2026 dans son plan budgétaire ?",
+            "question": "Qui est le père de Laeticia Hallyday ayant fêté ses 74 ans le 4 août 2025 ?",
             "options": [
-                "3,8% du PIB",
-                "4,2% du PIB",
-                "4,6% du PIB",
-                "5,1% du PIB"
+                "André Boudou",
+                "André Dubois",
+                "André Martin",
+                "André Rousseau"
             ],
-            "correctAnswer": "4,6% du PIB",
-            "explanation": "Le plan budgétaire de François Bayrou vise à ramener le déficit public à 4,6% du PIB en 2026, puis à 4,1% en 2027, 3,4% en 2028 pour atteindre 2,8% en 2029."
+            "correctAnswer": "André Boudou",
+            "explanation": "André Boudou, le père de Laeticia Hallyday, a célébré ses 74 ans le 4 août 2025, retrouvant son fils Grégory et sa petite dernière Alcéa pour l'occasion."
         },
         {
-            "question": "Combien d'honoraires Rachida Dati aurait-elle perçus dans l'affaire Carlos Ghosn ?",
+            "question": "Quel film avec Line Renaud a été diffusé le 3 août 2025 sur TF1 ?",
             "options": [
-                "700 000 euros",
-                "800 000 euros",
-                "900 000 euros",
-                "1 million d'euros"
+                "Une belle histoire",
+                "Une belle course",
+                "Une belle rencontre",
+                "Une belle aventure"
             ],
-            "correctAnswer": "900 000 euros",
-            "explanation": "Rachida Dati est soupçonnée d'avoir perçu 900 000 euros d'honoraires entre 2010 et 2012 pour des prestations de conseil présumées fictives auprès de Renault-Nissan, alors qu'elle était eurodéputée."
+            "correctAnswer": "Une belle course",
+            "explanation": "Le film 'Une belle course', dans lequel Line Renaud incarne l'un des rôles principaux, a été diffusé en première sur TF1 le dimanche 3 août 2025."
         },
         {
-            "question": "Quel jour de la semaine Thierry Ardisson est-il décédé ?",
+            "question": "Comment Catherine Vautrin qualifie-t-elle la fraude sociale ?",
             "options": [
-                "Dimanche",
-                "Lundi",
-                "Mardi",
-                "Mercredi"
+                "Un fléau",
+                "Une trahison",
+                "Un scandale",
+                "Une catastrophe"
             ],
-            "correctAnswer": "Lundi",
-            "explanation": "Thierry Ardisson est décédé le lundi 14 juillet 2025 à l'hôpital de la Pitié-Salpêtrière à Paris, entouré de sa famille selon le communiqué d'Audrey Crespo-Mara, sa veuve."
+            "correctAnswer": "Une trahison",
+            "explanation": "Catherine Vautrin a déclaré que 'la fraude sociale est une trahison de celles et ceux qui cotisent pour financer notre modèle social', justifiant son projet de loi musclé."
         },
         {
-            "question": "Quelle mesure controversée François Bayrou a-t-il annoncée pour 2026 ?",
+            "question": "Quel acteur français a fêté ses 55 ans le 3 août 2025 ?",
             "options": [
-                "Hausse de la TVA",
-                "Gel des salaires publics",
-                "Année blanche",
-                "Suppression d'allocations"
+                "Vincent Cassel",
+                "Thierry Neuvic",
+                "Mathieu Kassovitz",
+                "Jean Dujardin"
             ],
-            "correctAnswer": "Année blanche",
-            "explanation": "François Bayrou a annoncé une 'année blanche' pour 2026, où les prestations et les barèmes ne seront pas augmentés, tout comme le montant des retraites, dans le cadre de son plan d'économies."
+            "correctAnswer": "Thierry Neuvic",
+            "explanation": "Thierry Neuvic, né le 3 août 1970 à Montreuil, a fêté son 55ème anniversaire le 3 août 2025. Il est notamment père de Joseph, né en 2014."
         },
         {
-            "question": "Quelle émission emblématique Thierry Ardisson a-t-il créée en 1998 ?",
+            "question": "Quelle étudiante a quitté la France début août 2025 après une polémique ?",
             "options": [
-                "Salut les Terriens",
-                "Tout le monde en parle",
-                "Lunettes noires pour nuits blanches",
-                "Paris Dernière"
+                "Une étudiante iranienne",
+                "Une étudiante palestinienne",
+                "Une étudiante libanaise",
+                "Une étudiante syrienne"
             ],
-            "correctAnswer": "Tout le monde en parle",
-            "explanation": "Thierry Ardisson a lancé 'Tout le monde en parle' en 1998 sur France 2, talk-show qui mélangeait actualité culturelle et confessions de célébrités avec son complice Laurent Baffie, popularisant l'expression 'Magnéto Serge'."
+            "correctAnswer": "Une étudiante palestinienne",
+            "explanation": "Une étudiante palestinienne, accusée de propos antisémites à Sciences Po Lille, a quitté la France début août 2025, entraînant la suspension des évacuations depuis Gaza vers la France."
         },
         {
-            "question": "Quel conseil extraordinaire s'est tenu le 23 juillet 2025 selon l'agenda présidentiel ?",
+            "question": "Selon le projet Vautrin, où ne pourront plus être versées les allocations chômage ?",
             "options": [
-                "Conseil de défense économique",
-                "Conseil des ministres",
-                "Conseil de sécurité nationale",
-                "Conseil européen"
+                "Hors de France uniquement",
+                "Hors Union européenne",
+                "Dans tous les pays",
+                "Hors zone euro"
             ],
-            "correctAnswer": "Conseil des ministres",
-            "explanation": "Le compte-rendu du Conseil des ministres du 23 juillet 2025 a été publié, traitant notamment du bilan de la session parlementaire 2024-2025 et de diverses nominations au sein de l'administration."
+            "correctAnswer": "Hors Union européenne",
+            "explanation": "Le projet de loi de Catherine Vautrin prévoit que les allocations chômage ne seraient plus versées que sur des comptes domiciliés en France ou dans l'Union européenne."
         },
         {
-            "question": "À quel âge exact Thierry Ardisson est-il décédé ?",
+            "question": "Quel chanteur s'est récemment marié avec une femme prénommée Paola ?",
             "options": [
-                "74 ans",
-                "75 ans",
-                "76 ans",
-                "77 ans"
+                "Patrick Bruel",
+                "Jean-Luc Lahaye",
+                "Francis Cabrel",
+                "Alain Souchon"
             ],
-            "correctAnswer": "76 ans",
-            "explanation": "Thierry Ardisson, né le 6 janvier 1949 à Bourganeuf (Creuse), est décédé le 14 juillet 2025 à l'âge de 76 ans des suites d'un cancer du foie, laissant derrière lui un patrimoine télévisuel de 35 émissions."
+            "correctAnswer": "Jean-Luc Lahaye",
+            "explanation": "Jean-Luc Lahaye, 72 ans, vient de se marier avec la jeune Paola. Dans une interview au Parisien, il a expliqué l'événement qui l'a convaincu de passer le cap."
+        },
+        {
+            "question": "À quelle date Audrey Crespo-Mara est-elle revenue à l'antenne après la mort de Thierry Ardisson ?",
+            "options": [
+                "22 juillet 2025",
+                "24 juillet 2025",
+                "25 juillet 2025",
+                "27 juillet 2025"
+            ],
+            "correctAnswer": "25 juillet 2025",
+            "explanation": "Audrey Crespo-Mara, veuve de Thierry Ardisson décédé le 14 juillet 2025, a fait le choix de revenir à l'antenne le 25 juillet 2025, soit huit jours après les obsèques."
+        },
+        {
+            "question": "Quel homme politique Michel Barnier a-t-il appelé à 'ne pas se tromper' d'élection ?",
+            "options": [
+                "Emmanuel Macron",
+                "Rachida Dati",
+                "Marine Le Pen",
+                "Éric Ciotti"
+            ],
+            "correctAnswer": "Rachida Dati",
+            "explanation": "Michel Barnier a appelé Rachida Dati à 'ne pas se tromper' d'élection concernant la législative partielle à Paris, dans le contexte de leurs ambitions politiques respectives."
+        },
+        {
+            "question": "Quelles nouvelles photos Mareva Galanter a-t-elle dévoilées le 3 août 2025 ?",
+            "options": [
+                "Photos de vacances",
+                "Photos de son mariage avec Arthur",
+                "Photos de famille",
+                "Photos professionnelles"
+            ],
+            "correctAnswer": "Photos de son mariage avec Arthur",
+            "explanation": "Le 3 août 2025, Mareva Galanter, ancienne Miss France, a dévoilé de nouveaux clichés inédits de son mariage avec l'animateur Arthur, révélant des moments du 'plus beau jour de sa vie'."
+        },
+        {
+            "question": "Combien de films Gérard Chaillou a-t-il tournés au cours de sa carrière ?",
+            "options": [
+                "Plus de 20",
+                "Plus de 30",
+                "Plus de 40",
+                "Plus de 50"
+            ],
+            "correctAnswer": "Plus de 30",
+            "explanation": "Gérard Chaillou a joué dans plus d'une trentaine de films au cours de sa carrière, incluant 'Diva', 'J'accuse' de Roman Polanski et 'Super-héros malgré lui' de Philippe Lacheau."
+        },
+        {
+            "question": "Quand le projet de loi contre la fraude sociale sera-t-il débattu selon Catherine Vautrin ?",
+            "options": [
+                "En septembre 2025",
+                "À la fin du deuxième semestre 2025",
+                "En janvier 2026",
+                "Au printemps 2026"
+            ],
+            "correctAnswer": "À la fin du deuxième semestre 2025",
+            "explanation": "Catherine Vautrin a annoncé que le projet de loi contre la fraude sociale sera débattu 'à la fin du deuxième semestre 2025, entre les textes budgétaires, en commençant par l'Assemblée nationale'."
         }
     ]
 }
