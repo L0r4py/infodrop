@@ -2164,7 +2164,7 @@
             const dlog = (...args) => DEBUG && console.log('[DEBUG]', ...args);
 
             /* ───── Variables globales ───── */
-            let supabase = null;
+            let supabaseClient = null;
             let ADMIN_EMAILS = [];
             let STRIPE_LINK = '';
 
@@ -2172,7 +2172,7 @@
                initializeSupabase — Appel unique au chargement, version propre
                ─────────────────────────────────────────────────────────────────── */
             async function initializeSupabase() {
-                if (supabase) { return true; }
+                if (supabaseClient) { return true; }
                 dlog('🔐 initializeSupabase() lancé');
                 try {
                     const res = await fetch('/api/config');
@@ -2181,7 +2181,7 @@
                     ADMIN_EMAILS = cfg.adminEmails;
                     STRIPE_LINK = cfg.stripeLink;
                     const { createClient } = window.supabase;
-                    supabase = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+                    supabaseClient = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
                     dlog('✅ Supabase initialisé');
                     return true;
                 } catch (err) {
@@ -2279,7 +2279,7 @@
 
                         const isReady = await initializeSupabase();
                         if (isReady) {
-                            supabase.auth.onAuthStateChange((event, session) => {
+                            supabaseClient.auth.onAuthStateChange((event, session) => {
                                 this.$nextTick(async () => {
                                     this.user = session?.user || null;
                                     this.sessionLoaded = true;
@@ -2327,7 +2327,7 @@
                                     } else if (event === 'SIGNED_OUT') {
                                         this.isDataLoaded = false;
                                         this.stopAutoUpdate();
-                                        if (this.realtimeChannel) { supabase.removeChannel(this.realtimeChannel); this.realtimeChannel = null; }
+                                        if (this.realtimeChannel) { supabaseClient.removeChannel(this.realtimeChannel); this.realtimeChannel = null; }
                                     }
                                 });
                             });
@@ -2475,7 +2475,7 @@
 
                         try {
                             await this.saveGamingData();
-                            await supabase.from('user_achievement_history').upsert({ user_id: this.user.id, achievement_code: code }, { onConflict: 'user_id, achievement_code' });
+                            await supabaseClient.from('user_achievement_history').upsert({ user_id: this.user.id, achievement_code: code }, { onConflict: 'user_id, achievement_code' });
                             localStorage.removeItem(`infodrop_unlocking_${code}`);
                         } catch (error) {
                             console.error(`Erreur sauvegarde succès ${code}:`, error);
@@ -2606,9 +2606,9 @@
                     async initGamification() {
                         if (!this.user) return;
                         try {
-                            let { data, error } = await supabase.from('user_gaming_stats').select('*').eq('user_id', this.user.id).single();
+                            let { data, error } = await supabaseClient.from('user_gaming_stats').select('*').eq('user_id', this.user.id).single();
                             if (error && error.code === 'PGRST116') {
-                                const { data: newStats } = await supabase.from('user_gaming_stats').insert({ user_id: this.user.id, xp: 0, level: 1, reading_streak: 0, unlocked_achievements: ['WELCOME'], last_read_date: null }).select().single();
+                                const { data: newStats } = await supabaseClient.from('user_gaming_stats').insert({ user_id: this.user.id, xp: 0, level: 1, reading_streak: 0, unlocked_achievements: ['WELCOME'], last_read_date: null }).select().single();
                                 data = newStats;
                             }
                             this.userXP = data.xp || 0;
@@ -2633,7 +2633,7 @@
                     async saveGamingData() {
                         if (!this.user) return;
                         try {
-                            await supabase.from('user_gaming_stats').update({
+                            await supabaseClient.from('user_gaming_stats').update({
                                 xp: this.userXP,
                                 level: this.userLevel,
                                 reading_streak: this.readingStreak,
@@ -2661,7 +2661,7 @@
 
                     async loadAchievements() {
                         try {
-                            const { data } = await supabase.from('achievements').select('*').eq('is_active', true).order('order_priority');
+                            const { data } = await supabaseClient.from('achievements').select('*').eq('is_active', true).order('order_priority');
                             this.achievementsData = data || [];
                         } catch (error) {
                             console.error('[ERREUR] Le chargement des achievements a échoué', error);
@@ -2743,7 +2743,7 @@
                                 const validationResult = await validateRes.json();
                                 if (!validationResult.success) { this.message = validationResult.error; this.messageType = 'error'; this.loading = false; return; }
                             }
-                            const { error: otpError } = await supabase.auth.signInWithOtp({ email: this.email.toLowerCase(), options: { emailRedirectTo: window.location.origin } });
+                            const { error: otpError } = await supabaseClient.auth.signInWithOtp({ email: this.email.toLowerCase(), options: { emailRedirectTo: window.location.origin } });
                             if (otpError) throw otpError;
                             this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé. Pensez à vérifier vos spams si besoin.';
                             this.messageType = 'success';
@@ -2759,7 +2759,7 @@
                         if (!this.user || !this.user.email) return;
                         if (this.isAdmin) {
                             try {
-                                const { data: adminCode, error: adminError } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
+                                const { data: adminCode, error: adminError } = await supabaseClient.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
                                 if (adminError && adminError.code !== 'PGRST116') { console.error('❌ Erreur requête admin:', adminError); return; }
                                 if (adminCode) {
                                     this.userInviteData.code = adminCode.code;
@@ -2771,13 +2771,13 @@
                             } catch (error) { console.error('❌ Erreur traitement admin:', error); return; }
                         }
                         try {
-                            const { data: ownCode } = await supabase.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
+                            const { data: ownCode } = await supabaseClient.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
                             if (ownCode) {
                                 this.userInviteData.code = ownCode.code;
                                 this.userInviteData.is_used = ownCode.is_used || false;
                                 if (ownCode.is_used && ownCode.used_by_email) { this.userInviteData.filleulEmail = ownCode.used_by_email; }
                             }
-                            const { data: usedCode } = await supabase.from('invitation_codes').select('owner_email').ilike('used_by_email', this.user.email.toLowerCase()).maybeSingle();
+                            const { data: usedCode } = await supabaseClient.from('invitation_codes').select('owner_email').ilike('used_by_email', this.user.email.toLowerCase()).maybeSingle();
                             if (usedCode) { this.userInviteData.parrainEmail = usedCode.owner_email; }
                         } catch (error) {
                             console.error("❌ Erreur chargement des données d'invitation:", error);
@@ -2786,7 +2786,7 @@
                     },
 
                     setupRealtime(session) {
-                        this.realtimeChannel = supabase.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } });
+                        this.realtimeChannel = supabaseClient.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } });
                         this.realtimeChannel.on('presence', { event: 'sync' }, () => {
                             this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
                         }).subscribe(async (status) => {
@@ -2803,7 +2803,7 @@
                         const { id, resume, source, url, orientation, tagsText } = this.editingNews;
                         const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
                         try {
-                            await supabase.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id);
+                            await supabaseClient.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id);
                             const index = this.newsList.findIndex(n => n.id === id);
                             if (index !== -1) { this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; }
                             this.showEditPanel = false;
@@ -2815,7 +2815,7 @@
                         if (!confirm("Supprimer ?")) return;
                         this.newsList = this.newsList.filter(n => n.id !== id);
                         try {
-                            await supabase.from('actu').delete().eq('id', id);
+                            await supabaseClient.from('actu').delete().eq('id', id);
                             if (this.isAdmin) this.loadStats();
                         } catch (e) { alert("La suppression a échoué."); this.loadNews(); }
                     },
@@ -2832,7 +2832,7 @@
                             }
                             const articleData = { resume: this.newNews.resume.trim(), source: '🧨INFODROP', url: this.newNews.url.trim(), heure: new Date().toISOString(), tags: tags, added_by: this.user.email };
                             if (this.newNews.orientation && this.newNews.orientation.trim()) { articleData.orientation = this.newNews.orientation.trim(); }
-                            const { error } = await supabase.from('actu').insert(articleData).select('*');
+                            const { error } = await supabaseClient.from('actu').insert(articleData).select('*');
                             if (error) { throw new Error(`Erreur DB: ${error.message}`); }
                             this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
                             this.showAdminPanel = false;
@@ -2849,7 +2849,7 @@
                         if (!this.isAdmin || this.generatingCode) return;
                         this.generatingCode = true;
                         try {
-                            const { data: { session } } = await supabase.auth.getSession();
+                            const { data: { session } } = await supabaseClient.auth.getSession();
                             if (!session) throw new Error("Session introuvable");
                             const response = await fetch('/api/generate-invite', { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' } });
                             const result = await response.json();
@@ -2875,7 +2875,7 @@
                     async loadNews(filter = null, isNewFilter = false) {
                         if (isNewFilter) this.loadingNews = true;
                         try {
-                            let query = supabase.from('actu').select('id, resume, url, heure, source, orientation, tags, added_by').order('heure', { ascending: false });
+                            let query = supabaseClient.from('actu').select('id, resume, url, heure, source, orientation, tags, added_by').order('heure', { ascending: false });
                             if (filter && filter !== 'all') {
                                 if (this.allOrientations.includes(filter)) { query = query.eq('orientation', filter); }
                                 else { query = query.contains('tags', [filter]); }
@@ -2914,7 +2914,7 @@
 
                     async loadStats() {
                         try {
-                            const { data, error } = await supabase.rpc('get_live_stats');
+                            const { data, error } = await supabaseClient.rpc('get_live_stats');
                             if (error) throw error;
                             this.stats = { total_articles: data.total_articles || 0, total_sources: data.total_sources || 0 };
                             this.activeOrientations = data.active_orientations || [];
@@ -2928,14 +2928,14 @@
                     async saveReadArticleToDB(articleId) {
                         if (!this.user) return;
                         try {
-                            await supabase.from('user_read_articles').upsert({ user_id: this.user.id, article_id: articleId, read_at: new Date().toISOString() }, { onConflict: 'user_id,article_id' });
+                            await supabaseClient.from('user_read_articles').upsert({ user_id: this.user.id, article_id: articleId, read_at: new Date().toISOString() }, { onConflict: 'user_id,article_id' });
                         } catch (error) { console.error('Erreur sauvegarde article lu:', error); }
                     },
 
                     async loadReadArticlesFromDB() {
                         if (!this.user) return;
                         try {
-                            const { data } = await supabase.from('user_read_articles').select('article_id, read_at').eq('user_id', this.user.id);
+                            const { data } = await supabaseClient.from('user_read_articles').select('article_id, read_at').eq('user_id', this.user.id);
                             this.readArticles = {};
                             if (data) { data.forEach(item => { this.readArticles[item.article_id] = item.read_at; }); }
                             this.updateTotalReadCount();
@@ -2950,7 +2950,7 @@
                         if (!this.user) return;
                         localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
                         try {
-                            await supabase.from('user_preferences').upsert({ user_id: this.user.id, hide_read_articles: this.hideReadFromMain, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+                            await supabaseClient.from('user_preferences').upsert({ user_id: this.user.id, hide_read_articles: this.hideReadFromMain, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
                         } catch (error) { console.error('Erreur sauvegarde préférences:', error); }
                     },
 
@@ -2959,7 +2959,7 @@
                         const localPref = localStorage.getItem('infodrop_hide_read_' + this.user.id);
                         if (localPref !== null) { this.hideReadFromMain = localPref === 'true'; }
                         try {
-                            const { data, error } = await supabase.from('user_preferences').select('hide_read_articles').eq('user_id', this.user.id).maybeSingle();
+                            const { data, error } = await supabaseClient.from('user_preferences').select('hide_read_articles').eq('user_id', this.user.id).maybeSingle();
                             if (error) throw error;
                             if (data) {
                                 this.hideReadFromMain = data.hide_read_articles;
@@ -2978,7 +2978,7 @@
                         if (!this.user || !article) return;
                         const orientation = article.tags?.includes('🧨INFODROP') ? '🧨INFODROP' : (article.orientation || 'neutre');
                         try {
-                            await supabase.from('user_diversity_data').insert({ user_id: this.user.id, orientation: orientation, source: article.source, read_at: new Date().toISOString() });
+                            await supabaseClient.from('user_diversity_data').insert({ user_id: this.user.id, orientation: orientation, source: article.source, read_at: new Date().toISOString() });
                             await this.calculateDiversityScore();
                         } catch (error) { console.error('Erreur sauvegarde diversité:', error); }
                     },
@@ -3036,7 +3036,7 @@
 
                     async logout() {
                         if (this.realtimeChannel) await this.realtimeChannel.untrack();
-                        await supabase.auth.signOut();
+                        await supabaseClient.auth.signOut();
                     },
 
                     getWeekNumber(d) {
