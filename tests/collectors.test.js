@@ -16,6 +16,7 @@ test('le collecteur local utilise la même lecture HTTP robuste que la vérifica
   assert.match(localCollector, /Accept:\s*'application\/rss\+xml/);
   assert.match(localCollector, /AbortSignal\.timeout\(12_000\)/);
   assert.match(localCollector, /parser\.parseString/);
+  assert.match(localCollector, /attempt\s*=\s*0;\s*attempt\s*<\s*2/);
 });
 
 test('le collecteur local respecte le déclencheur anti-doublon historique', () => {

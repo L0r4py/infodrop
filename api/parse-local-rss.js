@@ -19,6 +19,27 @@ const FEED_HEADERS = {
   'User-Agent': 'Mozilla/5.0 (compatible; Infodrop/1.0; +https://infodrop.live/)',
 };
 
+async function fetchFeed(source) {
+  let lastError;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const response = await fetch(source.feed_url, {
+        redirect: 'follow',
+        headers: FEED_HEADERS,
+        signal: AbortSignal.timeout(12_000),
+      });
+      if (!response.ok) {
+        await response.body?.cancel();
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return parser.parseString(await response.text());
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError;
+}
+
 function authorized(req) {
   const secret = process.env.CRON_SECRET || '';
   const provided = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '');
@@ -52,13 +73,7 @@ function looksPaywalled(item = {}) {
 async function collectSource(source) {
   const startedAt = Date.now();
   try {
-    const response = await fetch(source.feed_url, {
-      redirect: 'follow',
-      headers: FEED_HEADERS,
-      signal: AbortSignal.timeout(12_000),
-    });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const feed = await parser.parseString(await response.text());
+    const feed = await fetchFeed(source);
     const articles = [];
     for (const item of (feed.items || []).slice(0, 40)) {
       const publishedAt = item.isoDate || item.pubDate || new Date().toISOString();
