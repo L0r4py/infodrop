@@ -21,7 +21,11 @@ test('National et Pyrénées utilisent la même interface et la palette historiq
   assert.match(index, /bg-\[#0a0a0a\]/);
   assert.deepEqual(vercel.rewrites, [
     { source: '/pyrenees', destination: '/index.html' },
+    { source: '/pyrenees/', destination: '/index.html' },
     { source: '/pyrenees/:path*', destination: '/index.html' },
+    { source: '/pyrénées', destination: '/index.html' },
+    { source: '/pyrénées/', destination: '/index.html' },
+    { source: '/pyrénées/:path*', destination: '/index.html' },
   ]);
 });
 

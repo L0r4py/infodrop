@@ -5,7 +5,11 @@
     "outputDirectory": "dist",
     "rewrites": [
         { "source": "/pyrenees", "destination": "/index.html" },
-        { "source": "/pyrenees/:path*", "destination": "/index.html" }
+        { "source": "/pyrenees/", "destination": "/index.html" },
+        { "source": "/pyrenees/:path*", "destination": "/index.html" },
+        { "source": "/pyrénées", "destination": "/index.html" },
+        { "source": "/pyrénées/", "destination": "/index.html" },
+        { "source": "/pyrénées/:path*", "destination": "/index.html" }
     ],
     "functions": {
         "api/parse-rss.js": { "maxDuration": 60 },
