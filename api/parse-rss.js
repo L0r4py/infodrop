@@ -289,7 +289,8 @@ export default async function handler(req, res) {
                 }
 
                 let articleTags = feed.tags ? [...feed.tags] : [];
-                if (detectPaywall(item, feed.name)) {
+                const isPaywalled = detectPaywall(item, feed.name);
+                if (isPaywalled) {
                     if (!articleTags.includes('Abonné')) {
                         articleTags.push('Abonné');
                     }
@@ -299,9 +300,14 @@ export default async function handler(req, res) {
                     resume: createSummary(titleToUse || item.contentSnippet),
                     source: feed.name,
                     url: item.link,
+                    canonical_url: item.link,
                     heure: pubDate.toISOString(),
                     orientation: feed.orientation,
-                    tags: articleTags.length > 0 ? articleTags : null
+                    tags: articleTags.length > 0 ? articleTags : null,
+                    edition_slug: 'national',
+                    source_kind: 'rss',
+                    is_paywalled: isPaywalled,
+                    ingested_at: new Date().toISOString()
                 });
             }
         }

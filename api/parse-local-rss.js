@@ -6,13 +6,18 @@ import {
   canonicalizeUrl,
   categorizeArticle,
   classifyTerritory,
+  deduplicateArticles,
   isWithinRollingWindow,
 } from '../lib/local/territory.js';
 
 const parser = new Parser({
-  timeout: 9000,
-  headers: { 'User-Agent': 'infodrop.live local feed collector/1.0 (+https://infodrop.live/pyrenees/)' },
+  timeout: 12_000,
 });
+
+const FEED_HEADERS = {
+  Accept: 'application/rss+xml, application/atom+xml, application/xml, text/xml;q=0.9, */*;q=0.5',
+  'User-Agent': 'Mozilla/5.0 (compatible; Infodrop/1.0; +https://infodrop.live/)',
+};
 
 function authorized(req) {
   const secret = process.env.CRON_SECRET || '';
@@ -47,7 +52,13 @@ function looksPaywalled(item = {}) {
 async function collectSource(source) {
   const startedAt = Date.now();
   try {
-    const feed = await parser.parseURL(source.feed_url);
+    const response = await fetch(source.feed_url, {
+      redirect: 'follow',
+      headers: FEED_HEADERS,
+      signal: AbortSignal.timeout(12_000),
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const feed = await parser.parseString(await response.text());
     const articles = [];
     for (const item of (feed.items || []).slice(0, 40)) {
       const publishedAt = item.isoDate || item.pubDate || new Date().toISOString();
@@ -124,6 +135,56 @@ function sourceRow(source) {
   };
 }
 
+async function persistArticles(supabase, articles) {
+  if (articles.length === 0) return { inserted: 0, updated: 0, written: 0, error: null };
+
+  const canonicalUrls = [...new Set(articles.map((article) => article.canonical_url))];
+  const [canonicalLookup, urlLookup] = await Promise.all([
+    supabase.from('actu').select('id,url,canonical_url,edition_slug').in('canonical_url', canonicalUrls),
+    supabase.from('actu').select('id,url,canonical_url,edition_slug').in('url', canonicalUrls),
+  ]);
+  if (canonicalLookup.error || urlLookup.error) {
+    return { error: canonicalLookup.error || urlLookup.error };
+  }
+
+  const existing = [...new Map(
+    [...(canonicalLookup.data || []), ...(urlLookup.data || [])].map((row) => [row.id, row]),
+  ).values()];
+  const updates = [];
+  const inserts = [];
+
+  for (const article of articles) {
+    const matches = existing.filter((row) => (
+      row.canonical_url === article.canonical_url || row.url === article.canonical_url
+    ));
+    const localRow = matches.find((row) => row.edition_slug === 'pyrenees');
+    if (localRow) {
+      updates.push({ id: localRow.id, article: { ...article, url: localRow.url } });
+      continue;
+    }
+
+    const url = matches.length > 0
+      ? `${article.canonical_url}#infodrop-pyrenees`
+      : article.url;
+    inserts.push({ ...article, url });
+  }
+
+  const updateResults = await Promise.all(updates.map(({ id, article }) => (
+    supabase.from('actu').update(article).eq('id', id).select('id')
+  )));
+  const updateError = updateResults.find((result) => result.error)?.error;
+  if (updateError) return { error: updateError };
+
+  let inserted = 0;
+  if (inserts.length > 0) {
+    const insertResult = await supabase.from('actu').insert(inserts).select('id');
+    if (insertResult.error) return { error: insertResult.error };
+    inserted = insertResult.data?.length || 0;
+  }
+  const updated = updateResults.reduce((count, result) => count + (result.data?.length || 0), 0);
+  return { inserted, updated, written: inserted + updated, error: null };
+}
+
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (!['GET', 'POST'].includes(req.method)) {
@@ -155,15 +216,10 @@ export default async function handler(req, res) {
 
   const startedAt = Date.now();
   const results = await Promise.all(sources.map(collectSource));
-  const articles = results.flatMap((result) => result.articles);
-  let inserted = 0;
-
-  if (articles.length > 0) {
-    const write = await supabase.from('actu').upsert(articles, { onConflict: 'url' }).select('id');
-    if (write.error) {
-      return res.status(500).json({ error: 'Échec d’écriture des articles régionaux', details: write.error.message });
-    }
-    inserted = write.data?.length || 0;
+  const articles = deduplicateArticles(results.flatMap((result) => result.articles));
+  const articleWrite = await persistArticles(supabase, articles);
+  if (articleWrite.error) {
+    return res.status(500).json({ error: 'Échec d’écriture des articles régionaux', details: articleWrite.error.message });
   }
 
   const checkedAt = new Date().toISOString();
@@ -197,7 +253,9 @@ export default async function handler(req, res) {
     sources_ok: results.filter((result) => result.status === 'ok').length,
     sources_failed: results.filter((result) => result.status !== 'ok').length,
     articles_qualified: articles.length,
-    articles_upserted: inserted,
+    articles_inserted: articleWrite.inserted,
+    articles_updated: articleWrite.updated,
+    articles_upserted: articleWrite.written,
     duration_ms: Date.now() - startedAt,
     results: results.map((result) => ({
       source: result.source.name,

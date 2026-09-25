@@ -27,7 +27,7 @@ async function inspectOnce(source) {
       redirect: 'follow',
       headers: {
         'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml;q=0.9, */*;q=0.5',
-        'User-Agent': 'infodrop.live source verifier/1.0 (+https://infodrop.live/)',
+        'User-Agent': 'Mozilla/5.0 (compatible; Infodrop/1.0; +https://infodrop.live/)',
       },
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });

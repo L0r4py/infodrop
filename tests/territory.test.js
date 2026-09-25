@@ -61,6 +61,13 @@ test('la catégorisation reconnaît la mobilité et garde un repli neutre', () =
   assert.equal(categorizeArticle({ title: 'Réunion des habitants jeudi soir' }), 'Vie locale');
 });
 
+test('la catégorisation ne confond pas les fragments de mots', () => {
+  assert.equal(categorizeArticle({ title: 'Les nageurs reprennent les entraînements' }), 'Vie locale');
+  assert.equal(categorizeArticle({ title: 'Un dimanche solidaire pour Septembre Turquoise' }), 'Vie locale');
+  assert.equal(categorizeArticle({ title: 'Randonnées à Blajan' }), 'Montagne');
+  assert.equal(categorizeArticle({ title: 'Les nageurs reprennent', tags: ['Sports'] }), 'Sport');
+});
+
 test('la déduplication neutralise les paramètres de campagne', () => {
   const articles = [
     { title: 'A', url: 'https://exemple.fr/a?utm_source=x', heure: '2026-09-25T09:00:00Z' },
