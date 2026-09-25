@@ -65,7 +65,7 @@ where reads.article_id = actu.id;
 update public.user_bookmarks as bookmarks
 set edition_slug = case when actu.edition_slug = 'pyrenees' then 'pyrenees' else 'national' end
 from public.actu as actu
-where bookmarks.article_id = actu.id;
+where bookmarks.article_id = actu.id::text;
 
 do $$
 begin
