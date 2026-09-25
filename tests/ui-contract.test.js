@@ -29,6 +29,11 @@ test('National et Pyrénées utilisent la même interface et la palette historiq
   ]);
 });
 
+test('les filtres propres à Pyrénées ne polluent pas le flux national', () => {
+  assert.match(app, /LOCAL_ONLY_TAGS/);
+  assert.match(app, /!LOCAL_ONLY_TAGS\.has\(tag\)/);
+});
+
 test('les données personnelles anonymes restent séparées par édition sur l’appareil', () => {
   assert.match(app, /infodrop_\$\{kind\}_\$\{this\.edition\}_v1/);
   assert.match(app, /if \(this\.user\) await this\.saveReadArticleToDB/);

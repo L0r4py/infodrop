@@ -17,6 +17,7 @@ const LOCAL_CATEGORIES = [
     'Culture',
     'Sport'
 ];
+const LOCAL_ONLY_TAGS = new Set(['pyrenees', 'local', ...LOCAL_CATEGORIES]);
 
 function currentEdition() {
     return /^\/pyr(?:e|é)nees(?:\/|$)/i.test(window.location.pathname) ? 'pyrenees' : 'national';
@@ -593,7 +594,7 @@ function infodropApp() {
             }
             const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre'];
             this.allOrientations = pol;
-            this.allOtherTags = this.activeTags.filter(tag => !pol.includes(tag));
+            this.allOtherTags = this.activeTags.filter(tag => !pol.includes(tag) && !LOCAL_ONLY_TAGS.has(tag));
         },
 
         hasArticlesForOrientation(o) { return this.activeOrientations.includes(o); },

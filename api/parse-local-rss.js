@@ -92,7 +92,7 @@ async function collectSource(source) {
       const canonicalUrl = canonicalizeUrl(item.link);
       const paywalled = looksPaywalled(item);
       const category = categorizeArticle(candidate);
-      const tags = [...new Set(['pyrenees', 'local', category, ...(item.categories || []), ...(paywalled ? ['Abonné'] : [])])];
+      const tags = [...new Set(['pyrenees', 'local', category, ...(paywalled ? ['Abonné'] : [])])];
       articles.push({
         resume: candidate.resume,
         source: source.name,

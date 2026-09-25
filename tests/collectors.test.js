@@ -24,3 +24,8 @@ test('le collecteur local respecte le déclencheur anti-doublon historique', () 
   assert.match(localCollector, /#infodrop-pyrenees/);
   assert.doesNotMatch(localCollector, /\.upsert\(articles/);
 });
+
+test('le collecteur local ne publie pas les catégories RSS brutes comme filtres', () => {
+  assert.match(localCollector, /new Set\(\['pyrenees', 'local', category,/);
+  assert.doesNotMatch(localCollector, /category, \.\.\.\(item\.categories/);
+});
