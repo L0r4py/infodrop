@@ -1,5 +1,5 @@
-// Fichier : /api/parse-rss.js
-// Version 24.0 - OPTI Promise.all + Timeout hard + Logs (Juillet 2025)
+
+
 
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
@@ -11,12 +11,12 @@ const supabase = createClient(
 
 const parser = new Parser({
     timeout: 10000,
-    headers: { 'User-Agent': 'INFODROP RSS Parser/1.0' }
+    headers: { 'User-Agent': 'infodrop.live RSS Parser/1.0' }
 });
 
-// Ta liste de flux RSS complète et organisée
+
 const RSS_FEEDS = [
-    // === GENERALISTES ===
+
     { name: 'France Info', url: 'https://www.francetvinfo.fr/titres.rss', orientation: 'centre', tags: ['national'] },
     { name: 'Le Monde', url: 'https://www.lemonde.fr/rss/une.xml', orientation: 'centre-gauche', tags: ['national'] },
     { name: 'Libération', url: 'https://www.liberation.fr/arc/outboundfeeds/rss-all/?outputType=xml', orientation: 'gauche', tags: ['national'] },
@@ -31,26 +31,26 @@ const RSS_FEEDS = [
     { name: 'Euronews', url: 'https://fr.euronews.com/rss?format=mrss&level=theme&name=news', orientation: 'centre', tags: ['international'] },
     { name: 'L’Express', url: 'https://www.lexpress.fr/rss/alaune.xml', orientation: 'centre-droit', tags: ['politique'] },
 
-    // === RÉGIONALES ===
+
     { name: "La Depeche", url: 'https://www.ladepeche.fr/rss.xml', orientation: 'centre-gauche', tags: ['regional'] },
     { name: "Sud Ouest", url: 'https://www.sudouest.fr/rss.xml', orientation: 'centre-gauche', tags: ['regional'] },
     { name: "La Republique des Pyrenees", url: 'https://www.larepubliquedespyrenees.fr/rss.xml', orientation: 'centre-gauche', tags: ['regional'] },
     { name: 'La Semaine des Pyrénées', url: 'https://www.lasemainedespyrenees.fr/feed', orientation: 'centre', tags: ['regional'] },
     { name: 'Corse Net Infos', url: 'https://www.corsenetinfos.corsica/xml/syndication.rss', orientation: 'neutre', tags: ['Corse'] },
 
-    // === LA PRESSE (Canada) ===
+
     { name: 'La Presse', url: 'https://www.lapresse.ca/actualites/rss', orientation: 'centre', tags: ['canada'] },
     { name: 'Radio-Canada', url: 'https://ici.radio-canada.ca/rss/4159', orientation: 'centre', tags: ['canada'] },
     { name: 'Le Devoir', url: 'https://www.ledevoir.com/rss/manchettes.xml', orientation: 'gauche', tags: ['canada'] },
     { name: 'Journal de Montréal', url: 'https://www.journaldemontreal.com/rss.xml', orientation: 'droite', tags: ['canada'] },
 
-    // === SOURCES OFFICIELLES & PARLEMENTAIRES ===
+
     { name: 'Sénat (Textes)', url: 'https://www.senat.fr/rss/textes.xml', orientation: 'gouvernement', tags: ['officiel'] },
     { name: 'Sénat (Presse)', url: 'https://www.senat.fr/rss/presse.xml', orientation: 'gouvernement', tags: ['officiel'] },
     { name: 'Assemblée Nat. (Docs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/documents-parlementaires', orientation: 'gouvernement', tags: ['officiel'] },
     { name: 'Assemblée Nat. (CRs)', url: 'https://www2.assemblee-nationale.fr/feeds/detail/crs', orientation: 'gouvernement', tags: ['officiel'] },
 
-    // === CULTURE / SCIENCES / SOCIÉTÉ ===
+
     { name: 'France Culture', url: 'https://www.radiofrance.fr/franceculture/rss', orientation: 'centre-gauche', tags: ['culture'] },
     { name: 'Futura Sciences', url: 'https://www.futura-sciences.com/rss/actualites.xml', orientation: 'centre', tags: ['sciences'] },
     { name: 'Sciences et Avenir', url: 'https://www.sciencesetavenir.fr/rss.xml', orientation: 'centre', tags: ['sciences'] },
@@ -63,26 +63,26 @@ const RSS_FEEDS = [
 
 
 
-    // === ECO & CRYPTO ===
+
     { name: 'Journal du coin', url: 'https://journalducoin.com/feed/', orientation: 'neutre', tags: ['crypto'] },
     { name: 'Cryptoast', url: 'https://cryptoast.fr/feed/', orientation: 'neutre', tags: ['crypto'] },
     { name: 'Capital.fr', url: 'https://feed.prismamediadigital.com/v1/cap/rss', orientation: 'centre-droit', tags: ['économie'] },
 
-    // === SPORT ===
+
     { name: "L'Équipe", url: "https://dwh.lequipe.fr/api/edito/rss?path=/Tous%20sports", orientation: "centre", tags: ["sport"] },
 
-    // === DÉFENSE / MILITAIRE ===
+
     { name: 'Cyber.gouv.fr (ANSSI)', url: 'https://cyber.gouv.fr/actualites/feed', orientation: 'gouvernement', tags: ['cyber'] },
     { name: 'OPEX360', url: 'https://feeds.feedburner.com/ZoneMilitaire', orientation: 'droite', tags: ['militaire'] },
 
-    // === INDÉPENDANTS ===
+
     { name: 'Reporterre', url: 'https://reporterre.net/spip.php?page=backend', orientation: 'gauche', tags: ['écologie'] },
     { name: 'Blast', url: 'https://api.blast-info.fr/rss.xml', orientation: 'gauche', tags: ['independant'] },
     { name: 'Arrêt sur Images', url: 'https://api.arretsurimages.net/api/public/rss/all-content', orientation: 'centre-gauche', tags: ['investigation'] },
     { name: 'Apar.tv', url: 'https://www.apar.tv/latest/rss/', orientation: 'centre-gauche', tags: ['pop'] },
     { name: 'Le Média en 4-4-2', url: 'https://lemediaen442.fr/feed/', orientation: 'centre-gauche', tags: ['independant'] },
 
-    // === PRESSE D’OPINION & IDÉOLOGIQUE ===
+
     { name: "L'Humanité", url: 'https://www.humanite.fr/sections/politique/feed', orientation: 'gauche', tags: ['politique'] },
     { name: "L'Humanité", url: 'https://www.humanite.fr/sections/social-et-economie/feed', orientation: 'gauche', tags: ['économie'] },
     { name: "L'Humanité", url: 'https://www.humanite.fr/mot-cle/extreme-droite/feed', orientation: 'gauche', tags: ['opinion'] },
@@ -103,13 +103,13 @@ const RSS_FEEDS = [
     { name: 'Basta!', url: 'https://basta.media/spip.php?page=backend', orientation: 'extrême-gauche', tags: ['opinion'] },
     { name: 'Ballast', url: 'https://www.revue-ballast.fr/feed/', orientation: 'extrême-gauche', tags: ['opinion'] },
 
-    // === PRESSE ÉTRANGÈRE ===
+
     { name: 'RTBF', url: 'https://rss.rtbf.be/article/rss/highlight_rtbf_info.xml?source=internal', orientation: 'centre-gauche', tags: ['belgique'] },
 
-    // === ZAP ===
+
     { name: 'VU FranceTV', url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCqt99sKYNTxqlHtzV9weUYA', orientation: 'neutre', tags: ['zap'] },
 
-    // === OUTRE-MER ===
+
     { name: 'Mayotte Hebdo', url: 'https://mayottehebdo.com/feed/', orientation: 'centre', tags: ['outre-mer'] },
     { name: "L'Info Kwezi", url: 'https://www.linfokwezi.fr/feed/', orientation: 'centre', tags: ['outre-mer'] },
     { name: 'France-Antilles', url: 'https://www.martinique.franceantilles.fr/actualite/rss.xml', orientation: 'centre', tags: ['outre-mer'] },
@@ -117,11 +117,11 @@ const RSS_FEEDS = [
     { name: 'Tahiti Infos', url: 'https://www.tahiti-infos.com/xml/syndication.rss', orientation: 'centre', tags: ['outre-mer'] },
     { name: 'Outremers360', url: 'https://api.outremers360.com/rss/fil-info.xml', orientation: 'centre', tags: ['outre-mer'] },
 
-    // === ALTERNATIF / INDÉPENDANT ===
+
     { name: 'Le Gossip', url: 'https://www.legossip.net/spip.php?page=backend', orientation: 'neutre', tags: ['people'] },
     { name: 'Public', url: 'https://www.public.fr/feed', orientation: 'neutre', tags: ['people'] },
 
-    // --- ALTERNATIF / OPINION / GÉOPOLITIQUE ---
+
     { name: 'Réseau International', url: 'https://reseauinternational.net/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
     { name: 'Le Saker Francophone', url: 'https://lesakerfrancophone.fr/feed/', orientation: 'extrême-droite', tags: ['alternatif'] },
     { name: 'Geopolintel', url: 'https://geopolintel.fr/spip.php?page=backend', orientation: 'extrême-droite', tags: ['alternatif'] },
@@ -131,7 +131,7 @@ const RSS_FEEDS = [
 
 
 
-    // --- EUROPÉEN / SCIENCE / COMMUNICATION ---
+
     { name: 'Le Grand Continent', url: 'https://legrandcontinent.eu/fr/feed/', orientation: 'centre-gauche', tags: ['europe'] },
     { name: 'The Conversation France', url: 'https://theconversation.com/fr/articles.atom', orientation: 'centre', tags: ['sciences'] },
     { name: 'Intelligence Online', url: 'https://feeds.feedburner.com/IntelligenceOnline-fr', orientation: 'centre', tags: ['tech'] },
@@ -151,7 +151,7 @@ function decodeHtmlEntities(str) {
         .replace(/&ecirc;/g, 'ê')
         .replace(/&rsquo;/g, "'")
         .replace(/&hellip;/g, '…')
-        // 🇫🇷 FIX ENCODAGE GOUVERNEMENT
+
         .replace(/�/g, 'é')
         .replace(/ç/g, 'ç')
         .replace(/à/g, 'à')
@@ -184,6 +184,25 @@ function createSummary(text) {
     return cleanText;
 }
 
+function detectPaywall(item, source) {
+    const content = (item.title + ' ' + (item.contentSnippet || '') + ' ' + (item.content || '')).toLowerCase();
+
+    // Known 100% paywall sources in feed
+    const paywallSources = ['Arrêt sur Images', 'Mediapart', 'Les Jours'];
+    if (paywallSources.includes(source)) return true;
+
+    // Common paywall keywords in French RSS feeds
+    const paywallKeywords = [
+        'article réservé aux abonnés',
+        'réservé aux abonnés',
+        'abonnez-vous',
+        'pour lire la suite, abonnez-vous',
+        'contenu réservé'
+    ];
+
+    return paywallKeywords.some(keyword => content.includes(keyword));
+}
+
 function shouldFilterArticle(title, source) {
     const lowerTitle = (title || '').toLowerCase();
     if (GLOBAL_FILTER_KEYWORDS.some(keyword => lowerTitle.includes(keyword))) return true;
@@ -192,7 +211,7 @@ function shouldFilterArticle(title, source) {
     return false;
 }
 
-// --- Fetch RSS avec timeout hard (5s) ---
+
 function fetchRssWithTimeout(feed, timeout = 5000) {
     return new Promise((resolve) => {
         let finished = false;
@@ -227,9 +246,8 @@ export default async function handler(req, res) {
     }
 
     const start = Date.now();
-    console.log('🚀 [INFODROP] Parsing RSS - OPTI Promise.all + Timeout 5s');
 
-    // Traite tout EN PARALLÈLE
+
     const results = await Promise.allSettled(
         RSS_FEEDS.map(feed => fetchRssWithTimeout(feed, 5000))
     );
@@ -269,19 +287,27 @@ export default async function handler(req, res) {
                 if (feed.name === 'Konbini') {
                     titleToUse = decodeHtmlEntities(item.title);
                 }
+
+                let articleTags = feed.tags ? [...feed.tags] : [];
+                if (detectPaywall(item, feed.name)) {
+                    if (!articleTags.includes('Abonné')) {
+                        articleTags.push('Abonné');
+                    }
+                }
+
                 articlesToInsert.push({
                     resume: createSummary(titleToUse || item.contentSnippet),
                     source: feed.name,
                     url: item.link,
                     heure: pubDate.toISOString(),
                     orientation: feed.orientation,
-                    tags: feed.tags || null
+                    tags: articleTags.length > 0 ? articleTags : null
                 });
             }
         }
     }
 
-    // Insertion en base
+
     let insertedCount = 0;
     if (articlesToInsert.length > 0) {
         const { data, error } = await supabase
@@ -298,10 +324,7 @@ export default async function handler(req, res) {
 
     const duration = ((Date.now() - start) / 1000).toFixed(2);
 
-    // Le nouveau message de log, beaucoup plus informatif
-    console.log(`✅ [INFODROP] Parsing terminé en ${duration}s. Flux OK: ${fluxOk}, timeouts: ${fluxTimeout}, erreurs: ${fluxError}. ${articlesToInsert.length} articles trouvés, ${insertedCount} insérés, ${filteredCount} filtrés.`);
 
-    // La nouvelle réponse JSON
     res.status(200).json({
         success: true,
         flux_ok: fluxOk,

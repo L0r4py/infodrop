@@ -1,0 +1,47 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+
+const index = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+const app = await readFile(new URL('../src/js/app.js', import.meta.url), 'utf8');
+const css = await readFile(new URL('../src/css/style.css', import.meta.url), 'utf8');
+const vercel = JSON.parse(await readFile(new URL('../vercel.json', import.meta.url), 'utf8'));
+
+test('le flux public ne dépend pas d’une session utilisateur', () => {
+  assert.match(index, /x-show="sessionLoaded"/);
+  assert.doesNotMatch(index, /x-show="sessionLoaded\s*&&\s*user"/);
+  assert.match(app, /await this\.loadNews\(this\.activeFilter, true\)/);
+});
+
+test('National et Pyrénées utilisent la même interface et la palette historique', () => {
+  assert.match(index, />National<\/a>/);
+  assert.match(index, />Pyrénées<\/a>/);
+  assert.match(css, /body[\s\S]*font-family:\s*'Inter'/);
+  assert.match(css, /\.edition-switch-link\.active[\s\S]*background:\s*#FF2D55/);
+  assert.match(index, /bg-\[#0a0a0a\]/);
+  assert.deepEqual(vercel.rewrites, [
+    { source: '/pyrenees', destination: '/index.html' },
+    { source: '/pyrenees/:path*', destination: '/index.html' },
+  ]);
+});
+
+test('les données personnelles anonymes restent séparées par édition sur l’appareil', () => {
+  assert.match(app, /infodrop_\$\{kind\}_\$\{this\.edition\}_v1/);
+  assert.match(app, /if \(this\.user\) await this\.saveReadArticleToDB/);
+  assert.match(app, /if \(this\.user\) try \{\s*await this\.saveBookmarkToDB/);
+});
+
+test('aucun commentaire de conception interdit n’est exposé dans la page publique', () => {
+  for (const phrase of [
+    'Prototype local V1',
+    'sans gamification',
+    'sources d’origine conservées',
+    'choix éditorial',
+    'ancrage dans le Parc',
+    'données non simulées',
+    'prototype prêt',
+    'configurez les variables Supabase',
+  ]) {
+    assert.equal(index.toLowerCase().includes(phrase.toLowerCase()), false, phrase);
+  }
+});

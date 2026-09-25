@@ -1,5 +1,5 @@
 // Fichier : /api/config.js
-// API pour fournir TOUTES les configurations de manière sécurisée
+// API publique limitée aux valeurs nécessaires au client.
 
 export default async function handler(req, res) {
     // Vérifier la méthode HTTP
@@ -8,12 +8,12 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Récupérer TOUTES les variables d'environnement
         const config = {
             supabaseUrl: process.env.SUPABASE_URL,
             supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-            adminEmails: process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',') : ['l0r4.py@gmail.com'],
-            stripeLink: process.env.STRIPE_LINK || 'https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801'
+            adminEmails: process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map((email) => email.trim()).filter(Boolean) : [],
+            stripeLink: process.env.STRIPE_LINK || '',
+            regionalSchemaEnabled: process.env.REGIONAL_SCHEMA_ENABLED === 'true'
         };
 
         // Vérifier que les variables essentielles existent
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         // Ajouter des headers de sécurité
         res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
-        
+
         // Retourner la configuration complète
         res.status(200).json(config);
 

@@ -1,80 +1,75 @@
-# INFODROP - Le Club privé de l'actu centralisée
+# Infodrop
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FL0r4py%2Finfodrop)
+Infodrop conserve son édition nationale/internationale à la racine et ajoute une édition locale à l’adresse `/pyrenees/` (alias `/pyrénées/`). Les deux éditions utilisent la même application, la même charte et les mêmes composants que la version de référence `infodrop.live`. Un sélecteur discret permet de passer de l’une à l’autre.
 
-**INFODROP** n'est pas un simple agrégateur de news. C'est une plateforme gamifiée conçue comme un club privé, dont la mission est d'aider ses membres à sortir de leurs bulles de filtres médiatiques. En transformant la consommation d'information en une "mission d'intelligence", l'application encourage une vision équilibrée et multi-perspectives de l'actualité.
+## Fonctionnement
 
-L'interface est fortement inspirée de l'univers "Clash of Clans" pour une expérience utilisateur engageante et unique.
+- le flux est public et ne dépend pas d’une session ;
+- les lectures, favoris et préférences sont conservés sur l’appareil avec `localStorage` ;
+- l’identification par email/magic link reste facultative et sert uniquement à synchroniser ces données entre appareils ;
+- l’édition Pyrénées est classée par thème et n’affiche pas d’étiquette politique ;
+- 19 flux locaux actifs ont réussi deux contrôles complets le 25 septembre 2026 ;
+- déduplication des URL et suppression des paramètres de suivi ;
+- signalement des accès abonnés lorsqu’ils sont détectés ;
+- même fond, couleurs, typographie, cartes, header, proportions et comportement mobile que l’édition existante.
 
-**Lien vers l'application :** [https://www.infodrop.live](https://www.infodrop.live)
+Tant que la migration régionale n’est pas appliquée, l’application utilise le schéma historique. Après migration, `REGIONAL_SCHEMA_ENABLED=true` active les champs régionaux et la synchronisation multi-appareils séparée par édition.
 
----
+## Histoire du projet préservée
 
-## ✨ Fonctionnalités Clés
+Les quiz, la gamification, les analyses 360°, les invitations et les anciens composants n’ont pas été effacés. Ils sont conservés :
 
-### 🎮 Gamification au Cœur de l'Expérience
-- **Système d'XP et de Niveaux :** Chaque article lu récompense l'utilisateur avec des points d'expérience, lui permettant de monter en niveau.
-- **Streak de Lecture Quotidien :** Un compteur de "jours de feu" encourage une consultation régulière et récompense l'assiduité.
-- **🏆 Mes Succès :** Un palmarès de plus de 15 succès à débloquer en fonction des actions de l'utilisateur (nombre d'articles lus, streaks, niveaux, etc.).
-- **💎 Récompenses Unifiées :** Toutes les récompenses (XP, niveaux, succès) sont présentées via un modal unique et cohérent, avec un effet de flou pour une expérience premium.
+- dans `archive/legacy-gamified/` pour une consultation immédiate ;
+- sur la branche locale `archive/legacy-gamified-2026-09-25` ;
+- dans le tag local annoté `legacy-gamified-v1-2026-09-25` ;
+- dans les sauvegardes historiques référencées dans [docs/LEGACY_ARCHIVE.md](docs/LEGACY_ARCHIVE.md).
 
-### 🎯 Score de Diversité
-- Un score sur 100, calculé sur les lectures des dernières 24h.
-- Il est basé sur deux piliers : la **variété des orientations politiques** et la **variété des sources médiatiques**.
-- La carte de score est visible par défaut et disparaît à 100% pour gratifier l'utilisateur et désencombrer l'interface.
+Les tables Supabase historiques restent intactes. La migration Pyrénées est exclusivement additive.
 
-### 🌐 INFODROP 360° : La Révolution de l'Analyse
-- Un concept unique d'**infographie interactive** pour analyser les sujets d'actualité complexes.
-- **Présentation visuelle** des positions des médias sur un spectre politique.
-- **Synthèse par IA** qui identifie les faits établis, les points de divergence et les biais médiatiques.
-- Format "accordéon" optimisé pour une lecture agréable sur mobile.
-- Utilise une approche **statique** (fichiers HTML par analyse) pour des performances maximales, avec une page hub (`infodrop360.html`) qui liste dynamiquement les sujets disponibles.
+## Démarrage local
 
-### ⚙️ Panel d'Administration
-- Interface simple pour les administrateurs permettant de :
-  - **Ajouter manuellement** des actualités importantes.
-  - **Modifier ou supprimer** des articles existants.
-  - **Générer des codes d'invitation** à usage unique.
+Prérequis : Node.js 22.
 
-### 🔐 Système d'Invitation Privé
-- L'inscription se fait uniquement via un **code d'invitation**.
-- Chaque membre reçoit un code unique à partager, favorisant une communauté de qualité.
-- Le système gère la relation parrain/filleul.
+```bash
+npm ci
+npm run dev
+```
 
----
+Ouvrir ensuite `http://localhost:3000/` ou `http://localhost:3000/pyrenees/`.
 
-## 🛠️ Stack Technique
+Variables attendues pour lire des données réelles :
 
-- **Frontend :** HTML, [Tailwind CSS](https://tailwindcss.com/) (via CDN), [Alpine.js](https://alpinejs.dev/)
-- **Backend & Base de Données :** [Supabase](https://supabase.com/) (Authentication, Postgres, Database Functions)
-- **Hébergement :** [Vercel](https://vercel.com/) (Déploiement statique & Serverless Functions pour l'API sécurisée)
+```text
+SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+REGIONAL_SCHEMA_ENABLED
+```
 
----
+Variables serveur nécessaires à la collecte :
 
-## 📂 Structure du Projet
+```text
+SUPABASE_SERVICE_KEY
+CRON_SECRET
+```
 
--   **`index.html`**: Application principale (Flux 24H) contenant toute la logique de gamification.
--   **`infodrop360.html`**: Page de présentation qui liste les analyses 360° disponibles.
--   **`/analyses/`**: Dossier contenant les pages HTML statiques pour chaque sujet d'analyse 360°.
--   **`/api/`**: Fonctions Serverless (Node.js) hébergées sur Vercel pour la logique backend.
-    -   `config.js`: Sert les clés d'environnement (Supabase) de manière sécurisée.
-    -   `check-email.js`, `generate-invite.js`, `validate-invite.js`: Gèrent le système d'invitations.
-    -   `parse-rss.js`: Cœur du système d'agrégation des flux d'actualités.
-    -   `daily-purge.js`: Tâche planifiée (Cron Job) pour le nettoyage des anciennes données.
--   **`/images/`**: Contient tous les assets visuels : favicons, icônes PWA pour l'écran d'accueil, et l'image de partage social.
--   **`vercel.json`**: Fichier de configuration pour Vercel.
--   **`package.json`**: Définit les dépendances Node.js nécessaires au fonctionnement des fonctions Serverless dans le dossier `/api/`.
+Ne jamais placer la clé de service dans le navigateur ou dans un fichier commité.
 
----
+## Vérification
 
-## 🚀 Améliorations Futures
+```bash
+npm run validate
+```
 
-- **Faire évoluer le Score de Diversité :** Passer du modèle "Bingo" (exploration) à un modèle "Balance" (équilibre), qui pénaliserait une surconsommation d'une seule orientation politique pour un engagement encore plus profond.
+Cette commande exécute les tests et la construction Vite. Le contrôle réel des flux se relance avec `node scripts/verify-local-sources.mjs`. Avant toute publication, suivre aussi [docs/DEPLOYMENT_CHECKLIST.md](docs/DEPLOYMENT_CHECKLIST.md).
 
----
+## Documentation
 
-## 🙏 Remerciements
+- [Audit de l’état actuel](docs/AUDIT_CURRENT_STATE.md)
+- [Architecture de l’édition Pyrénées](docs/ARCHITECTURE_PYRENEES.md)
+- [Registre et méthode de sélection des sources](docs/SOURCES_PYRENEES.md)
+- [Conservation et restauration de l’ancien projet](docs/LEGACY_ARCHIVE.md)
+- [Checklist de mise en production](docs/DEPLOYMENT_CHECKLIST.md)
 
-Un immense merci à nos bêta-testeurs pour leur aide précieuse, leurs retours avisés et leur soutien tout au long du développement.
+## Statut
 
-🛡️ **Alpha4, Coolmax, José, Yoz, Same** 🛡️
+Le chantier est local sur `feature/infodrop-pyrenees-v1`. Aucune migration distante, publication Vercel ou modification du domaine de production n’est déclenchée par ce dépôt.

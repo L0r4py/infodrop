@@ -1,13 +1,14 @@
 {
-  "headers": [
-    {
-      "source": "/.well-known/apple-app-site-association",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/json"
-        }
-      ]
+    "$schema": "https://openapi.vercel.sh/vercel.json",
+    "framework": "vite",
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "rewrites": [
+        { "source": "/pyrenees", "destination": "/index.html" },
+        { "source": "/pyrenees/:path*", "destination": "/index.html" }
+    ],
+    "functions": {
+        "api/parse-rss.js": { "maxDuration": 60 },
+        "api/parse-local-rss.js": { "maxDuration": 60 }
     }
-  ]
 }

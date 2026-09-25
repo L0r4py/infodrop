@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr" style="color-scheme: dark;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>Connexion à infodrop.live</title>
+    <!--[if mso]>
+  <style type="text/css">
+    table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+  </style>
+  <![endif]-->
+</head>
+
+<body
+    style="margin:0; padding:0; background-color:#0a0a0a; font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; -webkit-font-smoothing:antialiased;"
+    bgcolor="#0a0a0a">
+
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#0a0a0a;" bgcolor="#0a0a0a">
+        <tr>
+            <td align="center" style="padding:48px 20px;">
+
+                <!-- Logo -->
+                <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                    style="max-width:460px; margin-bottom:40px;">
+                    <tr>
+                        <td align="center">
+                            <div
+                                style="font-size:28px; font-weight:800; color:#ffffff; letter-spacing:-1px; margin-bottom:4px;">
+                                infodrop<span style="color:#FF2D55;">.live</span>
+                            </div>
+                            <div
+                                style="font-size:11px; color:#555555; letter-spacing:0.08em; text-transform:uppercase;">
+                                Le Club privé de l'actu centralisée</div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Carte Connexion -->
+                <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                    style="max-width:460px; margin-bottom:24px; background-color:rgba(255,255,255,0.04); border-radius:20px; border:1px solid rgba(255,255,255,0.07);">
+                    <tr>
+                        <td style="padding:40px 32px;" align="center">
+                            <!-- Icône -->
+                            <table cellspacing="0" cellpadding="0" border="0"
+                                style="margin:0 auto 24px auto; background-color:rgba(255,45,85,0.15); border-radius:14px;">
+                                <tr>
+                                    <td style="padding:14px;">
+                                        <div style="font-size:22px;">🔑</div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <h1
+                                style="font-size:22px; color:#ffffff; font-weight:700; margin:0 0 6px 0; letter-spacing:-0.3px;">
+                                Votre lien de connexion</h1>
+                            <p style="font-size:13px; color:#555555; margin:0 0 32px 0;">Cliquez pour accéder à infodrop.live
+                            </p>
+
+                            <!-- Bouton CTA -->
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:28px;">
+                                <tr>
+                                    <td align="center">
+                                        <table cellspacing="0" cellpadding="0" border="0"
+                                            style="background-color:#FF2D55; border-radius:14px;">
+                                            <tr>
+                                                <td align="center">
+                                                    <a href="{{ .ConfirmationURL }}" target="_blank"
+                                                        style="color:#ffffff; font-size:15px; font-weight:600; padding:14px 40px; text-decoration:none; display:block; letter-spacing:0.3px;">
+                                                        Se connecter à infodrop.live
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Code OTP -->
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:28px;">
+                                <tr>
+                                    <td align="center">
+                                        <p style="font-size:14px; color:#aaaaaa; margin:0 0 12px 0;">Si vous utilisez
+                                            l'application installée (PWA), copiez ce code :</p>
+                                        <div
+                                            style="font-size:32px; font-weight:800; color:#ffffff; letter-spacing:8px; background-color:rgba(255,255,255,0.05); padding:16px 24px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); display:inline-block;">
+                                            {{ .Token }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Note -->
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                                style="background-color:rgba(255,255,255,0.03); border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+                                <tr>
+                                    <td style="padding:16px;">
+                                        <p
+                                            style="font-size:12px; color:#666666; margin:0; line-height:1.6; text-align:center;">
+                                            Pas besoin de mot de passe — votre email suffit.<br>
+                                            Ce lien expire dans <strong style="color:#FF2D55;">60 minutes</strong>.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Carte "Comment ça marche" -->
+                <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                    style="max-width:460px; margin-bottom:24px; background-color:rgba(255,255,255,0.04); border-radius:20px; border:1px solid rgba(255,255,255,0.07);">
+                    <tr>
+                        <td style="padding:28px 28px;">
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:20px;">
+                                <tr>
+                                    <td align="center">
+                                        <div style="font-size:15px; color:#ffffff; font-weight:700; margin-bottom:4px;">
+                                            Comment ça marche</div>
+                                        <p style="font-size:12px; color:#555555; margin:0;">Simple, rapide, sans mot de
+                                            passe</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Étape 1 -->
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:12px;">
+                                <tr>
+                                    <td width="36" valign="top" style="padding-right:12px;">
+                                        <div
+                                            style="width:28px; height:28px; background-color:rgba(255,45,85,0.15); border-radius:8px; text-align:center; line-height:28px; font-size:12px; font-weight:700; color:#FF2D55;">
+                                            1</div>
+                                    </td>
+                                    <td valign="middle">
+                                        <div style="font-size:13px; color:#e0e0e0; line-height:1.5;">Cliquez sur le
+                                            bouton rouge ci-dessus</div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Étape 2 -->
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:12px;">
+                                <tr>
+                                    <td width="36" valign="top" style="padding-right:12px;">
+                                        <div
+                                            style="width:28px; height:28px; background-color:rgba(255,45,85,0.15); border-radius:8px; text-align:center; line-height:28px; font-size:12px; font-weight:700; color:#FF2D55;">
+                                            2</div>
+                                    </td>
+                                    <td valign="middle">
+                                        <div style="font-size:13px; color:#e0e0e0; line-height:1.5;">Vous êtes connecté
+                                            instantanément</div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Étape 3 -->
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                <tr>
+                                    <td width="36" valign="top" style="padding-right:12px;">
+                                        <div
+                                            style="width:28px; height:28px; background-color:rgba(255,45,85,0.15); border-radius:8px; text-align:center; line-height:28px; font-size:12px; font-weight:700; color:#FF2D55;">
+                                            3</div>
+                                    </td>
+                                    <td valign="middle">
+                                        <div style="font-size:13px; color:#e0e0e0; line-height:1.5;">Explorez le flux
+                                            24h en temps réel</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Sécurité -->
+                <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                    style="max-width:460px; margin-bottom:40px;">
+                    <tr>
+                        <td align="center">
+                            <p style="font-size:11px; color:#333333; margin:0; line-height:1.5;">
+                                Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Footer -->
+                <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                    style="max-width:460px; border-top:1px solid rgba(255,255,255,0.05);">
+                    <tr>
+                        <td align="center" style="padding:20px 0;">
+                            <div style="color:#333333; font-size:10px; margin-bottom:4px;">© 2026 infodrop.live. Tous droits
+                                réservés.</div>
+                            <div style="color:#222222; font-size:10px;">infodrop.live</div>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

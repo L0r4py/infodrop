@@ -5,9 +5,12 @@
   "description": "Agrégateur d'actualités",
   "type": "module",
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.0",
-    "axios": "^1.10.0",
-    "cheerio": "^1.0.0-rc.12",
+    "@alpinejs/intersect": "^3.17.4",
+    "@mozilla/readability": "^0.6.0",
+    "@supabase/supabase-js": "^2.117.2",
+    "@tailwindcss/typography": "^0.5.20",
+    "alpinejs": "^3.17.4",
+    "linkedom": "^0.18.13",
     "rss-parser": "^3.13.0"
   },
   "engines": {
@@ -15,7 +18,11 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test \"tests/*.test.js\"",
+    "validate": "npm run test && npm run build"
   },
   "repository": {
     "type": "git",
@@ -27,5 +34,11 @@
   "bugs": {
     "url": "https://github.com/L0r4py/infodrop/issues"
   },
-  "homepage": "https://github.com/L0r4py/infodrop#readme"
+  "homepage": "https://github.com/L0r4py/infodrop#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.6.1",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^3.4.19",
+    "vite": "^7.3.6"
+  }
 }

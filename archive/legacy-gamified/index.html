@@ -1,0 +1,3145 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+
+<!-- ============================================================================ -->
+<!-- 📋 HEAD - MÉTADONNÉES ET CONFIGURATION                                      -->
+<!-- ============================================================================ -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- === OPEN GRAPH ET RÉSEAUX SOCIAUX === -->
+    <meta property="og:title" content="INFODROP - Le Club privé de l'actu centralisée " />
+    <meta property="og:description"
+        content="Le Club privé de l'actu centralisée . Agrégation multi-sources en temps réel." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://infodrop.live/" />
+    <meta property="og:image" content="https://infodrop.live/images/infodrop-share.png" />
+
+    <!-- === TWITTER CARD === -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="INFODROP - Le Club privé de l'actu centralisée ">
+    <meta name="twitter:description"
+        content="Le Club privé de l'actu centralisée . Agrégation multi-sources en temps réel.">
+    <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png">
+
+    <title>INFODROP - Flux 24H // Le Club privé de l'actu centralisée</title>
+
+    <!-- === FAVICON ET ICÔNES MOBILES HD === -->
+    <link rel="icon" type="image/png" href="images/infodrop-favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="images/apple-touch-icon-167x167.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="images/android-chrome-512x512.png">
+
+    <!-- Meta tags PWA -->
+    <meta name="theme-color" content="#111827">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="INFODROP">
+
+    <!-- === AMÉLIORATION PWA === -->
+    <meta name="apple-itunes-app" content="app-id=com.infodrop.app">
+    <link rel="alternate" href="app://infodrop.live">
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- === URL SCHEME PERSONNALISÉ === -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- === BIBLIOTHÈQUES EXTERNES === -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    <!-- === FONT GAMING === -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- ======================================================================== -->
+    <!-- 🎮 STYLES CSS                                  -->
+    <!-- ======================================================================== -->
+    <style>
+        /* === VARIABLES CLASH === */
+        :root {
+            --clash-blue: #2E7BE6;
+            --clash-dark-blue: #1B4F91;
+            --clash-light-blue: #4A9EFF;
+            --clash-sky: #87CEEB;
+            --clash-gold: #FFD700;
+            --clash-silver: #C0C0C0;
+            --clash-bronze: #CD7F32;
+            --clash-green: #4CAF50;
+            --clash-red: #F44336;
+            --clash-purple: #9C27B0;
+            --clash-gray: #424242;
+            --clash-light-gray: #616161;
+            --clash-bg: #1a1a2e;
+            --clash-card: #16213e;
+        }
+
+        /* === FONT CLASH === */
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: #0f1419;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(46, 123, 230, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(74, 158, 255, 0.1) 0%, transparent 50%);
+        }
+
+        /* === BOUTONS 3D CLASH === */
+        .clash-btn {
+            background: linear-gradient(180deg, var(--clash-light-blue) 0%, var(--clash-blue) 100%);
+            border: 3px solid var(--clash-dark-blue);
+            border-radius: 15px;
+            box-shadow:
+                0 4px 0 var(--clash-dark-blue),
+                0 6px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: translateY(0);
+            transition: all 0.1s;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .clash-btn:hover {
+            transform: translateY(1px);
+            box-shadow:
+                0 3px 0 var(--clash-dark-blue),
+                0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .clash-btn:active {
+            transform: translateY(3px);
+            box-shadow:
+                0 1px 0 var(--clash-dark-blue),
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .clash-btn-green {
+            background: linear-gradient(180deg, #5CBF60 0%, var(--clash-green) 100%);
+            border-color: #388E3C;
+            box-shadow:
+                0 4px 0 #388E3C,
+                0 6px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .clash-btn-red {
+            background: linear-gradient(180deg, #FF6B6B 0%, var(--clash-red) 100%);
+            border-color: #C62828;
+            box-shadow:
+                0 4px 0 #C62828,
+                0 6px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        /* === CARDS CLASH === */
+        .clash-card {
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 3px solid #1B4F91;
+            border-radius: 20px;
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clash-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+            border-radius: 20px 20px 0 0;
+            pointer-events: none;
+        }
+
+        /* === BADGES NIVEAU === */
+        .level-badge {
+            background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 50px;
+            padding: 6px 16px;
+            font-weight: 900;
+            color: #FFF;
+            text-shadow:
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                0 1px 0 #D68910;
+            box-shadow:
+                0 3px 0 #D68910,
+                0 5px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* === BARRE XP CLASH === */
+        .xp-bar-container {
+            background: #0D1929;
+            border: 3px solid #1B4F91;
+            border-radius: 25px;
+            padding: 3px;
+            box-shadow:
+                inset 0 2px 4px rgba(0, 0, 0, 0.5),
+                0 2px 5px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .xp-bar-fill {
+            background: linear-gradient(180deg, #4FC3F7 0%, #29B6F6 50%, #0288D1 100%);
+            height: 16px;
+            border-radius: 20px;
+            box-shadow:
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            transition: width 0.5s ease-out;
+            overflow: hidden;
+        }
+
+        .xp-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: xp-shine 3s infinite;
+        }
+
+        @keyframes xp-shine {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* === INPUT CLASH === */
+        .clash-input {
+            background: #0D1929;
+            border: 3px solid #1B4F91;
+            border-radius: 10px;
+            padding: 10px 15px;
+            color: white;
+            font-weight: 500;
+            transition: all 0.2s;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .clash-input:focus {
+            outline: none;
+            border-color: var(--clash-light-blue);
+            box-shadow:
+                inset 0 2px 4px rgba(0, 0, 0, 0.3),
+                0 0 0 3px rgba(74, 158, 255, 0.2);
+        }
+
+        /* === STATS CARDS OPTIMISÉES MOBILE === */
+        .stat-card {
+            background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
+            border: 2px solid #1B4F91;
+            border-radius: 10px;
+            padding: 8px 4px;
+            text-align: center;
+            box-shadow:
+                0 2px 0 #0D47A1,
+                0 3px 6px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 4px 0 #0D47A1,
+                0 6px 12px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-card.gold-card {
+            background: linear-gradient(180deg, #FFD700 0%, #F39C12 100%);
+            border-color: #D68910;
+            box-shadow:
+                0 2px 0 #D68910,
+                0 3px 6px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .stat-card.gold-card:hover {
+            box-shadow:
+                0 4px 0 #D68910,
+                0 6px 12px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 640px) {
+            .stat-card {
+                padding: 6px 3px;
+                border-radius: 8px;
+                min-height: 42px;
+            }
+        }
+
+        /* === TOOLTIP STATS === */
+        .stat-tooltip {
+            position: fixed;
+            background: linear-gradient(180deg, #1E3A5F 0%, #0D1929 100%);
+            border: 3px solid #1B4F91;
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 9999;
+            pointer-events: none;
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.5),
+                0 0 0 3px rgba(27, 79, 145, 0.3);
+            animation: tooltipFadeIn 0.2s ease-out;
+        }
+
+        @keyframes tooltipFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+            animation: pulse-stat 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-stat {
+
+            0%,
+            100% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* === ACHIEVEMENT ICON === */
+        .achievement-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(180deg, #FFD700 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow:
+                0 3px 0 #D68910,
+                0 5px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        @media (max-width: 640px) {
+            .achievement-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+                border-width: 2px;
+                border-radius: 8px;
+                box-shadow:
+                    0 2px 0 #D68910,
+                    0 3px 6px rgba(0, 0, 0, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        .achievement-icon:hover {
+            transform: translateY(-2px) scale(1.1);
+            box-shadow:
+                0 5px 0 #D68910,
+                0 8px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        /* === NEWS CARD CLASH === */
+        .news-card-clash {
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 3px solid #1B4F91;
+            border-radius: 15px;
+            padding: 16px;
+            position: relative;
+            transition: all 0.2s;
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 640px) {
+            .news-card-clash {
+                padding: 14px;
+            }
+        }
+
+        .news-card-clash:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: var(--clash-light-blue);
+        }
+
+        /* Articles lus */
+        .news-card-clash.read-article {
+            opacity: 0.6;
+            background: linear-gradient(180deg, #1a2332 0%, #0f1621 100%);
+        }
+
+        .news-card-clash.read-article:hover {
+            opacity: 0.8;
+        }
+
+        /* === ORIENTATION TAGS === */
+        .orientation-tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 2px solid;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* === SCROLLBAR CUSTOM === */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0D1929;
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--clash-light-blue) 0%, var(--clash-blue) 100%);
+            border-radius: 6px;
+            border: 2px solid #0D1929;
+        }
+
+        /* === LOADING === */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #1B4F91;
+            border-top-color: var(--clash-light-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* === ACHIEVEMENT POPUP === */
+        .achievement-popup-clash {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
+            border: 4px solid var(--clash-gold);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            z-index: 9999;
+            animation: reward-appear 0.3s ease-out;
+            /* On garde la nouvelle animation sobre */
+            box-shadow:
+                0 0 0 5px #D68910,
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 100px rgba(255, 215, 0, 0.3);
+        }
+
+        /* AJOUTEZ CETTE NOUVELLE CLASSE DÉDIÉE */
+        .reward-modal-card {
+            background: linear-gradient(180deg, #2C5AA0 0%, #1B4F91 100%);
+            border: 4px solid var(--clash-gold);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            animation: reward-appear 0.3s ease-out;
+            box-shadow:
+                0 0 0 5px #D68910,
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 100px rgba(255, 215, 0, 0.3);
+        }
+
+        /* NOUVELLE ANIMATION */
+        @keyframes reward-appear {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* === MODAL PARTAGE === */
+        .share-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 4px solid var(--clash-gold);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            z-index: 9999;
+            max-width: 90%;
+            width: 400px;
+            box-shadow:
+                0 0 0 5px #D68910,
+                0 10px 40px rgba(0, 0, 0, 0.7),
+                0 0 100px rgba(255, 215, 0, 0.2);
+        }
+
+        /* === FADE IN === */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* === OPTIMISATIONS MOBILES === */
+        @media (max-width: 640px) {
+            .level-badge {
+                padding: 4px 12px;
+                font-size: 11px;
+            }
+
+            .xp-bar-container {
+                padding: 2px;
+            }
+
+            .xp-bar-fill {
+                height: 12px;
+            }
+
+            .clash-card {
+                border-radius: 15px;
+            }
+
+            .news-card-clash p {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* === MODAL SCROLL === */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: #1a1a2e;
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #4A9EFF;
+            border-radius: 4px;
+        }
+
+        /* === MENU DROPDOWN === */
+        .clash-menu-dropdown {
+            background: linear-gradient(180deg, #1E3A5F 0%, #0D1929 100%);
+            border: 4px solid #1B4F91;
+            border-radius: 20px;
+            box-shadow:
+                0 8px 24px rgba(0, 0, 0, 0.5),
+                0 0 0 6px rgba(27, 79, 145, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            animation: menuDrop 0.3s ease-out;
+        }
+
+        @keyframes menuDrop {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-header {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.05) 100%);
+            padding: 12px 16px;
+            border-bottom: 2px solid #1B4F91;
+            text-align: center;
+            position: relative;
+        }
+
+        .menu-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+
+        .menu-items {
+            padding: 8px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin: 4px 0;
+            background: linear-gradient(180deg, rgba(46, 123, 230, 0.15) 0%, rgba(46, 123, 230, 0.05) 100%);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .menu-item:hover {
+            background: linear-gradient(180deg, rgba(46, 123, 230, 0.3) 0%, rgba(46, 123, 230, 0.15) 100%);
+            border-color: #2E7BE6;
+            transform: translateX(4px);
+            box-shadow:
+                0 4px 12px rgba(46, 123, 230, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item:hover::before {
+            left: 100%;
+        }
+
+        .menu-item-icon {
+            font-size: 24px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .menu-item-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .menu-item-title {
+            font-weight: 700;
+            color: white;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-item-desc {
+            font-size: 11px;
+            color: #87CEEB;
+            opacity: 0.8;
+        }
+
+        .menu-item-arrow {
+            font-size: 16px;
+            color: #4A9EFF;
+            transition: transform 0.2s ease;
+        }
+
+        .menu-item:hover .menu-item-arrow {
+            transform: translateX(4px);
+        }
+
+        .menu-separator {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #1B4F91, transparent);
+            margin: 12px 8px;
+        }
+
+        .menu-item-special {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%);
+        }
+
+        .menu-item-special:hover {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.15) 100%);
+            border-color: #FFD700;
+            box-shadow:
+                0 4px 12px rgba(255, 215, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-item-danger {
+            background: linear-gradient(180deg, rgba(244, 67, 54, 0.15) 0%, rgba(244, 67, 54, 0.05) 100%);
+        }
+
+        .menu-item-danger:hover {
+            background: linear-gradient(180deg, rgba(244, 67, 54, 0.3) 0%, rgba(244, 67, 54, 0.15) 100%);
+            border-color: #F44336;
+            box-shadow:
+                0 4px 12px rgba(244, 67, 54, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item-danger .menu-item-title {
+            color: #FF6B6B;
+        }
+
+        .menu-item-danger .menu-item-desc {
+            color: #FF9999;
+        }
+
+        /* === MODAL ACHIEVEMENTS === */
+        .achievements-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(180deg, #263859 0%, #17223B 100%);
+            border: 4px solid var(--clash-gold);
+            border-radius: 20px;
+            padding: 0;
+            z-index: 9999;
+            max-width: 90%;
+            width: 450px;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 5px #D68910,
+                0 10px 40px rgba(0, 0, 0, 0.7),
+                0 0 100px rgba(255, 215, 0, 0.2);
+        }
+
+        @media (max-width: 640px) {
+            .achievements-modal {
+                max-height: 75vh;
+                width: 95%;
+                max-width: 400px;
+            }
+        }
+
+        .achievements-header {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.1) 100%);
+            padding: 16px;
+            border-bottom: 3px solid #D68910;
+            text-align: center;
+            position: relative;
+        }
+
+        .achievements-content {
+            padding: 16px;
+            max-height: calc(80vh - 100px);
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .achievements-header {
+                padding: 12px;
+            }
+
+            .achievements-content {
+                padding: 12px;
+                max-height: calc(75vh - 90px);
+            }
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: linear-gradient(180deg, rgba(46, 123, 230, 0.1) 0%, rgba(46, 123, 230, 0.05) 100%);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            transition: all 0.2s;
+        }
+
+        @media (max-width: 640px) {
+            .achievement-item {
+                gap: 10px;
+                padding: 10px;
+                margin-bottom: 6px;
+            }
+        }
+
+        .achievement-item.unlocked {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.1) 100%);
+            border-color: #D68910;
+        }
+
+        .achievement-item.locked {
+            opacity: 0.6;
+            filter: grayscale(0.5);
+        }
+
+        .achievement-icon-modal {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(180deg, #FFD700 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 640px) {
+            .achievement-icon-modal {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+                border-width: 2px;
+            }
+        }
+
+        .achievement-item.locked .achievement-icon-modal {
+            background: linear-gradient(180deg, #666 0%, #444 100%);
+            border-color: #333;
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .achievement-desc {
+            font-size: 12px;
+            color: #87CEEB;
+            margin-bottom: 2px;
+        }
+
+        .achievement-progress {
+            font-size: 11px;
+            color: #FFD700;
+            font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .achievement-title {
+                font-size: 14px;
+            }
+
+            .achievement-desc {
+                font-size: 11px;
+            }
+
+            .achievement-progress {
+                font-size: 10px;
+            }
+        }
+
+        .achievement-item.locked .achievement-progress {
+            color: #999;
+        }
+
+        /* === BOUTON QUIZ DANS LA BARRE HEADER === */
+        .quiz-btn-bar {
+            position: relative;
+            /* Essentiel pour le positionnement du badge 'NEW' */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            /* Centre le contenu du bouton */
+            gap: 10px;
+
+            background: linear-gradient(180deg, #FFD700 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 15px;
+            padding: 10px 24px;
+
+            box-shadow:
+                0 4px 0 #D68910,
+                0 8px 20px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+            color: white;
+            font-weight: 900;
+            font-size: 15px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+            text-decoration: none;
+
+            transform: translateY(0);
+            transition: all 0.1s;
+        }
+
+        .quiz-btn-bar:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 6px 0 #D68910,
+                0 12px 30px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .quiz-btn-bar:active {
+            transform: translateY(2px);
+            box-shadow:
+                0 2px 0 #D68910,
+                0 4px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Badge NEW */
+        .new-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #F44336;
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+            padding: 3px 7px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* === BOUTON QUIZ ICÔNE DANS LE HEADER === */
+        .quiz-icon-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 12px;
+            box-shadow:
+                0 3px 0 #D68910,
+                0 5px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.15s ease-out;
+        }
+
+        .quiz-icon-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow:
+                0 5px 0 #D68910,
+                0 8px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .quiz-icon-btn:active {
+            transform: translateY(1px) scale(1);
+            box-shadow:
+                0 2px 0 #D68910,
+                0 3px 6px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Badge "NEW" sous forme de point qui pulse */
+        .new-badge-dot {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--clash-red);
+            border-radius: 50%;
+            border: 2px solid #0f1419;
+            /* Couleur du fond du header */
+            box-shadow: 0 0 10px var(--clash-red);
+            animation: pulse-dot 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                transform: scale(0.9);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        /* === BADGE DE NIVEAU RECTANGULAIRE === */
+        .level-badge-rect {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            height: 40px;
+            padding: 0 16px;
+            background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            border-radius: 12px;
+            box-shadow: 0 3px 0 #D68910, 0 5px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            font-weight: 900;
+            color: #FFF;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            font-size: 14px;
+        }
+
+        /* === STYLE UNIFIÉ POUR LES BOUTONS D'ACTION DU HEADER === */
+        .action-btn-header {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.15s ease-out;
+        }
+
+        /* Style pour le bouton Quiz Doré */
+        .quiz-btn-gold {
+            background: linear-gradient(180deg, var(--clash-gold) 0%, #F39C12 100%);
+            border: 3px solid #D68910;
+            box-shadow: 0 3px 0 #D68910, 0 5px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+        }
+
+        .quiz-btn-gold:hover {
+            transform: translateY(-2px);
+        }
+
+        .quiz-btn-gold:active {
+            transform: translateY(1px);
+        }
+
+        /* Style pour le bouton Menu Bleu */
+        .action-btn-header.clash-btn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+        }
+
+        /* Badge "NEW" sous forme de point qui pulse */
+        .new-badge-dot {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--clash-red);
+            border-radius: 50%;
+            border: 2px solid #0f1419;
+            /* Couleur du fond du header */
+            box-shadow: 0 0 10px var(--clash-red);
+            animation: pulse-dot 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                transform: scale(0.9);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        /* Style spécifique pour le bouton Menu (qui hérite de clash-btn) */
+        .action-btn-header.clash-btn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 12px;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                transform: scale(0.9);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                transform: scale(0.9);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <!-- === CONFIGURATION TAILWIND === -->
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: {} } }
+    </script>
+</head>
+
+<body class="text-gray-200 min-h-screen">
+
+    <!-- ======================================================================== -->
+    <!-- 🏗️ STRUCTURE PRINCIPALE DE L'APPLICATION                               -->
+    <!-- ======================================================================== -->
+    <div x-data="infodropApp()" x-init="init()" class="w-full">
+        <!-- ================================================================== -->
+        <!-- ⏳ ÉCRAN DE CHARGEMENT                                            -->
+        <!-- ================================================================== -->
+        <div x-show="!sessionLoaded" class="min-h-screen flex items-center justify-center">
+            <div class="text-center">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-xl font-bold" style="color: var(--clash-light-blue);">Chargement...</p>
+            </div>
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- 🔑 PAGE DE CONNEXION                                              -->
+        <!-- ================================================================== -->
+        <div x-show="sessionLoaded && !user" x-transition class="min-h-screen flex items-center justify-center p-4">
+            <div class="max-w-sm w-full clash-card p-8">
+                <div class="text-center mb-8">
+                    <div
+                        class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-b from-blue-400 to-blue-600 rounded-full mb-4 shadow-lg">
+                        <span class="text-4xl">📰</span>
+                    </div>
+                    <h1 class="text-3xl font-bold mb-2 text-white">INFODROP</h1>
+                    <p class="text-gray-400">Le Club privé de l'actu centralisée</p>
+                </div>
+
+                <!-- === FORMULAIRE DE CONNEXION === -->
+                <form @submit.prevent="login()" class="space-y-4">
+                    <div>
+                        <input x-model="email" type="email" required @input="email = email.toLowerCase()"
+                            class="w-full clash-input" placeholder="votre@email.com">
+                    </div>
+                    <!-- === CHAMP CODE D'INVITATION === -->
+                    <div>
+                        <input x-model="inviteCode" type="text" class="w-full clash-input"
+                            placeholder="Code d'invitation (si nouveau)">
+                    </div>
+                    <button type="submit" :disabled="loading"
+                        class="w-full clash-btn text-white py-3 px-6 font-bold transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-show="!loading">⚡ Recevoir le lien magique</span>
+                        <span x-show="loading" class="flex items-center justify-center gap-2">
+                            <span
+                                class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                            Envoi en cours...
+                        </span>
+                    </button>
+                </form>
+
+                <!-- === LIEN D'AIDE === -->
+                <p class="text-xs text-center text-gray-400 mt-6">
+                    🎁 Pas de code ? Suivez <a href="https://x.com/LOR4_14" target="_blank"
+                        class="text-blue-400 hover:text-blue-300 underline">nos annonces</a> pour en gagner un !
+                </p>
+
+                <!-- === MESSAGES DE RETOUR === -->
+                <div x-show="message" class="mt-4 p-3 rounded-lg text-sm"
+                    :class="messageType === 'error' ? 'bg-red-900/20 border-2 border-red-500 text-red-300' : 'bg-green-900/20 border-2 border-green-500 text-green-300'"
+                    x-text="message"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- 🏠 APPLICATION PRINCIPALE (UTILISATEUR CONNECTÉ)                  -->
+        <!-- ================================================================== -->
+        <div x-show="sessionLoaded && user" x-transition.opacity class="min-h-screen flex flex-col">
+
+            <!-- ============================================================== -->
+            <!-- 📱 HEADER            -->
+            <!-- ============================================================== -->
+            <div class="sticky top-0 z-40" id="stickyHeader">
+
+                <header class="bg-gradient-to-b from-gray-900 to-gray-950 border-b-4 border-blue-900">
+                    <div class="max-w-6xl mx-auto px-4">
+
+                        <!-- Ligne supérieure avec niveau et XP -->
+                        <div class="py-2 sm:py-3 flex items-center justify-between">
+                            <div class="flex items-center gap-1 sm:gap-4">
+                                <a href="/index.html"
+                                    class="flex items-center gap-1.5 sm:gap-2 hover:scale-105 transition">
+                                    <div x-show="!isAdmin"
+                                        class="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-b from-blue-400 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+                                        <span class="text-lg sm:text-2xl">📰</span>
+                                    </div>
+                                    <button x-show="isAdmin" @click.prevent="showAdminPanel = !showAdminPanel"
+                                        class="clash-btn clash-btn-red w-8 h-8 sm:w-10 sm:h-10 p-0 flex items-center justify-center"
+                                        title="Admin">
+                                        <span class="text-base sm:text-lg">⚙️</span>
+                                    </button>
+                                    <span
+                                        class="text-sm sm:text-xl font-bold text-white whitespace-nowrap">INFODROP</span>
+                                </a>
+                                <span
+                                    class="hidden sm:inline-flex text-[10px] sm:text-xs bg-blue-900/50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-blue-300 font-medium">v4.0.1</span>
+                            </div>
+
+                            <!-- Stats joueur (VERSION FINALE CORRIGÉE) -->
+                            <div class="flex items-center gap-2">
+
+                                <!-- 1. Le Niveau (Rectangulaire avec l'étoile) -->
+                                <div @click="showAchievementsModal = true"
+                                    class="level-badge-rect cursor-pointer hover:scale-105 transition-transform"
+                                    :title="currentAchievement ? getAchievementTitle(currentAchievement) : 'Mes Succès'">
+                                    <!-- On force l'icône étoile pour la cohérence -->
+                                    <span class="text-xs">⭐</span>
+                                    <span>NIV <span x-text="userLevel"></span></span>
+                                </div>
+
+                                <!-- 2. Le Bouton Quiz (Bonne icône et badge NEW) -->
+                                <!-- <a @click.prevent="handleQuizClick()" href="/quiz.html"
+                                    class="action-btn-header quiz-btn-gold">
+                                    <span x-show="showNewQuizBadge" class="new-badge-dot"></span>
+                                    <span>🎯</span>
+                                </a>-->
+
+                                <!-- 3. Le Menu Hamburger (Style harmonisé) -->
+                                <div class="relative" x-data="{ showMenu: false }">
+                                    <div x-show="showMenu" x-transition.opacity
+                                        class="fixed inset-0 backdrop-blur-sm bg-black/20 z-40"
+                                        @click="showMenu = false"></div>
+                                    <button @click="showMenu = !showMenu"
+                                        class="action-btn-header clash-btn relative z-50">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M4 6h16M4 12h16M4 18h16" />
+                                        </svg>
+                                    </button>
+                                    <div x-show="showMenu" x-transition
+                                        class="absolute top-full right-0 mt-3 w-64 clash-menu-dropdown z-50"
+                                        style="display: none;">
+                                        <div class="menu-header">
+                                            <span class="text-xs font-bold text-yellow-300">⚡ MENU PRINCIPAL</span>
+                                        </div>
+                                        <div class="menu-items">
+                                            <a href="/index.html" class="menu-item">
+                                                <div class="menu-item-icon">📰</div>
+                                                <div class="menu-item-content"><span class="menu-item-title">Flux
+                                                        24H</span><span class="menu-item-desc">Actualités temps
+                                                        réel</span></div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                            <a @click.prevent="loadAndShow360Modal()" href="#" class="menu-item">
+                                                <div class="menu-item-icon">🌐</div>
+                                                <div class="menu-item-content"><span class="menu-item-title">Analyses
+                                                        360°</span><span class="menu-item-desc">Vision complète</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                            <a @click.prevent="showShareModal = true" href="#" class="menu-item">
+                                                <div class="menu-item-icon">🎁</div>
+                                                <div class="menu-item-content"><span class="menu-item-title">Mon code
+                                                        d'invitation</span><span class="menu-item-desc">Inviter des
+                                                        amis</span></div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                            <div class="menu-separator"></div>
+                                            <a @click.prevent="showAboutModal = true; showMenu = false" href="#"
+                                                class="menu-item">
+                                                <div class="menu-item-icon">ℹ️</div>
+                                                <div class="menu-item-content"><span class="menu-item-title">À
+                                                        propos</span><span class="menu-item-desc">En savoir plus</span>
+                                                </div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                            <a href="https://buy.stripe.com/7sYcN6fh6ez47u5ejh28801" target="_blank"
+                                                class="menu-item menu-item-special">
+                                                <div class="menu-item-icon">❤️</div>
+                                                <div class="menu-item-content"><span
+                                                        class="menu-item-title">Soutenir</span><span
+                                                        class="menu-item-desc">Aidez-nous</span></div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                            <div class="menu-separator"></div>
+                                            <a @click="logout()" href="#" class="menu-item menu-item-danger">
+                                                <div class="menu-item-icon">🚪</div>
+                                                <div class="menu-item-content"><span
+                                                        class="menu-item-title">Déconnexion</span><span
+                                                        class="menu-item-desc">À bientôt !</span></div>
+                                                <div class="menu-item-arrow">→</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Barre XP (INCHANGÉE) -->
+                        <div class="pb-2 sm:pb-3">
+                            <div class="flex items-center gap-2 sm:gap-3">
+                                <span class="text-xs font-bold text-blue-300">XP</span>
+                                <div class="flex-1 xp-bar-container">
+                                    <div class="xp-bar-fill" :style="`width: ${(userXP / xpToNextLevel) * 100}%`"></div>
+                                </div>
+                                <span class="text-xs font-medium text-gray-400">
+                                    <span x-text="userXP"></span> / <span x-text="xpToNextLevel"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </header>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- ⚙️ PANNEAU ADMINISTRATION                                     -->
+            <!-- ============================================================== -->
+            <div x-show="showAdminPanel && isAdmin" x-transition class="bg-red-950/20 border-b-4 border-red-900">
+                <div class="max-w-6xl mx-auto p-4">
+                    <h2 class="text-lg font-bold text-red-400 mb-4 flex items-center gap-2">
+                        <span>🧨</span>
+                        <span>Ajouter une actualité</span>
+                    </h2>
+
+                    <form @submit.prevent="addManualNews()" class="grid grid-cols-1 gap-3">
+                        <input x-model="newNews.resume" type="text" placeholder="Résumé" maxlength="180" required
+                            class="clash-input">
+                        <input x-model="newNews.url" type="url" placeholder="URL de l'article" required
+                            class="clash-input">
+                        <button type="submit" :disabled="addingNews"
+                            class="clash-btn clash-btn-green px-6 py-3 text-white font-bold disabled:opacity-50">
+                            <span x-show="!addingNews">🚀 Publier</span>
+                            <span x-show="addingNews">⏳ Publication...</span>
+                        </button>
+                    </form>
+
+                    <div class="border-t border-gray-700 pt-4 mt-4">
+                        <div class="flex items-center gap-3">
+                            <h3 class="text-sm font-bold text-gray-300">Générer un code d'invitation</h3>
+                            <button type="button" @click="generateInviteCode()" :disabled="generatingCode"
+                                class="clash-btn px-4 py-2 text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span x-show="!generatingCode">🎁 Générer</span>
+                                <span x-show="generatingCode" class="flex items-center gap-2">
+                                    <span
+                                        class="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                                    Génération...
+                                </span>
+                            </button>
+                            <span x-show="lastGeneratedCode"
+                                class="font-mono bg-gray-800 text-green-400 px-3 py-1 rounded text-sm font-bold">
+                                <span x-text="lastGeneratedCode"></span> (copié !)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- 📊 CONTENU PRINCIPAL                                          -->
+            <!-- ============================================================== -->
+            <main class="max-w-6xl mx-auto px-4 py-4 sm:py-6 flex-grow w-full">
+
+                <!-- ========================================================== -->
+                <!-- 📈 STATISTIQUES GLOBALES (CORRIGÉ)                         -->
+                <!-- ========================================================== -->
+                <div class="flex gap-1 sm:gap-2 mb-4 sm:mb-6">
+                    <div class="stat-card flex-1 min-w-[75px]"
+                        @click="showStatTooltip($event, 'Articles des dernières 24H')">
+                        <div class="relative z-10">
+                            <div class="text-sm sm:text-base">📰</div>
+                            <div class="text-sm sm:text-base font-bold text-white leading-tight"
+                                x-text="stats.total_articles">0</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card flex-1 min-w-[75px]" @click="showStatTooltip($event, 'Sources actives')">
+                        <div class="relative z-10">
+                            <div class="text-sm sm:text-base">📊</div>
+                            <div class="text-sm sm:text-base font-bold text-white leading-tight"
+                                x-text="stats.total_sources">0</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card flex-1 min-w-[75px]"
+                        @click="showStatTooltip($event, 'Jours de lecture consécutifs')">
+                        <div class="relative z-10">
+                            <div class="text-sm sm:text-base">🔥</div>
+                            <div class="text-sm sm:text-base font-bold text-white leading-tight" x-text="readingStreak">
+                                0
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card gold-card flex-1 min-w-[75px] hover:scale-105 transition-transform"
+                        @click="showReadArticles = !showReadArticles">
+                        <div class="relative z-10">
+                            <!-- L'icône change maintenant en fonction de l'état 'showReadArticles' -->
+                            <div class="text-sm sm:text-base" x-text="showReadArticles ? '📖' : '📚'"></div>
+                            <div class="text-sm sm:text-base font-bold text-white leading-tight"
+                                x-text="totalReadCount">0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- 🌈 CHECKER DE DIVERSITÉ (CORRIGÉ)                           -->
+                <!-- ========================================================== -->
+                <!-- MODIFICATION 1: La condition d'affichage est simplifiée pour toujours l'afficher, sauf à 100% -->
+                <div x-show="!loadingNews && diversityScore !== 100" x-transition class="clash-card mb-4 sm:mb-6">
+                    <button @click="showDiversityChecker = !showDiversityChecker"
+                        class="w-full flex items-center justify-between p-3 sm:p-4">
+                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                            <span>🎲</span>
+                            <span>Score de diversité</span>
+                        </h3>
+                        <div class="flex items-center gap-3">
+                            <!-- MODIFICATION 2: Affiche '0%' si le score n'est pas encore calculé, pour éviter un 'null%' inesthétique -->
+                            <div class="text-xl sm:text-2xl font-bold" :class="{
+                                'text-red-400': diversityScore < 30,
+                                'text-yellow-400': diversityScore >= 30 && diversityScore < 70,
+                                'text-green-400': diversityScore >= 70
+                            }" x-text="(diversityScore !== null ? diversityScore : 0) + '%'"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform text-gray-400"
+                                :class="{ 'rotate-180': showDiversityChecker }" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </button>
+
+                    <div x-show="showDiversityChecker" x-transition class="p-3 sm:p-4 border-t-2 border-gray-700">
+                        <div class="mb-3 sm:mb-4">
+                            <div class="xp-bar-container">
+                                <!-- On utilise (diversityScore || 0) pour que la barre soit à 0% au lieu de ne pas s'afficher -->
+                                <div class="xp-bar-fill" :style="`width: ${diversityScore || 0}%`" :class="{
+                                         'bg-gradient-to-r from-red-400 to-red-600': diversityScore < 30,
+                                         'bg-gradient-to-r from-yellow-400 to-yellow-600': diversityScore >= 30 && diversityScore < 70,
+                                         'bg-gradient-to-r from-green-400 to-green-600': diversityScore >= 70
+                                     }"></div>
+                            </div>
+                        </div>
+
+                        <p class="text-sm text-center mb-3" :class="{
+                            'text-red-300': diversityScore < 30,
+                            'text-yellow-300': diversityScore >= 30 && diversityScore < 70,
+                            'text-green-300': diversityScore >= 70
+                        }" x-text="getDiversityMessage()"></p>
+
+                        <p class="text-xs text-center text-blue-300 mb-4" x-text="getDiversityTip()"></p>
+
+                        <div class="flex flex-wrap gap-2 justify-center" x-show="readOrientations.length > 0">
+                            <template x-for="orientation in readOrientations" :key="orientation">
+                                <span class="orientation-tag" :class="getOrientationClass(orientation)">
+                                    <span x-text="getOrientationDisplayName(orientation)"></span>
+                                </span>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- 🔍 SYSTÈME DE FILTRES ET RECHERCHE                       -->
+                <!-- ========================================================== -->
+                <div x-show="!loadingNews" x-transition class="clash-card mb-4 sm:mb-6">
+                    <button @click="showFilters = !showFilters"
+                        class="w-full flex items-center justify-between p-3 sm:p-4">
+                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                            <span>🔍</span>
+                            <span>Filtrer et Rechercher</span>
+                        </h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform text-gray-400"
+                            :class="{ 'rotate-180': showFilters }" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+
+                    <div x-show="showFilters" x-transition class="p-3 sm:p-4 border-t-2 border-gray-700 space-y-4">
+                        <!-- Barre de recherche -->
+                        <div>
+                            <div class="relative">
+                                <input x-model="searchQuery" type="text" placeholder="Rechercher dans les articles..."
+                                    class="w-full clash-input pl-10 pr-10" @input="$el.value = $el.value.toLowerCase()">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                <button x-show="searchQuery" @click="searchQuery = ''"
+                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <p x-show="searchQuery && filteredNewsList.length === 0"
+                                class="text-sm text-yellow-400 mt-2">
+                                Aucun résultat pour "<span x-text="searchQuery"></span>"
+                            </p>
+                            <p x-show="searchQuery && filteredNewsList.length > 0" class="text-sm text-green-400 mt-2">
+                                <span x-text="filteredNewsList.length"></span> résultat<span
+                                    x-text="filteredNewsList.length > 1 ? 's' : ''"></span> trouvé<span
+                                    x-text="filteredNewsList.length > 1 ? 's' : ''"></span>
+                            </p>
+                        </div>
+
+                        <button @click="toggleFilter('all')" class="clash-btn px-4 py-2 text-sm text-white"
+                            :class="activeFilter === 'all' ? 'clash-btn-green' : ''">
+                            🎯 Tout voir
+                        </button>
+
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-300 mb-3">🗳️ Orientations politiques</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <template x-for="orientation in allOrientations" :key="orientation">
+                                    <button @click="toggleFilter(orientation)" :class="[
+                                            'clash-btn px-3 py-1 text-xs',
+                                            activeFilter === orientation ? 'clash-btn-green' : '',
+                                            !hasArticlesForOrientation(orientation) ? 'opacity-50 cursor-not-allowed' : ''
+                                        ]" :disabled="!hasArticlesForOrientation(orientation)"
+                                        :title="hasArticlesForOrientation(orientation) ? '' : 'Aucun article ces dernières 24h'">
+                                        <span x-text="getOrientationDisplayName(orientation)"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div x-show="allOtherTags.length > 0">
+                            <h4 class="text-sm font-bold text-gray-300 mb-3">🏷️ Catégories</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <template x-for="tag in allOtherTags" :key="tag">
+                                    <button @click="toggleFilter(tag)" :class="[
+                                            'clash-btn px-3 py-1 text-xs',
+                                            activeFilter === tag ? 'clash-btn-green' : '',
+                                            !hasArticlesForTag(tag) ? 'opacity-50 cursor-not-allowed' : ''
+                                        ]" :disabled="!hasArticlesForTag(tag)"
+                                        :title="hasArticlesForTag(tag) ? '' : 'Aucun article ces dernières 24h'"
+                                        x-text="tag"></button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- 📰 LISTE DES ACTUALITÉS                                   -->
+                <!-- ========================================================== -->
+
+                <!-- Section Articles Lus (CORRIGÉE) -->
+                <div x-show="showReadArticles" x-transition class="mb-4 sm:mb-6">
+                    <div class="clash-card p-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                                <!-- L'icône est maintenant le livre ouvert -->
+                                <span>📖</span>
+                                <span>Articles lus (<span x-text="Object.keys(readArticles).length"></span>)</span>
+                            </h2>
+                            <button @click="showReadArticles = false" class="clash-btn px-3 py-1 text-sm text-white">
+                                ✕ Fermer
+                            </button>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+                                <input type="checkbox" x-model="hideReadFromMain" @change="saveReadPreferences()"
+                                    class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500">
+                                <span>Masquer les articles lus du flux principal</span>
+                            </label>
+                        </div>
+
+                        <div class="space-y-3 max-h-96 overflow-y-auto">
+                            <template x-for="news in getReadArticlesList()" :key="news.id">
+                                <div class="news-card-clash opacity-60 hover:opacity-80 transition">
+                                    <a :href="news.url" target="_blank" class="block">
+                                        <p class="text-base sm:text-lg text-gray-300 mb-3 leading-relaxed"
+                                            x-text="news.resume"></p>
+                                        <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-sm">
+                                            <span class="text-green-400 font-bold">✓ Lu</span>
+                                            <span x-show="news.added_by" class="font-bold text-red-400">🧨
+                                                INFODROP</span>
+                                            <span x-show="!news.added_by" class="text-gray-500"
+                                                x-text="news.source"></span>
+                                            <span class="text-gray-500">⏰ <span
+                                                    x-text="formatTime(news.heure)"></span></span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </template>
+                            <div x-show="Object.keys(readArticles).length === 0" class="text-center py-8 text-gray-500">
+                                <p>Aucun article lu pour le moment</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flux Principal -->
+                <div class="space-y-3 sm:space-y-4">
+                    <template x-for="news in filteredNewsList" :key="news.id">
+                        <div x-show="!hideReadFromMain || !readArticles[news.id]" class="news-card-clash fade-in group"
+                            :class="{ 'read-article': readArticles[news.id] && !hideReadFromMain }">
+                            <a :href="news.url" target="_blank" @click="markAsRead(news.id)" class="block">
+                                <p class="text-base sm:text-lg text-white mb-3 leading-relaxed" x-text="news.resume">
+                                </p>
+                                <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-sm">
+                                    <span x-show="news.added_by" class="font-bold text-red-400">🧨 INFODROP</span>
+                                    <span x-show="!news.added_by" class="text-gray-400" x-text="news.source"></span>
+                                    <span class="text-blue-300">⏰ <span x-text="formatTime(news.heure)"></span></span>
+                                    <span x-show="news.orientation" class="orientation-tag"
+                                        :class="getOrientationClass(news.orientation)">
+                                        <span x-text="getOrientationDisplayName(news.orientation)"></span>
+                                    </span>
+                                    <template x-if="news.tags && news.tags.filter(tag => tag !== '🧨INFODROP').length">
+                                        <div class="flex gap-2">
+                                            <template x-for="tag in news.tags.filter(tag => tag !== '🧨INFODROP')"
+                                                :key="tag">
+                                                <span
+                                                    class="px-3 py-1 bg-gray-700/50 rounded-full text-xs text-gray-300 border border-gray-600"
+                                                    x-text="tag"></span>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+                            </a>
+
+                            <!-- Boutons admin -->
+                            <div x-show="showAdminPanel && isAdmin"
+                                class="flex gap-2 mt-3 pt-3 border-t border-gray-700">
+                                <button @click.prevent.stop="openEditPanel(news)"
+                                    class="clash-btn px-3 py-1 text-xs text-white">
+                                    ✏️ Éditer
+                                </button>
+                                <button @click.prevent.stop="deleteNews(news.id)"
+                                    class="clash-btn clash-btn-red px-3 py-1 text-xs text-white">
+                                    🗑️ Supprimer
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Messages d'état -->
+                    <div x-show="filteredNewsList.length === 0 && !loadingNews" class="text-center py-12">
+                        <div x-show="activeFilter === 'all' && !searchQuery" class="text-gray-500">
+                            <div class="text-6xl mb-4">📭</div>
+                            <p class="text-lg">Aucune actualité pour le moment.</p>
+                        </div>
+                        <div x-show="activeFilter !== 'all' && !searchQuery"
+                            class="clash-card p-6 sm:p-8 max-w-lg mx-auto text-center">
+                            <div class="text-5xl mb-4">🔍</div>
+                            <h3 class="text-xl font-bold text-white mb-3">Aucun article trouvé</h3>
+                            <p class="text-gray-400 mb-6" x-text="getEmptyFilterMessage()"></p>
+                            <button @click="toggleFilter('all')" class="clash-btn px-6 py-3 text-white">
+                                ← Voir toutes les actualités
+                            </button>
+                        </div>
+                        <div x-show="searchQuery" class="clash-card p-6 sm:p-8 max-w-lg mx-auto text-center">
+                            <div class="text-5xl mb-4">🔍</div>
+                            <h3 class="text-xl font-bold text-white mb-3">Aucun résultat</h3>
+                            <p class="text-gray-400 mb-6">Aucun article ne correspond à votre recherche "<span
+                                    x-text="searchQuery"></span>"</p>
+                            <button @click="searchQuery = ''" class="clash-btn px-6 py-3 text-white">
+                                ← Effacer la recherche
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Loader -->
+                    <div x-show="loadingNews && filteredNewsList.length === 0" class="text-center py-12">
+                        <div class="loading-spinner mx-auto mb-4"></div>
+                        <p class="text-gray-400">Chargement des actualités...</p>
+                    </div>
+                </div>
+            </main>
+
+            <!-- ============================================================== -->
+            <!-- 🎁 MODAL CODE D'INVITATION                                    -->
+            <!-- ============================================================== -->
+            <div x-show="showShareModal" x-transition @click.away="showShareModal = false"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+                <div class="share-modal">
+                    <h3 class="text-2xl font-bold text-white mb-4">🎁 Mon code d'invitation</h3>
+
+                    <div x-show="userInviteData.code" class="mb-6">
+                        <p class="text-gray-300 mb-3">Partagez ce code avec vos proches :</p>
+                        <div class="font-mono bg-blue-900/50 px-4 py-3 rounded-lg cursor-pointer hover:bg-blue-900/70 transition text-white text-xl border-2 border-blue-600 font-bold"
+                            @click="copyInviteMessage(userInviteData.code)" title="Cliquez pour copier">
+                            <span x-text="userInviteData.code"></span>
+                        </div>
+                        <span x-show="copied" class="text-green-400 font-bold text-sm mt-2 inline-block">✓ Copié
+                            !</span>
+                    </div>
+
+                    <div x-show="!userInviteData.code" class="text-gray-400 mb-6">
+                        <p>Aucun code d'invitation disponible.</p>
+                    </div>
+
+                    <div class="space-y-2 text-sm">
+                        <div x-show="userInviteData.parrainEmail" class="flex items-center justify-center gap-2">
+                            <span class="text-green-400">👆</span>
+                            <span class="text-gray-400">Invité par :</span>
+                            <span class="font-mono text-white" x-text="userInviteData.parrainEmail"></span>
+                        </div>
+
+                        <div x-show="userInviteData.filleulEmail" class="flex items-center justify-center gap-2">
+                            <span class="text-purple-400">👇</span>
+                            <span class="text-gray-400">Votre filleul :</span>
+                            <span class="font-mono text-white" x-text="userInviteData.filleulEmail"></span>
+                        </div>
+                    </div>
+
+                    <button @click="showShareModal = false" class="clash-btn px-6 py-2 mt-6 text-white">
+                        Fermer
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- 🏆 MODAL MES SUCCÈS (AVEC FLOU)                                -->
+            <!-- ============================================================== -->
+            <div x-show="showAchievementsModal" x-transition
+                @click="if($event.target === $el) showAchievementsModal = false"
+                class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                style="display: none;">
+                <div class="achievements-modal" @click.stop>
+                    <div class="achievements-header relative">
+                        <button @click="showAchievementsModal = false"
+                            class="absolute top-3 right-3 clash-btn clash-btn-red p-1.5 w-8 h-8 flex items-center justify-center">
+                            <span class="text-lg">✕</span>
+                        </button>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white mb-1">🏆 Mes Succès</h2>
+                        <p class="text-xs sm:text-sm text-yellow-200">Score de diversité : <span
+                                x-text="diversityScore || 0"></span>%</p>
+                    </div>
+                    <div class="achievements-content modal-content">
+                        <!-- Achievements débloqués -->
+                        <h3 class="text-base sm:text-lg font-bold text-white mb-2 flex items-center gap-2">
+                            <span>✅</span>
+                            <span>Débloqués</span>
+                        </h3>
+                        <template x-for="achievement in getAllAchievementsData().filter(a => a.unlocked)"
+                            :key="achievement.id">
+                            <div class="achievement-item unlocked">
+                                <div class="achievement-icon-modal">
+                                    <span x-text="achievement.icon"></span>
+                                </div>
+                                <div class="achievement-info">
+                                    <div class="achievement-title" x-text="achievement.title"></div>
+                                    <div class="achievement-desc" x-text="achievement.description"></div>
+                                    <div class="achievement-progress">✓ Complété</div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Achievements verrouillés -->
+                        <h3 class="text-base sm:text-lg font-bold text-white mb-2 mt-4 flex items-center gap-2">
+                            <span>🔒</span>
+                            <span>À débloquer</span>
+                        </h3>
+                        <template x-for="achievement in getAllAchievementsData().filter(a => !a.unlocked)"
+                            :key="achievement.id">
+                            <div class="achievement-item locked">
+                                <div class="achievement-icon-modal">
+                                    <span>🔒</span>
+                                </div>
+                                <div class="achievement-info">
+                                    <div class="achievement-title" x-text="achievement.title"></div>
+                                    <div class="achievement-desc" x-text="achievement.description"></div>
+                                    <div class="achievement-progress" x-text="achievement.progress"></div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="p-3 text-center border-t-2 border-gray-700">
+                        <button @click="showAchievementsModal = false" class="clash-btn px-4 py-1.5 text-sm text-white">
+                            Fermer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- 🎭 MODAL D'ÉDITION                                            -->
+            <!-- ============================================================== -->
+            <div x-show="showEditPanel" x-transition
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" style="display: none;">
+                <div @click.away="showEditPanel = false" class="clash-card w-full max-w-lg p-6">
+                    <h3 class="text-xl font-bold mb-4 text-white">✏️ Éditer l'actualité</h3>
+                    <form @submit.prevent="updateNews()" class="space-y-4">
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">Résumé</label>
+                            <input x-model="editingNews.resume" type="text" class="w-full clash-input">
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">Source</label>
+                            <input x-model="editingNews.source" type="text" class="w-full clash-input">
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">URL</label>
+                            <input x-model="editingNews.url" type="url" class="w-full clash-input">
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">Orientation</label>
+                            <select x-model="editingNews.orientation" class="w-full clash-input">
+                                <option value="">Non définie</option>
+                                <option value="extrême-gauche">Extrême gauche</option>
+                                <option value="gauche">Gauche</option>
+                                <option value="centre-gauche">Centre gauche</option>
+                                <option value="centre">Centre</option>
+                                <option value="centre-droit">Centre droit</option>
+                                <option value="droite">Droite</option>
+                                <option value="extrême-droite">Extrême droite</option>
+                                <option value="neutre">Neutre</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">Tags (séparés par des virgules)</label>
+                            <input x-model="editingNews.tagsText" type="text" class="w-full clash-input"
+                                placeholder="ex: national, crypto, tv">
+                        </div>
+                        <div class="flex justify-end gap-3 pt-4">
+                            <button type="button" @click="showEditPanel = false" class="clash-btn px-4 py-2 text-white">
+                                Annuler
+                            </button>
+                            <button type="submit" class="clash-btn clash-btn-green px-4 py-2 text-white">
+                                Enregistrer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- ============================================================== -->
+            <!-- ℹ️ MODAL À PROPOS (AVEC REMERCIEMENTS)                          -->
+            <!-- ============================================================== -->
+            <div x-show="showAboutModal" x-transition @click="if ($event.target === $el) showAboutModal = false"
+                class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                style="display: none;"
+                x-init="$watch('showAboutModal', value => document.body.style.overflow = value ? 'hidden' : '')">
+
+                <div class="achievements-modal flex flex-col" @click.stop>
+
+                    <!-- En-tête (inchangé) -->
+                    <div class="achievements-header relative flex-shrink-0">
+                        <button @click="showAboutModal = false"
+                            class="absolute top-3 right-3 clash-btn clash-btn-red p-1.5 w-8 h-8 flex items-center justify-center">
+                            <span class="text-lg">✕</span>
+                        </button>
+                        <h2
+                            class="text-xl sm:text-2xl font-bold text-white mb-1 flex items-center justify-center gap-3">
+                            <span class="text-2xl">📰</span>
+                            <span>À propos d'INFODROP</span>
+                        </h2>
+                        <p class="text-xs sm:text-sm text-yellow-200">Version 4.0.0</p>
+                    </div>
+
+                    <!-- Contenu scrollable (inchangé) -->
+                    <div class="achievements-content modal-content flex-grow overflow-y-auto">
+                        <div class="space-y-4">
+                            <!-- Le Projet -->
+                            <div class="clash-card p-4">
+                                <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                                    <span class="text-yellow-400">⚡</span>
+                                    Le Projet
+                                </h3>
+                                <p class="text-gray-300 leading-relaxed text-sm">
+                                    INFODROP est un club privé d'actualités gamifiées qui transforme la consommation
+                                    d'information en mission d'intelligence. Notre objectif : vous aider à sortir de
+                                    votre bulle
+                                    de filtre et développer une vision équilibrée de l'actualité.
+                                </p>
+                            </div>
+
+                            <!-- Comment ça marche -->
+                            <div class="clash-card p-4">
+                                <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                                    <span class="text-green-400">🎮</span>
+                                    Comment ça marche ?
+                                </h3>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-blue-400">1.</span>
+                                        <span class="text-gray-300">Lisez des articles de sources variées pour gagner de
+                                            l'XP.</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-green-400">2.</span>
+                                        <span class="text-gray-300">Diversifiez vos lectures pour améliorer votre Score
+                                            de Diversité.</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-yellow-400">3.</span>
+                                        <span class="text-gray-300">Montez en niveau et débloquez des Succès.</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-purple-400">4.</span>
+                                        <span class="text-gray-300">Maintenez votre streak de lecture quotidien.</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-red-400">5.</span>
+                                        <span class="text-gray-300">Analysez les sujets sous tous les angles avec
+                                            INFODROP 360°.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Le Système de Parrainage -->
+                            <div class="clash-card p-4">
+                                <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                                    <span class="text-purple-400">🎁</span>
+                                    Le Système de Parrainage
+                                </h3>
+                                <p class="text-gray-300 mb-3 text-sm">
+                                    INFODROP fonctionne sur invitation uniquement. Chaque membre reçoit un code unique à
+                                    partager.
+                                </p>
+                                <div class="bg-green-900/30 border-2 border-green-600 rounded-lg p-3">
+                                    <p class="text-green-300 font-bold text-center text-sm">
+                                        Un code = Un filleul = Une communauté de qualité
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- L'Équipe (MODIFIÉE POUR INCLURE LES REMERCIEMENTS) -->
+                            <div class="clash-card p-4">
+                                <!-- Section Équipe (originale) -->
+                                <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                                    <span class="text-red-400">👥</span>
+                                    L'Équipe
+                                </h3>
+                                <p class="text-gray-300 text-center text-sm">
+                                    Un projet 3C - w/L0r4.py [AI]
+                                </p>
+
+                                <!-- Séparateur visuel -->
+                                <div class="border-t-2 border-gray-700/50 my-4"></div>
+
+                                <!-- Section Remerciements (nouvelle) -->
+                                <h4 class="text-lg font-bold text-white mb-2 flex items-center justify-center gap-2">
+                                    <span class="text-yellow-400">🛡️</span>
+                                    <span>Nos Bêta-Testeurs</span>
+                                </h4>
+                                <p class="text-gray-400 text-center text-xs mb-4">
+                                    Un immense merci pour leur aide précieuse et leurs retours avisés.
+                                </p>
+                                <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
+                                    <span class="font-medium text-gray-200">Alpha4</span>
+                                    <span class="font-medium text-gray-200">Coolmax</span>
+                                    <span class="font-medium text-gray-200">José</span>
+                                    <span class="font-medium text-gray-200">Yoz</span>
+                                    <span class="font-medium text-gray-200">Same</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pied de page (inchangé) -->
+                    <div class="p-4 text-center border-t-2 border-gray-700 flex-shrink-0">
+                        <a href="mailto:lauranallim@protonmail.com" class="clash-btn px-4 py-1.5 text-sm text-white">
+                            📧 Contactez-nous
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- 🌐 MODAL POUR INFODROP 360° (FERMETURE CORRIGÉE)                -->
+            <!-- ============================================================== -->
+            <div x-show="show360Modal" x-transition @click="if ($event.target === $el) show360Modal = false"
+                class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                style="display: none;">
+
+                <div class="achievements-modal flex flex-col" @click.stop>
+                    <div class="achievements-header relative flex-shrink-0">
+                        <button @click="show360Modal = false"
+                            class="absolute top-3 right-3 clash-btn clash-btn-red p-1.5 w-8 h-8 flex items-center justify-center"><span
+                                class="text-lg">✕</span></button>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white mb-1">🌐 Analyses 360°</h2>
+                    </div>
+
+                    <div class="achievements-content modal-content flex-grow overflow-y-auto">
+                        <!-- Affiche un spinner pendant le chargement -->
+                        <div x-show="loadingAnalyses" class="flex justify-center py-8">
+                            <div class="loading-spinner"></div>
+                        </div>
+
+                        <!-- Affiche la liste une fois chargée -->
+                        <div x-show="!loadingAnalyses" class="space-y-4">
+                            <template x-for="analyse in analyses" :key="analyse.slug">
+                                <a :href="analyse.status === 'published' ? `/analyses/${analyse.slug}.html` : '#'"
+                                    class="block clash-card p-4 transition-transform hover:scale-105"
+                                    :class="{ 'opacity-60 cursor-not-allowed': analyse.status === 'wip' }">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="text-sm text-yellow-400 font-semibold"
+                                                x-text="analyse.category"></span>
+                                            <span x-show="analyse.isNew"
+                                                class="text-xs bg-green-600 text-green-100 px-2 py-0.5 rounded-full">NOUVEAU</span>
+                                        </div>
+                                        <h3 class="text-base font-bold text-white mb-2" x-text="analyse.title"></h3>
+                                        <div class="text-xs text-gray-400 flex justify-between items-center">
+                                            <span x-text="analyse.date"></span>
+                                            <span x-show="analyse.status === 'published'"
+                                                class="text-blue-400 font-semibold">→ Lire l'analyse</span>
+                                            <span x-show="analyse.status === 'wip'"
+                                                class="text-gray-500">Bientôt...</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- 💎 MODAL DE RÉCOMPENSE UNIFIÉ (DESIGN CORRIGÉ)                   -->
+            <!-- ============================================================== -->
+            <div x-show="showRewardModal" x-transition @click="if ($event.target === $el) closeRewardModal()"
+                class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                style="display: none;">
+
+                <!-- MODIFICATION : On utilise une nouvelle classe 'reward-modal-card' et une taille 'max-w-xs' -->
+                <div class="reward-modal-card w-full max-w-xs" @click.stop>
+                    <div class="text-6xl mb-3" x-text="rewardData.icon"></div>
+                    <h3 class="text-2xl font-bold mb-2 text-white" x-text="rewardData.title"></h3>
+                    <p class="text-lg text-blue-200" x-text="rewardData.description"></p>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- 🦶 FOOTER                                                     -->
+            <!-- ============================================================== -->
+            <footer class="text-center py-6 sm:py-8 text-xs text-gray-500 mt-auto border-t-2 border-gray-800">
+                <p>© 2025 INFODROP. Tous droits réservés.</p>
+                <p class="mt-1">Un projet 3C - L0r4.py [AI]</p>
+            </footer>
+        </div>
+
+        <!-- ======================================================================== -->
+        <!-- 🔝 BOUTON SCROLL TO TOP                                                 -->
+        <!-- ======================================================================== -->
+        <button x-data="{ show: false }" x-show="show" x-transition
+            @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            x-init="window.addEventListener('scroll', () => { show = window.scrollY > 500 })"
+            class="fixed bottom-6 right-6 z-40 clash-btn p-3 text-white" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd" />
+            </svg>
+        </button>
+
+
+
+        <!-- ======================================================================== -->
+        <!-- 🧮 JAVASCRIPT - LOGIQUE MÉTIER AVEC GAMIFICATION                        -->
+        <!-- ======================================================================== -->
+        <script>
+            /* ───── CONFIG DEBUG ───── */
+            const DEBUG = true;
+            const dlog = (...args) => DEBUG && console.log('[DEBUG]', ...args);
+
+            /* ───── Variables globales ───── */
+            let supabaseClient = null;
+            let ADMIN_EMAILS = [];
+            let STRIPE_LINK = '';
+
+            /* ──────────────────────────────────────────────────────────────────────
+               initializeSupabase — Appel unique au chargement, version propre
+               ─────────────────────────────────────────────────────────────────── */
+            async function initializeSupabase() {
+                if (supabaseClient) { return true; }
+                dlog('🔐 initializeSupabase() lancé');
+                try {
+                    const res = await fetch('/api/config');
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    const cfg = await res.json();
+                    ADMIN_EMAILS = cfg.adminEmails;
+                    STRIPE_LINK = cfg.stripeLink;
+                    const { createClient } = window.supabase;
+                    supabaseClient = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+                    dlog('✅ Supabase initialisé');
+                    return true;
+                } catch (err) {
+                    console.error('❌ Erreur initialisation:', err);
+                    const errorDiv = document.createElement('div');
+                    errorDiv.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: Arial;"><div style="text-align: center; padding: 2rem;"><h2>❌ Erreur de configuration</h2><p>Impossible de charger la configuration sécurisée.</p><button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem;">Recharger</button></div></div>`;
+                    document.body.appendChild(errorDiv);
+                    return false;
+                }
+            }
+
+            // ====================================================================
+            // 🏗️ APPLICATION PRINCIPALE - GESTION DE L'ÉTAT ET LOGIQUE MÉTIER
+            // ====================================================================
+            function infodropApp() {
+                const ORIENTATION_DATA = { 'extrême-gauche': { class: 'bg-[#FF0000] text-white border-[#CC0000]', color: '#FF0000' }, 'gauche': { class: 'bg-[#D42A2A] text-white border-[#A82020]', color: '#D42A2A' }, 'centre-gauche': { class: 'bg-[#AA5555] text-white border-[#884444]', color: '#AA5555' }, 'centre': { class: 'bg-[#808080] text-white border-[#666666]', color: '#808080' }, 'centre-droit': { class: 'bg-[#5555AA] text-white border-[#444488]', color: '#5555AA' }, 'droite': { class: 'bg-[#2A2AD4] text-white border-[#2020A8]', color: '#2A2AD4' }, 'extrême-droite': { class: 'bg-[#0000FF] text-white border-[#0000CC]', color: '#0000FF' }, 'gouvernement': { class: 'bg-blue-800 text-blue-100 border-blue-900', color: '#1e40af' }, 'neutre': { class: 'bg-green-700 text-green-100 border-green-800', color: '#16a34a' } };
+
+                return {
+                    // --- ÉTAT DE L'APPLICATION ---
+                    isDataLoaded: false,
+                    sessionLoaded: false,
+                    user: null,
+                    email: '',
+                    loading: false,
+                    message: '',
+                    messageType: '',
+                    inviteCode: '',
+                    newsList: [],
+                    loadingNews: true,
+                    latestNewsTimestamp: null,
+                    updateInterval: null,
+                    realtimeChannel: null,
+
+                    // --- PANNEAU ADMIN ---
+                    isAdmin: false,
+                    showAdminPanel: false,
+                    addingNews: false,
+                    newNews: { resume: '', url: '' },
+                    lastGeneratedCode: null,
+                    generatingCode: false,
+                    editingNews: {},
+
+                    // --- MODALES & PANNEAUX UTILISATEUR ---
+                    showShareModal: false,
+                    copied: false,
+                    showAboutModal: false,
+                    showFilters: false,
+                    showAchievementsModal: false,
+                    showEditPanel: false,
+                    show360Modal: false,
+                    analyses: [],
+                    loadingAnalyses: false,
+                    showRewardModal: false,
+                    rewardData: { icon: '', title: '', description: '' },
+                    showNewQuizBadge: true,
+
+
+                    // --- STATS & GAMIFICATION ---
+                    stats: { total_articles: 0, total_sources: 0 },
+                    achievementsData: [],
+                    userXP: 0,
+                    userLevel: 1,
+                    xpToNextLevel: 100,
+                    readingStreak: 0,
+                    unlockedAchievements: [],
+                    lastReadDate: null,
+                    currentAchievement: null,
+                    userInviteData: { code: null, parrainEmail: null, filleulEmail: null },
+
+                    // --- FILTRES & DIVERSITÉ ---
+                    activeFilter: 'all',
+                    searchQuery: '',
+                    allOrientations: [],
+                    allOtherTags: [],
+                    activeOrientations: [],
+                    activeTags: [],
+                    diversityScore: null,
+                    readOrientations: [],
+                    showDiversityChecker: true,
+
+                    // --- ARTICLES LUS ---
+                    readArticles: {},
+                    totalReadCount: 0,
+                    showReadArticles: false,
+                    hideReadFromMain: true,
+
+                    // ============================================================
+                    // 🚀 INITIALISATION DE L'APPLICATION
+                    // ============================================================
+                    async init() {
+                        localStorage.removeItem('infodrop_animation_queue');
+                        if (window.infodropAppInitialized) return;
+                        window.infodropAppInitialized = true;
+                        console.log('🚀 Alpine init() lancé.');
+
+                        const isReady = await initializeSupabase();
+                        if (isReady) {
+                            supabaseClient.auth.onAuthStateChange((event, session) => {
+                                this.$nextTick(async () => {
+                                    this.user = session?.user || null;
+                                    this.sessionLoaded = true;
+
+                                    if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+                                        if (!this.user) return;
+                                        if (this.isDataLoaded) return;
+                                        this.isDataLoaded = true;
+
+                                        this.loadingNews = true;
+                                        this.isAdmin = ADMIN_EMAILS.includes(this.user.email);
+
+                                        const week = this.getWeekNumber(new Date());
+                                        if (localStorage.getItem(`infodrop_quiz_seen_week_${week}`)) {
+                                            this.showNewQuizBadge = false;
+                                        }
+
+                                        try {
+                                            // ÉTAPE 1 : On charge TOUTES les données de l'utilisateur d'abord.
+                                            await Promise.all([
+                                                this.loadAchievements(),
+                                                this.initGamification(),
+                                                this.loadReadArticlesFromDB(), // <- Le plus important
+                                                this.loadReadPreferences(),
+                                                this.loadUserInviteData(),
+                                                this.loadStats(),
+                                                this.calculateDiversityScore()
+                                            ]);
+
+                                            console.log(`[DEBUG] Données utilisateur chargées. ${Object.keys(this.readArticles).length} articles lus prêts pour l'affichage.`);
+
+                                            // ÉTAPE 2 : On synchronise les succès en silence.
+                                            await this.synchronizeAchievements();
+
+                                            // ÉTAPE 3 : SEULEMENT MAINTENANT, on charge et affiche les actualités.
+                                            await this.loadNews(this.activeFilter, true);
+
+                                            this.startAutoUpdate();
+                                            this.setupRealtime(session);
+
+                                        } catch (error) {
+                                            console.error('[FATAL] Erreur de chargement:', error);
+                                            this.loadingNews = false;
+                                        }
+                                    } else if (event === 'SIGNED_OUT') {
+                                        this.isDataLoaded = false;
+                                        this.stopAutoUpdate();
+                                        if (this.realtimeChannel) { supabaseClient.removeChannel(this.realtimeChannel); this.realtimeChannel = null; }
+                                    }
+                                });
+                            });
+                        }
+
+                        document.addEventListener('visibilitychange', () => {
+                            if (!document.hidden) {
+                                // On se contente de gérer la file d'attente des animations au retour.
+                                const queue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
+                                localStorage.removeItem('infodrop_animation_queue');
+
+                                if (queue.length > 0) {
+                                    this.playAnimationQueue(queue);
+                                }
+                            }
+                        });
+                    },
+
+                    // ============================================================
+                    // 📚 ORCHESTRATEUR DE GAMIFICATION
+                    // ============================================================
+                    async markAsRead(id) {
+                        if (!this.user || this.readArticles[id]) return;
+
+                        this.readArticles[id] = new Date().toISOString();
+                        this.updateTotalReadCount();
+
+                        const article = this.newsList.find(n => n.id === id);
+                        let animationQueue = [];
+
+                        // Mettre à jour l'XP
+                        this.updateXP(article, animationQueue);
+                        this.updateStreak();
+                        await this.calculateDiversityScore();
+
+                        // IMPORTANT : Stocker les achievements actuels AVANT la vérification
+                        const achievementsBeforeCheck = [...this.unlockedAchievements];
+
+                        await this.checkAchievements(animationQueue);
+
+                        // Filtrer la queue pour ne garder que les NOUVEAUX achievements
+                        animationQueue = animationQueue.filter(anim => {
+                            if (anim.type === 'achievement') {
+                                // Vérifier si c'était vraiment un nouvel achievement
+                                const wasAlreadyUnlocked = achievementsBeforeCheck.some(code => {
+                                    const achievement = this.achievementsData.find(a => a.code === code);
+                                    return achievement && achievement.title === anim.title;
+                                });
+                                return !wasAlreadyUnlocked;
+                            }
+                            return true; // Garder XP et level up
+                        });
+
+                        await this.saveGamingData();
+                        await this.saveReadArticleToDB(id);
+                        await this.addToDiversityData(article);
+
+                        // Sauvegarder seulement si il y a de vraies nouvelles animations
+                        if (animationQueue.length > 0) {
+                            // Récupérer la queue existante et fusionner
+                            const existingQueue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
+                            const newQueue = [...existingQueue, ...animationQueue];
+                            localStorage.setItem('infodrop_animation_queue', JSON.stringify(newQueue));
+                        }
+                    },
+
+                    // ============================================================
+                    // 🎮 FONCTION checkAchievements - DOIT ÊTRE ICI
+                    // ============================================================
+                    async checkAchievements(queue = null) {
+                        if (!this.user || !this.achievementsData.length) return;
+
+                        // Protection contre la boucle infinie pour la diversité
+                        const diversityAchievements = this.achievementsData.filter(a => a.condition_type === 'diversity_score');
+                        const allDiversityUnlocked = diversityAchievements.every(a => this.unlockedAchievements.includes(a.code));
+                        if (allDiversityUnlocked && this.diversityScore >= 90) { return; }
+
+                        for (const achievement of this.achievementsData) {
+                            if (this.unlockedAchievements.includes(achievement.code)) continue;
+
+                            let shouldUnlock = false;
+                            switch (achievement.condition_type) {
+                                case 'connection': shouldUnlock = true; break; // On remet le cas 'connection'
+                                case 'articles_read': shouldUnlock = this.totalReadCount >= achievement.condition_value; break;
+                                case 'streak_days': shouldUnlock = this.readingStreak >= achievement.condition_value; break;
+                                case 'level_reached': shouldUnlock = this.userLevel >= achievement.condition_value; break;
+                                case 'diversity_score': shouldUnlock = this.diversityScore >= achievement.condition_value; break;
+                            }
+
+                            if (shouldUnlock) {
+                                // MODIFICATION : On passe la 'queue' à la fonction suivante
+                                await this.unlockAchievement(achievement.code, queue);
+                            }
+                        }
+                    },
+
+                    // ============================================================
+                    // 🎮 SOUS-FONCTIONS DE GAMIFICATION
+                    // ============================================================
+                    updateXP(article, queue) {
+                        let xpGained = 10;
+                        if (article) {
+                            if (article.orientation && !this.readOrientations.includes(article.orientation)) xpGained += 20;
+                            if (article.tags && article.tags.includes('🧨INFODROP')) xpGained += 5;
+                        }
+
+                        // Toujours ajouter l'XP à la queue
+                        if (xpGained > 0 && queue) {
+                            queue.push({ type: 'xp', amount: xpGained });
+                        }
+
+                        this.userXP += xpGained;
+                        while (this.userXP >= this.xpToNextLevel) {
+                            this.userXP -= this.xpToNextLevel;
+                            this.userLevel++;
+                            this.updateXPToNextLevel();
+                            if (queue) {
+                                queue.push({ type: 'level_up', newLevel: this.userLevel });
+                            }
+                        }
+                    },
+
+
+                    updateStreak() {
+                        const today = new Date().toDateString();
+                        if (this.lastReadDate === today) return;
+                        const yesterday = new Date(Date.now() - 86400000).toDateString();
+                        this.readingStreak = (this.lastReadDate === yesterday) ? this.readingStreak + 1 : 1;
+                        this.lastReadDate = today;
+                    },
+
+
+                    async unlockAchievement(code, queue = null) { // On rend la 'queue' optionnelle
+                        if (this.unlockedAchievements.includes(code)) return;
+                        this.unlockedAchievements.push(code);
+
+                        const achievement = this.achievementsData.find(a => a.code === code);
+
+                        // MODIFICATION : On ajoute une animation SEULEMENT si une 'queue' est présente
+                        if (achievement && queue) {
+                            queue.push({ type: 'achievement', icon: achievement.icon_emoji, title: achievement.title });
+                        }
+
+                        this.updateCurrentAchievement();
+
+                        try {
+                            await this.saveGamingData();
+                            await supabaseClient.from('user_achievement_history').upsert({ user_id: this.user.id, achievement_code: code }, { onConflict: 'user_id, achievement_code' });
+                            localStorage.removeItem(`infodrop_unlocking_${code}`);
+                        } catch (error) {
+                            console.error(`Erreur sauvegarde succès ${code}:`, error);
+                        }
+                    },
+
+                    playAnimationQueue(queue) {
+                        if (!queue || queue.length === 0) {
+                            this.showRewardModal = false;
+                            return;
+                        }
+
+                        // On prend la première récompense de la liste
+                        const reward = queue[0];
+
+                        // On formate les données pour notre modal
+                        switch (reward.type) {
+                            case 'xp':
+                                this.rewardData = {
+                                    icon: '✨',
+                                    title: `+${reward.amount} XP`,
+                                    description: 'Pour votre lecture assidue !'
+                                };
+                                break;
+                            case 'level_up':
+                                this.rewardData = {
+                                    icon: '🚀',
+                                    title: `NIVEAU ${reward.newLevel} !`,
+                                    description: 'Votre perspicacité augmente !'
+                                };
+                                break;
+                            case 'achievement':
+                                this.rewardData = {
+                                    icon: reward.icon,
+                                    title: 'SUCCÈS DÉBLOQUÉ !',
+                                    description: reward.title
+                                };
+                                break;
+                        }
+
+                        // On affiche le modal
+                        this.showRewardModal = true;
+
+                        // On prépare la suite : on passe la file d'attente SANS le premier élément
+                        const remainingQueue = queue.slice(1);
+                        localStorage.setItem('infodrop_animation_queue', JSON.stringify(remainingQueue));
+                    },
+
+                    closeRewardModal() {
+                        this.showRewardModal = false;
+
+                        // On attend la fin de l'animation de fermeture
+                        setTimeout(() => {
+                            const remainingQueue = JSON.parse(localStorage.getItem('infodrop_animation_queue') || '[]');
+                            this.playAnimationQueue(remainingQueue);
+                        }, 300);
+                    },
+
+
+                    async calculateDiversityScore() {
+                        if (!this.user) return;
+                        try {
+                            const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                            const { data } = await supabase
+                                .from('user_diversity_data')
+                                .select('orientation, source')
+                                .eq('user_id', this.user.id)
+                                .gte('read_at', twentyFourHoursAgo.toISOString());
+
+                            if (!data || data.length === 0) {
+                                this.diversityScore = null;
+                                this.readOrientations = [];
+                                return;
+                            }
+
+                            const oSet = new Set(data.map(r => r.orientation).filter(Boolean));
+                            const sSet = new Set(data.map(r => r.source));
+                            const spec = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'];
+                            this.readOrientations = [...oSet].filter(o => o !== 'gouvernement').sort((a, b) => spec.indexOf(a) - spec.indexOf(b));
+                            this.diversityScore = Math.round(((this.readOrientations.length / 9) * 50) + (Math.min((sSet.size / 5) * 50, 50)));
+
+                        } catch (error) {
+                            console.error('Erreur calcul diversité:', error);
+                        }
+                    },
+
+                    // ============================================================
+                    // ⚙️ SYNCHRONISATION DES SUCCÈS (NOUVELLE FONCTION)
+                    // ============================================================
+                    async synchronizeAchievements() {
+                        if (!this.user || !this.achievementsData.length) return;
+
+                        console.log('[DEBUG] Lancement de la synchronisation des succès...');
+                        const originalUnlocks = new Set(this.unlockedAchievements);
+                        let needsSave = false;
+
+                        for (const achievement of this.achievementsData) {
+                            if (this.unlockedAchievements.includes(achievement.code)) continue;
+
+                            let shouldBeUnlocked = false;
+                            switch (achievement.condition_type) {
+                                case 'connection': shouldBeUnlocked = true; break;
+                                case 'articles_read': shouldBeUnlocked = this.totalReadCount >= achievement.condition_value; break;
+                                case 'streak_days': shouldBeUnlocked = this.readingStreak >= achievement.condition_value; break;
+                                case 'level_reached': shouldBeUnlocked = this.userLevel >= achievement.condition_value; break;
+                                case 'diversity_score': shouldBeUnlocked = this.diversityScore >= achievement.condition_value; break;
+                            }
+
+                            if (shouldBeUnlocked) {
+                                console.log(`[SYNC] Le succès '${achievement.title}' aurait dû être débloqué. Correction en cours.`);
+                                this.unlockedAchievements.push(achievement.code);
+                                needsSave = true;
+                            }
+                        }
+
+                        if (needsSave) {
+                            console.log('[SYNC] Des corrections ont été apportées. Sauvegarde des données...');
+                            await this.saveGamingData();
+                            this.updateCurrentAchievement(); // On met à jour le badge du niveau
+                        } else {
+                            console.log('[DEBUG] Aucune correction de succès nécessaire.');
+                        }
+                    },
+
+                    // ============================================================
+                    // ⚙️ INITIALISATION & SAUVEGARDES
+                    // ============================================================
+                    async initGamification() {
+                        if (!this.user) return;
+                        try {
+                            let { data, error } = await supabaseClient.from('user_gaming_stats').select('*').eq('user_id', this.user.id).single();
+                            if (error && error.code === 'PGRST116') {
+                                const { data: newStats } = await supabaseClient.from('user_gaming_stats').insert({ user_id: this.user.id, xp: 0, level: 1, reading_streak: 0, unlocked_achievements: ['WELCOME'], last_read_date: null }).select().single();
+                                data = newStats;
+                            }
+                            this.userXP = data.xp || 0;
+                            this.userLevel = data.level || 1;
+                            this.readingStreak = data.reading_streak || 0;
+                            this.unlockedAchievements = data.unlocked_achievements && data.unlocked_achievements.length > 0 ? data.unlocked_achievements : ['WELCOME'];
+
+                            // --- DÉBUT DE LA CORRECTION ---
+                            if (data.last_read_date) {
+                                this.lastReadDate = new Date(data.last_read_date).toDateString();
+                            } else {
+                                this.lastReadDate = null;
+                            }
+                            // --- FIN DE LA CORRECTION ---
+                            this.updateXPToNextLevel();
+                            this.updateCurrentAchievement();
+                        } catch (error) {
+                            console.error('Erreur init gamification:', error);
+                        }
+                    },
+
+                    async saveGamingData() {
+                        if (!this.user) return;
+                        try {
+                            await supabaseClient.from('user_gaming_stats').update({
+                                xp: this.userXP,
+                                level: this.userLevel,
+                                reading_streak: this.readingStreak,
+                                unlocked_achievements: this.unlockedAchievements,
+                                last_read_date: this.lastReadDate,
+                                updated_at: new Date().toISOString()
+                            }).eq('user_id', this.user.id);
+                        } catch (error) {
+                            console.error('Erreur sauvegarde gaming:', error);
+                        }
+                    },
+
+                    toggleFilter(filter) {
+                        this.activeFilter = (this.activeFilter === filter) ? 'all' : filter;
+                        this.searchQuery = '';
+                        this.loadNews(this.activeFilter, true);
+                    },
+
+                    getOrientationDisplayName(orientation) {
+                        if (!orientation) return '';
+                        if (orientation === 'gouvernement') return '🇫🇷 Gouvernement';
+                        if (orientation === '🧨INFODROP') return orientation;
+                        return orientation.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                    },
+
+                    async loadAchievements() {
+                        try {
+                            const { data } = await supabaseClient.from('achievements').select('*').eq('is_active', true).order('order_priority');
+                            this.achievementsData = data || [];
+                        } catch (error) {
+                            console.error('[ERREUR] Le chargement des achievements a échoué', error);
+                        }
+                    },
+
+                    updateCurrentAchievement() {
+                        const unlocked = this.achievementsData
+                            .filter(a => this.unlockedAchievements.includes(a.code))
+                            .sort((a, b) => b.order_priority - a.order_priority);
+                        this.currentAchievement = unlocked.length > 0 ? unlocked[0].icon_emoji : '⭐';
+                    },
+
+                    updateXPToNextLevel() {
+                        this.xpToNextLevel = this.userLevel * 100;
+                    },
+
+                    getAchievementTitle(iconOrCode) {
+                        const achievement = this.achievementsData.find(a => a.code === iconOrCode || a.icon_emoji === iconOrCode);
+                        return achievement ? achievement.title : 'Achievement mystère';
+                    },
+
+                    getAllAchievementsData() {
+                        if (!this.achievementsData) return [];
+                        return this.achievementsData.map(achievement => ({
+                            id: achievement.code,
+                            icon: achievement.icon_emoji,
+                            title: achievement.title,
+                            description: achievement.description,
+                            unlocked: this.unlockedAchievements.includes(achievement.code),
+                            progress: this.getAchievementProgress(achievement)
+                        }));
+                    },
+
+                    getAchievementProgress(achievement) {
+                        if (this.unlockedAchievements.includes(achievement.code)) return '✓ Complété';
+                        switch (achievement.condition_type) {
+                            case 'articles_read': return `${this.totalReadCount}/${achievement.condition_value} articles`;
+                            case 'streak_days': return `${this.readingStreak}/${achievement.condition_value} jours`;
+                            case 'level_reached': return `Niveau ${this.userLevel}/${achievement.condition_value}`;
+                            case 'diversity_score': return `Score: ${this.diversityScore || 0}%`;
+                            default: return '...';
+                        }
+                    },
+
+                    createGoldConfetti() {
+                        const colors = ['#FFD700', '#FFA500', '#FFFF00', '#FFE4B5'];
+                        for (let i = 0; i < 30; i++) {
+                            setTimeout(() => {
+                                const conf = document.createElement('div');
+                                conf.style.cssText = `position: fixed; width: 15px; height: 15px; background: ${colors[i % colors.length]}; left: ${Math.random() * 100}%; top: -20px; opacity: ${Math.random() + 0.5}; transform: rotate(${Math.random() * 360}deg); animation: confetti-fall ${3 + Math.random() * 2}s linear forwards; pointer-events: none; z-index: 9999; box-shadow: 0 0 10px ${colors[i % colors.length]};`;
+                                document.body.appendChild(conf);
+                                setTimeout(() => conf.remove(), 5000);
+                            }, i * 50);
+                        }
+                    },
+
+                    get filteredNewsList() {
+                        if (!this.searchQuery || this.searchQuery.trim() === '') return this.newsList;
+                        const query = this.searchQuery.toLowerCase().trim();
+                        return this.newsList.filter(news => (news.resume && news.resume.toLowerCase().includes(query)) || (news.source && news.source.toLowerCase().includes(query)) || (news.tags && news.tags.some(tag => tag.toLowerCase().includes(query))) || (news.orientation && news.orientation.toLowerCase().includes(query)));
+                    },
+
+                    getOrientationColor(o) { return ORIENTATION_DATA[o]?.color || '#808080'; },
+                    getOrientationClass(o) { return ORIENTATION_DATA[o]?.class || 'bg-gray-700 text-gray-200 border-gray-600'; },
+
+                    async login() {
+                        if (this.loading) return;
+                        this.loading = true;
+                        this.message = '';
+                        this.messageType = '';
+                        try {
+                            const checkRes = await fetch('/api/check-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: this.email.toLowerCase() }) });
+                            if (!checkRes.ok) { const err = await checkRes.json(); throw new Error(err.error || 'Erreur de communication.'); }
+                            const { exists } = await checkRes.json();
+                            if (!exists) {
+                                if (!this.inviteCode) { this.message = "Code d'invitation requis pour les nouveaux utilisateurs."; this.messageType = 'error'; this.loading = false; return; }
+                                const validateRes = await fetch('/api/validate-invite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: this.inviteCode, email: this.email }) });
+                                const validationResult = await validateRes.json();
+                                if (!validationResult.success) { this.message = validationResult.error; this.messageType = 'error'; this.loading = false; return; }
+                            }
+                            const { error: otpError } = await supabaseClient.auth.signInWithOtp({ email: this.email.toLowerCase(), options: { emailRedirectTo: window.location.origin } });
+                            if (otpError) throw otpError;
+                            this.message = 'Vérifiez vos emails ! Un lien de connexion a été envoyé. Pensez à vérifier vos spams si besoin.';
+                            this.messageType = 'success';
+                        } catch (error) {
+                            this.message = error.message || 'Une erreur est survenue.';
+                            this.messageType = 'error';
+                        } finally {
+                            this.loading = false;
+                        }
+                    },
+
+                    async loadUserInviteData() {
+                        if (!this.user || !this.user.email) return;
+                        if (this.isAdmin) {
+                            try {
+                                const { data: adminCode, error: adminError } = await supabaseClient.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
+                                if (adminError && adminError.code !== 'PGRST116') { console.error('❌ Erreur requête admin:', adminError); return; }
+                                if (adminCode) {
+                                    this.userInviteData.code = adminCode.code;
+                                    this.userInviteData.is_used = adminCode.is_used || false;
+                                    if (adminCode.is_used && adminCode.used_by_email) { this.userInviteData.filleulEmail = adminCode.used_by_email; }
+                                } else { this.userInviteData.code = null; }
+                                this.userInviteData.parrainEmail = null;
+                                return;
+                            } catch (error) { console.error('❌ Erreur traitement admin:', error); return; }
+                        }
+                        try {
+                            const { data: ownCode } = await supabaseClient.from('invitation_codes').select('*').ilike('owner_email', this.user.email.toLowerCase()).maybeSingle();
+                            if (ownCode) {
+                                this.userInviteData.code = ownCode.code;
+                                this.userInviteData.is_used = ownCode.is_used || false;
+                                if (ownCode.is_used && ownCode.used_by_email) { this.userInviteData.filleulEmail = ownCode.used_by_email; }
+                            }
+                            const { data: usedCode } = await supabaseClient.from('invitation_codes').select('owner_email').ilike('used_by_email', this.user.email.toLowerCase()).maybeSingle();
+                            if (usedCode) { this.userInviteData.parrainEmail = usedCode.owner_email; }
+                        } catch (error) {
+                            console.error("❌ Erreur chargement des données d'invitation:", error);
+                            this.userInviteData = { code: null, is_used: false, parrainEmail: null, filleulEmail: null };
+                        }
+                    },
+
+                    setupRealtime(session) {
+                        this.realtimeChannel = supabaseClient.channel('infodrop-online-users', { config: { presence: { key: session.user.id } } });
+                        this.realtimeChannel.on('presence', { event: 'sync' }, () => {
+                            this.connectedUsers = Object.keys(this.realtimeChannel.presenceState()).length;
+                        }).subscribe(async (status) => {
+                            if (status === 'SUBSCRIBED') { await this.realtimeChannel.track({ online_at: new Date().toISOString() }); }
+                        });
+                    },
+
+                    openEditPanel(news) {
+                        this.editingNews = { ...JSON.parse(JSON.stringify(news)), tagsText: (news.tags || []).join(', ') };
+                        this.showEditPanel = true;
+                    },
+
+                    async updateNews() {
+                        const { id, resume, source, url, orientation, tagsText } = this.editingNews;
+                        const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
+                        try {
+                            await supabaseClient.from('actu').update({ resume, source, url, orientation, tags }).eq('id', id);
+                            const index = this.newsList.findIndex(n => n.id === id);
+                            if (index !== -1) { this.newsList[index] = { ...this.newsList[index], resume, source, url, orientation, tags }; }
+                            this.showEditPanel = false;
+                            this.updateTagsList();
+                        } catch (e) { alert("La mise à jour a échoué."); }
+                    },
+
+                    async deleteNews(id) {
+                        if (!confirm("Supprimer ?")) return;
+                        this.newsList = this.newsList.filter(n => n.id !== id);
+                        try {
+                            await supabaseClient.from('actu').delete().eq('id', id);
+                            if (this.isAdmin) this.loadStats();
+                        } catch (e) { alert("La suppression a échoué."); this.loadNews(); }
+                    },
+
+                    async addManualNews() {
+                        this.addingNews = true;
+                        try {
+                            if (!this.newNews.resume || !this.newNews.resume.trim()) { throw new Error('Le résumé est obligatoire'); }
+                            if (!this.newNews.url || !this.newNews.url.trim()) { throw new Error('L\'URL est obligatoire'); }
+                            let tags = ['🧨INFODROP'];
+                            if (this.newNews.tagsText && this.newNews.tagsText.trim()) {
+                                const additionalTags = this.newNews.tagsText.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0 && tag !== '🧨INFODROP');
+                                tags = tags.concat(additionalTags);
+                            }
+                            const articleData = { resume: this.newNews.resume.trim(), source: '🧨INFODROP', url: this.newNews.url.trim(), heure: new Date().toISOString(), tags: tags, added_by: this.user.email };
+                            if (this.newNews.orientation && this.newNews.orientation.trim()) { articleData.orientation = this.newNews.orientation.trim(); }
+                            const { error } = await supabaseClient.from('actu').insert(articleData).select('*');
+                            if (error) { throw new Error(`Erreur DB: ${error.message}`); }
+                            this.newNews = { resume: '', source: '', url: '', orientation: '', tagsText: '' };
+                            this.showAdminPanel = false;
+                            await this.loadData();
+                            alert('✅ Article ajouté avec succès !');
+                        } catch (error) {
+                            alert('Erreur lors de l\'ajout de l\'article: ' + error.message);
+                        } finally {
+                            this.addingNews = false;
+                        }
+                    },
+
+                    async generateInviteCode() {
+                        if (!this.isAdmin || this.generatingCode) return;
+                        this.generatingCode = true;
+                        try {
+                            const { data: { session } } = await supabaseClient.auth.getSession();
+                            if (!session) throw new Error("Session introuvable");
+                            const response = await fetch('/api/generate-invite', { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' } });
+                            const result = await response.json();
+                            if (!result.success) throw new Error(result.error || 'Erreur lors de la génération');
+                            this.lastGeneratedCode = result.code;
+                            this.copyInviteMessage(result.code);
+                        } catch (error) {
+                            alert('Erreur lors de la génération du code: ' + error.message);
+                        } finally {
+                            this.generatingCode = false;
+                        }
+                    },
+
+                    async loadData(isInitial = false) {
+                        if (isInitial) this.loadingNews = true;
+                        await this.loadStats();
+                        if (isInitial) {
+                            await this.loadNews(this.activeFilter, true);
+                        }
+                        if (isInitial) this.loadingNews = false;
+                    },
+
+                    async loadNews(filter = null, isNewFilter = false) {
+                        if (isNewFilter) this.loadingNews = true;
+                        try {
+                            let query = supabaseClient.from('actu').select('id, resume, url, heure, source, orientation, tags, added_by').order('heure', { ascending: false });
+                            if (filter && filter !== 'all') {
+                                if (this.allOrientations.includes(filter)) { query = query.eq('orientation', filter); }
+                                else { query = query.contains('tags', [filter]); }
+                            }
+                            if (!isNewFilter && this.latestNewsTimestamp) { query = query.gt('heure', this.latestNewsTimestamp); }
+                            else { query = query.limit(100); }
+
+                            const { data: newArticles, error } = await query;
+                            if (error) throw error;
+
+                            if (newArticles && newArticles.length > 0) {
+                                if (isNewFilter) { this.newsList = newArticles; }
+                                else { this.newsList = [...newArticles, ...this.newsList]; }
+                                this.latestNewsTimestamp = this.newsList[0].heure;
+                            } else if (isNewFilter) { this.newsList = []; }
+                        } catch (e) {
+                            console.error('Erreur dans loadNews:', e);
+                        } finally {
+                            if (isNewFilter) this.loadingNews = false;
+                        }
+                    },
+
+                    updateTagsList() {
+                        const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre'];
+                        this.allOrientations = pol;
+                        this.allOtherTags = this.activeTags.filter(tag => !pol.includes(tag));
+                    },
+
+                    hasArticlesForOrientation(o) { return this.activeOrientations.includes(o); },
+                    hasArticlesForTag(t) { return this.activeTags.includes(t); },
+
+                    getEmptyFilterMessage() {
+                        if (this.allOrientations.includes(this.activeFilter)) return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`;
+                        return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`;
+                    },
+
+                    async loadStats() {
+                        try {
+                            const { data, error } = await supabaseClient.rpc('get_live_stats');
+                            if (error) throw error;
+                            this.stats = { total_articles: data.total_articles || 0, total_sources: data.total_sources || 0 };
+                            this.activeOrientations = data.active_orientations || [];
+                            this.activeTags = data.active_tags || [];
+                            this.updateTagsList();
+                        } catch (e) {
+                            console.error('[ERREUR] Le chargement des statistiques et filtres a échoué :', e);
+                        }
+                    },
+
+                    async saveReadArticleToDB(articleId) {
+                        if (!this.user) return;
+                        try {
+                            await supabaseClient.from('user_read_articles').upsert({ user_id: this.user.id, article_id: articleId, read_at: new Date().toISOString() }, { onConflict: 'user_id,article_id' });
+                        } catch (error) { console.error('Erreur sauvegarde article lu:', error); }
+                    },
+
+                    async loadReadArticlesFromDB() {
+                        if (!this.user) return;
+                        try {
+                            const { data } = await supabaseClient.from('user_read_articles').select('article_id, read_at').eq('user_id', this.user.id);
+                            this.readArticles = {};
+                            if (data) { data.forEach(item => { this.readArticles[item.article_id] = item.read_at; }); }
+                            this.updateTotalReadCount();
+                        } catch (error) { console.error('Erreur chargement articles lus:', error); }
+                    },
+
+                    getReadArticlesList() {
+                        return this.newsList.filter(news => this.readArticles[news.id]).sort((a, b) => new Date(this.readArticles[b.id]) - new Date(this.readArticles[a.id]));
+                    },
+
+                    async saveReadPreferences() {
+                        if (!this.user) return;
+                        localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
+                        try {
+                            await supabaseClient.from('user_preferences').upsert({ user_id: this.user.id, hide_read_articles: this.hideReadFromMain, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+                        } catch (error) { console.error('Erreur sauvegarde préférences:', error); }
+                    },
+
+                    async loadReadPreferences() {
+                        if (!this.user) return;
+                        const localPref = localStorage.getItem('infodrop_hide_read_' + this.user.id);
+                        if (localPref !== null) { this.hideReadFromMain = localPref === 'true'; }
+                        try {
+                            const { data, error } = await supabaseClient.from('user_preferences').select('hide_read_articles').eq('user_id', this.user.id).maybeSingle();
+                            if (error) throw error;
+                            if (data) {
+                                this.hideReadFromMain = data.hide_read_articles;
+                                localStorage.setItem('infodrop_hide_read_' + this.user.id, this.hideReadFromMain);
+                            }
+                        } catch (error) {
+                            console.error('[ERREUR] Chargement des préférences utilisateur échoué :', error);
+                        }
+                    },
+
+                    updateTotalReadCount() {
+                        this.totalReadCount = Object.keys(this.readArticles).length;
+                    },
+
+                    async addToDiversityData(article) {
+                        if (!this.user || !article) return;
+                        const orientation = article.tags?.includes('🧨INFODROP') ? '🧨INFODROP' : (article.orientation || 'neutre');
+                        try {
+                            await supabaseClient.from('user_diversity_data').insert({ user_id: this.user.id, orientation: orientation, source: article.source, read_at: new Date().toISOString() });
+                            await this.calculateDiversityScore();
+                        } catch (error) { console.error('Erreur sauvegarde diversité:', error); }
+                    },
+
+                    getDiversityMessage() {
+                        if (this.diversityScore < 30) return "🔴 Bulle de filtre ! Explorez d'autres horizons";
+                        if (this.diversityScore < 50) return "🟡 Bon début ! Continuez à diversifier";
+                        if (this.diversityScore < 70) return "🟠 Bien ! Quelques perspectives en plus ?";
+                        if (this.diversityScore < 85) return "🟢 Très bien ! Vous êtes sur la bonne voie";
+                        return "🏆 Champion de la diversité !";
+                    },
+
+                    getDiversityTip() {
+                        const missing = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'neutre', '🧨INFODROP'].filter(o => !this.readOrientations.includes(o));
+                        if (missing.length === 0) return "🎉 Toutes les orientations explorées !";
+                        if (missing.length > 6) return "💡 Essayez de lire des perspectives variées";
+                        const suggestion = missing[Math.floor(Math.random() * missing.length)];
+                        return `💡 Essayez de lire du "${suggestion.replace('-', ' ')}"`;
+                    },
+
+                    celebrateArticles(count) {
+                        if (document.hidden) { localStorage.setItem(`infodrop_celebration_pending_${count}`, 'true'); return; }
+                        this.showCelebration(count);
+                    },
+
+                    showCelebration(count = 100) {
+                        const cont = document.createElement('div');
+                        cont.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:auto;z-index:9999;background:rgba(0,0,0,0.8);cursor:pointer;';
+                        this.startConfettiLoop(cont);
+                        const msg = document.createElement('div');
+                        msg.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-2xl shadow-2xl z-50 text-center animate-bounce';
+                        const isSpecial = count === 100 || count % 100 === 0;
+                        const emoji = isSpecial ? '🏆' : '🎉';
+                        const title = isSpecial ? 'Incroyable !' : 'Bravo !';
+                        msg.innerHTML = `<h2 class="text-3xl font-bold mb-2">${emoji} ${title} ${emoji}</h2><p class="text-lg mb-2">${count} articles lus !</p><p class="text-sm opacity-80">Cliquez pour continuer</p>`;
+                        cont.appendChild(msg);
+                        document.body.appendChild(cont);
+                        const closeAnimation = () => { cont.remove(); this.stopConfettiLoop(); localStorage.removeItem(`infodrop_celebration_pending_${count}`); };
+                        cont.addEventListener('click', closeAnimation);
+                        msg.addEventListener('click', closeAnimation);
+                    },
+
+                    startConfettiLoop(container) { this.confettiInterval = setInterval(() => { this.createConfettiBatch(container); }, 1000); },
+                    stopConfettiLoop() { if (this.confettiInterval) { clearInterval(this.confettiInterval); this.confettiInterval = null; } },
+
+                    createConfettiBatch(container) {
+                        const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24', '#6C5CE7'];
+                        for (let i = 0; i < 10; i++) {
+                            const conf = document.createElement('div');
+                            conf.style.cssText = `position:absolute;width:10px;height:10px;background:${colors[i % 5]};left:${Math.random() * 100}%;top:-10px;opacity:${Math.random() + .5};transform:rotate(${Math.random() * 360}deg);animation:confetti-fall ${3 + Math.random() * 2}s linear forwards;pointer-events:none;`;
+                            container.appendChild(conf);
+                            setTimeout(() => conf.remove(), 5000);
+                        }
+                    },
+
+                    async logout() {
+                        if (this.realtimeChannel) await this.realtimeChannel.untrack();
+                        await supabaseClient.auth.signOut();
+                    },
+
+                    getWeekNumber(d) {
+                        d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+                        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+                        const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+                        const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+                        return weekNo;
+                    },
+
+                    handleQuizClick() {
+                        const week = this.getWeekNumber(new Date());
+                        localStorage.setItem(`infodrop_quiz_seen_week_${week}`, 'true');
+                        this.showNewQuizBadge = false;
+                        window.location.href = '/quiz.html';
+                    },
+
+                    async loadAndShow360Modal() {
+                        this.show360Modal = true;
+                        this.showMenu = false;
+
+                        if (this.analyses.length > 0) {
+                            return;
+                        }
+
+                        this.loadingAnalyses = true;
+                        try {
+                            // LA CORRECTION : On ajoute un paramètre unique à l'URL pour déjouer le cache.
+                            const response = await fetch(`/analyses-list.json?v=${Date.now()}`);
+                            this.analyses = await response.json();
+                        } catch (error) {
+                            console.error("Erreur lors du chargement des analyses :", error);
+                        } finally {
+                            this.loadingAnalyses = false;
+                        }
+                    },
+
+
+                    // ============================================================
+                    // 🔄 GESTION DES MISES À JOUR AUTOMATIQUES (VERSION FINALE)
+                    // ============================================================
+
+                    startAutoUpdate() {
+                        // Si un intervalle existe déjà, on le nettoie pour éviter les doublons.
+                        if (this.updateInterval) {
+                            clearInterval(this.updateInterval);
+                        }
+                        // On lance le nouvel intervalle.
+                        this.updateInterval = setInterval(() => {
+                            // On vérifie que la page est bien visible avant de lancer la requête.
+                            if (!document.hidden) {
+                                this.loadNews(this.activeFilter, false);
+                            }
+                        }, 30000); // 30 secondes
+                    },
+
+                    stopAutoUpdate() {
+                        if (this.updateInterval) {
+                            clearInterval(this.updateInterval);
+                            this.updateInterval = null;
+                        }
+                    },
+
+                    formatTime(t) { return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); },
+
+                    showStatTooltip(event, text) {
+                        event.stopPropagation();
+                        const existingTooltip = document.querySelector('.stat-tooltip');
+                        if (existingTooltip) existingTooltip.remove();
+                        const tooltip = document.createElement('div');
+                        tooltip.className = 'stat-tooltip';
+                        tooltip.textContent = text;
+                        document.body.appendChild(tooltip);
+                        const rect = event.currentTarget.getBoundingClientRect();
+                        const tooltipRect = tooltip.getBoundingClientRect();
+                        let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+                        let top = rect.top - tooltipRect.height - 10;
+                        if (left < 10) left = 10;
+                        if (left + tooltipRect.width > window.innerWidth - 10) { left = window.innerWidth - tooltipRect.width - 10; }
+                        if (top < 10) { top = rect.bottom + 10; }
+                        tooltip.style.left = left + 'px';
+                        tooltip.style.top = top + 'px';
+                        const autoRemoveTimeout = setTimeout(() => tooltip.remove(), 2000);
+                        tooltip.dataset.timeout = autoRemoveTimeout;
+                        const removeTooltip = (e) => {
+                            if (!tooltip.contains(e.target) && !event.currentTarget.contains(e.target)) {
+                                clearTimeout(autoRemoveTimeout);
+                                tooltip.remove();
+                                document.removeEventListener('click', removeTooltip);
+                            }
+                        };
+                        setTimeout(() => { document.addEventListener('click', removeTooltip); }, 100);
+                    },
+
+                    copyInviteMessage(code) {
+                        const message = `Vous avez été invité à rejoindre le club privé INFODROP !\nAccédez à l'actu essentielle sur : https://infodrop.live\nUtilisez ce code lors de votre inscription : ${code}`;
+                        navigator.clipboard.writeText(message);
+                        this.copied = true;
+                        setTimeout(() => this.copied = false, 1500);
+                    }
+                };
+            }
+        </script>
+</body>
+
+</html>
