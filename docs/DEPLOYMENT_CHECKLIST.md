@@ -23,7 +23,7 @@
 
 ## 3. Planification
 
-Le plan Vercel Hobby observé n’accepte qu’une exécution cron par jour. La collecte Pyrénées utilise donc GitHub Actions toutes les quinze minutes, avec `CRON_SECRET` stocké dans les secrets du dépôt. Le workflow échoue si le serveur ne contrôle pas exactement 19 sources ou si l’une d’elles échoue.
+Le plan Vercel Hobby observé n’accepte qu’une exécution cron par jour. La collecte Pyrénées utilise donc GitHub Actions toutes les quinze minutes, avec `CRON_SECRET` stocké dans les secrets du dépôt. Le workflow exige une réponse réussie, au moins une source contrôlée, aucune source en échec et `sources_ok == sources_checked`, sans nombre de sources codé en dur.
 
 ## 4. Secrets et environnement
 
