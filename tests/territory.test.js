@@ -1,11 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  DISPLAY_ZONES,
   buildDedupeKey,
   canonicalizeUrl,
   categorizeArticle,
   classifyTerritory,
   deduplicateArticles,
+  deduplicateArticlesWithMetrics,
   isWithinRollingWindow,
 } from '../lib/local/territory.js';
 
@@ -16,35 +18,72 @@ test('canonicalizeUrl retire les paramètres de suivi sans détruire les paramè
   );
 });
 
-test('le cœur du Parc est inclus sur mention territoriale explicite', () => {
+test('les six zones publiques gardent les couleurs sémantiques demandées', () => {
+  assert.deepEqual(
+    Object.fromEntries(DISPLAY_ZONES.map(({ id, color }) => [id, color])),
+    {
+      barousse: '#30D158',
+      comminges: '#0A84FF',
+      luchonnais: '#BF5AF2',
+      nestes_lannemezan: '#FF9F0A',
+      hautes_pyrenees: '#FF453A',
+      val_aran: '#64D2FF',
+    },
+  );
+});
+
+test('un lieu précis détermine la zone publique affichée', () => {
   const result = classifyTerritory({ title: 'Réouverture de la route à Bagnères-de-Luchon' });
   assert.equal(result.included, true);
-  assert.equal(result.zone, 'core');
+  assert.equal(result.displayZone, 'luchonnais');
   assert.equal(result.locality, 'Luchonnais');
 });
 
-test('les pôles fonctionnels sont qualifiés séparément', () => {
+test('Saint-Gaudens et le Comminges partagent le badge Comminges', () => {
   const result = classifyTerritory({ title: 'Fibre Excellence : mobilisation à Saint-Gaudens' });
   assert.equal(result.included, true);
-  assert.equal(result.zone, 'functional_ring');
-  assert.equal(result.locality, 'Saint-Gaudens');
+  assert.equal(result.displayZone, 'comminges');
 });
 
-test('le Val d’Aran est conservé comme continuité transfrontalière', () => {
+test('le Val d’Aran reste une continuité transfrontalière distincte', () => {
   const result = classifyTerritory({ title: 'Travaux sur la route de Bossòst vers Vielha' });
   assert.equal(result.included, true);
-  assert.equal(result.zone, 'cross_border');
+  assert.equal(result.displayZone, 'val_aran');
+  assert.equal(result.relevance, 'cross_border');
 });
 
-test('une actualité tarbaise sans effet territorial est exclue', () => {
-  const result = classifyTerritory({ title: 'Nouvelle exposition au centre-ville de Tarbes' });
+test('une source départementale 65 accepte un sujet sans commune précise', () => {
+  const result = classifyTerritory(
+    { title: 'Le budget départemental adopté pour la rentrée' },
+    {
+      territory_policy: 'department_65',
+      default_display_zone: 'hautes_pyrenees',
+      default_locality: 'Hautes-Pyrénées',
+    },
+  );
+  assert.equal(result.included, true);
+  assert.equal(result.displayZone, 'hautes_pyrenees');
+  assert.equal(result.relevance, 'department');
+  assert.equal(result.reason, 'department-65-source-scope');
+});
+
+test('une source Haute-Garonne reste stricte hors sud 31', () => {
+  const result = classifyTerritory(
+    { title: 'Nouveau chantier dans le centre de Toulouse' },
+    { territory_policy: 'south_31', default_display_zone: 'comminges' },
+  );
   assert.equal(result.included, false);
 });
 
 test('une source strictement locale peut qualifier ses publications sans mot-clé', () => {
   const result = classifyTerritory(
     { title: 'Le prochain conseil communautaire se réunira jeudi' },
-    { name: 'Cagire Garonne Salat', default_zone: 'core', default_locality: 'Cagire Garonne Salat', requires_keyword: false },
+    {
+      name: 'Cagire Garonne Salat',
+      territory_policy: 'trusted_local',
+      default_display_zone: 'comminges',
+      default_locality: 'Cagire Garonne Salat',
+    },
   );
   assert.equal(result.included, true);
   assert.equal(result.reason, 'trusted-local-source-scope');
@@ -77,4 +116,34 @@ test('la déduplication neutralise les paramètres de campagne', () => {
   assert.equal(result.length, 1);
   assert.equal(result[0].heure, '2026-09-25T10:00:00Z');
   assert.equal(buildDedupeKey(result[0]), 'url:https://exemple.fr/a');
+});
+
+test('un titre quasi identique du même domaine préfère le flux le plus ciblé', () => {
+  const result = deduplicateArticlesWithMetrics([
+    {
+      title: 'RN125 fermée après un éboulement à Saint-Gaudens',
+      url: 'https://media.fr/general/rn125-fermee',
+      heure: '2026-09-25T10:00:00Z',
+      source_slug: 'general',
+      dedupe_priority: 10,
+    },
+    {
+      title: 'RN125 fermée après un éboulement à Saint-Gaudens',
+      url: 'https://media.fr/comminges/rn125-fermee',
+      heure: '2026-09-25T09:55:00Z',
+      source_slug: 'cible',
+      dedupe_priority: 100,
+    },
+  ]);
+  assert.equal(result.articles.length, 1);
+  assert.equal(result.articles[0].source_slug, 'cible');
+  assert.equal(result.duplicatesBySource.general, 1);
+});
+
+test('deux médias différents traitant le même fait restent deux articles', () => {
+  const result = deduplicateArticles([
+    { title: 'RN125 fermée à Saint-Gaudens', url: 'https://media-a.fr/article', heure: '2026-09-25T10:00:00Z' },
+    { title: 'RN125 fermée à Saint-Gaudens', url: 'https://media-b.fr/article', heure: '2026-09-25T10:01:00Z' },
+  ]);
+  assert.equal(result.length, 2);
 });

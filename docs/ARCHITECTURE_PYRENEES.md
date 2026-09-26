@@ -8,15 +8,27 @@ La référence visuelle reste la production `infodrop.live` : Inter, fond `#0a0a
 
 ## Périmètre éditorial
 
-La V1 utilise trois zones explicites :
+Les anciens codes `core`, `functional_ring` et `cross_border` restent conservés pour compatibilité en base. L’interface utilise désormais six zones territoriales compréhensibles :
 
-| Code | Libellé public | Fonction |
+| Code public | Libellé | Couleur |
 | --- | --- | --- |
-| `core` | Cœur du Parc | communes et vallées du PNR Comminges Barousse Pyrénées |
-| `functional_ring` | Bassins de vie | Saint-Gaudens, Montréjeau, Lannemezan et impacts structurants |
-| `cross_border` | Val d’Aran | continuité frontalière immédiatement utile |
+| `barousse` | Barousse | `#30D158` |
+| `comminges` | Comminges | `#0A84FF` |
+| `luchonnais` | Luchonnais | `#BF5AF2` |
+| `nestes_lannemezan` | Nestes / Lannemezan | `#FF9F0A` |
+| `hautes_pyrenees` | Hautes-Pyrénées | `#FF453A` |
+| `val_aran` | Val d’Aran | `#64D2FF` |
 
-Une information extérieure n’est retenue que si son titre ou ses métadonnées mentionnent explicitement un lieu, un axe ou un impact territorial. Tarbes, Toulouse, Pau ou Foix ne suffisent pas à eux seuls.
+La couleur est limitée aux badges, points et accents de zone. Le fond noir et l’accent de marque `#FF2D55` restent inchangés.
+
+La qualification dépend du profil de la source :
+
+- `trusted_local` : le périmètre propre d’une source hyperlocale suffit ;
+- `department_65` : un contenu départemental 65 est admis sans exiger une commune précise ;
+- `south_31` : le nord du département et Toulouse restent exclus sans lien avec le sud 31 ;
+- `regional_strict`, `pyrenees_strict` et `specialized_strict` : un lieu, bassin, axe ou impact du périmètre doit être explicite.
+
+Le champ `relevance_level` distingue `core`, `department`, `cross_border` et `regional_relevant`. Une mention de l’Occitanie seule ne suffit jamais.
 
 ## Flux de données
 
@@ -25,17 +37,20 @@ Registre public vérifié
         │
         ├── flux RSS actifs ──> api/parse-local-rss.js
         │                            │
-        │                            ├── fenêtre 24 h
-        │                            ├── qualification territoriale
-        │                            ├── catégorie et paywall
-        │                            └── URL canonique + écritures contrôlées
+        │                            ├── dates valides + fenêtre 24 h
+        │                            ├── qualification source-aware
+        │                            ├── catégorie, zone et paywall
+        │                            ├── déduplication URL puis titre/domaine
+        │                            └── écritures + compteurs par source
         │                                      │
         └── pages en veille              Supabase actu
                                                 │
                                     interface Infodrop partagée
 ```
 
-Le registre JSON est la source lisible et versionnée. La table `regional_sources` en devient le miroir opérationnel lors de la collecte, y compris pour conserver une source retirée avec `active = false`. Les règles territoriales restent dans le collecteur et la documentation ; elles ne sont pas affichées dans le flux public.
+Le registre JSON est la source lisible et versionnée. La table `regional_sources` en devient le miroir opérationnel lors de la collecte, y compris pour conserver une source retirée avec `active = false`. Le lot `config/source-candidates-pyrenees.json` reste séparé : un endpoint peut y être testé depuis Vercel sans activation et sans écriture en base.
+
+Chaque collecte conserve `items_fetched`, `items_in_24h`, `items_rejected_territory`, `items_rejected_invalid_date`, `items_duplicate`, `items_written`, `last_feed_item_at` et `last_qualified_item_at`. Les dix derniers refus par source sont enregistrés dans `regional_source_diagnostics`, sous RLS sans droit de lecture public.
 
 ## Accès et données personnelles
 
@@ -53,7 +68,9 @@ La migration ajoute :
 
 - `edition_slug`, `territory_zone`, `locality`, `category` ;
 - `source_kind`, `source_slug`, `canonical_url`, `is_paywalled`, `ingested_at` ;
+- `display_zone` et `relevance_level` ;
 - `regional_sources` et `regional_source_checks` ;
+- `regional_source_diagnostics`, privé ;
 - les index adaptés à la lecture par édition et par zone.
 - `get_edition_stats(text)`, fonction publique limitée à l’édition demandée, sans remplacer `get_live_stats`.
 
@@ -72,7 +89,7 @@ Le déclencheur historique `prevent_duplicate_urls` reste en place. Le collecteu
 
 ## Planification
 
-Le workflow `.github/workflows/collect-pyrenees.yml` appelle la fonction serveur toutes les quinze minutes. Il exige une réponse à 19 sources contrôlées sans échec ; le secret d’autorisation n’est jamais envoyé au navigateur.
+Le workflow `.github/workflows/collect-pyrenees.yml` appelle la fonction serveur toutes les quinze minutes. Il exige que toutes les sources actives contrôlées réussissent, sans recopier leur nombre dans le workflow ; le secret d’autorisation n’est jamais envoyé au navigateur.
 
 ## Sécurité
 

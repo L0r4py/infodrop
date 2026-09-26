@@ -30,7 +30,7 @@ jobs:
             https://www.infodrop.live/api/parse-local-rss)"
 
           echo "$response" | jq -e \
-            '.success == true and .sources_checked == 19 and .sources_failed == 0' \
+            '.success == true and .sources_checked > 0 and .sources_ok == .sources_checked and .sources_failed == 0' \
             > /dev/null
           echo "$response" | jq \
-            '{edition, sources_checked, sources_ok, sources_failed, articles_qualified, articles_inserted, articles_updated, duration_ms}'
+            '{edition, sources_checked, sources_ok, sources_failed, items_fetched, items_in_24h, items_rejected_territory, items_rejected_invalid_date, items_duplicate, articles_qualified, articles_inserted, articles_updated, duration_ms}'

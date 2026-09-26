@@ -4,16 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="infodrop.live" />
-    <meta property="og:description" content="Agrégation multi-sources en temps réel." />
+    <meta name="description" content="Deux flux publics H24 : actualités nationales et internationales, puis veille locale Pyrénées. Aucun compte obligatoire." />
+    <meta property="og:title" content="Infodrop · Actualités National & Pyrénées H24" />
+    <meta property="og:description" content="Deux flux publics H24 : actualités nationales et internationales, puis veille locale Pyrénées. Aucun compte obligatoire." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://infodrop.live/" />
     <meta property="og:image" content="https://infodrop.live/images/infodrop-share.png?v=2" />
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="infodrop.live">
-    <meta name="twitter:description" content="Agrégation multi-sources en temps réel.">
+    <meta name="twitter:title" content="Infodrop · Actualités National & Pyrénées H24">
+    <meta name="twitter:description" content="Deux flux publics H24 : actualités nationales et internationales, puis veille locale Pyrénées. Aucun compte obligatoire.">
     <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png?v=2">
-    <title>infodrop.live</title>
+    <title>Infodrop · Actualités National & Pyrénées H24</title>
     <link rel="icon" type="image/png" href="images/infodrop-favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180x180.png">
     <link rel="apple-touch-icon" sizes="167x167" href="images/apple-touch-icon-167x167.png">
@@ -337,10 +338,24 @@
                 </div>
 
                 <div x-show="!loadingNews" x-transition class="mb-4">
+                    <div x-show="isLocalEdition" class="flex gap-1.5 overflow-x-auto hide-scrollbar pb-2 items-center"
+                        aria-label="Filtrer par zone géographique">
+                        <button @click="toggleZoneFilter('all')" class="pill-filter"
+                            :class="activeZone === 'all' ? 'active' : ''">
+                            Toutes les zones
+                        </button>
+                        <template x-for="zone in localZones" :key="zone.id">
+                            <button @click="toggleZoneFilter(zone.id)" class="pill-filter flex items-center gap-1.5"
+                                :style="getZoneFilterStyle(zone.id)" :aria-pressed="activeZone === zone.id">
+                                <span class="w-1.5 h-1.5 rounded-full" :style="'background:' + zone.color"></span>
+                                <span x-text="zone.label"></span>
+                            </button>
+                        </template>
+                    </div>
                     <div class="flex gap-1.5 overflow-x-auto hide-scrollbar pb-1 items-center">
                         <button @click="toggleFilter('all')" class="pill-filter"
-                            :class="activeFilter === 'all' && !activeSource ? 'active' : ''">
-                            Tous
+                            :class="activeFilter === 'all' && !activeSource ? 'active' : ''"
+                            x-text="isLocalEdition ? 'Tous les sujets' : 'Tous'">
                         </button>
 
                         <template x-if="activeSource">
@@ -541,10 +556,11 @@
                                         :class="getOrientationClass(news.orientation)">
                                         <span x-text="getOrientationDisplayName(news.orientation)"></span>
                                     </span>
-                                    <span x-show="isLocalEdition && (news.locality || news.category)"
+                                    <span x-show="isLocalEdition && getArticleDisplayZone(news)"
                                         class="orientation-tag"
-                                        style="color:#0A84FF; background:rgba(10,132,255,0.12); border:1px solid rgba(10,132,255,0.18)"
-                                        x-text="news.locality || news.category"></span>
+                                        :style="getZoneBadgeStyle(getArticleDisplayZone(news))"
+                                        :title="news.locality || getZoneLabel(getArticleDisplayZone(news))"
+                                        x-text="getZoneLabel(getArticleDisplayZone(news))"></span>
                                     <span x-show="news.added_by" class="text-[10px] font-bold"
                                         style="color:#FF2D55">infodrop.live</span>
                                     <span x-show="!news.added_by"
@@ -729,7 +745,8 @@
                             <span class="text-base font-extrabold text-white">infodrop<span
                                     style="color:#FF2D55">.live</span></span>
                             <span class="text-[10px] px-2 py-0.5 rounded-full"
-                                style="background:rgba(255,45,85,0.15); color:#FF2D55">v5.0</span>
+                                style="background:rgba(255,45,85,0.15); color:#FF2D55"
+                                x-text="'v' + productVersion"></span>
                         </div>
                         <button @click="showAboutModal = false" class="p-1.5 rounded-lg transition hover:bg-white/5"
                             style="color:#555">✕</button>
@@ -745,11 +762,18 @@
                                 </svg>
                                 Le Projet
                             </h3>
-                            <p class="text-xs leading-relaxed" style="color:#888">
-                                infodrop.live est un lecteur d'actualités minimaliste qui regroupe les flux en temps
-                                réel.
-                                Notre objectif : vous aider à sortir de votre bulle de filtre et développer une vision
-                                équilibrée de l'actualité.
+                            <p x-show="!isLocalEdition" class="text-xs leading-relaxed" style="color:#888">
+                                Infodrop propose deux éditions publiques : un flux National/International sur les
+                                dernières 24 heures et un flux Pyrénées consacré au territoire. La consultation ne
+                                demande aucun compte ; la connexion par e-mail reste facultative et sert uniquement à
+                                synchroniser les préférences personnelles.
+                            </p>
+                            <p x-show="isLocalEdition" class="text-xs leading-relaxed" style="color:#888">
+                                Infodrop Pyrénées est un flux public d’informations locales sur les dernières 24 heures.
+                                Il agrège des médias, collectivités et organismes du territoire, conserve la source
+                                d’origine et permet de passer du flux National/International au flux Pyrénées sans compte
+                                obligatoire. La connexion par e-mail reste facultative et sert uniquement à synchroniser
+                                les préférences personnelles.
                             </p>
                         </div>
                         <div class="rounded-xl p-4"
@@ -769,9 +793,9 @@
                                     <span class="text-[10px] font-bold rounded px-1.5 py-0.5 shrink-0"
                                         style="background:rgba(255,45,85,0.15); color:#FF2D55">1</span>
                                     <p class="text-xs leading-relaxed" style="color:#888"><b style="color:#ccc">Flux 24h
-                                            glissantes</b> — Les articles sont collectés automatiquement depuis des
-                                        dizaines de sources de presse française, toutes orientations confondues. Ils
-                                        sont supprimés après 24h.</p>
+                                            glissantes</b> — <span
+                                            x-text="isLocalEdition ? 'Les informations locales sont collectées auprès de médias, collectivités et organismes du territoire, puis filtrées géographiquement.' : 'Les actualités nationales et internationales sont collectées automatiquement auprès de nombreuses sources.'"></span>
+                                        Les articles quittent le flux après 24h.</p>
                                 </div>
                                 <div class="flex items-start gap-2">
                                     <span class="text-[10px] font-bold rounded px-1.5 py-0.5 shrink-0"
@@ -863,7 +887,7 @@
                     <div class="px-5 py-4 flex items-center justify-between flex-shrink-0"
                         style="border-bottom:1px solid rgba(255,255,255,0.06)">
                         <div class="flex items-center gap-2">
-                            <span style="color:#0A84FF">📰</span>
+                            <span style="color:#FF2D55">📰</span>
                             <span class="text-sm font-bold text-white">Sources actives (<span
                                     x-text="sourcesDetail.length"></span>)</span>
                         </div>
@@ -881,19 +905,23 @@
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center justify-between mb-1">
                                             <div class="flex items-center gap-1.5 min-w-0">
+                                                <span x-show="isLocalEdition && data.displayZone"
+                                                    class="w-1.5 h-1.5 rounded-full shrink-0"
+                                                    :style="'background:' + getZoneColor(data.displayZone)"></span>
                                                 <img :src="getFavicon(data.url)" alt=""
                                                     class="w-3.5 h-3.5 rounded-[3px] grayscale opacity-80 shrink-0"
                                                     loading="lazy" @error="$el.style.display='none'" />
                                                 <span class="text-xs font-bold truncate" style="color:#FF2D55"
                                                     x-text="source"></span>
                                             </div>
-                                            <span class="text-[10px] font-bold shrink-0 ml-2" style="color:#0A84FF"
+                                            <span class="text-[10px] font-bold shrink-0 ml-2"
+                                                :style="'color:' + (data.displayZone ? getZoneColor(data.displayZone) : '#0A84FF')"
                                                 x-text="data.count + ' article' + (data.count > 1 ? 's' : '')"></span>
                                         </div>
                                         <div class="w-full rounded-full overflow-hidden"
                                             style="height:3px; background:rgba(255,255,255,0.06)">
                                             <div class="h-full rounded-full transition-all"
-                                                :style="'width:' + (data.count / Math.max(sourcesDetail[0][1].count, 1) * 100) + '%; background:#0A84FF'">
+                                                :style="'width:' + (data.count / Math.max(sourcesDetail[0][1].count, 1) * 100) + '%; background:' + (data.displayZone ? getZoneColor(data.displayZone) : '#0A84FF')">
                                             </div>
                                         </div>
                                     </div>
