@@ -1,6 +1,6 @@
 # Checklist de mise en production
 
-État au 26 septembre 2026 : les contrôles de préproduction ci-dessous sont terminés. La promotion et le smoke test public doivent encore être consignés dans le compte rendu de version.
+État au 26 septembre 2026 : cette checklist a été exécutée jusqu’au smoke test public. La version National + Pyrénées est active sur `infodrop.live` ; les résultats détaillés et les points de retour arrière figurent dans `docs/RELEASE_2026-09-26.md`.
 
 ## 1. Avant toute modification distante
 
@@ -49,3 +49,13 @@ Le plan Vercel Hobby observé n’accepte qu’une exécution cron par jour. La 
 - retour applicatif : redéployer le dernier déploiement stable ;
 - retour Git : repartir du tag `legacy-gamified-v1-2026-09-25` ou du commit de production synchronisé ;
 - base : la migration est additive, donc les anciennes fonctions continuent d’exister ; une suppression des nouvelles colonnes n’est pas requise pour revenir à l’ancienne interface.
+
+## 7. Validation de la version du 26 septembre 2026
+
+- snapshot Supabase réalisé avant migration et contrôlé par SHA-256 ;
+- migrations additives appliquées sans suppression de table ni de fonction historique ;
+- deux collectes de preview puis une collecte de production à 19/19 sources locales ;
+- flux National et Pyrénées contrôlés avec des données réelles ;
+- recherche, filtres, liste des sources, lectures, favoris et préférences locales validés sans compte ;
+- rendu bureau et mobile contrôlé sans débordement ni erreur console ;
+- ancien déploiement Vercel, branche d’archive et tag historique conservés.

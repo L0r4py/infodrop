@@ -69,7 +69,8 @@ Cette commande exécute les tests et la construction Vite. Le contrôle réel de
 - [Registre et méthode de sélection des sources](docs/SOURCES_PYRENEES.md)
 - [Conservation et restauration de l’ancien projet](docs/LEGACY_ARCHIVE.md)
 - [Checklist de mise en production](docs/DEPLOYMENT_CHECKLIST.md)
+- [Compte rendu de mise en production du 26 septembre 2026](docs/RELEASE_2026-09-26.md)
 
 ## Statut
 
-La branche `feature/infodrop-pyrenees-v1` correspond à la preview Vercel validée avant promotion. La migration Supabase et sa fonction additive `get_edition_stats` sont appliquées ; le déploiement historique reste disponible pour un retour arrière. L’état final de production est consigné dans le dossier `docs/` après le smoke test public.
+La version National + Pyrénées est en production sur `infodrop.live` depuis le 26 septembre 2026. La migration Supabase et sa fonction additive `get_edition_stats` sont appliquées, les 19 sources locales actives répondent, et le déploiement historique reste disponible pour un retour arrière. Les preuves de validation et les identifiants de restauration sont consignés dans [docs/RELEASE_2026-09-26.md](docs/RELEASE_2026-09-26.md).
