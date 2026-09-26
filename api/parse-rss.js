@@ -240,6 +240,31 @@ function fetchRssWithTimeout(feed, timeout = 5000) {
     });
 }
 
+const ITEM_DATE_FIELDS = [
+    'isoDate',
+    'pubDate',
+    'date',
+    'published',
+    'updated',
+    'created',
+    'dc:date'
+];
+
+export function parseItemPublicationDate(item) {
+    for (const field of ITEM_DATE_FIELDS) {
+        const rawValue = item?.[field];
+        const candidates = Array.isArray(rawValue) ? rawValue : [rawValue];
+
+        for (const candidate of candidates) {
+            if (candidate === undefined || candidate === null || candidate === '') continue;
+            const parsed = candidate instanceof Date ? candidate : new Date(candidate);
+            if (Number.isFinite(parsed.getTime())) return parsed;
+        }
+    }
+
+    return null;
+}
+
 export default async function handler(req, res) {
     if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -254,8 +279,11 @@ export default async function handler(req, res) {
 
     let articlesToInsert = [];
     let filteredCount = 0;
+    let invalidDateCount = 0;
+    const invalidDatesBySource = new Map();
     let fluxOk = 0, fluxTimeout = 0, fluxError = 0;
     const now = new Date();
+    const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
     for (const result of results) {
         if (result.status !== "fulfilled" || !result.value) {
@@ -278,10 +306,16 @@ export default async function handler(req, res) {
                 continue;
             }
 
-            let pubDate = item.isoDate ? new Date(item.isoDate) : new Date(now);
-            if (pubDate > now) pubDate = new Date(now);
+            const pubDate = parseItemPublicationDate(item);
+            if (!pubDate || pubDate > now) {
+                invalidDateCount++;
+                invalidDatesBySource.set(
+                    feed.name,
+                    (invalidDatesBySource.get(feed.name) || 0) + 1
+                );
+                continue;
+            }
 
-            const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
             if (pubDate >= twentyFourHoursAgo && item.link) {
                 let titleToUse = item.title;
                 if (feed.name === 'Konbini') {
@@ -313,6 +347,10 @@ export default async function handler(req, res) {
         }
     }
 
+    for (const [source, count] of invalidDatesBySource) {
+        console.warn(`⚠️ [RSS] ${source}: ${count} article(s) rejeté(s), date absente, invalide ou future.`);
+    }
+
 
     let insertedCount = 0;
     if (articlesToInsert.length > 0) {
@@ -339,6 +377,7 @@ export default async function handler(req, res) {
         articles_found: articlesToInsert.length,
         articles_inserted: insertedCount,
         articles_filtered: filteredCount,
+        articles_rejected_invalid_date: invalidDateCount,
         duration_seconds: duration
     });
 }
