@@ -8,7 +8,7 @@ test('le registre public ne contient qu’un socle significatif de flux contrôl
   assert.ok(registry.sources.length >= 15, `seulement ${registry.sources.length} sources vérifiées`);
   const slugs = registry.sources.map((source) => source.slug);
   assert.equal(new Set(slugs).size, slugs.length);
-  assert.ok(registry.sources.every((source) => source.active));
+  assert.equal(registry.sources.filter((source) => source.active).length, 19);
 });
 
 test('les URL déclarées sont syntaxiquement valides', () => {
@@ -19,11 +19,18 @@ test('les URL déclarées sont syntaxiquement valides', () => {
 });
 
 test('une source active correspond toujours à un flux vérifié', () => {
-  for (const source of registry.sources) {
+  for (const source of registry.sources.filter((candidate) => candidate.active)) {
     assert.equal(source.automation, 'rss', source.slug);
-    assert.equal(source.verification, 'two-pass-content-verified', source.slug);
+    assert.match(source.verification, /^(two|three)-pass-content-verified$/, source.slug);
     assert.ok(source.feed_url, source.slug);
   }
+});
+
+test('une source écartée reste archivée sans être présentée comme active', () => {
+  const atmo = registry.sources.find((source) => source.slug === 'atmo-occitanie');
+  assert.equal(atmo?.active, false);
+  assert.equal(atmo?.automation, 'manual-review');
+  assert.match(atmo?.verification || '', /investigate/);
 });
 
 test('le registre n’introduit aucun classement politique', () => {

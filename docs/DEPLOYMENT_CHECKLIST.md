@@ -1,6 +1,6 @@
 # Checklist de mise en production
 
-Cette branche n’est pas publiée automatiquement.
+État au 26 septembre 2026 : les contrôles de préproduction ci-dessous sont terminés. La promotion et le smoke test public doivent encore être consignés dans le compte rendu de version.
 
 ## 1. Avant toute modification distante
 
@@ -12,24 +12,18 @@ Cette branche n’est pas publiée automatiquement.
 
 ## 2. Base de données
 
-- sauvegarder Supabase ;
-- exécuter la migration additive en préproduction ;
-- confirmer les nouvelles colonnes sur `actu` ;
-- vérifier les politiques RLS avec un client anonyme ;
-- lancer `parse-local-rss` sur une seule source avec `?source=cagire-garonne-salat` ;
-- contrôler l’upsert, la déduplication, la fenêtre 24 h et la table de santé ;
+- sauvegarder Supabase : snapshot local contrôlé avec manifeste SHA-256 ;
+- exécuter les migrations additives dans une transaction ;
+- confirmer les nouvelles colonnes sur `actu` et la compatibilité de `user_bookmarks.article_id` en texte ;
+- vérifier les politiques RLS et les fonctions avec un client anonyme ;
+- lancer `parse-local-rss` sur la preview Vercel ;
+- contrôler les écritures explicites, la déduplication, la fenêtre 24 h et la table de santé ;
 - définir `REGIONAL_SCHEMA_ENABLED=true` seulement après ces contrôles ;
 - ne supprimer aucune table historique.
 
 ## 3. Planification
 
-Le plan Vercel Hobby observé n’accepte qu’une exécution cron par jour. Pour un fil réellement continu, choisir explicitement l’une de ces solutions avant publication :
-
-- passer le projet sur un plan autorisant une fréquence adaptée ;
-- utiliser un scheduler externe fiable avec stockage sécurisé de `CRON_SECRET` ;
-- déclencher la collecte depuis une infrastructure existante documentée.
-
-Ne pas ajouter un cron quotidien en le présentant comme du temps réel.
+Le plan Vercel Hobby observé n’accepte qu’une exécution cron par jour. La collecte Pyrénées utilise donc GitHub Actions toutes les quinze minutes, avec `CRON_SECRET` stocké dans les secrets du dépôt. Le workflow échoue si le serveur ne contrôle pas exactement 19 sources ou si l’une d’elles échoue.
 
 ## 4. Secrets et environnement
 
@@ -43,10 +37,12 @@ Ne pas ajouter un cron quotidien en le présentant comme du temps réel.
 
 1. aperçu Vercel sans domaine de production ;
 2. test fonctionnel de l’édition générale ;
-3. test public sans session de `/` et `/pyrenees/`, puis test facultatif du magic link ;
-4. vérification PWA, navigation hors ligne et liens externes ;
-5. validation des compteurs et de l’âge des sources ;
-6. bascule de production uniquement après accord explicite.
+3. test public sans session de `/` et `/pyrenees/` ;
+4. vérification desktop et mobile, recherche, filtres et sources ;
+5. validation des compteurs par édition, favoris, lectures et préférences locales ;
+6. double collecte serveur à 19/19 ;
+7. bascule de production uniquement après accord explicite ;
+8. smoke test complet du domaine public et du workflow planifié.
 
 ## 6. Retour arrière
 

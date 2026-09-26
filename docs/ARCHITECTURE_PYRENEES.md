@@ -28,14 +28,14 @@ Registre public vérifié
         │                            ├── fenêtre 24 h
         │                            ├── qualification territoriale
         │                            ├── catégorie et paywall
-        │                            └── URL canonique + upsert
+        │                            └── URL canonique + écritures contrôlées
         │                                      │
         └── pages en veille              Supabase actu
                                                 │
                                     interface Infodrop partagée
 ```
 
-Le registre JSON est la source lisible et versionnée. La table `regional_sources` en devient le miroir opérationnel lors de la collecte. Les règles territoriales restent dans le collecteur et la documentation ; elles ne sont pas affichées dans le flux public.
+Le registre JSON est la source lisible et versionnée. La table `regional_sources` en devient le miroir opérationnel lors de la collecte, y compris pour conserver une source retirée avec `active = false`. Les règles territoriales restent dans le collecteur et la documentation ; elles ne sont pas affichées dans le flux public.
 
 ## Accès et données personnelles
 
@@ -55,6 +55,7 @@ La migration ajoute :
 - `source_kind`, `source_slug`, `canonical_url`, `is_paywalled`, `ingested_at` ;
 - `regional_sources` et `regional_source_checks` ;
 - les index adaptés à la lecture par édition et par zone.
+- `get_edition_stats(text)`, fonction publique limitée à l’édition demandée, sans remplacer `get_live_stats`.
 
 Les tables historiques ne sont ni supprimées ni renommées.
 
@@ -66,6 +67,12 @@ La clé principale reste l’URL, après :
 - retrait des paramètres `utm_*`, `fbclid`, `gclid` et assimilés ;
 - normalisation du domaine et du slash final ;
 - repli sur le titre normalisé si aucune URL n’est disponible.
+
+Le déclencheur historique `prevent_duplicate_urls` reste en place. Le collecteur recherche donc d’abord les URL canoniques existantes, met explicitement à jour les lignes locales déjà présentes, puis insère seulement les nouvelles lignes. Si la même URL existe déjà dans l’édition nationale, la ligne locale conserve l’URL canonique et reçoit un fragment technique distinct sur la colonne historique `url`.
+
+## Planification
+
+Le workflow `.github/workflows/collect-pyrenees.yml` appelle la fonction serveur toutes les quinze minutes. Il exige une réponse à 19 sources contrôlées sans échec ; le secret d’autorisation n’est jamais envoyé au navigateur.
 
 ## Sécurité
 

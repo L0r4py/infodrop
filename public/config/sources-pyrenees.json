@@ -1,6 +1,6 @@
 {
   "edition": "pyrenees",
-  "version": 2,
+  "version": 3,
   "verified_at": "2026-09-25",
   "verification_runs": 2,
   "policy": "Le registre public ne contient que les flux ayant réussi deux lectures consécutives avec des titres, liens et dates valides.",
@@ -166,6 +166,22 @@
       "active": true
     },
     {
+      "slug": "nouvelle-republique-pyrenees",
+      "name": "La Nouvelle République des Pyrénées",
+      "publisher": "La Nouvelle République des Pyrénées",
+      "homepage_url": "https://www.nrpyrenees.fr/",
+      "feed_url": "https://www.nrpyrenees.fr/rss.xml",
+      "source_type": "media",
+      "scope": "regional",
+      "default_zone": "functional_ring",
+      "default_locality": "Hautes-Pyrénées",
+      "requires_keyword": true,
+      "language": "fr",
+      "automation": "rss",
+      "verification": "three-pass-content-verified",
+      "active": true
+    },
+    {
       "slug": "parc-national-pyrenees",
       "name": "Parc national des Pyrénées",
       "publisher": "Parc national des Pyrénées",
@@ -209,9 +225,9 @@
       "default_locality": "Occitanie",
       "requires_keyword": true,
       "language": "fr",
-      "automation": "rss",
-      "verification": "two-pass-content-verified",
-      "active": true
+      "automation": "manual-review",
+      "verification": "vercel-timeout-investigate",
+      "active": false
     },
     {
       "slug": "lio-occitanie",

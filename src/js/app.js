@@ -616,7 +616,13 @@ function infodropApp() {
                 return;
             }
             try {
-                const { data, error } = await supabaseClient.rpc('get_live_stats');
+                let { data, error } = REGIONAL_SCHEMA_ENABLED
+                    ? await supabaseClient.rpc('get_edition_stats', { p_edition_slug: 'national' })
+                    : await supabaseClient.rpc('get_live_stats');
+                // Repli temporaire pendant une propagation de schéma ou un retour arrière.
+                if (error && REGIONAL_SCHEMA_ENABLED) {
+                    ({ data, error } = await supabaseClient.rpc('get_live_stats'));
+                }
                 if (error) throw error;
                 this.stats = { total_articles: data.total_articles || 0, total_sources: data.total_sources || 0 };
                 this.activeOrientations = data.active_orientations || [];

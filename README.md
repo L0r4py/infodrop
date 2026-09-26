@@ -8,12 +8,12 @@ Infodrop conserve son édition nationale/internationale à la racine et ajoute u
 - les lectures, favoris et préférences sont conservés sur l’appareil avec `localStorage` ;
 - l’identification par email/magic link reste facultative et sert uniquement à synchroniser ces données entre appareils ;
 - l’édition Pyrénées est classée par thème et n’affiche pas d’étiquette politique ;
-- 19 flux locaux actifs ont réussi deux contrôles complets le 25 septembre 2026 ;
+- 19 flux locaux actifs ont réussi les contrôles locaux et deux collectes complètes depuis Vercel les 25 et 26 septembre 2026 ;
 - déduplication des URL et suppression des paramètres de suivi ;
 - signalement des accès abonnés lorsqu’ils sont détectés ;
 - même fond, couleurs, typographie, cartes, header, proportions et comportement mobile que l’édition existante.
 
-Tant que la migration régionale n’est pas appliquée, l’application utilise le schéma historique. Après migration, `REGIONAL_SCHEMA_ENABLED=true` active les champs régionaux et la synchronisation multi-appareils séparée par édition.
+La migration régionale additive est appliquée. `REGIONAL_SCHEMA_ENABLED=true` active les champs régionaux, les statistiques séparées par édition et la synchronisation multi-appareils sans modifier les tables historiques.
 
 ## Histoire du projet préservée
 
@@ -72,4 +72,4 @@ Cette commande exécute les tests et la construction Vite. Le contrôle réel de
 
 ## Statut
 
-Le chantier est local sur `feature/infodrop-pyrenees-v1`. Aucune migration distante, publication Vercel ou modification du domaine de production n’est déclenchée par ce dépôt.
+La branche `feature/infodrop-pyrenees-v1` correspond à la preview Vercel validée avant promotion. La migration Supabase et sa fonction additive `get_edition_stats` sont appliquées ; le déploiement historique reste disponible pour un retour arrière. L’état final de production est consigné dans le dossier `docs/` après le smoke test public.

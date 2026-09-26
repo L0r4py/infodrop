@@ -1,11 +1,12 @@
 # Sources locales à investiguer
 
-Ces sources sont pertinentes sur le plan éditorial, mais ne figurent pas dans le registre actif tant que leur récupération n’est pas suffisamment fiable. Le dernier contrôle a été réalisé le 25 septembre 2026. Le catalogue de travail complet est conservé dans `docs/source-candidates-snapshot-2026-09-25.json`.
+Ces sources sont pertinentes sur le plan éditorial, mais ne figurent pas dans le registre actif tant que leur récupération n’est pas suffisamment fiable. Le dernier contrôle a été réalisé les 25 et 26 septembre 2026. Le catalogue de travail complet est conservé dans `docs/source-candidates-snapshot-2026-09-25.json`.
 
 ## Flux trouvé mais non exploitable en continu
 
 | Source | État observé | Suite possible |
 |---|---|---|
+| Atmo Occitanie | Le flux renvoie bien 10 articles et HTTP 200 en local, mais échoue de façon reproductible depuis Vercel après deux tentatives et environ 20 secondes. | Réévaluer l’accessibilité depuis l’infrastructure de production ou prévoir un relais officiel stable. |
 | PNR Comminges Barousse Pyrénées | Le flux `/feed/` répond mais ne contient aucun article sur deux lectures. | Identifier le type de contenu WordPress réellement utilisé ou prévoir un adaptateur. |
 | InfoRoute65 | Flux valide techniquement, mais dernier article daté de novembre 2022. | Étudier la donnée opérationnelle du site plutôt que son ancien flux éditorial. |
 | Hôpitaux de Lannemezan | Flux valide techniquement, mais dernier article daté de janvier 2023. | Vérifier une autre rubrique ou un autre canal officiel. |

@@ -6,7 +6,7 @@ Un flux n’entre dans le registre actif que s’il réussit deux lectures cons�
 
 Cette vérification confirme l’état observé à la date indiquée. La collecte en exploitation conserve ensuite un historique des succès, erreurs et timeouts afin de repérer une dégradation durable.
 
-Contrôle final relancé le 25 septembre 2026 à 17:02 UTC : **38 lectures réussies sur 38**, réponses HTTP 200, aucun timeout, aucun échec de parsing et une durée maximale observée de 1 823 ms. Certains flux n’avaient naturellement aucun article qualifié dans la fenêtre locale des dernières 24 heures au moment du contrôle ; cela ne remet pas en cause leur validité technique.
+Contrôle final relancé le 25 septembre 2026 à 22:15 UTC : **38 lectures réussies sur 38**, réponses HTTP 200, aucun timeout et aucun échec de parsing. La même liste a ensuite réussi deux collectes consécutives depuis la preview Vercel : **19/19 puis 19/19**, avec une durée individuelle maximale de 3 034 ms. Certains flux n’avaient naturellement aucun article qualifié dans la fenêtre locale des dernières 24 heures au moment du contrôle ; cela ne remet pas en cause leur validité technique.
 
 ## Flux actifs retenus
 
@@ -22,9 +22,9 @@ Contrôle final relancé le 25 septembre 2026 à 17:02 UTC : **38 lectures réus
 | Conselh Generau d’Aran | 10 | 2026-09-25 | 2/2 réussis |
 | Petite République | 10 | 2026-09-25 | 2/2 réussis |
 | La Semaine des Pyrénées | 10 | 2026-09-25 | 2/2 réussis |
+| La Nouvelle République des Pyrénées | 20 | 2026-09-25 | 3/3 puis 2/2 réussis |
 | Parc national des Pyrénées | 10 | 2026-09-17 | 2/2 réussis |
 | DREAL Occitanie | 20 | 2026-09-07 | 2/2 réussis |
-| Atmo Occitanie | 10 | 2026-09-25 | 2/2 réussis |
 | liO Occitanie | 9 | 2026-09-22 | 2/2 réussis |
 | SDIS 31 | 10 | 2026-09-16 | 2/2 réussis |
 | ARS Occitanie | 20 | 2026-09-25 | 2/2 réussis |
@@ -39,6 +39,7 @@ Total : **19 flux actifs vérifiés**. Les URL exactes sont dans `public/config/
 - Le flux générique de Saint-Gaudens était ancien ; le flux de la rubrique Actualités a été trouvé et validé.
 - Le chemin RSS déclaré par le Parc national des Pyrénées a remplacé une variante non canonique.
 - Le flux du SDIS 31 sous `/actualites/` renvoyait 404 ; le flux racine fonctionne et a été retenu.
+- Atmo Occitanie répond localement, mais deux collectes Vercel consécutives ont épuisé leurs relances ; la source est conservée inactive et remplacée par La Nouvelle République des Pyrénées.
 - Le flux du PNR Comminges Barousse Pyrénées répond mais ne contient aucun article : il reste à investiguer et n’est pas actif.
 
 ## Reproduire le contrôle

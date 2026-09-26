@@ -221,7 +221,9 @@ export default async function handler(req, res) {
     return res.status(404).json({ error: 'Source active introuvable' });
   }
 
-  const registryWrite = await supabase.from('regional_sources').upsert(sources.map(sourceRow), { onConflict: 'slug' });
+  // Synchroniser aussi les sources retirées du flux actif conserve leur historique
+  // tout en empêchant qu'un ancien état `active = true` persiste en base.
+  const registryWrite = await supabase.from('regional_sources').upsert(registry.sources.map(sourceRow), { onConflict: 'slug' });
   if (registryWrite.error) {
     return res.status(503).json({
       error: 'Migration régionale requise avant la collecte',
