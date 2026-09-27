@@ -2,7 +2,7 @@
 // infodrop.live Service Worker — Offline-first strategy
 // ═══════════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'infodrop-editions-20260927';
+const CACHE_NAME = 'infodrop-editions-20260927-rubriques-mobile';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
@@ -40,6 +40,20 @@ self.addEventListener('fetch', (event) => {
 
     // Skip non-GET requests
     if (event.request.method !== 'GET') return;
+
+    // Le HTML et le registre doivent suivre le déploiement : un ancien HTML
+    // référence des bundles qui n'existent plus après une mise à jour Vite.
+    if (url.origin === self.location.origin && (event.request.mode === 'navigate'
+        || url.pathname.endsWith('.html') || url.pathname === '/config/sources-pyrenees.json')) {
+        event.respondWith(fetch(event.request).then(response => {
+            if (response.ok) {
+                const clone = response.clone();
+                event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone)));
+            }
+            return response;
+        }).catch(() => caches.match(event.request)));
+        return;
+    }
 
     // API calls & Supabase: network-first with cache fallback
     if (url.pathname.startsWith('/api/') || url.hostname.includes('supabase')) {
