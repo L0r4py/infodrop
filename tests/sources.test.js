@@ -8,7 +8,8 @@ test('le registre public ne contient qu’un socle significatif de flux contrôl
   assert.ok(registry.sources.length >= 15, `seulement ${registry.sources.length} sources vérifiées`);
   const slugs = registry.sources.map((source) => source.slug);
   assert.equal(new Set(slugs).size, slugs.length);
-  assert.equal(registry.sources.filter((source) => source.active).length, 34);
+  assert.ok(registry.sources.some(source => source.active));
+  assert.equal(new Set(registry.sources.filter(source => source.active).map(source => source.feed_url)).size, registry.sources.filter(source => source.active).length);
 });
 
 test('les URL déclarées sont syntaxiquement valides', () => {
@@ -27,6 +28,9 @@ test('une source active correspond toujours à un flux vérifié', () => {
       source.slug,
     );
     assert.ok(source.feed_url, source.slug);
+    assert.ok(source.default_zone, source.slug);
+    assert.equal('requires_keyword' in source, false, source.slug);
+    assert.ok(!['regional_strict', 'specialized_strict', 'south_31'].includes(source.scope), source.slug);
   }
 });
 

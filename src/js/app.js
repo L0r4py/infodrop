@@ -1,5 +1,6 @@
 import packageMetadata from '../../package.json';
 import { ZONE_PRESENTATION } from '../../lib/local/territory.js';
+import { diversifyLocalArticles } from '../../lib/local/diversify.js';
 
 const DEBUG = false;
 const dlog = (...args) => DEBUG && console.log('[DEBUG]', ...args);
@@ -105,6 +106,11 @@ function infodropApp() {
         stats: { total_articles: 0, total_sources: 0 },
         sourceRegistry: [],
         sourceStats: [],
+        sourceStatsLoaded: false,
+        sourceDiagnostics: [],
+        sourcesView: 'active',
+        sourcesLoading: false,
+        sourcesError: false,
         activeZones: [],
         releaseVersion: packageMetadata.version,
 
@@ -243,7 +249,41 @@ function infodropApp() {
             const response = await fetch('/config/sources-pyrenees.json', { cache: 'no-store' });
             if (!response.ok) throw new Error('Registre des sources indisponible');
             const registry = await response.json();
-            this.sourceRegistry = (registry.sources || []).filter(source => source.active);
+            this.sourceRegistry = registry.sources || [];
+        },
+
+        async loadSourceDiagnostics() {
+            this.sourcesLoading = true;
+            this.sourcesError = false;
+            try {
+                const { data, error } = await supabaseClient.from('regional_sources')
+                    .select('slug,last_status,last_checked_at,last_success_at,latest:regional_source_checks(checked_at,status,items_in_24h,items_rejected_invalid_date,items_duplicate,items_written,last_feed_item_at),written:regional_source_checks(checked_at,last_qualified_item_at)')
+                    .order('checked_at', { referencedTable: 'latest', ascending: false }).limit(1, { referencedTable: 'latest' })
+                    .gt('written.items_written', 0)
+                    .order('checked_at', { referencedTable: 'written', ascending: false }).limit(1, { referencedTable: 'written' });
+                if (error) throw error;
+                this.sourceDiagnostics = data || [];
+            } catch (error) {
+                this.sourcesError = true;
+                console.error('Diagnostics des sources indisponibles', error);
+            } finally { this.sourcesLoading = false; }
+        },
+
+        get allSourcesDetail() {
+            return this.sourceRegistry.map(source => {
+                const diagnostic = this.sourceDiagnostics.find(row => row.slug === source.slug) || {};
+                const latest = diagnostic.latest?.[0] || {};
+                const stale = !latest.checked_at || Date.now() - new Date(latest.checked_at) > 60 * 60_000;
+                const status = !source.active ? 'Désactivée'
+                    : stale ? 'Contrôle ancien ou absent'
+                        : latest.status === 'ok' ? (latest.items_in_24h ? 'Flux OK' : 'Flux OK · aucun article H24')
+                            : latest.status === 'timeout' ? 'Délai dépassé' : 'Erreur de lecture';
+                return { ...source, ...latest, statusLabel: status, written: diagnostic.written?.[0] || {} };
+            }).sort((a, b) => Number(b.active) - Number(a.active) || a.name.localeCompare(b.name, 'fr'));
+        },
+
+        sourceDate(value) {
+            return value ? new Date(value).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' }) : '—';
         },
 
         async markAsRead(id) {
@@ -470,6 +510,7 @@ function infodropApp() {
         },
 
         distributeArticles(articles) {
+            if (this.isLocalEdition) return diversifyLocalArticles(articles);
             if (!articles || articles.length <= 1) return articles;
             const result = [...articles];
 
@@ -648,6 +689,7 @@ function infodropApp() {
                     const sourceResult = await supabaseClient.rpc('get_edition_source_stats', { p_edition_slug: this.edition });
                     if (sourceResult.error) throw sourceResult.error;
                     this.sourceStats = Array.isArray(sourceResult.data) ? sourceResult.data : [];
+                    this.sourceStatsLoaded = true;
                 }
                 this.updateTagsList();
             } catch (e) {
@@ -1016,7 +1058,7 @@ function infodropApp() {
         },
 
         get sourcesDetail() {
-            if (this.sourceStats.length > 0) {
+            if (this.sourceStatsLoaded) {
                 return this.sourceStats.map(item => [item.source, { count: item.count, url: item.url }]);
             }
             const counts = {};

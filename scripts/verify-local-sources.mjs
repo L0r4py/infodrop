@@ -2,7 +2,7 @@ import Parser from 'rss-parser';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import registry from '../public/config/sources-pyrenees.json' with { type: 'json' };
-import { classifyTerritory, isWithinRollingWindow } from '../lib/local/territory.js';
+import { isWithinRollingWindow } from '../lib/local/territory.js';
 
 const parser = new Parser();
 const TIMEOUT_MS = 12_000;
@@ -50,17 +50,7 @@ async function inspectOnce(source) {
     const newest = parsedDates[0] || null;
     const freshnessDays = newest ? Math.floor((Date.now() - newest.getTime()) / 86_400_000) : null;
     const futureMinutes = newest ? Math.ceil((newest.getTime() - Date.now()) / 60_000) : null;
-    const qualifiedLast24h = items.filter((item) => {
-      const publishedAt = item.isoDate || item.pubDate;
-      if (!isWithinRollingWindow(publishedAt)) return false;
-      return classifyTerritory({
-        title: item.title,
-        resume: item.contentSnippet,
-        url: item.link,
-        source: source.name,
-        tags: item.categories || [],
-      }, source).included;
-    }).length;
+    const qualifiedLast24h = (feed.items || []).filter((item) => isWithinRollingWindow(item.isoDate || item.pubDate)).length;
 
     const passed = titlesValid === items.length
       && linksValid === items.length
@@ -117,44 +107,44 @@ const discoveredCandidates = [
   {
     slug: 'ville-saint-gaudens-actualites', name: 'Ville de Saint-Gaudens — actualités',
     feed_url: 'https://www.stgo.fr/actualites/feed/', default_zone: 'functional_ring',
-    default_locality: 'Saint-Gaudens', requires_keyword: false,
+    default_locality: 'Saint-Gaudens',
   },
   {
     slug: 'parc-national-pyrenees-official', name: 'Parc national des Pyrénées — flux déclaré',
     feed_url: 'https://www.pyrenees-parcnational.fr/fr/flux/rss.xml', default_zone: 'functional_ring',
-    default_locality: 'Pyrénées', requires_keyword: true,
+    default_locality: 'Pyrénées',
   },
   {
     slug: 'ville-luchon', name: 'Ville de Luchon', feed_url: 'https://www.mairie-luchon.fr/feed/',
-    default_zone: 'core', default_locality: 'Luchonnais', requires_keyword: false,
+    default_zone: 'core', default_locality: 'Luchonnais',
   },
   {
     slug: 'cc-pyrenees-haut-garonnaises', name: 'Pyrénées Haut Garonnaises',
     feed_url: 'https://cc-pyreneeshautgaronnaises.fr/communaute/s-informer/actualites?format=feed&type=rss',
-    default_zone: 'core', default_locality: 'Pyrénées Haut Garonnaises', requires_keyword: false,
+    default_zone: 'core', default_locality: 'Pyrénées Haut Garonnaises',
   },
   {
     slug: 'inforoute65', name: 'InfoRoute65', feed_url: 'https://inforoute.ha-py.fr/feed/',
-    default_zone: 'functional_ring', default_locality: 'Hautes-Pyrénées', requires_keyword: true,
+    default_zone: 'functional_ring', default_locality: 'Hautes-Pyrénées',
   },
   {
     slug: 'ch-comminges-pyrenees', name: 'Centre Hospitalier Comminges Pyrénées',
     feed_url: 'https://www.ch-saintgaudens.fr/feed/', default_zone: 'functional_ring',
-    default_locality: 'Saint-Gaudens', requires_keyword: false,
+    default_locality: 'Saint-Gaudens',
   },
   {
     slug: 'hopitaux-lannemezan', name: 'Hôpitaux de Lannemezan',
     feed_url: 'https://www.ch-lannemezan.fr/?feed=rss2', default_zone: 'functional_ring',
-    default_locality: 'Lannemezan', requires_keyword: false,
+    default_locality: 'Lannemezan',
   },
   {
     slug: 'agriculture-pyrenees', name: 'Agriculture Pyrénées',
     feed_url: 'https://agriculturepyrenees.fr/feed/', default_zone: 'core',
-    default_locality: 'Massif des Pyrénées', requires_keyword: true,
+    default_locality: 'Massif des Pyrénées',
   },
   {
     slug: 'ici-france-bleu', name: 'ICI', feed_url: 'https://www.radiofrance.fr/francebleu/rss',
-    default_zone: 'functional_ring', default_locality: 'Occitanie', requires_keyword: true,
+    default_zone: 'functional_ring', default_locality: 'Occitanie',
   },
 ];
 
@@ -178,8 +168,8 @@ const standardProbeCandidates = [
   ['ars-occitanie', 'ARS Occitanie', 'https://www.occitanie.ars.sante.fr/rss.xml', 'functional_ring', 'Occitanie', true],
   ['chambre-agriculture-31', 'Chambre d’agriculture de la Haute-Garonne', 'https://hautegaronne.chambres-agriculture.fr/feed/', 'core', 'Haute-Garonne', true],
   ['chambre-agriculture-65', 'Chambre d’agriculture des Hautes-Pyrénées', 'https://hapy.chambres-agriculture.fr/feed/', 'functional_ring', 'Hautes-Pyrénées', true],
-].map(([slug, name, feed_url, default_zone, default_locality, requires_keyword]) => ({
-  slug, name, feed_url, default_zone, default_locality, requires_keyword,
+].map(([slug, name, feed_url, default_zone, default_locality]) => ({
+  slug, name, feed_url, default_zone, default_locality,
 }));
 
 const candidateFileIndex = process.argv.indexOf('--candidate-file');

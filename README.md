@@ -8,8 +8,9 @@ Infodrop conserve son édition nationale/internationale à la racine et ajoute u
 - les lectures, favoris et préférences sont conservés sur l’appareil avec `localStorage` ;
 - l’identification par email/magic link reste facultative et sert uniquement à synchroniser ces données entre appareils ;
 - l’édition Pyrénées est classée par territoire et par thème, sans étiquette politique ;
-- le périmètre couvre la Barousse, le Comminges, le Luchonnais, les Nestes/Lannemezan, les Hautes-Pyrénées, le sud de la Haute-Garonne, le Val d’Aran et l’Occitanie lorsqu’une information concerne directement cette zone ;
-- chaque collecte locale distingue les items bruts, récents, rejetés par le territoire, invalides, dédupliqués et finalement écrits ;
+- le périmètre couvre la Barousse, le Comminges, le Luchonnais, les Nestes/Lannemezan, les Hautes-Pyrénées, le sud de la Haute-Garonne et le Val d’Aran, par sélection de rubriques RSS locales ;
+- chaque flux accepté fournit une zone fixe ; aucun filtrage géographique des titres ou résumés n'intervient ;
+- chaque collecte locale distingue les items bruts, récents, invalides, dédupliqués et finalement écrits ;
 - déduplication des URL et suppression des paramètres de suivi ;
 - signalement des accès abonnés lorsqu’ils sont détectés ;
 - même fond, couleurs, typographie, cartes, header, proportions et comportement mobile que l’édition existante.

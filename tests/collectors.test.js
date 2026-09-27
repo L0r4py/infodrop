@@ -36,7 +36,6 @@ test('le collecteur local rejette les dates absentes et expose le diagnostic par
   for (const metric of [
     'items_fetched',
     'items_in_24h',
-    'items_rejected_territory',
     'items_rejected_invalid_date',
     'items_duplicate',
     'items_written',
@@ -50,4 +49,18 @@ test('le collecteur local rejette les dates absentes et expose le diagnostic par
 test('le mode probe vérifie une source inactive sans écrire en base', () => {
   assert.match(localCollector, /probeMode/);
   assert.match(localCollector, /probe:\s*true/);
+});
+
+test('le collecteur accepte le périmètre du flux et ne déduit jamais la zone du texte', async () => {
+  assert.doesNotMatch(localCollector, /classifyTerritory|requires_keyword|items_rejected_territory/);
+  const { collectSource } = await import('../api/parse-local-rss.js');
+  const originalFetch = globalThis.fetch;
+  const published = new Date(Date.now() - 3600000).toUTCString();
+  globalThis.fetch = async () => new Response(`<rss version="2.0"><channel><title>Local</title><item><title>Un conseil jeudi à Montpellier</title><link>https://example.org/item</link><pubDate>${published}</pubDate></item><item><title>Sans date</title><link>https://example.org/missing</link></item></channel></rss>`);
+  try {
+    const result = await collectSource({ name: 'Rubrique locale', slug: 'test', default_zone: 'barousse', default_locality: 'Barousse' });
+    assert.equal(result.articles.length, 1);
+    assert.equal(result.articles[0].territory_zone, 'barousse');
+    assert.equal(result.metrics.items_rejected_invalid_date, 1);
+  } finally { globalThis.fetch = originalFetch; }
 });

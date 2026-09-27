@@ -1,0 +1,3601 @@
+{
+  "checked_at": "2026-09-27T08:24:57.108Z",
+  "results": [
+    {
+      "slug": "depeche-arbas",
+      "name": "La Dépêche — Arbas",
+      "locality": "Arbas",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/arbas,31011/",
+      "feed_url": "https://www.ladepeche.fr/communes/arbas,31011/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Arbas",
+          "count": 25,
+          "valid": 25,
+          "h24": 1,
+          "newest": "2026-09-27T03:46:06.000Z",
+          "sample": [
+            {
+              "title": "Arbas. Des moulins d’hier à l’énergie de demain",
+              "url": "https://www.ladepeche.fr/2026/09/27/des-moulins-dhier-a-lenergie-de-demain-13571071.php",
+              "date": "2026-09-27T03:46:06.000Z"
+            },
+            {
+              "title": "Arbas. Ça se passe comme ça à Chinchouret",
+              "url": "https://www.ladepeche.fr/2026/09/23/ca-se-passe-comme-ca-a-chinchouret-13564326.php",
+              "date": "2026-09-23T03:59:06.000Z"
+            },
+            {
+              "title": "Arbas. Café-épicerie Jojo : un nouveau gérant et des habitants ravis",
+              "url": "https://www.ladepeche.fr/2026/09/20/cafe-epicerie-jojo-un-nouveau-gerant-et-des-habitants-ravis-13559926.php",
+              "date": "2026-09-21T16:51:24.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Arbas",
+          "count": 25,
+          "valid": 25,
+          "h24": 1,
+          "newest": "2026-09-27T03:46:06.000Z",
+          "sample": [
+            {
+              "title": "Arbas. Des moulins d’hier à l’énergie de demain",
+              "url": "https://www.ladepeche.fr/2026/09/27/des-moulins-dhier-a-lenergie-de-demain-13571071.php",
+              "date": "2026-09-27T03:46:06.000Z"
+            },
+            {
+              "title": "Arbas. Ça se passe comme ça à Chinchouret",
+              "url": "https://www.ladepeche.fr/2026/09/23/ca-se-passe-comme-ca-a-chinchouret-13564326.php",
+              "date": "2026-09-23T03:59:06.000Z"
+            },
+            {
+              "title": "Arbas. Café-épicerie Jojo : un nouveau gérant et des habitants ravis",
+              "url": "https://www.ladepeche.fr/2026/09/20/cafe-epicerie-jojo-un-nouveau-gerant-et-des-habitants-ravis-13559926.php",
+              "date": "2026-09-21T16:51:24.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-argeles-gazost",
+      "name": "La Dépêche — Argelès-Gazost",
+      "locality": "Argelès-Gazost",
+      "zone": "hautes_pyrenees",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/argeles-gazost,65025/",
+      "feed_url": "https://www.ladepeche.fr/communes/argeles-gazost,65025/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Argelès-Gazost",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:40:09.000Z",
+          "sample": [
+            {
+              "title": "Succès étincelant pour la première Star Party",
+              "url": "https://www.ladepeche.fr/2026/09/26/succes-etincelant-pour-la-premiere-star-party-13569628.php",
+              "date": "2026-09-26T03:40:09.000Z"
+            },
+            {
+              "title": "\" Si le pape veut venir bénir le terrain, on l'accueille avec plaisir \", entre report et maintien, le week-end sportif est contrarié dans les Hautes-Pyrenées",
+              "url": "https://www.ladepeche.fr/2026/09/24/si-le-pape-veut-venir-benir-le-terrain-on-laccueille-avec-plaisir-entre-report-et-maintien-le-week-end-sportif-est-contrarie-dans-les-hautes-pyrenees-13566786.php",
+              "date": "2026-09-24T18:22:32.000Z"
+            },
+            {
+              "title": "Le \"Pas du Monde\" avec le Cultur’Bus",
+              "url": "https://www.ladepeche.fr/2026/09/25/le-pas-du-monde-avec-le-culturbus-13567987.php",
+              "date": "2026-09-25T04:04:09.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Argelès-Gazost",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:40:09.000Z",
+          "sample": [
+            {
+              "title": "Succès étincelant pour la première Star Party",
+              "url": "https://www.ladepeche.fr/2026/09/26/succes-etincelant-pour-la-premiere-star-party-13569628.php",
+              "date": "2026-09-26T03:40:09.000Z"
+            },
+            {
+              "title": "\" Si le pape veut venir bénir le terrain, on l'accueille avec plaisir \", entre report et maintien, le week-end sportif est contrarié dans les Hautes-Pyrenées",
+              "url": "https://www.ladepeche.fr/2026/09/24/si-le-pape-veut-venir-benir-le-terrain-on-laccueille-avec-plaisir-entre-report-et-maintien-le-week-end-sportif-est-contrarie-dans-les-hautes-pyrenees-13566786.php",
+              "date": "2026-09-24T18:22:32.000Z"
+            },
+            {
+              "title": "Le \"Pas du Monde\" avec le Cultur’Bus",
+              "url": "https://www.ladepeche.fr/2026/09/25/le-pas-du-monde-avec-le-culturbus-13567987.php",
+              "date": "2026-09-25T04:04:09.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-arreau",
+      "name": "La Dépêche — Arreau",
+      "locality": "Arreau",
+      "zone": "nestes_lannemezan",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/arreau,65031/",
+      "feed_url": "https://www.ladepeche.fr/communes/arreau,65031/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Arreau",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-23T03:40:25.000Z",
+          "sample": [
+            {
+              "title": "Arreau. Smyle, une rentrée pleine de nouveautés",
+              "url": "https://www.ladepeche.fr/2026/09/23/smyle-une-rentree-pleine-de-nouveautes-13564055.php",
+              "date": "2026-09-23T03:40:25.000Z"
+            },
+            {
+              "title": "Arreau. La deuxième Foire aux bestiaux transfrontalière revient",
+              "url": "https://www.ladepeche.fr/2026/09/12/la-deuxieme-foire-aux-bestiaux-transfrontaliere-revient-13547571.php",
+              "date": "2026-09-12T04:08:09.000Z"
+            },
+            {
+              "title": "Forum des associations à Loures-Barousse : découvrez plus de 30 activités et animations ce samedi 14h30-18h30 au lac",
+              "url": "https://www.ladepeche.fr/2026/09/07/forum-des-associations-a-loures-barousse-decouvrez-plus-de-30-activites-et-animations-ce-samedi-14h30-18h30-au-lac-13539603.php",
+              "date": "2026-09-07T13:06:34.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Arreau",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-23T03:40:25.000Z",
+          "sample": [
+            {
+              "title": "Arreau. Smyle, une rentrée pleine de nouveautés",
+              "url": "https://www.ladepeche.fr/2026/09/23/smyle-une-rentree-pleine-de-nouveautes-13564055.php",
+              "date": "2026-09-23T03:40:25.000Z"
+            },
+            {
+              "title": "Arreau. La deuxième Foire aux bestiaux transfrontalière revient",
+              "url": "https://www.ladepeche.fr/2026/09/12/la-deuxieme-foire-aux-bestiaux-transfrontaliere-revient-13547571.php",
+              "date": "2026-09-12T04:08:09.000Z"
+            },
+            {
+              "title": "Forum des associations à Loures-Barousse : découvrez plus de 30 activités et animations ce samedi 14h30-18h30 au lac",
+              "url": "https://www.ladepeche.fr/2026/09/07/forum-des-associations-a-loures-barousse-decouvrez-plus-de-30-activites-et-animations-ce-samedi-14h30-18h30-au-lac-13539603.php",
+              "date": "2026-09-07T13:06:34.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-aspet",
+      "name": "La Dépêche — Aspet",
+      "locality": "Aspet",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/aspet,31020/",
+      "feed_url": "https://www.ladepeche.fr/communes/aspet,31020/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Aspet",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:38:44.000Z",
+          "sample": [
+            {
+              "title": "Aspet. Un mini-salon entre pros, pour booster le centre-ville",
+              "url": "https://www.ladepeche.fr/2026/09/26/un-mini-salon-entre-pros-pour-booster-le-centre-ville-13569575.php",
+              "date": "2026-09-26T03:38:44.000Z"
+            },
+            {
+              "title": "Aspet. Le Comptoir des curieux invite à la découverte",
+              "url": "https://www.ladepeche.fr/2026/09/26/le-comptoir-des-curieux-invite-a-la-decouverte-13569570.php",
+              "date": "2026-09-26T03:38:43.000Z"
+            },
+            {
+              "title": "Aspetopies : visites sonores et visuelles surprenantes",
+              "url": "https://www.ladepeche.fr/2026/09/24/aspetopies-visites-sonores-et-visuelles-surprenantes-13566138.php",
+              "date": "2026-09-24T04:01:47.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Aspet",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:38:44.000Z",
+          "sample": [
+            {
+              "title": "Aspet. Un mini-salon entre pros, pour booster le centre-ville",
+              "url": "https://www.ladepeche.fr/2026/09/26/un-mini-salon-entre-pros-pour-booster-le-centre-ville-13569575.php",
+              "date": "2026-09-26T03:38:44.000Z"
+            },
+            {
+              "title": "Aspet. Le Comptoir des curieux invite à la découverte",
+              "url": "https://www.ladepeche.fr/2026/09/26/le-comptoir-des-curieux-invite-a-la-decouverte-13569570.php",
+              "date": "2026-09-26T03:38:43.000Z"
+            },
+            {
+              "title": "Aspetopies : visites sonores et visuelles surprenantes",
+              "url": "https://www.ladepeche.fr/2026/09/24/aspetopies-visites-sonores-et-visuelles-surprenantes-13566138.php",
+              "date": "2026-09-24T04:01:47.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-aurignac",
+      "name": "La Dépêche — Aurignac",
+      "locality": "Aurignac",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/aurignac,31028/",
+      "feed_url": "https://www.ladepeche.fr/communes/aurignac,31028/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Aurignac",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:38:43.000Z",
+          "sample": [
+            {
+              "title": "Aurignac. La foule s’est déplacée pour aller à la rencontre des associations",
+              "url": "https://www.ladepeche.fr/2026/09/26/la-foule-sest-deplacee-pour-aller-a-la-rencontre-des-associations-13569567.php",
+              "date": "2026-09-26T03:38:43.000Z"
+            },
+            {
+              "title": "Aurignac. Au Motis, \"Bien Vivre\" cultive la convivialité et l’entraide",
+              "url": "https://www.ladepeche.fr/2026/09/23/au-motis-bien-vivre-cultive-la-convivialite-et-lentraide-13564321.php",
+              "date": "2026-09-23T03:59:06.000Z"
+            },
+            {
+              "title": "Aurignac. Atelier d’écriture et expo photos à la Cafetière",
+              "url": "https://www.ladepeche.fr/2026/09/19/atelier-decriture-et-expo-photos-a-la-cafetiere-13558688.php",
+              "date": "2026-09-19T04:04:07.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Aurignac",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:38:43.000Z",
+          "sample": [
+            {
+              "title": "Aurignac. La foule s’est déplacée pour aller à la rencontre des associations",
+              "url": "https://www.ladepeche.fr/2026/09/26/la-foule-sest-deplacee-pour-aller-a-la-rencontre-des-associations-13569567.php",
+              "date": "2026-09-26T03:38:43.000Z"
+            },
+            {
+              "title": "Aurignac. Au Motis, \"Bien Vivre\" cultive la convivialité et l’entraide",
+              "url": "https://www.ladepeche.fr/2026/09/23/au-motis-bien-vivre-cultive-la-convivialite-et-lentraide-13564321.php",
+              "date": "2026-09-23T03:59:06.000Z"
+            },
+            {
+              "title": "Aurignac. Atelier d’écriture et expo photos à la Cafetière",
+              "url": "https://www.ladepeche.fr/2026/09/19/atelier-decriture-et-expo-photos-a-la-cafetiere-13558688.php",
+              "date": "2026-09-19T04:04:07.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-bagneres-de-bigorre",
+      "name": "La Dépêche — Bagnères-de-Bigorre",
+      "locality": "Bagnères-de-Bigorre",
+      "zone": "hautes_pyrenees",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/bagneres-de-bigorre,65059/",
+      "feed_url": "https://www.ladepeche.fr/communes/bagneres-de-bigorre,65059/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Bagnères-de-Bigorre",
+          "count": 25,
+          "valid": 25,
+          "h24": 1,
+          "newest": "2026-09-27T03:35:08.000Z",
+          "sample": [
+            {
+              "title": "Bagnères-de-Bigorre. La cartographie au Salon du Livre Pyrénéen",
+              "url": "https://www.ladepeche.fr/2026/09/27/la-cartographie-au-salon-du-livre-pyreneen-13570949.php",
+              "date": "2026-09-27T03:35:08.000Z"
+            },
+            {
+              "title": "Tourmalet-Pic du Midi : Destination fraîcheur par excellence cet été avec une hausse de 3,5 % du taux d'occupation",
+              "url": "https://www.ladepeche.fr/2026/09/24/tourmalet-pic-du-midi-destination-fraicheur-par-excellence-cet-ete-avec-une-hausse-de-35-du-taux-doccupation-13567186.php",
+              "date": "2026-09-24T21:08:37.000Z"
+            },
+            {
+              "title": "Un camion-toupie se renverse et percute plusieurs véhicules dans le centre-ville de Bagnères-de-Bigorre",
+              "url": "https://www.ladepeche.fr/2026/09/24/un-camion-toupie-se-renverse-et-percute-plusieurs-vehicules-dans-le-centre-ville-de-bagneres-de-bigorre-13566692.php",
+              "date": "2026-09-24T12:08:38.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Bagnères-de-Bigorre",
+          "count": 25,
+          "valid": 25,
+          "h24": 1,
+          "newest": "2026-09-27T03:35:08.000Z",
+          "sample": [
+            {
+              "title": "Bagnères-de-Bigorre. La cartographie au Salon du Livre Pyrénéen",
+              "url": "https://www.ladepeche.fr/2026/09/27/la-cartographie-au-salon-du-livre-pyreneen-13570949.php",
+              "date": "2026-09-27T03:35:08.000Z"
+            },
+            {
+              "title": "Tourmalet-Pic du Midi : Destination fraîcheur par excellence cet été avec une hausse de 3,5 % du taux d'occupation",
+              "url": "https://www.ladepeche.fr/2026/09/24/tourmalet-pic-du-midi-destination-fraicheur-par-excellence-cet-ete-avec-une-hausse-de-35-du-taux-doccupation-13567186.php",
+              "date": "2026-09-24T21:08:37.000Z"
+            },
+            {
+              "title": "Un camion-toupie se renverse et percute plusieurs véhicules dans le centre-ville de Bagnères-de-Bigorre",
+              "url": "https://www.ladepeche.fr/2026/09/24/un-camion-toupie-se-renverse-et-percute-plusieurs-vehicules-dans-le-centre-ville-de-bagneres-de-bigorre-13566692.php",
+              "date": "2026-09-24T12:08:38.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-bagneres-de-luchon",
+      "name": "La Dépêche — Bagnères-de-Luchon",
+      "locality": "Bagnères-de-Luchon",
+      "zone": "luchonnais",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/bagneres-de-luchon,31042/",
+      "feed_url": "https://www.ladepeche.fr/communes/bagneres-de-luchon,31042/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Bagnères-de-Luchon",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:38:43.000Z",
+          "sample": [
+            {
+              "title": "Bagnères-de-Luchon. Le plein de projets avec  les parents d’élèves",
+              "url": "https://www.ladepeche.fr/2026/09/26/le-plein-de-projets-avec-les-parents-deleves-13569564.php",
+              "date": "2026-09-26T03:38:43.000Z"
+            },
+            {
+              "title": "\"On va faire du covoiturage pour aller voter\" : pour les élections sénatoriales, les maires du Luchonnais organisent leur déplacement jusqu'à Toulouse",
+              "url": "https://www.ladepeche.fr/2026/09/23/on-va-faire-du-covoiturage-pour-aller-voter-pour-les-elections-senatoriales-les-maires-du-luchonnais-organisent-leur-deplacement-jusqua-toulouse-13557779.php",
+              "date": "2026-09-23T04:01:04.000Z"
+            },
+            {
+              "title": "Adjointe à Luchon, ancien maire de Boulogne, conseillers de Saint-Gaudens : qui sont les candidats commingeois aux sénatoriales ?",
+              "url": "https://www.ladepeche.fr/2026/09/23/adjointe-a-luchon-ancien-maire-de-boulogne-conseillers-de-saint-gaudens-qui-sont-les-candidats-commingeois-aux-senatoriales-13554011.php",
+              "date": "2026-09-23T08:46:18.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Bagnères-de-Luchon",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:38:43.000Z",
+          "sample": [
+            {
+              "title": "Bagnères-de-Luchon. Le plein de projets avec  les parents d’élèves",
+              "url": "https://www.ladepeche.fr/2026/09/26/le-plein-de-projets-avec-les-parents-deleves-13569564.php",
+              "date": "2026-09-26T03:38:43.000Z"
+            },
+            {
+              "title": "\"On va faire du covoiturage pour aller voter\" : pour les élections sénatoriales, les maires du Luchonnais organisent leur déplacement jusqu'à Toulouse",
+              "url": "https://www.ladepeche.fr/2026/09/23/on-va-faire-du-covoiturage-pour-aller-voter-pour-les-elections-senatoriales-les-maires-du-luchonnais-organisent-leur-deplacement-jusqua-toulouse-13557779.php",
+              "date": "2026-09-23T04:01:04.000Z"
+            },
+            {
+              "title": "Adjointe à Luchon, ancien maire de Boulogne, conseillers de Saint-Gaudens : qui sont les candidats commingeois aux sénatoriales ?",
+              "url": "https://www.ladepeche.fr/2026/09/23/adjointe-a-luchon-ancien-maire-de-boulogne-conseillers-de-saint-gaudens-qui-sont-les-candidats-commingeois-aux-senatoriales-13554011.php",
+              "date": "2026-09-23T08:46:18.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-barbazan",
+      "name": "La Dépêche — Barbazan",
+      "locality": "Barbazan",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/barbazan,31045/",
+      "feed_url": "https://www.ladepeche.fr/communes/barbazan,31045/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Barbazan",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:35:07.000Z",
+          "sample": [
+            {
+              "title": "Barbazan. Le casino aux couleurs des Virades de l’espoir",
+              "url": "https://www.ladepeche.fr/2026/09/26/le-casino-aux-couleurs-des-virades-de-lespoir-13569561.php",
+              "date": "2026-09-26T03:35:07.000Z"
+            },
+            {
+              "title": "Barbazan. De la couleur sur les cimaises du casino",
+              "url": "https://www.ladepeche.fr/2026/09/23/de-la-couleur-sur-les-cimaises-du-casino-13564305.php",
+              "date": "2026-09-23T03:58:07.000Z"
+            },
+            {
+              "title": "Barbazan. Le parc thermal plongé dans les années 80-90",
+              "url": "https://www.ladepeche.fr/2026/09/05/le-parc-thermal-plonge-dans-les-annees-80-90-13536921.php",
+              "date": "2026-09-05T06:34:12.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Barbazan",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:35:07.000Z",
+          "sample": [
+            {
+              "title": "Barbazan. Le casino aux couleurs des Virades de l’espoir",
+              "url": "https://www.ladepeche.fr/2026/09/26/le-casino-aux-couleurs-des-virades-de-lespoir-13569561.php",
+              "date": "2026-09-26T03:35:07.000Z"
+            },
+            {
+              "title": "Barbazan. De la couleur sur les cimaises du casino",
+              "url": "https://www.ladepeche.fr/2026/09/23/de-la-couleur-sur-les-cimaises-du-casino-13564305.php",
+              "date": "2026-09-23T03:58:07.000Z"
+            },
+            {
+              "title": "Barbazan. Le parc thermal plongé dans les années 80-90",
+              "url": "https://www.ladepeche.fr/2026/09/05/le-parc-thermal-plonge-dans-les-annees-80-90-13536921.php",
+              "date": "2026-09-05T06:34:12.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-boulogne-sur-gesse",
+      "name": "La Dépêche — Boulogne-sur-Gesse",
+      "locality": "Boulogne-sur-Gesse",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/boulogne-sur-gesse,31080/",
+      "feed_url": "https://www.ladepeche.fr/communes/boulogne-sur-gesse,31080/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Boulogne-sur-Gesse",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:38:43.000Z",
+          "sample": [
+            {
+              "title": "« On voit qu’il est en souffrance et qu’il a du mal à suivre » : parents d'élèves, élus et professeurs ont manifesté en Haute-Garonne contre le manque d’accompagnants d’élèves en situation de handicap",
+              "url": "https://www.ladepeche.fr/2026/09/24/on-voit-quil-est-en-souffrance-et-quil-a-du-mal-a-suivre-parents-deleves-elus-et-professeurs-ont-manifeste-en-haute-garonne-contre-le-manque-13566720.php",
+              "date": "2026-09-24T14:44:01.000Z"
+            },
+            {
+              "title": "Boulogne-sur-Gesse. Forum : bilan satisfaisant pour les associations",
+              "url": "https://www.ladepeche.fr/2026/09/26/forum-bilan-satisfaisant-pour-les-associations-13569563.php",
+              "date": "2026-09-26T03:38:43.000Z"
+            },
+            {
+              "title": "Boulogne-sur-Gesse. Un spectacle équestre pour la fête ce week-end",
+              "url": "https://www.ladepeche.fr/2026/09/24/un-spectacle-equestre-pour-la-fete-ce-week-end-13566129.php",
+              "date": "2026-09-24T03:59:09.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Boulogne-sur-Gesse",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:38:43.000Z",
+          "sample": [
+            {
+              "title": "« On voit qu’il est en souffrance et qu’il a du mal à suivre » : parents d'élèves, élus et professeurs ont manifesté en Haute-Garonne contre le manque d’accompagnants d’élèves en situation de handicap",
+              "url": "https://www.ladepeche.fr/2026/09/24/on-voit-quil-est-en-souffrance-et-quil-a-du-mal-a-suivre-parents-deleves-elus-et-professeurs-ont-manifeste-en-haute-garonne-contre-le-manque-13566720.php",
+              "date": "2026-09-24T14:44:01.000Z"
+            },
+            {
+              "title": "Boulogne-sur-Gesse. Forum : bilan satisfaisant pour les associations",
+              "url": "https://www.ladepeche.fr/2026/09/26/forum-bilan-satisfaisant-pour-les-associations-13569563.php",
+              "date": "2026-09-26T03:38:43.000Z"
+            },
+            {
+              "title": "Boulogne-sur-Gesse. Un spectacle équestre pour la fête ce week-end",
+              "url": "https://www.ladepeche.fr/2026/09/24/un-spectacle-equestre-pour-la-fete-ce-week-end-13566129.php",
+              "date": "2026-09-24T03:59:09.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-boussens",
+      "name": "La Dépêche — Boussens",
+      "locality": "Boussens",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/boussens,31084/",
+      "feed_url": "https://www.ladepeche.fr/communes/boussens,31084/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Boussens",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-10T03:22:45.000Z",
+          "sample": [
+            {
+              "title": "Boussens. Les associations à l’honneur sous la halle",
+              "url": "https://www.ladepeche.fr/2026/09/10/les-associations-a-lhonneur-sous-la-halle-13543754.php",
+              "date": "2026-09-10T03:22:45.000Z"
+            },
+            {
+              "title": "Guylaine Darmani, une vie consacrée au service des autres",
+              "url": "https://www.ladepeche.fr/2026/09/08/guylaine-darmani-une-vie-consacree-au-service-des-autres-13540524.php",
+              "date": "2026-09-08T03:34:05.000Z"
+            },
+            {
+              "title": "Elle est décorée du titre de chevalier dans l’ordre du Mérite",
+              "url": "https://www.ladepeche.fr/2026/09/08/elle-est-decoree-du-titre-de-chevalier-dans-lordre-du-merite-13540523.php",
+              "date": "2026-09-08T03:33:59.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Boussens",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-10T03:22:45.000Z",
+          "sample": [
+            {
+              "title": "Boussens. Les associations à l’honneur sous la halle",
+              "url": "https://www.ladepeche.fr/2026/09/10/les-associations-a-lhonneur-sous-la-halle-13543754.php",
+              "date": "2026-09-10T03:22:45.000Z"
+            },
+            {
+              "title": "Guylaine Darmani, une vie consacrée au service des autres",
+              "url": "https://www.ladepeche.fr/2026/09/08/guylaine-darmani-une-vie-consacree-au-service-des-autres-13540524.php",
+              "date": "2026-09-08T03:34:05.000Z"
+            },
+            {
+              "title": "Elle est décorée du titre de chevalier dans l’ordre du Mérite",
+              "url": "https://www.ladepeche.fr/2026/09/08/elle-est-decoree-du-titre-de-chevalier-dans-lordre-du-merite-13540523.php",
+              "date": "2026-09-08T03:33:59.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-boutx",
+      "name": "La Dépêche — Boutx",
+      "locality": "Boutx",
+      "zone": "luchonnais",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/boutx,31085/",
+      "feed_url": "https://www.ladepeche.fr/communes/boutx,31085/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Boutx",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-08-18T05:57:20.000Z",
+          "sample": [
+            {
+              "title": "Mort d'un homme d'une vingtaine d'années dans un accident entre une moto et une voiture à Boutx dans le sud de la Haute-Garonne",
+              "url": "https://www.ladepeche.fr/2026/08/18/a-boutx-dans-le-sud-de-la-haute-garonne-un-grave-accident-de-la-circulation-provoque-la-mort-dun-homme-dune-vingtaine-dannees-13512810.php",
+              "date": "2026-08-18T05:57:20.000Z"
+            },
+            {
+              "title": "Boutx. Demain, les J.O. du Berger au Mourtis",
+              "url": "https://www.ladepeche.fr/2026/08/12/demain-les-jo-du-berger-au-mourtis-13505378.php",
+              "date": "2026-08-12T03:18:43.000Z"
+            },
+            {
+              "title": "Boutx. 31 Notes d’été : concerts et visites au Mourtis",
+              "url": "https://www.ladepeche.fr/2026/08/06/31-notes-dete-concerts-et-visites-au-mourtis-13498809.php",
+              "date": "2026-08-06T03:29:32.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Boutx",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-08-18T05:57:20.000Z",
+          "sample": [
+            {
+              "title": "Mort d'un homme d'une vingtaine d'années dans un accident entre une moto et une voiture à Boutx dans le sud de la Haute-Garonne",
+              "url": "https://www.ladepeche.fr/2026/08/18/a-boutx-dans-le-sud-de-la-haute-garonne-un-grave-accident-de-la-circulation-provoque-la-mort-dun-homme-dune-vingtaine-dannees-13512810.php",
+              "date": "2026-08-18T05:57:20.000Z"
+            },
+            {
+              "title": "Boutx. Demain, les J.O. du Berger au Mourtis",
+              "url": "https://www.ladepeche.fr/2026/08/12/demain-les-jo-du-berger-au-mourtis-13505378.php",
+              "date": "2026-08-12T03:18:43.000Z"
+            },
+            {
+              "title": "Boutx. 31 Notes d’été : concerts et visites au Mourtis",
+              "url": "https://www.ladepeche.fr/2026/08/06/31-notes-dete-concerts-et-visites-au-mourtis-13498809.php",
+              "date": "2026-08-06T03:29:32.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-capvern",
+      "name": "La Dépêche — Capvern",
+      "locality": "Capvern",
+      "zone": "nestes_lannemezan",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/capvern,65127/",
+      "feed_url": "https://www.ladepeche.fr/communes/capvern,65127/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Capvern",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-25T04:04:09.000Z",
+          "sample": [
+            {
+              "title": "Adoptez Bandjo, l'épagneul breton plein de vie, au refuge Les Potes à Pouf",
+              "url": "https://www.ladepeche.fr/2026/09/24/adoptez-bandjo-lepagneul-breton-plein-de-vie-au-refuge-les-potes-a-pouf-13567051.php",
+              "date": "2026-09-24T15:01:03.000Z"
+            },
+            {
+              "title": "Capvern. Ciné-discussion au cinéma",
+              "url": "https://www.ladepeche.fr/2026/09/25/cine-discussion-au-cinema-13567983.php",
+              "date": "2026-09-25T04:04:09.000Z"
+            },
+            {
+              "title": "Capvern. Ciné-débat à Agnès-Varda",
+              "url": "https://www.ladepeche.fr/2026/09/24/cine-debat-a-agnes-varda-13566063.php",
+              "date": "2026-09-24T03:56:07.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Capvern",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-25T04:04:09.000Z",
+          "sample": [
+            {
+              "title": "Adoptez Bandjo, l'épagneul breton plein de vie, au refuge Les Potes à Pouf",
+              "url": "https://www.ladepeche.fr/2026/09/24/adoptez-bandjo-lepagneul-breton-plein-de-vie-au-refuge-les-potes-a-pouf-13567051.php",
+              "date": "2026-09-24T15:01:03.000Z"
+            },
+            {
+              "title": "Capvern. Ciné-discussion au cinéma",
+              "url": "https://www.ladepeche.fr/2026/09/25/cine-discussion-au-cinema-13567983.php",
+              "date": "2026-09-25T04:04:09.000Z"
+            },
+            {
+              "title": "Capvern. Ciné-débat à Agnès-Varda",
+              "url": "https://www.ladepeche.fr/2026/09/24/cine-debat-a-agnes-varda-13566063.php",
+              "date": "2026-09-24T03:56:07.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-cauterets",
+      "name": "La Dépêche — Cauterets",
+      "locality": "Cauterets",
+      "zone": "hautes_pyrenees",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/cauterets,65138/",
+      "feed_url": "https://www.ladepeche.fr/communes/cauterets,65138/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Cauterets",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-25T04:04:09.000Z",
+          "sample": [
+            {
+              "title": "Le \"Pas du Monde\" avec le Cultur’Bus",
+              "url": "https://www.ladepeche.fr/2026/09/25/le-pas-du-monde-avec-le-culturbus-13567987.php",
+              "date": "2026-09-25T04:04:09.000Z"
+            },
+            {
+              "title": "Cauterets. Plongez dans une nouvelle saison",
+              "url": "https://www.ladepeche.fr/2026/09/23/plongez-dans-une-nouvelle-saison-13564061.php",
+              "date": "2026-09-23T03:40:25.000Z"
+            },
+            {
+              "title": "Cauterets. Des animations entre culture et convivialité",
+              "url": "https://www.ladepeche.fr/2026/09/16/des-animations-entre-culture-et-convivialite-13553227.php",
+              "date": "2026-09-16T04:17:08.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Cauterets",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-25T04:04:09.000Z",
+          "sample": [
+            {
+              "title": "Le \"Pas du Monde\" avec le Cultur’Bus",
+              "url": "https://www.ladepeche.fr/2026/09/25/le-pas-du-monde-avec-le-culturbus-13567987.php",
+              "date": "2026-09-25T04:04:09.000Z"
+            },
+            {
+              "title": "Cauterets. Plongez dans une nouvelle saison",
+              "url": "https://www.ladepeche.fr/2026/09/23/plongez-dans-une-nouvelle-saison-13564061.php",
+              "date": "2026-09-23T03:40:25.000Z"
+            },
+            {
+              "title": "Cauterets. Des animations entre culture et convivialité",
+              "url": "https://www.ladepeche.fr/2026/09/16/des-animations-entre-culture-et-convivialite-13553227.php",
+              "date": "2026-09-16T04:17:08.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-cazeres",
+      "name": "La Dépêche — Cazères",
+      "locality": "Cazères",
+      "zone": "haute_garonne_sud",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/cazeres,31135/",
+      "feed_url": "https://www.ladepeche.fr/communes/cazeres,31135/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Cazères",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T04:08:07.000Z",
+          "sample": [
+            {
+              "title": "MMA : \"Je savais qu'une fois sur deux, j'allais finir par me battre...\" Après avoir combattu ses démons, le Toulousain Morgan Thong s'attaque à Ugo Vidal lors de l'Hexagone MMA 47, à Toulouse",
+              "url": "https://www.ladepeche.fr/2026/09/24/mma-je-savais-quune-fois-sur-deux-jallais-finir-par-me-battre-apres-avoir-combattu-ses-demons-le-toulousain-morgan-thong-sattaque-a-ugo-vidal-lors-de-13566419.php",
+              "date": "2026-09-24T15:31:02.000Z"
+            },
+            {
+              "title": "Cazères. Ce week-end, place  au nettoyage de la nature",
+              "url": "https://www.ladepeche.fr/2026/09/26/ce-week-end-place-au-nettoyage-de-la-nature-13569881.php",
+              "date": "2026-09-26T04:08:07.000Z"
+            },
+            {
+              "title": "Cazères. Ce week-end, place  au nettoyage de la nature",
+              "url": "https://www.ladepeche.fr/2026/09/25/ce-week-end-place-au-nettoyage-de-la-nature-13568025.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Cazères",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T04:08:07.000Z",
+          "sample": [
+            {
+              "title": "MMA : \"Je savais qu'une fois sur deux, j'allais finir par me battre...\" Après avoir combattu ses démons, le Toulousain Morgan Thong s'attaque à Ugo Vidal lors de l'Hexagone MMA 47, à Toulouse",
+              "url": "https://www.ladepeche.fr/2026/09/24/mma-je-savais-quune-fois-sur-deux-jallais-finir-par-me-battre-apres-avoir-combattu-ses-demons-le-toulousain-morgan-thong-sattaque-a-ugo-vidal-lors-de-13566419.php",
+              "date": "2026-09-24T15:31:02.000Z"
+            },
+            {
+              "title": "Cazères. Ce week-end, place  au nettoyage de la nature",
+              "url": "https://www.ladepeche.fr/2026/09/26/ce-week-end-place-au-nettoyage-de-la-nature-13569881.php",
+              "date": "2026-09-26T04:08:07.000Z"
+            },
+            {
+              "title": "Cazères. Ce week-end, place  au nettoyage de la nature",
+              "url": "https://www.ladepeche.fr/2026/09/25/ce-week-end-place-au-nettoyage-de-la-nature-13568025.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-cierp-gaud",
+      "name": "La Dépêche — Cierp-Gaud",
+      "locality": "Cierp-Gaud",
+      "zone": "luchonnais",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/cierp-gaud,31144/",
+      "feed_url": "https://www.ladepeche.fr/communes/cierp-gaud,31144/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Cierp-Gaud",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-18T03:54:08.000Z",
+          "sample": [
+            {
+              "title": "Cierp-Gaud. Voyage musical avec  le groupe Raft odyssey",
+              "url": "https://www.ladepeche.fr/2026/09/18/voyage-musical-avec-le-groupe-raft-odyssey-13556722.php",
+              "date": "2026-09-18T03:54:08.000Z"
+            },
+            {
+              "title": "Cierp-Gaud. Voyage musical avec  le groupe Raft odyssey",
+              "url": "https://www.ladepeche.fr/2026/09/18/voyage-musical-avec-le-groupe-raft-odyssey-13556650.php",
+              "date": "2026-09-18T03:44:08.000Z"
+            },
+            {
+              "title": "Cierp-Gaud. Le foyer des 2 Vallées lance les inscriptions à ses activités",
+              "url": "https://www.ladepeche.fr/2026/09/05/le-foyer-des-2-vallees-lance-les-inscriptions-a-ses-activites-13536920.php",
+              "date": "2026-09-05T06:34:07.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Cierp-Gaud",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-18T03:54:08.000Z",
+          "sample": [
+            {
+              "title": "Cierp-Gaud. Voyage musical avec  le groupe Raft odyssey",
+              "url": "https://www.ladepeche.fr/2026/09/18/voyage-musical-avec-le-groupe-raft-odyssey-13556722.php",
+              "date": "2026-09-18T03:54:08.000Z"
+            },
+            {
+              "title": "Cierp-Gaud. Voyage musical avec  le groupe Raft odyssey",
+              "url": "https://www.ladepeche.fr/2026/09/18/voyage-musical-avec-le-groupe-raft-odyssey-13556650.php",
+              "date": "2026-09-18T03:44:08.000Z"
+            },
+            {
+              "title": "Cierp-Gaud. Le foyer des 2 Vallées lance les inscriptions à ses activités",
+              "url": "https://www.ladepeche.fr/2026/09/05/le-foyer-des-2-vallees-lance-les-inscriptions-a-ses-activites-13536920.php",
+              "date": "2026-09-05T06:34:07.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-estancarbon",
+      "name": "La Dépêche — Estancarbon",
+      "locality": "Estancarbon",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/estancarbon,31175/",
+      "feed_url": "https://www.ladepeche.fr/communes/estancarbon,31175/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Estancarbon",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-24T07:50:07.000Z",
+          "sample": [
+            {
+              "title": "REPORTAGE. Dominique Bouchait, Meilleur ouvrier de France, crée un plateau de quarante fromages pour le pape Léon XIV, mettant en avant les saveurs pyrénéennes",
+              "url": "https://www.ladepeche.fr/2026/09/24/reportage-dominique-bouchait-meilleur-ouvrier-de-france-cree-un-plateau-de-quarante-fromages-pour-le-pape-leon-xiv-mettant-en-avant-les-saveurs-13565170.php",
+              "date": "2026-09-24T07:50:07.000Z"
+            },
+            {
+              "title": "Estancarbon. ELLES : des matchs en attendant le championnat",
+              "url": "https://www.ladepeche.fr/2026/09/19/elles-des-matchs-en-attendant-le-championnat-13558721.php",
+              "date": "2026-09-19T04:07:07.000Z"
+            },
+            {
+              "title": "Estancarbon. Coupe : Encausse et l’ELLES passent le 1er tour",
+              "url": "https://www.ladepeche.fr/2026/08/26/coupe-encausse-et-lelles-passent-le-1er-tour-13523418.php",
+              "date": "2026-08-26T03:28:38.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Estancarbon",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-24T07:50:07.000Z",
+          "sample": [
+            {
+              "title": "REPORTAGE. Dominique Bouchait, Meilleur ouvrier de France, crée un plateau de quarante fromages pour le pape Léon XIV, mettant en avant les saveurs pyrénéennes",
+              "url": "https://www.ladepeche.fr/2026/09/24/reportage-dominique-bouchait-meilleur-ouvrier-de-france-cree-un-plateau-de-quarante-fromages-pour-le-pape-leon-xiv-mettant-en-avant-les-saveurs-13565170.php",
+              "date": "2026-09-24T07:50:07.000Z"
+            },
+            {
+              "title": "Estancarbon. ELLES : des matchs en attendant le championnat",
+              "url": "https://www.ladepeche.fr/2026/09/19/elles-des-matchs-en-attendant-le-championnat-13558721.php",
+              "date": "2026-09-19T04:07:07.000Z"
+            },
+            {
+              "title": "Estancarbon. Coupe : Encausse et l’ELLES passent le 1er tour",
+              "url": "https://www.ladepeche.fr/2026/08/26/coupe-encausse-et-lelles-passent-le-1er-tour-13523418.php",
+              "date": "2026-08-26T03:28:38.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-fos",
+      "name": "La Dépêche — Fos",
+      "locality": "Fos",
+      "zone": "luchonnais",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/fos,31190/",
+      "feed_url": "https://www.ladepeche.fr/communes/fos,31190/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Fos",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-17T04:02:08.000Z",
+          "sample": [
+            {
+              "title": "Fos. Les surprises de l’église Saint-Pierre-aux-Liens",
+              "url": "https://www.ladepeche.fr/2026/09/17/les-surprises-de-leglise-saint-pierre-aux-liens-13555143.php",
+              "date": "2026-09-17T04:02:08.000Z"
+            },
+            {
+              "title": "Fos. Arts, artistes et artisans mis en en lumière pendant une semaine",
+              "url": "https://www.ladepeche.fr/2026/08/24/arts-artistes-et-artisans-mis-en-en-lumiere-pendant-une-semaine-13520437.php",
+              "date": "2026-08-24T03:22:48.000Z"
+            },
+            {
+              "title": "Fos. La Gentilhommière a repris du service au centre du village",
+              "url": "https://www.ladepeche.fr/2026/08/22/la-gentilhommiere-a-repris-du-service-au-centre-du-village-13518192.php",
+              "date": "2026-08-22T03:28:26.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Fos",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-17T04:02:08.000Z",
+          "sample": [
+            {
+              "title": "Fos. Les surprises de l’église Saint-Pierre-aux-Liens",
+              "url": "https://www.ladepeche.fr/2026/09/17/les-surprises-de-leglise-saint-pierre-aux-liens-13555143.php",
+              "date": "2026-09-17T04:02:08.000Z"
+            },
+            {
+              "title": "Fos. Arts, artistes et artisans mis en en lumière pendant une semaine",
+              "url": "https://www.ladepeche.fr/2026/08/24/arts-artistes-et-artisans-mis-en-en-lumiere-pendant-une-semaine-13520437.php",
+              "date": "2026-08-24T03:22:48.000Z"
+            },
+            {
+              "title": "Fos. La Gentilhommière a repris du service au centre du village",
+              "url": "https://www.ladepeche.fr/2026/08/22/la-gentilhommiere-a-repris-du-service-au-centre-du-village-13518192.php",
+              "date": "2026-08-22T03:28:26.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-gourdan-polignan",
+      "name": "La Dépêche — Gourdan-Polignan",
+      "locality": "Gourdan-Polignan",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/gourdan-polignan,31224/",
+      "feed_url": "https://www.ladepeche.fr/communes/gourdan-polignan,31224/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Gourdan-Polignan",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-25T04:09:08.000Z",
+          "sample": [
+            {
+              "title": "Nouvelle enseigne alimentaire dans la zone commerciale",
+              "url": "https://www.ladepeche.fr/2026/09/25/nouvelle-enseigne-alimentaire-dans-la-zone-commerciale-13568021.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            },
+            {
+              "title": "Adjointe à Luchon, ancien maire de Boulogne, conseillers de Saint-Gaudens : qui sont les candidats commingeois aux sénatoriales ?",
+              "url": "https://www.ladepeche.fr/2026/09/23/adjointe-a-luchon-ancien-maire-de-boulogne-conseillers-de-saint-gaudens-qui-sont-les-candidats-commingeois-aux-senatoriales-13554011.php",
+              "date": "2026-09-23T08:46:18.000Z"
+            },
+            {
+              "title": "Gourdan-Polignan. Une entreprise au plus près des élèves de Paul-Mathou",
+              "url": "https://www.ladepeche.fr/2026/09/23/une-entreprise-au-plus-pres-des-eleves-de-paul-mathou-13564311.php",
+              "date": "2026-09-23T03:58:08.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Gourdan-Polignan",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-25T04:09:08.000Z",
+          "sample": [
+            {
+              "title": "Nouvelle enseigne alimentaire dans la zone commerciale",
+              "url": "https://www.ladepeche.fr/2026/09/25/nouvelle-enseigne-alimentaire-dans-la-zone-commerciale-13568021.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            },
+            {
+              "title": "Adjointe à Luchon, ancien maire de Boulogne, conseillers de Saint-Gaudens : qui sont les candidats commingeois aux sénatoriales ?",
+              "url": "https://www.ladepeche.fr/2026/09/23/adjointe-a-luchon-ancien-maire-de-boulogne-conseillers-de-saint-gaudens-qui-sont-les-candidats-commingeois-aux-senatoriales-13554011.php",
+              "date": "2026-09-23T08:46:18.000Z"
+            },
+            {
+              "title": "Gourdan-Polignan. Une entreprise au plus près des élèves de Paul-Mathou",
+              "url": "https://www.ladepeche.fr/2026/09/23/une-entreprise-au-plus-pres-des-eleves-de-paul-mathou-13564311.php",
+              "date": "2026-09-23T03:58:08.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-l-isle-en-dodon",
+      "name": "La Dépêche — L’Isle-en-Dodon",
+      "locality": "L’Isle-en-Dodon",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/lisle-en-dodon,31239/",
+      "feed_url": "https://www.ladepeche.fr/communes/lisle-en-dodon,31239/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "L'Isle-en-Dodon",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-23T03:59:06.000Z",
+          "sample": [
+            {
+              "title": "L'Isle-en-Dodon. Un beau week-end autour du patrimoine",
+              "url": "https://www.ladepeche.fr/2026/09/23/un-beau-week-end-autour-du-patrimoine-13564312.php",
+              "date": "2026-09-23T03:59:06.000Z"
+            },
+            {
+              "title": "L'Isle-en-Dodon. Rugby: l’USL fait tomber le leader",
+              "url": "https://www.ladepeche.fr/2026/09/22/rugby-lusl-fait-tomber-le-leader-13562795.php",
+              "date": "2026-09-22T04:10:12.000Z"
+            },
+            {
+              "title": "L'Isle-en-Dodon. Les échos du SYGESAVE",
+              "url": "https://www.ladepeche.fr/2026/09/21/les-echos-du-sygesave-13561103.php",
+              "date": "2026-09-21T03:47:09.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "L'Isle-en-Dodon",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-23T03:59:06.000Z",
+          "sample": [
+            {
+              "title": "L'Isle-en-Dodon. Un beau week-end autour du patrimoine",
+              "url": "https://www.ladepeche.fr/2026/09/23/un-beau-week-end-autour-du-patrimoine-13564312.php",
+              "date": "2026-09-23T03:59:06.000Z"
+            },
+            {
+              "title": "L'Isle-en-Dodon. Rugby: l’USL fait tomber le leader",
+              "url": "https://www.ladepeche.fr/2026/09/22/rugby-lusl-fait-tomber-le-leader-13562795.php",
+              "date": "2026-09-22T04:10:12.000Z"
+            },
+            {
+              "title": "L'Isle-en-Dodon. Les échos du SYGESAVE",
+              "url": "https://www.ladepeche.fr/2026/09/21/les-echos-du-sygesave-13561103.php",
+              "date": "2026-09-21T03:47:09.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-la-barthe-de-neste",
+      "name": "La Dépêche — La Barthe-de-Neste",
+      "locality": "La Barthe-de-Neste",
+      "zone": "nestes_lannemezan",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/la-barthe-de-neste,65069/",
+      "feed_url": "https://www.ladepeche.fr/communes/la-barthe-de-neste,65069/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "La Barthe-de-Neste",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-21T11:38:14.000Z",
+          "sample": [
+            {
+              "title": "Une épicerie, un marché réaménagé et un projet autour du lac pour dynamiser la commune",
+              "url": "https://www.ladepeche.fr/2026/09/21/une-epicerie-un-marche-reamenage-et-un-projet-autour-du-lac-pour-dynamiser-la-commune-13560252.php",
+              "date": "2026-09-21T11:38:14.000Z"
+            },
+            {
+              "title": "Rencontrez l'Apecita à La Barthe-de-Neste le 15 septembre pour un accompagnement gratuit",
+              "url": "https://www.ladepeche.fr/2026/09/06/rencontrez-lapecita-a-la-barthe-de-neste-le-15-septembre-pour-un-accompagnement-gratuit-13536278.php",
+              "date": "2026-09-06T19:25:50.000Z"
+            },
+            {
+              "title": "Les Écuries du Cuhour ouvrent leurs portes pour la rentrée",
+              "url": "https://www.ladepeche.fr/2026/09/02/les-ecuries-du-cuhour-ouvrent-leurs-portes-pour-la-rentree-13531007.php",
+              "date": "2026-09-02T15:03:32.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "La Barthe-de-Neste",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-21T11:38:14.000Z",
+          "sample": [
+            {
+              "title": "Une épicerie, un marché réaménagé et un projet autour du lac pour dynamiser la commune",
+              "url": "https://www.ladepeche.fr/2026/09/21/une-epicerie-un-marche-reamenage-et-un-projet-autour-du-lac-pour-dynamiser-la-commune-13560252.php",
+              "date": "2026-09-21T11:38:14.000Z"
+            },
+            {
+              "title": "Rencontrez l'Apecita à La Barthe-de-Neste le 15 septembre pour un accompagnement gratuit",
+              "url": "https://www.ladepeche.fr/2026/09/06/rencontrez-lapecita-a-la-barthe-de-neste-le-15-septembre-pour-un-accompagnement-gratuit-13536278.php",
+              "date": "2026-09-06T19:25:50.000Z"
+            },
+            {
+              "title": "Les Écuries du Cuhour ouvrent leurs portes pour la rentrée",
+              "url": "https://www.ladepeche.fr/2026/09/02/les-ecuries-du-cuhour-ouvrent-leurs-portes-pour-la-rentree-13531007.php",
+              "date": "2026-09-02T15:03:32.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-labarthe-inard",
+      "name": "La Dépêche — Labarthe-Inard",
+      "locality": "Labarthe-Inard",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/labarthe-inard,31246/",
+      "feed_url": "https://www.ladepeche.fr/communes/labarthe-inard,31246/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Labarthe-Inard",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-17T04:04:07.000Z",
+          "sample": [
+            {
+              "title": "Labarthe-Inard. Florentina, la musique au-delà du solfège",
+              "url": "https://www.ladepeche.fr/2026/09/17/florentina-la-musique-au-dela-du-solfege-13555159.php",
+              "date": "2026-09-17T04:04:07.000Z"
+            },
+            {
+              "title": "Labarthe-Inard. L’épicerie du village a changé de mains",
+              "url": "https://www.ladepeche.fr/2026/09/16/lepicerie-du-village-a-change-de-mains-13553272.php",
+              "date": "2026-09-16T04:24:08.000Z"
+            },
+            {
+              "title": "\"L'idée, c'est vraiment de pouvoir faire plaisir aux gens\" : de Marseille au Comminges, elle ramène les churros à Labarthe-Inard",
+              "url": "https://www.ladepeche.fr/2026/09/09/lidee-cest-vraiment-de-pouvoir-faire-plaisir-aux-gens-de-marseille-au-comminges-elle-ramene-les-churros-a-labarthe-inard-13517309.php",
+              "date": "2026-09-09T04:01:06.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Labarthe-Inard",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-17T04:04:07.000Z",
+          "sample": [
+            {
+              "title": "Labarthe-Inard. Florentina, la musique au-delà du solfège",
+              "url": "https://www.ladepeche.fr/2026/09/17/florentina-la-musique-au-dela-du-solfege-13555159.php",
+              "date": "2026-09-17T04:04:07.000Z"
+            },
+            {
+              "title": "Labarthe-Inard. L’épicerie du village a changé de mains",
+              "url": "https://www.ladepeche.fr/2026/09/16/lepicerie-du-village-a-change-de-mains-13553272.php",
+              "date": "2026-09-16T04:24:08.000Z"
+            },
+            {
+              "title": "\"L'idée, c'est vraiment de pouvoir faire plaisir aux gens\" : de Marseille au Comminges, elle ramène les churros à Labarthe-Inard",
+              "url": "https://www.ladepeche.fr/2026/09/09/lidee-cest-vraiment-de-pouvoir-faire-plaisir-aux-gens-de-marseille-au-comminges-elle-ramene-les-churros-a-labarthe-inard-13517309.php",
+              "date": "2026-09-09T04:01:06.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-labarthe-riviere",
+      "name": "La Dépêche — Labarthe-Rivière",
+      "locality": "Labarthe-Rivière",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/labarthe-riviere,31247/",
+      "feed_url": "https://www.ladepeche.fr/communes/labarthe-riviere,31247/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Labarthe-Rivière",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-07-08T07:01:14.000Z",
+          "sample": [
+            {
+              "title": "Labarthe-Rivière. La colère des maires face à la fermeture de La Poste",
+              "url": "https://www.ladepeche.fr/2026/07/08/la-colere-des-maires-face-a-la-fermeture-de-la-poste-13458427.php",
+              "date": "2026-07-08T07:01:14.000Z"
+            },
+            {
+              "title": "Labarthe-Rivière. La maire sortante Claire Vougny repart en campagne",
+              "url": "https://www.ladepeche.fr/2026/03/10/la-maire-sortante-claire-vougny-repart-en-campagne-13263833.php",
+              "date": "2026-03-10T04:14:34.000Z"
+            },
+            {
+              "title": "Tragique accident sur la ligne Toulouse-Bayonne : un homme meurt percuté par un train, le trafic interrompu pendant plusieurs heures",
+              "url": "https://www.ladepeche.fr/2026/02/20/tragique-accident-sur-la-ligne-toulouse-bayonne-un-homme-meurt-percute-par-un-train-le-trafic-interrompu-pendant-plusieurs-heures-13236570.php",
+              "date": "2026-02-20T15:37:54.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Labarthe-Rivière",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-07-08T07:01:14.000Z",
+          "sample": [
+            {
+              "title": "Labarthe-Rivière. La colère des maires face à la fermeture de La Poste",
+              "url": "https://www.ladepeche.fr/2026/07/08/la-colere-des-maires-face-a-la-fermeture-de-la-poste-13458427.php",
+              "date": "2026-07-08T07:01:14.000Z"
+            },
+            {
+              "title": "Labarthe-Rivière. La maire sortante Claire Vougny repart en campagne",
+              "url": "https://www.ladepeche.fr/2026/03/10/la-maire-sortante-claire-vougny-repart-en-campagne-13263833.php",
+              "date": "2026-03-10T04:14:34.000Z"
+            },
+            {
+              "title": "Tragique accident sur la ligne Toulouse-Bayonne : un homme meurt percuté par un train, le trafic interrompu pendant plusieurs heures",
+              "url": "https://www.ladepeche.fr/2026/02/20/tragique-accident-sur-la-ligne-toulouse-bayonne-un-homme-meurt-percute-par-un-train-le-trafic-interrompu-pendant-plusieurs-heures-13236570.php",
+              "date": "2026-02-20T15:37:54.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-landorthe",
+      "name": "La Dépêche — Landorthe",
+      "locality": "Landorthe",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/landorthe,31270/",
+      "feed_url": "https://www.ladepeche.fr/communes/landorthe,31270/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Landorthe",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-25T04:09:08.000Z",
+          "sample": [
+            {
+              "title": "Une cabine de téléconsultation  en ophtalmologie à Landorthe",
+              "url": "https://www.ladepeche.fr/2026/09/25/une-cabine-de-teleconsultation-en-ophtalmologie-a-landorthe-13568032.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            },
+            {
+              "title": "Landorthe. Une rentrée avec le sourire",
+              "url": "https://www.ladepeche.fr/2026/09/04/une-rentree-avec-le-sourire-13535208.php",
+              "date": "2026-09-04T03:34:49.000Z"
+            },
+            {
+              "title": "Landorthe. Natation : trêve estivale pour Cédric Matilla",
+              "url": "https://www.ladepeche.fr/2026/08/25/natation-treve-estivale-pour-cedric-matilla-13521970.php",
+              "date": "2026-08-25T03:27:55.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Landorthe",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-25T04:09:08.000Z",
+          "sample": [
+            {
+              "title": "Une cabine de téléconsultation  en ophtalmologie à Landorthe",
+              "url": "https://www.ladepeche.fr/2026/09/25/une-cabine-de-teleconsultation-en-ophtalmologie-a-landorthe-13568032.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            },
+            {
+              "title": "Landorthe. Une rentrée avec le sourire",
+              "url": "https://www.ladepeche.fr/2026/09/04/une-rentree-avec-le-sourire-13535208.php",
+              "date": "2026-09-04T03:34:49.000Z"
+            },
+            {
+              "title": "Landorthe. Natation : trêve estivale pour Cédric Matilla",
+              "url": "https://www.ladepeche.fr/2026/08/25/natation-treve-estivale-pour-cedric-matilla-13521970.php",
+              "date": "2026-08-25T03:27:55.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-lannemezan",
+      "name": "La Dépêche — Lannemezan",
+      "locality": "Lannemezan",
+      "zone": "nestes_lannemezan",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/lannemezan,65258/",
+      "feed_url": "https://www.ladepeche.fr/communes/lannemezan,65258/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Lannemezan",
+          "count": 25,
+          "valid": 25,
+          "h24": 4,
+          "newest": "2026-09-27T03:35:08.000Z",
+          "sample": [
+            {
+              "title": "Lannemezan. Quand les sonnailles racontaient la Barousse",
+              "url": "https://www.ladepeche.fr/2026/09/27/quand-les-sonnailles-racontaient-la-barousse-13570955.php",
+              "date": "2026-09-27T03:35:08.000Z"
+            },
+            {
+              "title": "Lannemezan. Les petites bêtes à l’honneur",
+              "url": "https://www.ladepeche.fr/2026/09/27/les-petites-betes-a-lhonneur-13570951.php",
+              "date": "2026-09-27T03:35:08.000Z"
+            },
+            {
+              "title": "Lannemezan. À la recherche des origines du langage",
+              "url": "https://www.ladepeche.fr/2026/09/27/a-la-recherche-des-origines-du-langage-13570952.php",
+              "date": "2026-09-27T03:35:08.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Lannemezan",
+          "count": 25,
+          "valid": 25,
+          "h24": 4,
+          "newest": "2026-09-27T03:35:08.000Z",
+          "sample": [
+            {
+              "title": "Lannemezan. Quand les sonnailles racontaient la Barousse",
+              "url": "https://www.ladepeche.fr/2026/09/27/quand-les-sonnailles-racontaient-la-barousse-13570955.php",
+              "date": "2026-09-27T03:35:08.000Z"
+            },
+            {
+              "title": "Lannemezan. Les petites bêtes à l’honneur",
+              "url": "https://www.ladepeche.fr/2026/09/27/les-petites-betes-a-lhonneur-13570951.php",
+              "date": "2026-09-27T03:35:08.000Z"
+            },
+            {
+              "title": "Lannemezan. À la recherche des origines du langage",
+              "url": "https://www.ladepeche.fr/2026/09/27/a-la-recherche-des-origines-du-langage-13570952.php",
+              "date": "2026-09-27T03:35:08.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-le-fousseret",
+      "name": "La Dépêche — Le Fousseret",
+      "locality": "Le Fousseret",
+      "zone": "haute_garonne_sud",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/le-fousseret,31193/",
+      "feed_url": "https://www.ladepeche.fr/communes/le-fousseret,31193/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Le Fousseret",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-25T03:46:08.000Z",
+          "sample": [
+            {
+              "title": "Le Fousseret. Quatre jours d’animations pour la fête locale",
+              "url": "https://www.ladepeche.fr/2026/09/25/quatre-jours-danimations-pour-la-fete-locale-13567803.php",
+              "date": "2026-09-25T03:46:08.000Z"
+            },
+            {
+              "title": "Le Fousseret. Ce soir, à l’ordre du jour du conseil communautaire",
+              "url": "https://www.ladepeche.fr/2026/09/24/ce-soir-a-lordre-du-jour-du-conseil-communautaire-13565904.php",
+              "date": "2026-09-24T03:38:08.000Z"
+            },
+            {
+              "title": "Le Fousseret. Rugby : l’UCF s’offre une victoire bonifiée face à Miélan",
+              "url": "https://www.ladepeche.fr/2026/09/23/rugby-lucf-soffre-une-victoire-bonifiee-face-a-mielan-13564378.php",
+              "date": "2026-09-23T04:02:09.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Le Fousseret",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-25T03:46:08.000Z",
+          "sample": [
+            {
+              "title": "Le Fousseret. Quatre jours d’animations pour la fête locale",
+              "url": "https://www.ladepeche.fr/2026/09/25/quatre-jours-danimations-pour-la-fete-locale-13567803.php",
+              "date": "2026-09-25T03:46:08.000Z"
+            },
+            {
+              "title": "Le Fousseret. Ce soir, à l’ordre du jour du conseil communautaire",
+              "url": "https://www.ladepeche.fr/2026/09/24/ce-soir-a-lordre-du-jour-du-conseil-communautaire-13565904.php",
+              "date": "2026-09-24T03:38:08.000Z"
+            },
+            {
+              "title": "Le Fousseret. Rugby : l’UCF s’offre une victoire bonifiée face à Miélan",
+              "url": "https://www.ladepeche.fr/2026/09/23/rugby-lucf-soffre-une-victoire-bonifiee-face-a-mielan-13564378.php",
+              "date": "2026-09-23T04:02:09.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-lourdes",
+      "name": "La Dépêche — Lourdes",
+      "locality": "Lourdes",
+      "zone": "hautes_pyrenees",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/lourdes,65286/",
+      "feed_url": "https://www.ladepeche.fr/communes/lourdes,65286/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Lourdes",
+          "count": 25,
+          "valid": 25,
+          "h24": 16,
+          "newest": "2026-09-27T06:19:34.000Z",
+          "sample": [
+            {
+              "title": "Visite de Léon XIV à Lourdes : véhicule blindé, plaque unique... Voici tout ce qu'il faut savoir sur la papamobile",
+              "url": "https://www.ladepeche.fr/2026/09/27/visite-de-leon-xiv-a-lourdes-vehicule-blinde-plaque-unique-voici-tout-ce-quil-faut-savoir-sur-la-papamobile-13565457.php",
+              "date": "2026-09-27T04:47:02.000Z"
+            },
+            {
+              "title": "Visite du pape Léon XIV à Lourdes. \"Je ne pensais jamais voir un pape américain ici\" : ces trois fidèles ont traversé l'Atlantique jusqu'au sanctuaire",
+              "url": "https://www.ladepeche.fr/2026/09/27/visite-du-pape-leon-xiv-a-lourdes-je-ne-pensais-jamais-voir-un-pape-americain-ici-ces-trois-fideles-ont-traverse-latlantique-jusquau-sanctuaire-13571125.php",
+              "date": "2026-09-27T06:08:09.000Z"
+            },
+            {
+              "title": "REPLAY. Le pape Léon XIV à Lourdes : le souverain Pontife quitte la Grotte de Massabielle après avoir adressé une prière aux \"personnes malades et souffrantes\"",
+              "url": "https://www.ladepeche.fr/2026/09/26/direct-le-pape-leon-xiv-a-lourdes-200-000-fideles-attendus-ce-samedi-le-souverain-pontife-arrive-en-fin-de-journee-13568962.php",
+              "date": "2026-09-26T20:51:45.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Lourdes",
+          "count": 25,
+          "valid": 25,
+          "h24": 16,
+          "newest": "2026-09-27T06:19:34.000Z",
+          "sample": [
+            {
+              "title": "Visite de Léon XIV à Lourdes : véhicule blindé, plaque unique... Voici tout ce qu'il faut savoir sur la papamobile",
+              "url": "https://www.ladepeche.fr/2026/09/27/visite-de-leon-xiv-a-lourdes-vehicule-blinde-plaque-unique-voici-tout-ce-quil-faut-savoir-sur-la-papamobile-13565457.php",
+              "date": "2026-09-27T04:47:02.000Z"
+            },
+            {
+              "title": "Visite du pape Léon XIV à Lourdes. \"Je ne pensais jamais voir un pape américain ici\" : ces trois fidèles ont traversé l'Atlantique jusqu'au sanctuaire",
+              "url": "https://www.ladepeche.fr/2026/09/27/visite-du-pape-leon-xiv-a-lourdes-je-ne-pensais-jamais-voir-un-pape-americain-ici-ces-trois-fideles-ont-traverse-latlantique-jusquau-sanctuaire-13571125.php",
+              "date": "2026-09-27T06:08:09.000Z"
+            },
+            {
+              "title": "REPLAY. Le pape Léon XIV à Lourdes : le souverain Pontife quitte la Grotte de Massabielle après avoir adressé une prière aux \"personnes malades et souffrantes\"",
+              "url": "https://www.ladepeche.fr/2026/09/26/direct-le-pape-leon-xiv-a-lourdes-200-000-fideles-attendus-ce-samedi-le-souverain-pontife-arrive-en-fin-de-journee-13568962.php",
+              "date": "2026-09-26T20:51:45.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-loures-barousse",
+      "name": "La Dépêche — Loures-Barousse",
+      "locality": "Loures-Barousse",
+      "zone": "barousse",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/loures-barousse,65287/",
+      "feed_url": "https://www.ladepeche.fr/communes/loures-barousse,65287/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Loures-Barousse",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:35:10.000Z",
+          "sample": [
+            {
+              "title": "Loures-Barousse. Une journée à la rencontre des clubs de Neste et de Barousse",
+              "url": "https://www.ladepeche.fr/2026/09/26/une-journee-a-la-rencontre-des-clubs-de-neste-et-de-barousse-13569562.php",
+              "date": "2026-09-26T03:35:10.000Z"
+            },
+            {
+              "title": "Loures-Barousse. Le forum des associations sur le site du lac",
+              "url": "https://www.ladepeche.fr/2026/09/10/le-forum-des-associations-sur-le-site-du-lac-13543741.php",
+              "date": "2026-09-10T03:22:06.000Z"
+            },
+            {
+              "title": "Loures-Barousse. 157 élèves accueillis  en deux temps au collège",
+              "url": "https://www.ladepeche.fr/2026/09/09/157-eleves-accueillis-en-deux-temps-au-college-13541833.php",
+              "date": "2026-09-08T22:07:14.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Loures-Barousse",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:35:10.000Z",
+          "sample": [
+            {
+              "title": "Loures-Barousse. Une journée à la rencontre des clubs de Neste et de Barousse",
+              "url": "https://www.ladepeche.fr/2026/09/26/une-journee-a-la-rencontre-des-clubs-de-neste-et-de-barousse-13569562.php",
+              "date": "2026-09-26T03:35:10.000Z"
+            },
+            {
+              "title": "Loures-Barousse. Le forum des associations sur le site du lac",
+              "url": "https://www.ladepeche.fr/2026/09/10/le-forum-des-associations-sur-le-site-du-lac-13543741.php",
+              "date": "2026-09-10T03:22:06.000Z"
+            },
+            {
+              "title": "Loures-Barousse. 157 élèves accueillis  en deux temps au collège",
+              "url": "https://www.ladepeche.fr/2026/09/09/157-eleves-accueillis-en-deux-temps-au-college-13541833.php",
+              "date": "2026-09-08T22:07:14.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-luz-saint-sauveur",
+      "name": "La Dépêche — Luz-Saint-Sauveur",
+      "locality": "Luz-Saint-Sauveur",
+      "zone": "hautes_pyrenees",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/luz-saint-sauveur,65295/",
+      "feed_url": "https://www.ladepeche.fr/communes/luz-saint-sauveur,65295/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Luz-Saint-Sauveur",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:40:09.000Z",
+          "sample": [
+            {
+              "title": "Circulation vers Lourdes : pas de miracle à attendre",
+              "url": "https://www.ladepeche.fr/2026/09/25/circulation-vers-lourdes-pas-de-miracle-a-attendre-13567986.php",
+              "date": "2026-09-25T04:04:09.000Z"
+            },
+            {
+              "title": "Luz-Saint-Sauveur. Antigone entre révolte et liberté",
+              "url": "https://www.ladepeche.fr/2026/09/26/antigone-entre-revolte-et-liberte-13569627.php",
+              "date": "2026-09-26T03:40:09.000Z"
+            },
+            {
+              "title": "Luz-Saint-Sauveur. L’aventure Altitoy s’achève",
+              "url": "https://www.ladepeche.fr/2026/09/25/laventure-altitoy-sacheve-13567988.php",
+              "date": "2026-09-25T04:04:09.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Luz-Saint-Sauveur",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:40:09.000Z",
+          "sample": [
+            {
+              "title": "Circulation vers Lourdes : pas de miracle à attendre",
+              "url": "https://www.ladepeche.fr/2026/09/25/circulation-vers-lourdes-pas-de-miracle-a-attendre-13567986.php",
+              "date": "2026-09-25T04:04:09.000Z"
+            },
+            {
+              "title": "Luz-Saint-Sauveur. Antigone entre révolte et liberté",
+              "url": "https://www.ladepeche.fr/2026/09/26/antigone-entre-revolte-et-liberte-13569627.php",
+              "date": "2026-09-26T03:40:09.000Z"
+            },
+            {
+              "title": "Luz-Saint-Sauveur. L’aventure Altitoy s’achève",
+              "url": "https://www.ladepeche.fr/2026/09/25/laventure-altitoy-sacheve-13567988.php",
+              "date": "2026-09-25T04:04:09.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-mane",
+      "name": "La Dépêche — Mane",
+      "locality": "Mane",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/mane,31315/",
+      "feed_url": "https://www.ladepeche.fr/communes/mane,31315/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Mane",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-19T04:07:07.000Z",
+          "sample": [
+            {
+              "title": "Mane. Les associations, forces vives  du territoire, affichent leur dynamisme",
+              "url": "https://www.ladepeche.fr/2026/09/19/les-associations-forces-vives-du-territoire-affichent-leur-dynamisme-13558716.php",
+              "date": "2026-09-19T04:07:07.000Z"
+            },
+            {
+              "title": "Mane. Une belle retraite pour Jean-François \"Yaya\" Soum",
+              "url": "https://www.ladepeche.fr/2026/09/19/une-belle-retraite-pour-jean-francois-yaya-soum-13558707.php",
+              "date": "2026-09-19T04:04:08.000Z"
+            },
+            {
+              "title": "À Mane, plus de 50 associations au rendez-vous du forum intercommunal",
+              "url": "https://www.ladepeche.fr/2026/09/09/a-mane-plus-de-50-associations-au-rendez-vous-du-forum-intercommunal-13542187.php",
+              "date": "2026-09-09T04:32:23.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Mane",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-19T04:07:07.000Z",
+          "sample": [
+            {
+              "title": "Mane. Les associations, forces vives  du territoire, affichent leur dynamisme",
+              "url": "https://www.ladepeche.fr/2026/09/19/les-associations-forces-vives-du-territoire-affichent-leur-dynamisme-13558716.php",
+              "date": "2026-09-19T04:07:07.000Z"
+            },
+            {
+              "title": "Mane. Une belle retraite pour Jean-François \"Yaya\" Soum",
+              "url": "https://www.ladepeche.fr/2026/09/19/une-belle-retraite-pour-jean-francois-yaya-soum-13558707.php",
+              "date": "2026-09-19T04:04:08.000Z"
+            },
+            {
+              "title": "À Mane, plus de 50 associations au rendez-vous du forum intercommunal",
+              "url": "https://www.ladepeche.fr/2026/09/09/a-mane-plus-de-50-associations-au-rendez-vous-du-forum-intercommunal-13542187.php",
+              "date": "2026-09-09T04:32:23.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-marignac",
+      "name": "La Dépêche — Marignac",
+      "locality": "Marignac",
+      "zone": "luchonnais",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/marignac,31316/",
+      "feed_url": "https://www.ladepeche.fr/communes/marignac,31316/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Marignac",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-23T03:58:08.000Z",
+          "sample": [
+            {
+              "title": "Marignac. Le théâtre revient, dimanche",
+              "url": "https://www.ladepeche.fr/2026/09/23/le-theatre-revient-dimanche-13564306.php",
+              "date": "2026-09-23T03:58:08.000Z"
+            },
+            {
+              "title": "Un ciné-rencontre pour \"Passages\" d’Olivier Faup",
+              "url": "https://www.ladepeche.fr/2026/09/10/un-cine-rencontre-pour-passages-dolivier-faup-13544445.php",
+              "date": "2026-09-10T09:59:17.000Z"
+            },
+            {
+              "title": "Un ciné-rencontre pour \"Passages\" d’Olivier Faup",
+              "url": "https://www.ladepeche.fr/2026/09/10/un-cine-rencontre-pour-passages-dolivier-faup-13543742.php",
+              "date": "2026-09-10T03:22:12.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Marignac",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-23T03:58:08.000Z",
+          "sample": [
+            {
+              "title": "Marignac. Le théâtre revient, dimanche",
+              "url": "https://www.ladepeche.fr/2026/09/23/le-theatre-revient-dimanche-13564306.php",
+              "date": "2026-09-23T03:58:08.000Z"
+            },
+            {
+              "title": "Un ciné-rencontre pour \"Passages\" d’Olivier Faup",
+              "url": "https://www.ladepeche.fr/2026/09/10/un-cine-rencontre-pour-passages-dolivier-faup-13544445.php",
+              "date": "2026-09-10T09:59:17.000Z"
+            },
+            {
+              "title": "Un ciné-rencontre pour \"Passages\" d’Olivier Faup",
+              "url": "https://www.ladepeche.fr/2026/09/10/un-cine-rencontre-pour-passages-dolivier-faup-13543742.php",
+              "date": "2026-09-10T03:22:12.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-mauleon-barousse",
+      "name": "La Dépêche — Mauléon-Barousse",
+      "locality": "Mauléon-Barousse",
+      "zone": "barousse",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/mauleon-barousse,65305/",
+      "feed_url": "https://www.ladepeche.fr/communes/mauleon-barousse,65305/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Mauléon-Barousse",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-23T03:58:07.000Z",
+          "sample": [
+            {
+              "title": "Mauléon-Barousse. La Barousse se dévoile entre cartes anciennes et sources",
+              "url": "https://www.ladepeche.fr/2026/09/23/la-barousse-se-devoile-entre-cartes-anciennes-et-sources-13564300.php",
+              "date": "2026-09-23T03:58:07.000Z"
+            },
+            {
+              "title": "Histoire de la Barousse : deux rendez-vous à ne pas manquer",
+              "url": "https://www.ladepeche.fr/2026/09/20/histoire-de-la-barousse-deux-rendez-vous-a-ne-pas-manquer-13559821.php",
+              "date": "2026-09-20T03:33:07.000Z"
+            },
+            {
+              "title": "Une symphonie de bleus à la Maison des Sources",
+              "url": "https://www.ladepeche.fr/2026/09/20/une-symphonie-de-bleus-a-la-maison-des-sources-13559819.php",
+              "date": "2026-09-20T03:33:07.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Mauléon-Barousse",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-23T03:58:07.000Z",
+          "sample": [
+            {
+              "title": "Mauléon-Barousse. La Barousse se dévoile entre cartes anciennes et sources",
+              "url": "https://www.ladepeche.fr/2026/09/23/la-barousse-se-devoile-entre-cartes-anciennes-et-sources-13564300.php",
+              "date": "2026-09-23T03:58:07.000Z"
+            },
+            {
+              "title": "Histoire de la Barousse : deux rendez-vous à ne pas manquer",
+              "url": "https://www.ladepeche.fr/2026/09/20/histoire-de-la-barousse-deux-rendez-vous-a-ne-pas-manquer-13559821.php",
+              "date": "2026-09-20T03:33:07.000Z"
+            },
+            {
+              "title": "Une symphonie de bleus à la Maison des Sources",
+              "url": "https://www.ladepeche.fr/2026/09/20/une-symphonie-de-bleus-a-la-maison-des-sources-13559819.php",
+              "date": "2026-09-20T03:33:07.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-mazeres-sur-salat",
+      "name": "La Dépêche — Mazères-sur-Salat",
+      "locality": "Mazères-sur-Salat",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/mazeres-sur-salat,31336/",
+      "feed_url": "https://www.ladepeche.fr/communes/mazeres-sur-salat,31336/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Mazères-sur-Salat",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-25T04:09:08.000Z",
+          "sample": [
+            {
+              "title": "Mazères-sur-Salat. Les rugbymen mettent le cap sur le Gers",
+              "url": "https://www.ladepeche.fr/2026/09/25/les-rugbymen-mettent-le-cap-sur-le-gers-13568028.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            },
+            {
+              "title": "Mazères-sur-Salat. Les secrets de \"La chambre accouchée\"",
+              "url": "https://www.ladepeche.fr/2026/09/25/les-secrets-de-la-chambre-accouchee-13568029.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            },
+            {
+              "title": "Mazères-sur-Salat. Rugby : un dernier quart d’heure fatal !",
+              "url": "https://www.ladepeche.fr/2026/09/22/rugby-un-dernier-quart-dheure-fatal-13562796.php",
+              "date": "2026-09-22T04:10:12.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Mazères-sur-Salat",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-25T04:09:08.000Z",
+          "sample": [
+            {
+              "title": "Mazères-sur-Salat. Les rugbymen mettent le cap sur le Gers",
+              "url": "https://www.ladepeche.fr/2026/09/25/les-rugbymen-mettent-le-cap-sur-le-gers-13568028.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            },
+            {
+              "title": "Mazères-sur-Salat. Les secrets de \"La chambre accouchée\"",
+              "url": "https://www.ladepeche.fr/2026/09/25/les-secrets-de-la-chambre-accouchee-13568029.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            },
+            {
+              "title": "Mazères-sur-Salat. Rugby : un dernier quart d’heure fatal !",
+              "url": "https://www.ladepeche.fr/2026/09/22/rugby-un-dernier-quart-dheure-fatal-13562796.php",
+              "date": "2026-09-22T04:10:12.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-melles",
+      "name": "La Dépêche — Melles",
+      "locality": "Melles",
+      "zone": "luchonnais",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/melles,31337/",
+      "feed_url": "https://www.ladepeche.fr/communes/melles,31337/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Melles",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-23T08:46:18.000Z",
+          "sample": [
+            {
+              "title": "\"On va faire du covoiturage pour aller voter\" : pour les élections sénatoriales, les maires du Luchonnais organisent leur déplacement jusqu'à Toulouse",
+              "url": "https://www.ladepeche.fr/2026/09/23/on-va-faire-du-covoiturage-pour-aller-voter-pour-les-elections-senatoriales-les-maires-du-luchonnais-organisent-leur-deplacement-jusqua-toulouse-13557779.php",
+              "date": "2026-09-23T04:01:04.000Z"
+            },
+            {
+              "title": "Adjointe à Luchon, ancien maire de Boulogne, conseillers de Saint-Gaudens : qui sont les candidats commingeois aux sénatoriales ?",
+              "url": "https://www.ladepeche.fr/2026/09/23/adjointe-a-luchon-ancien-maire-de-boulogne-conseillers-de-saint-gaudens-qui-sont-les-candidats-commingeois-aux-senatoriales-13554011.php",
+              "date": "2026-09-23T08:46:18.000Z"
+            },
+            {
+              "title": "À Melles, un fournil communal pour du pain bio et local d'ici 2026 grâce à un chantier participatif et 100 000 € d'investissement",
+              "url": "https://www.ladepeche.fr/2026/09/11/a-melles-un-fournil-communal-pour-du-pain-bio-et-local-dici-2026-grace-a-un-chantier-participatif-et-100-000-eur-dinvestissement-13546633.php",
+              "date": "2026-09-11T16:44:02.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Melles",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-23T08:46:18.000Z",
+          "sample": [
+            {
+              "title": "\"On va faire du covoiturage pour aller voter\" : pour les élections sénatoriales, les maires du Luchonnais organisent leur déplacement jusqu'à Toulouse",
+              "url": "https://www.ladepeche.fr/2026/09/23/on-va-faire-du-covoiturage-pour-aller-voter-pour-les-elections-senatoriales-les-maires-du-luchonnais-organisent-leur-deplacement-jusqua-toulouse-13557779.php",
+              "date": "2026-09-23T04:01:04.000Z"
+            },
+            {
+              "title": "Adjointe à Luchon, ancien maire de Boulogne, conseillers de Saint-Gaudens : qui sont les candidats commingeois aux sénatoriales ?",
+              "url": "https://www.ladepeche.fr/2026/09/23/adjointe-a-luchon-ancien-maire-de-boulogne-conseillers-de-saint-gaudens-qui-sont-les-candidats-commingeois-aux-senatoriales-13554011.php",
+              "date": "2026-09-23T08:46:18.000Z"
+            },
+            {
+              "title": "À Melles, un fournil communal pour du pain bio et local d'ici 2026 grâce à un chantier participatif et 100 000 € d'investissement",
+              "url": "https://www.ladepeche.fr/2026/09/11/a-melles-un-fournil-communal-pour-du-pain-bio-et-local-dici-2026-grace-a-un-chantier-participatif-et-100-000-eur-dinvestissement-13546633.php",
+              "date": "2026-09-11T16:44:02.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-montrejeau",
+      "name": "La Dépêche — Montréjeau",
+      "locality": "Montréjeau",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/montrejeau,31390/",
+      "feed_url": "https://www.ladepeche.fr/communes/montrejeau,31390/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Montréjeau",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:38:43.000Z",
+          "sample": [
+            {
+              "title": "REPORTAGE. Dominique Bouchait, Meilleur ouvrier de France, crée un plateau de quarante fromages pour le pape Léon XIV, mettant en avant les saveurs pyrénéennes",
+              "url": "https://www.ladepeche.fr/2026/09/24/reportage-dominique-bouchait-meilleur-ouvrier-de-france-cree-un-plateau-de-quarante-fromages-pour-le-pape-leon-xiv-mettant-en-avant-les-saveurs-13565170.php",
+              "date": "2026-09-24T07:50:07.000Z"
+            },
+            {
+              "title": "Montréjeau. C’est la rentrée pour les Chanteurs du Mont-Royal",
+              "url": "https://www.ladepeche.fr/2026/09/26/cest-la-rentree-pour-les-chanteurs-du-mont-royal-13569565.php",
+              "date": "2026-09-26T03:38:43.000Z"
+            },
+            {
+              "title": "Montréjeau. Deux heures d’échanges autour de la sécurité et de la justice",
+              "url": "https://www.ladepeche.fr/2026/09/25/deux-heures-dechanges-autour-de-la-securite-et-de-la-justice-13568022.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Montréjeau",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:38:43.000Z",
+          "sample": [
+            {
+              "title": "REPORTAGE. Dominique Bouchait, Meilleur ouvrier de France, crée un plateau de quarante fromages pour le pape Léon XIV, mettant en avant les saveurs pyrénéennes",
+              "url": "https://www.ladepeche.fr/2026/09/24/reportage-dominique-bouchait-meilleur-ouvrier-de-france-cree-un-plateau-de-quarante-fromages-pour-le-pape-leon-xiv-mettant-en-avant-les-saveurs-13565170.php",
+              "date": "2026-09-24T07:50:07.000Z"
+            },
+            {
+              "title": "Montréjeau. C’est la rentrée pour les Chanteurs du Mont-Royal",
+              "url": "https://www.ladepeche.fr/2026/09/26/cest-la-rentree-pour-les-chanteurs-du-mont-royal-13569565.php",
+              "date": "2026-09-26T03:38:43.000Z"
+            },
+            {
+              "title": "Montréjeau. Deux heures d’échanges autour de la sécurité et de la justice",
+              "url": "https://www.ladepeche.fr/2026/09/25/deux-heures-dechanges-autour-de-la-securite-et-de-la-justice-13568022.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-pointis-inard",
+      "name": "La Dépêche — Pointis-Inard",
+      "locality": "Pointis-Inard",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/pointis-inard,31427/",
+      "feed_url": "https://www.ladepeche.fr/communes/pointis-inard,31427/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Pointis-Inard",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-18T03:55:08.000Z",
+          "sample": [
+            {
+              "title": "Pointis-Inard. La Garonne s’expose",
+              "url": "https://www.ladepeche.fr/2026/09/18/la-garonne-sexpose-13556741.php",
+              "date": "2026-09-18T03:55:08.000Z"
+            },
+            {
+              "title": "Pointis-Inard. Appel à la solidarité en faveur des sinistrés des incendies",
+              "url": "https://www.ladepeche.fr/2026/08/05/appel-a-la-solidarite-en-faveur-des-sinistres-des-incendies-13497558.php",
+              "date": "2026-08-05T07:59:30.000Z"
+            },
+            {
+              "title": "Pointis-Inard. Appel à la solidarité en faveur des sinistrés des incendies",
+              "url": "https://www.ladepeche.fr/2026/08/05/appel-a-la-solidarite-en-faveur-des-sinistres-des-incendies-13497371.php",
+              "date": "2026-08-05T03:30:32.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Pointis-Inard",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-18T03:55:08.000Z",
+          "sample": [
+            {
+              "title": "Pointis-Inard. La Garonne s’expose",
+              "url": "https://www.ladepeche.fr/2026/09/18/la-garonne-sexpose-13556741.php",
+              "date": "2026-09-18T03:55:08.000Z"
+            },
+            {
+              "title": "Pointis-Inard. Appel à la solidarité en faveur des sinistrés des incendies",
+              "url": "https://www.ladepeche.fr/2026/08/05/appel-a-la-solidarite-en-faveur-des-sinistres-des-incendies-13497558.php",
+              "date": "2026-08-05T07:59:30.000Z"
+            },
+            {
+              "title": "Pointis-Inard. Appel à la solidarité en faveur des sinistrés des incendies",
+              "url": "https://www.ladepeche.fr/2026/08/05/appel-a-la-solidarite-en-faveur-des-sinistres-des-incendies-13497371.php",
+              "date": "2026-08-05T03:30:32.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-roquefort-sur-garonne",
+      "name": "La Dépêche — Roquefort-sur-Garonne",
+      "locality": "Roquefort-sur-Garonne",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/roquefort-sur-garonne,31457/",
+      "feed_url": "https://www.ladepeche.fr/communes/roquefort-sur-garonne,31457/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Roquefort-sur-Garonne",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-12T04:11:24.000Z",
+          "sample": [
+            {
+              "title": "Roquefort-sur-Garonne. Le tournoi national de pétanque tire un bilan positif",
+              "url": "https://www.ladepeche.fr/2026/09/12/le-tournoi-national-de-petanque-tire-un-bilan-positif-13547616.php",
+              "date": "2026-09-12T04:11:24.000Z"
+            },
+            {
+              "title": "Roquefort-sur-Garonne. Bilan positif pour le National",
+              "url": "https://www.ladepeche.fr/2026/09/09/bilan-positif-pour-le-national-13542161.php",
+              "date": "2026-09-09T04:29:14.000Z"
+            },
+            {
+              "title": "Pétanque : le National de Roquefort-sur-Garonne, c'est du haut de gamme ! Et si la cité commingeoise accueillait un championnat de France?",
+              "url": "https://www.ladepeche.fr/2026/09/08/petanque-le-national-de-roquefort-sur-garonne-cest-du-haut-de-gamme-et-si-la-cite-commingeoise-accueillait-un-championnat-de-france-13541303.php",
+              "date": "2026-09-08T15:11:06.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Roquefort-sur-Garonne",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-12T04:11:24.000Z",
+          "sample": [
+            {
+              "title": "Roquefort-sur-Garonne. Le tournoi national de pétanque tire un bilan positif",
+              "url": "https://www.ladepeche.fr/2026/09/12/le-tournoi-national-de-petanque-tire-un-bilan-positif-13547616.php",
+              "date": "2026-09-12T04:11:24.000Z"
+            },
+            {
+              "title": "Roquefort-sur-Garonne. Bilan positif pour le National",
+              "url": "https://www.ladepeche.fr/2026/09/09/bilan-positif-pour-le-national-13542161.php",
+              "date": "2026-09-09T04:29:14.000Z"
+            },
+            {
+              "title": "Pétanque : le National de Roquefort-sur-Garonne, c'est du haut de gamme ! Et si la cité commingeoise accueillait un championnat de France?",
+              "url": "https://www.ladepeche.fr/2026/09/08/petanque-le-national-de-roquefort-sur-garonne-cest-du-haut-de-gamme-et-si-la-cite-commingeoise-accueillait-un-championnat-de-france-13541303.php",
+              "date": "2026-09-08T15:11:06.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-saint-aventin",
+      "name": "La Dépêche — Saint-Aventin",
+      "locality": "Saint-Aventin",
+      "zone": "luchonnais",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/saint-aventin,31470/",
+      "feed_url": "https://www.ladepeche.fr/communes/saint-aventin,31470/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Saint-Aventin",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-08-11T07:58:58.000Z",
+          "sample": [
+            {
+              "title": "\"Il nous a fallu batailler deux heures\": le PGHM intervient de nuit pour sortir un homme de 78 ans tombé dans un ravin durant sa promenade",
+              "url": "https://www.ladepeche.fr/2026/08/07/il-nous-a-fallu-batailler-deux-heures-le-pghm-intervient-de-nuit-pour-sortir-un-homme-de-78-ans-tombe-dans-un-ravin-durant-sa-promenade-13499565.php",
+              "date": "2026-08-11T07:58:58.000Z"
+            },
+            {
+              "title": "Neige dans les Pyrénées : leur bus est bloqué, 50 étudiants de Toulouse se retrouvent naufragés de la route",
+              "url": "https://www.ladepeche.fr/2026/01/10/neige-dans-les-pyrenees-leur-bus-est-bloque-50-etudiants-de-toulouse-se-retrouvent-naufrages-de-la-route-13154225.php",
+              "date": "2026-01-10T16:05:07.000Z"
+            },
+            {
+              "title": "\"Les secours en montagne, ce n’est pas que de la théorie\"… À Luchon, l’exercice grandeur nature des gendarmes du PGHM",
+              "url": "https://www.ladepeche.fr/2024/07/19/les-secours-en-montagne-ce-nest-pas-que-de-la-theorie-a-luchon-lexercice-grandeur-nature-des-gendarmes-du-pghm-12090294.php",
+              "date": "2024-07-19T07:23:39.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Saint-Aventin",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-08-11T07:58:58.000Z",
+          "sample": [
+            {
+              "title": "\"Il nous a fallu batailler deux heures\": le PGHM intervient de nuit pour sortir un homme de 78 ans tombé dans un ravin durant sa promenade",
+              "url": "https://www.ladepeche.fr/2026/08/07/il-nous-a-fallu-batailler-deux-heures-le-pghm-intervient-de-nuit-pour-sortir-un-homme-de-78-ans-tombe-dans-un-ravin-durant-sa-promenade-13499565.php",
+              "date": "2026-08-11T07:58:58.000Z"
+            },
+            {
+              "title": "Neige dans les Pyrénées : leur bus est bloqué, 50 étudiants de Toulouse se retrouvent naufragés de la route",
+              "url": "https://www.ladepeche.fr/2026/01/10/neige-dans-les-pyrenees-leur-bus-est-bloque-50-etudiants-de-toulouse-se-retrouvent-naufrages-de-la-route-13154225.php",
+              "date": "2026-01-10T16:05:07.000Z"
+            },
+            {
+              "title": "\"Les secours en montagne, ce n’est pas que de la théorie\"… À Luchon, l’exercice grandeur nature des gendarmes du PGHM",
+              "url": "https://www.ladepeche.fr/2024/07/19/les-secours-en-montagne-ce-nest-pas-que-de-la-theorie-a-luchon-lexercice-grandeur-nature-des-gendarmes-du-pghm-12090294.php",
+              "date": "2024-07-19T07:23:39.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-saint-beat-lez",
+      "name": "La Dépêche — Saint-Béat-Lez",
+      "locality": "Saint-Béat-Lez",
+      "zone": "luchonnais",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/saint-beat,31471/",
+      "feed_url": "https://www.ladepeche.fr/communes/saint-beat-lez/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Saint-Béat-Lez",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-24T03:59:08.000Z",
+          "sample": [
+            {
+              "title": "Saint-Béat-Lez. Parallèle et ses activités pour 2026-2027",
+              "url": "https://www.ladepeche.fr/2026/09/24/parallele-et-ses-activites-pour-2026-2027-13566123.php",
+              "date": "2026-09-24T03:59:08.000Z"
+            },
+            {
+              "title": "Déviation de Saint-Béat : le chantier a repris",
+              "url": "https://www.ladepeche.fr/2026/09/10/deviation-de-saint-beat-le-chantier-a-repris-13544214.php",
+              "date": "2026-09-10T10:18:34.000Z"
+            },
+            {
+              "title": "Saint-Béat-Lez. L’investissement de Leïa et Melany dans le service civique",
+              "url": "https://www.ladepeche.fr/2026/09/08/linvestissement-de-leia-et-melany-dans-le-service-civique-13540511.php",
+              "date": "2026-09-08T03:33:01.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Saint-Béat-Lez",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-24T03:59:08.000Z",
+          "sample": [
+            {
+              "title": "Saint-Béat-Lez. Parallèle et ses activités pour 2026-2027",
+              "url": "https://www.ladepeche.fr/2026/09/24/parallele-et-ses-activites-pour-2026-2027-13566123.php",
+              "date": "2026-09-24T03:59:08.000Z"
+            },
+            {
+              "title": "Déviation de Saint-Béat : le chantier a repris",
+              "url": "https://www.ladepeche.fr/2026/09/10/deviation-de-saint-beat-le-chantier-a-repris-13544214.php",
+              "date": "2026-09-10T10:18:34.000Z"
+            },
+            {
+              "title": "Saint-Béat-Lez. L’investissement de Leïa et Melany dans le service civique",
+              "url": "https://www.ladepeche.fr/2026/09/08/linvestissement-de-leia-et-melany-dans-le-service-civique-13540511.php",
+              "date": "2026-09-08T03:33:01.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-saint-bertrand-de-comminges",
+      "name": "La Dépêche — Saint-Bertrand-de-Comminges",
+      "locality": "Saint-Bertrand-de-Comminges",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/saint-bertrand-de-comminges,31472/",
+      "feed_url": "https://www.ladepeche.fr/communes/saint-bertrand-de-comminges,31472/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Saint-Bertrand-de-Comminges",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-21T09:07:43.000Z",
+          "sample": [
+            {
+              "title": "Saint-Bertrand-de-Comminges. Orgue et trompette vont faire vibrer  les voûtes de la cathédrale",
+              "url": "https://www.ladepeche.fr/2026/09/18/orgue-et-trompette-vont-faire-vibrer-les-voutes-de-la-cathedrale-13556727.php",
+              "date": "2026-09-18T03:54:09.000Z"
+            },
+            {
+              "title": "Saint-Bertrand-de-Comminges. Orgue et trompette vont faire vibrer  les voûtes de la cathédrale",
+              "url": "https://www.ladepeche.fr/2026/09/18/orgue-et-trompette-vont-faire-vibrer-les-voutes-de-la-cathedrale-13556655.php",
+              "date": "2026-09-18T03:44:08.000Z"
+            },
+            {
+              "title": "\"Je n’ai plus la qualité de vie que j’étais venue chercher\" : à Toulouse, la chaleur pousse-t-elle les habitants au départ ?",
+              "url": "https://www.ladepeche.fr/2026/09/15/je-nai-plus-la-qualite-de-vie-que-jetais-venue-chercher-a-toulouse-la-chaleur-pousse-t-elle-les-habitants-au-depart-13539786.php",
+              "date": "2026-09-21T09:07:43.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Saint-Bertrand-de-Comminges",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-21T09:07:43.000Z",
+          "sample": [
+            {
+              "title": "Saint-Bertrand-de-Comminges. Orgue et trompette vont faire vibrer  les voûtes de la cathédrale",
+              "url": "https://www.ladepeche.fr/2026/09/18/orgue-et-trompette-vont-faire-vibrer-les-voutes-de-la-cathedrale-13556727.php",
+              "date": "2026-09-18T03:54:09.000Z"
+            },
+            {
+              "title": "Saint-Bertrand-de-Comminges. Orgue et trompette vont faire vibrer  les voûtes de la cathédrale",
+              "url": "https://www.ladepeche.fr/2026/09/18/orgue-et-trompette-vont-faire-vibrer-les-voutes-de-la-cathedrale-13556655.php",
+              "date": "2026-09-18T03:44:08.000Z"
+            },
+            {
+              "title": "\"Je n’ai plus la qualité de vie que j’étais venue chercher\" : à Toulouse, la chaleur pousse-t-elle les habitants au départ ?",
+              "url": "https://www.ladepeche.fr/2026/09/15/je-nai-plus-la-qualite-de-vie-que-jetais-venue-chercher-a-toulouse-la-chaleur-pousse-t-elle-les-habitants-au-depart-13539786.php",
+              "date": "2026-09-21T09:07:43.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-saint-gaudens",
+      "name": "La Dépêche — Saint-Gaudens",
+      "locality": "Saint-Gaudens",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/saint-gaudens,31483/",
+      "feed_url": "https://www.ladepeche.fr/communes/saint-gaudens,31483/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Saint-Gaudens",
+          "count": 25,
+          "valid": 25,
+          "h24": 4,
+          "newest": "2026-09-27T03:46:07.000Z",
+          "sample": [
+            {
+              "title": "Le retour de la Fête du bois dimanche prochain",
+              "url": "https://www.ladepeche.fr/2026/09/27/le-retour-de-la-fete-du-bois-dimanche-prochain-13571070.php",
+              "date": "2026-09-27T03:46:06.000Z"
+            },
+            {
+              "title": "Coupe de France (4e tour) : cette fois, Balma a pris sa revanche et s'impose à Saint-Gaudens",
+              "url": "https://www.ladepeche.fr/2026/09/26/coupe-de-france-4e-tour-cette-fois-balma-a-pris-sa-revanche-et-simpose-a-saint-gaudens-13570757.php",
+              "date": "2026-09-26T21:03:32.000Z"
+            },
+            {
+              "title": "Élection sénatoriale en Haute-Garonne ce dimanche : à qui profitera la division ?",
+              "url": "https://www.ladepeche.fr/2026/09/26/election-senatoriale-en-haute-garonne-ce-dimanche-a-qui-profitera-la-division-13568356.php",
+              "date": "2026-09-26T15:23:18.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Saint-Gaudens",
+          "count": 25,
+          "valid": 25,
+          "h24": 4,
+          "newest": "2026-09-27T03:46:07.000Z",
+          "sample": [
+            {
+              "title": "Le retour de la Fête du bois dimanche prochain",
+              "url": "https://www.ladepeche.fr/2026/09/27/le-retour-de-la-fete-du-bois-dimanche-prochain-13571070.php",
+              "date": "2026-09-27T03:46:06.000Z"
+            },
+            {
+              "title": "Coupe de France (4e tour) : cette fois, Balma a pris sa revanche et s'impose à Saint-Gaudens",
+              "url": "https://www.ladepeche.fr/2026/09/26/coupe-de-france-4e-tour-cette-fois-balma-a-pris-sa-revanche-et-simpose-a-saint-gaudens-13570757.php",
+              "date": "2026-09-26T21:03:32.000Z"
+            },
+            {
+              "title": "Élection sénatoriale en Haute-Garonne ce dimanche : à qui profitera la division ?",
+              "url": "https://www.ladepeche.fr/2026/09/26/election-senatoriale-en-haute-garonne-ce-dimanche-a-qui-profitera-la-division-13568356.php",
+              "date": "2026-09-26T15:23:18.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-saint-lary-soulan",
+      "name": "La Dépêche — Saint-Lary-Soulan",
+      "locality": "Saint-Lary-Soulan",
+      "zone": "nestes_lannemezan",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/saint-lary-soulan,65388/",
+      "feed_url": "https://www.ladepeche.fr/communes/saint-lary-soulan,65388/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Saint-Lary-Soulan",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-21T11:46:47.000Z",
+          "sample": [
+            {
+              "title": "Isabelle Mir : \"Une parenté dans les archives, pas une histoire commune\"",
+              "url": "https://www.ladepeche.fr/2026/09/21/isabelle-mir-une-parente-dans-les-archives-pas-une-histoire-commune-13559029.php",
+              "date": "2026-09-21T11:46:47.000Z"
+            },
+            {
+              "title": "Saint-Lary-Soulan. L’architecture au fil du temps",
+              "url": "https://www.ladepeche.fr/2026/09/19/larchitecture-au-fil-du-temps-13558604.php",
+              "date": "2026-09-19T03:58:08.000Z"
+            },
+            {
+              "title": "Saint-Lary-Soulan. Quand la généalogie relie Isabelle Mir et Ombeline Perez",
+              "url": "https://www.ladepeche.fr/2026/09/16/quand-la-genealogie-relie-isabelle-mir-et-ombeline-perez-13553225.php",
+              "date": "2026-09-16T04:17:08.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Saint-Lary-Soulan",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-21T11:46:47.000Z",
+          "sample": [
+            {
+              "title": "Isabelle Mir : \"Une parenté dans les archives, pas une histoire commune\"",
+              "url": "https://www.ladepeche.fr/2026/09/21/isabelle-mir-une-parente-dans-les-archives-pas-une-histoire-commune-13559029.php",
+              "date": "2026-09-21T11:46:47.000Z"
+            },
+            {
+              "title": "Saint-Lary-Soulan. L’architecture au fil du temps",
+              "url": "https://www.ladepeche.fr/2026/09/19/larchitecture-au-fil-du-temps-13558604.php",
+              "date": "2026-09-19T03:58:08.000Z"
+            },
+            {
+              "title": "Saint-Lary-Soulan. Quand la généalogie relie Isabelle Mir et Ombeline Perez",
+              "url": "https://www.ladepeche.fr/2026/09/16/quand-la-genealogie-relie-isabelle-mir-et-ombeline-perez-13553225.php",
+              "date": "2026-09-16T04:17:08.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-saint-laurent-de-neste",
+      "name": "La Dépêche — Saint-Laurent-de-Neste",
+      "locality": "Saint-Laurent-de-Neste",
+      "zone": "nestes_lannemezan",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/saint-laurent-de-neste,65389/",
+      "feed_url": "https://www.ladepeche.fr/communes/saint-laurent-de-neste,65389/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Saint-Laurent-de-Neste",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-20T03:33:07.000Z",
+          "sample": [
+            {
+              "title": "Une jungle dansée et poétique",
+              "url": "https://www.ladepeche.fr/2026/09/20/une-jungle-dansee-et-poetique-13559818.php",
+              "date": "2026-09-20T03:33:07.000Z"
+            },
+            {
+              "title": "La Maison du Savoir fête ses 30 ans avec une saison culturelle foisonnante",
+              "url": "https://www.ladepeche.fr/2026/09/16/la-maison-du-savoir-fete-ses-30-ans-avec-une-saison-culturelle-foisonnante-13554157.php",
+              "date": "2026-09-16T13:39:15.000Z"
+            },
+            {
+              "title": "Les veilleurs de tourbières racontent un patrimoine naturel",
+              "url": "https://www.ladepeche.fr/2026/09/06/les-veilleurs-de-tourbieres-racontent-un-patrimoine-naturel-13537960.php",
+              "date": "2026-09-06T03:17:48.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Saint-Laurent-de-Neste",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-20T03:33:07.000Z",
+          "sample": [
+            {
+              "title": "Une jungle dansée et poétique",
+              "url": "https://www.ladepeche.fr/2026/09/20/une-jungle-dansee-et-poetique-13559818.php",
+              "date": "2026-09-20T03:33:07.000Z"
+            },
+            {
+              "title": "La Maison du Savoir fête ses 30 ans avec une saison culturelle foisonnante",
+              "url": "https://www.ladepeche.fr/2026/09/16/la-maison-du-savoir-fete-ses-30-ans-avec-une-saison-culturelle-foisonnante-13554157.php",
+              "date": "2026-09-16T13:39:15.000Z"
+            },
+            {
+              "title": "Les veilleurs de tourbières racontent un patrimoine naturel",
+              "url": "https://www.ladepeche.fr/2026/09/06/les-veilleurs-de-tourbieres-racontent-un-patrimoine-naturel-13537960.php",
+              "date": "2026-09-06T03:17:48.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-saint-mamet",
+      "name": "La Dépêche — Saint-Mamet",
+      "locality": "Saint-Mamet",
+      "zone": "luchonnais",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/saint-mamet,31500/",
+      "feed_url": "https://www.ladepeche.fr/communes/saint-mamet,31500/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Saint-Mamet",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-13T17:42:05.000Z",
+          "sample": [
+            {
+              "title": "Il chute brutalement de 15 m dans un ravin lors d’une course à vélo au col de Portillon : le cycliste se blesse grièvement et est héliporté",
+              "url": "https://www.ladepeche.fr/2026/09/13/un-cycliste-fait-une-sortie-de-route-au-col-de-portillon-lors-dune-course-a-velo-il-est-grievement-blesse-apres-une-chute-de-15-m-dans-un-ravin-13549193.php",
+              "date": "2026-09-13T17:42:05.000Z"
+            },
+            {
+              "title": "Un motard chute dans un ravin, sur une route de montagne au sud de Toulouse, les pompiers le remontent et l'évacuent, blessé",
+              "url": "https://www.ladepeche.fr/2026/09/04/un-motard-chute-dans-un-ravin-sur-une-route-de-montagne-au-sud-de-toulouse-les-pompiers-le-remontent-et-levacuent-blesse-13535301.php",
+              "date": "2026-09-04T05:36:53.000Z"
+            },
+            {
+              "title": "Les voix du Cagire à l’église de Saint-Mamet",
+              "url": "https://www.ladepeche.fr/2025/07/05/les-voix-du-cagire-a-leglise-de-saint-mamet-12807284.php",
+              "date": "2025-07-05T03:13:21.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Saint-Mamet",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-13T17:42:05.000Z",
+          "sample": [
+            {
+              "title": "Il chute brutalement de 15 m dans un ravin lors d’une course à vélo au col de Portillon : le cycliste se blesse grièvement et est héliporté",
+              "url": "https://www.ladepeche.fr/2026/09/13/un-cycliste-fait-une-sortie-de-route-au-col-de-portillon-lors-dune-course-a-velo-il-est-grievement-blesse-apres-une-chute-de-15-m-dans-un-ravin-13549193.php",
+              "date": "2026-09-13T17:42:05.000Z"
+            },
+            {
+              "title": "Un motard chute dans un ravin, sur une route de montagne au sud de Toulouse, les pompiers le remontent et l'évacuent, blessé",
+              "url": "https://www.ladepeche.fr/2026/09/04/un-motard-chute-dans-un-ravin-sur-une-route-de-montagne-au-sud-de-toulouse-les-pompiers-le-remontent-et-levacuent-blesse-13535301.php",
+              "date": "2026-09-04T05:36:53.000Z"
+            },
+            {
+              "title": "Les voix du Cagire à l’église de Saint-Mamet",
+              "url": "https://www.ladepeche.fr/2025/07/05/les-voix-du-cagire-a-leglise-de-saint-mamet-12807284.php",
+              "date": "2025-07-05T03:13:21.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-saint-martory",
+      "name": "La Dépêche — Saint-Martory",
+      "locality": "Saint-Martory",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/saint-martory,31503/",
+      "feed_url": "https://www.ladepeche.fr/communes/saint-martory,31503/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Saint-Martory",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T04:08:07.000Z",
+          "sample": [
+            {
+              "title": "Proupiary : une fête d’automne en point final de la saison",
+              "url": "https://www.ladepeche.fr/2026/09/26/proupiary-une-fete-dautomne-en-point-final-de-la-saison-13569880.php",
+              "date": "2026-09-26T04:08:07.000Z"
+            },
+            {
+              "title": "Une fête d’automne  en point final de la saison",
+              "url": "https://www.ladepeche.fr/2026/09/25/une-fete-dautomne-en-point-final-de-la-saison-13568027.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            },
+            {
+              "title": "La fête locale , à partir de demain",
+              "url": "https://www.ladepeche.fr/2026/09/24/la-fete-locale-a-partir-de-demain-13566134.php",
+              "date": "2026-09-24T04:01:07.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Saint-Martory",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T04:08:07.000Z",
+          "sample": [
+            {
+              "title": "Proupiary : une fête d’automne en point final de la saison",
+              "url": "https://www.ladepeche.fr/2026/09/26/proupiary-une-fete-dautomne-en-point-final-de-la-saison-13569880.php",
+              "date": "2026-09-26T04:08:07.000Z"
+            },
+            {
+              "title": "Une fête d’automne  en point final de la saison",
+              "url": "https://www.ladepeche.fr/2026/09/25/une-fete-dautomne-en-point-final-de-la-saison-13568027.php",
+              "date": "2026-09-25T04:09:08.000Z"
+            },
+            {
+              "title": "La fête locale , à partir de demain",
+              "url": "https://www.ladepeche.fr/2026/09/24/la-fete-locale-a-partir-de-demain-13566134.php",
+              "date": "2026-09-24T04:01:07.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-salies-du-salat",
+      "name": "La Dépêche — Salies-du-Salat",
+      "locality": "Salies-du-Salat",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/salies-du-salat,31523/",
+      "feed_url": "https://www.ladepeche.fr/communes/salies-du-salat,31523/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Salies-du-Salat",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:38:44.000Z",
+          "sample": [
+            {
+              "title": "Salies-du-Salat. Basket : victoire d’entrée pour les filles en Pré National",
+              "url": "https://www.ladepeche.fr/2026/09/26/basket-victoire-dentree-pour-les-filles-en-pre-national-13569572.php",
+              "date": "2026-09-26T03:38:44.000Z"
+            },
+            {
+              "title": "Salies-du-Salat. Le Judo Club a fait sa rentrée",
+              "url": "https://www.ladepeche.fr/2026/09/23/le-judo-club-a-fait-sa-rentree-13564327.php",
+              "date": "2026-09-23T03:59:06.000Z"
+            },
+            {
+              "title": "Ressources humaines partagées pour accompagner l’industrie",
+              "url": "https://www.ladepeche.fr/2026/09/21/ressources-humaines-partagees-pour-accompagner-lindustrie-13561111.php",
+              "date": "2026-09-21T03:47:09.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Salies-du-Salat",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-26T03:38:44.000Z",
+          "sample": [
+            {
+              "title": "Salies-du-Salat. Basket : victoire d’entrée pour les filles en Pré National",
+              "url": "https://www.ladepeche.fr/2026/09/26/basket-victoire-dentree-pour-les-filles-en-pre-national-13569572.php",
+              "date": "2026-09-26T03:38:44.000Z"
+            },
+            {
+              "title": "Salies-du-Salat. Le Judo Club a fait sa rentrée",
+              "url": "https://www.ladepeche.fr/2026/09/23/le-judo-club-a-fait-sa-rentree-13564327.php",
+              "date": "2026-09-23T03:59:06.000Z"
+            },
+            {
+              "title": "Ressources humaines partagées pour accompagner l’industrie",
+              "url": "https://www.ladepeche.fr/2026/09/21/ressources-humaines-partagees-pour-accompagner-lindustrie-13561111.php",
+              "date": "2026-09-21T03:47:09.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-sarp",
+      "name": "La Dépêche — Sarp",
+      "locality": "Sarp",
+      "zone": "barousse",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/sarp,65407/",
+      "feed_url": "https://www.ladepeche.fr/communes/sarp,65407/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Sarp",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-09T04:30:22.000Z",
+          "sample": [
+            {
+              "title": "Sarp. Les boules carrées ne tournent pas rond !",
+              "url": "https://www.ladepeche.fr/2026/09/09/les-boules-carrees-ne-tournent-pas-rond-13542173.php",
+              "date": "2026-09-09T04:30:22.000Z"
+            },
+            {
+              "title": "À Sarp, les boules carrées ont roulé… de travers",
+              "url": "https://www.ladepeche.fr/2026/09/06/a-sarp-les-boules-carrees-ont-roule-de-travers-13537959.php",
+              "date": "2026-09-06T03:17:44.000Z"
+            },
+            {
+              "title": "Sarp. Les boules carrées ne tournent pas rond",
+              "url": "https://www.ladepeche.fr/2026/09/04/les-boules-carrees-ne-tournent-pas-rond-13535149.php",
+              "date": "2026-09-04T03:30:37.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Sarp",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-09T04:30:22.000Z",
+          "sample": [
+            {
+              "title": "Sarp. Les boules carrées ne tournent pas rond !",
+              "url": "https://www.ladepeche.fr/2026/09/09/les-boules-carrees-ne-tournent-pas-rond-13542173.php",
+              "date": "2026-09-09T04:30:22.000Z"
+            },
+            {
+              "title": "À Sarp, les boules carrées ont roulé… de travers",
+              "url": "https://www.ladepeche.fr/2026/09/06/a-sarp-les-boules-carrees-ont-roule-de-travers-13537959.php",
+              "date": "2026-09-06T03:17:44.000Z"
+            },
+            {
+              "title": "Sarp. Les boules carrées ne tournent pas rond",
+              "url": "https://www.ladepeche.fr/2026/09/04/les-boules-carrees-ne-tournent-pas-rond-13535149.php",
+              "date": "2026-09-04T03:30:37.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-sengouagnet",
+      "name": "La Dépêche — Sengouagnet",
+      "locality": "Sengouagnet",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/sengouagnet,31544/",
+      "feed_url": "https://www.ladepeche.fr/communes/sengouagnet,31544/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Sengouagnet",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-08T17:04:02.000Z",
+          "sample": [
+            {
+              "title": "Sécheresse au Cagire : Loïc, berger, doit redescendre 800 brebis avec 40 jours d'avance, faute d'eau et d'herbage",
+              "url": "https://www.ladepeche.fr/2026/09/08/secheresse-au-cagire-loic-berger-doit-redescendre-800-brebis-avec-40-jours-davance-faute-deau-et-dherbage-13541376.php",
+              "date": "2026-09-08T17:04:02.000Z"
+            },
+            {
+              "title": "Gouillou : la fête sauvée par un élan de solidarité",
+              "url": "https://www.ladepeche.fr/2026/08/26/gouillou-la-fete-sauvee-par-un-elan-de-solidarite-13524707.php",
+              "date": "2026-08-26T21:32:22.000Z"
+            },
+            {
+              "title": "Sengouagnet. Loïc, la passion d’un berger au cœur du Cagire",
+              "url": "https://www.ladepeche.fr/2026/08/02/loic-la-passion-dun-berger-au-coeur-du-cagire-13494003.php",
+              "date": "2026-08-02T03:22:48.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Sengouagnet",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-08T17:04:02.000Z",
+          "sample": [
+            {
+              "title": "Sécheresse au Cagire : Loïc, berger, doit redescendre 800 brebis avec 40 jours d'avance, faute d'eau et d'herbage",
+              "url": "https://www.ladepeche.fr/2026/09/08/secheresse-au-cagire-loic-berger-doit-redescendre-800-brebis-avec-40-jours-davance-faute-deau-et-dherbage-13541376.php",
+              "date": "2026-09-08T17:04:02.000Z"
+            },
+            {
+              "title": "Gouillou : la fête sauvée par un élan de solidarité",
+              "url": "https://www.ladepeche.fr/2026/08/26/gouillou-la-fete-sauvee-par-un-elan-de-solidarite-13524707.php",
+              "date": "2026-08-26T21:32:22.000Z"
+            },
+            {
+              "title": "Sengouagnet. Loïc, la passion d’un berger au cœur du Cagire",
+              "url": "https://www.ladepeche.fr/2026/08/02/loic-la-passion-dun-berger-au-coeur-du-cagire-13494003.php",
+              "date": "2026-08-02T03:22:48.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-tarbes",
+      "name": "La Dépêche — Tarbes",
+      "locality": "Tarbes",
+      "zone": "hautes_pyrenees",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/tarbes,65440/",
+      "feed_url": "https://www.ladepeche.fr/communes/tarbes,65440/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Tarbes",
+          "count": 25,
+          "valid": 25,
+          "h24": 6,
+          "newest": "2026-09-26T21:14:41.000Z",
+          "sample": [
+            {
+              "title": "VIDEO. Visite du pape Léon XIV à Lourdes : le Saint-Père a atterri sur la terre de ses ancêtres, attendu par des enfants et des personnes âgées à l'aéroport de Tarbes-Lourdes",
+              "url": "https://www.ladepeche.fr/2026/09/26/visite-du-pape-leon-xiv-a-lourdes-le-saint-pere-a-atterri-sur-la-terre-de-ses-ancetres-attendu-par-des-enfants-et-des-personnes-agees-a-laeroport-de-13570596.php",
+              "date": "2026-09-26T21:14:41.000Z"
+            },
+            {
+              "title": "Visite du pape Léon XIV à Lourdes : comment les gendarmes spécialisés dans les transports aériens ont déminé le convoi du Saint-Père à l'aéroport",
+              "url": "https://www.ladepeche.fr/2026/09/26/visite-du-pape-leon-xiv-a-lourdes-comment-les-gendarmes-specialises-dans-les-transports-aeriens-ont-demine-le-convoi-du-saint-pere-a-laeroport-13570617.php",
+              "date": "2026-09-26T19:14:32.000Z"
+            },
+            {
+              "title": "Incendie spectaculaire en plein centre-ville de Tarbes : l'individu interpellé mis en examen et placement en détention demandé",
+              "url": "https://www.ladepeche.fr/2026/09/26/incendie-spectaculaire-en-plein-centre-ville-de-tarbes-lindividu-interpelle-mis-en-examen-et-placement-en-detention-demande-13570414.php",
+              "date": "2026-09-26T16:54:41.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Tarbes",
+          "count": 25,
+          "valid": 25,
+          "h24": 6,
+          "newest": "2026-09-26T21:14:41.000Z",
+          "sample": [
+            {
+              "title": "VIDEO. Visite du pape Léon XIV à Lourdes : le Saint-Père a atterri sur la terre de ses ancêtres, attendu par des enfants et des personnes âgées à l'aéroport de Tarbes-Lourdes",
+              "url": "https://www.ladepeche.fr/2026/09/26/visite-du-pape-leon-xiv-a-lourdes-le-saint-pere-a-atterri-sur-la-terre-de-ses-ancetres-attendu-par-des-enfants-et-des-personnes-agees-a-laeroport-de-13570596.php",
+              "date": "2026-09-26T21:14:41.000Z"
+            },
+            {
+              "title": "Visite du pape Léon XIV à Lourdes : comment les gendarmes spécialisés dans les transports aériens ont déminé le convoi du Saint-Père à l'aéroport",
+              "url": "https://www.ladepeche.fr/2026/09/26/visite-du-pape-leon-xiv-a-lourdes-comment-les-gendarmes-specialises-dans-les-transports-aeriens-ont-demine-le-convoi-du-saint-pere-a-laeroport-13570617.php",
+              "date": "2026-09-26T19:14:32.000Z"
+            },
+            {
+              "title": "Incendie spectaculaire en plein centre-ville de Tarbes : l'individu interpellé mis en examen et placement en détention demandé",
+              "url": "https://www.ladepeche.fr/2026/09/26/incendie-spectaculaire-en-plein-centre-ville-de-tarbes-lindividu-interpelle-mis-en-examen-et-placement-en-detention-demande-13570414.php",
+              "date": "2026-09-26T16:54:41.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-valentine",
+      "name": "La Dépêche — Valentine",
+      "locality": "Valentine",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/valentine,31565/",
+      "feed_url": "https://www.ladepeche.fr/communes/valentine,31565/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Valentine",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-17T04:02:09.000Z",
+          "sample": [
+            {
+              "title": "Valentine. Soixante exposants pour remonter le temps",
+              "url": "https://www.ladepeche.fr/2026/09/17/soixante-exposants-pour-remonter-le-temps-13555149.php",
+              "date": "2026-09-17T04:02:09.000Z"
+            },
+            {
+              "title": "Incendie à Valentine : une maison de 120 m² en flammes, 27 pompiers mobilisés pour maîtriser le sinistre",
+              "url": "https://www.ladepeche.fr/2026/08/31/incendie-a-valentine-une-maison-de-120-m2-en-flammes-27-pompiers-mobilises-pour-maitriser-le-sinistre-13529331.php",
+              "date": "2026-08-31T06:45:12.000Z"
+            },
+            {
+              "title": "Le Bout-du-Puy célèbre au Père Marie-Antoine",
+              "url": "https://www.ladepeche.fr/2026/08/11/le-bout-du-puy-celebre-au-pere-marie-antoine-13504119.php",
+              "date": "2026-08-11T03:20:59.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Valentine",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-17T04:02:09.000Z",
+          "sample": [
+            {
+              "title": "Valentine. Soixante exposants pour remonter le temps",
+              "url": "https://www.ladepeche.fr/2026/09/17/soixante-exposants-pour-remonter-le-temps-13555149.php",
+              "date": "2026-09-17T04:02:09.000Z"
+            },
+            {
+              "title": "Incendie à Valentine : une maison de 120 m² en flammes, 27 pompiers mobilisés pour maîtriser le sinistre",
+              "url": "https://www.ladepeche.fr/2026/08/31/incendie-a-valentine-une-maison-de-120-m2-en-flammes-27-pompiers-mobilises-pour-maitriser-le-sinistre-13529331.php",
+              "date": "2026-08-31T06:45:12.000Z"
+            },
+            {
+              "title": "Le Bout-du-Puy célèbre au Père Marie-Antoine",
+              "url": "https://www.ladepeche.fr/2026/08/11/le-bout-du-puy-celebre-au-pere-marie-antoine-13504119.php",
+              "date": "2026-08-11T03:20:59.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "depeche-villeneuve-de-riviere",
+      "name": "La Dépêche — Villeneuve-de-Rivière",
+      "locality": "Villeneuve-de-Rivière",
+      "zone": "comminges",
+      "media": "La Dépêche",
+      "page": "https://www.ladepeche.fr/communes/villeneuve-de-riviere,31585/",
+      "feed_url": "https://www.ladepeche.fr/communes/villeneuve-de-riviere,31585/rss.xml",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Villeneuve-de-Rivière",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-16T04:22:07.000Z",
+          "sample": [
+            {
+              "title": "Une journée autour du vélo au parc des expositions",
+              "url": "https://www.ladepeche.fr/2026/09/16/une-journee-autour-du-velo-au-parc-des-expositions-13553248.php",
+              "date": "2026-09-16T04:22:07.000Z"
+            },
+            {
+              "title": "Villeneuve-de-Rivière. Florentina, la musique au-delà du solfège",
+              "url": "https://www.ladepeche.fr/2026/09/09/florentina-la-musique-au-dela-du-solfege-13542214.php",
+              "date": "2026-09-09T04:34:49.000Z"
+            },
+            {
+              "title": "Villeneuve-de-Rivière. La chasse fête aussi le côté nature et terroir",
+              "url": "https://www.ladepeche.fr/2026/08/26/la-chasse-fete-aussi-le-cote-nature-et-terroir-13524713.php",
+              "date": "2026-08-26T21:32:54.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Villeneuve-de-Rivière",
+          "count": 25,
+          "valid": 25,
+          "h24": 0,
+          "newest": "2026-09-16T04:22:07.000Z",
+          "sample": [
+            {
+              "title": "Une journée autour du vélo au parc des expositions",
+              "url": "https://www.ladepeche.fr/2026/09/16/une-journee-autour-du-velo-au-parc-des-expositions-13553248.php",
+              "date": "2026-09-16T04:22:07.000Z"
+            },
+            {
+              "title": "Villeneuve-de-Rivière. Florentina, la musique au-delà du solfège",
+              "url": "https://www.ladepeche.fr/2026/09/09/florentina-la-musique-au-dela-du-solfege-13542214.php",
+              "date": "2026-09-09T04:34:49.000Z"
+            },
+            {
+              "title": "Villeneuve-de-Rivière. La chasse fête aussi le côté nature et terroir",
+              "url": "https://www.ladepeche.fr/2026/08/26/la-chasse-fete-aussi-le-cote-nature-et-terroir-13524713.php",
+              "date": "2026-08-26T21:32:54.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "petite-republique-cagire",
+      "media": "Petite République",
+      "name": "Petite République — Cagire Garonne Salat",
+      "page": "https://www.petiterepublique.com/actualites/communautes-de-communes/cc-cagire-garonne-salat/",
+      "zone": "comminges",
+      "locality": "Cagire Garonne Salat",
+      "feed_url": "https://www.petiterepublique.com/actualites/communautes-de-communes/cc-cagire-garonne-salat/feed/",
+      "reads": [
+        {
+          "status": 200,
+          "title": "CC Cagire Garonne Salat - Petite République.com",
+          "count": 11,
+          "valid": 11,
+          "h24": 0,
+          "newest": "2026-09-24T12:32:28.000Z",
+          "sample": [
+            {
+              "title": "Cagire Garonne Salat :  Les rendez-vous publics de Méandres",
+              "url": "https://www.petiterepublique.com/2026/06/01/cagire-garonne-salat-les-rendez-vous-publics-de-meandres/?utm_source=rss&utm_medium=rss&utm_campaign=cagire-garonne-salat-les-rendez-vous-publics-de-meandres",
+              "date": "2026-06-01T13:14:36.000Z"
+            },
+            {
+              "title": "Juzet d’Izaut : Deuxième fête de la « Colo du Cagire »",
+              "url": "https://www.petiterepublique.com/2026/09/24/juzet-dizaut-deuxieme-fete-de-la-colo-du-cagire/?utm_source=rss&utm_medium=rss&utm_campaign=juzet-dizaut-deuxieme-fete-de-la-colo-du-cagire",
+              "date": "2026-09-24T12:32:28.000Z"
+            },
+            {
+              "title": "Saint Gaudens : Le groupe pop-rock « Crippled Chicks » assurera l’animation musicale de la Sein Go Rose",
+              "url": "https://www.petiterepublique.com/2026/09/23/saint-gaudens-le-groupe-pop-rock-crippled-chicks-assurera-lanimation-musicale-de-la-sein-go-rose/?utm_source=rss&utm_medium=rss&utm_campaign=saint-gaudens-le-groupe-pop-rock-crippled-chicks-assurera-lanimation-musicale-de-la-sein-go-rose",
+              "date": "2026-09-23T16:36:01.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "CC Cagire Garonne Salat - Petite République.com",
+          "count": 11,
+          "valid": 11,
+          "h24": 0,
+          "newest": "2026-09-24T12:32:28.000Z",
+          "sample": [
+            {
+              "title": "Cagire Garonne Salat :  Les rendez-vous publics de Méandres",
+              "url": "https://www.petiterepublique.com/2026/06/01/cagire-garonne-salat-les-rendez-vous-publics-de-meandres/?utm_source=rss&utm_medium=rss&utm_campaign=cagire-garonne-salat-les-rendez-vous-publics-de-meandres",
+              "date": "2026-06-01T13:14:36.000Z"
+            },
+            {
+              "title": "Juzet d’Izaut : Deuxième fête de la « Colo du Cagire »",
+              "url": "https://www.petiterepublique.com/2026/09/24/juzet-dizaut-deuxieme-fete-de-la-colo-du-cagire/?utm_source=rss&utm_medium=rss&utm_campaign=juzet-dizaut-deuxieme-fete-de-la-colo-du-cagire",
+              "date": "2026-09-24T12:32:28.000Z"
+            },
+            {
+              "title": "Saint Gaudens : Le groupe pop-rock « Crippled Chicks » assurera l’animation musicale de la Sein Go Rose",
+              "url": "https://www.petiterepublique.com/2026/09/23/saint-gaudens-le-groupe-pop-rock-crippled-chicks-assurera-lanimation-musicale-de-la-sein-go-rose/?utm_source=rss&utm_medium=rss&utm_campaign=saint-gaudens-le-groupe-pop-rock-crippled-chicks-assurera-lanimation-musicale-de-la-sein-go-rose",
+              "date": "2026-09-23T16:36:01.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "petite-republique-coeur-garonne",
+      "media": "Petite République",
+      "name": "Petite République — Cœur de Garonne",
+      "page": "https://www.petiterepublique.com/actualites/communautes-de-communes/cc-coeur-de-garonne/",
+      "zone": "haute_garonne_sud",
+      "locality": "Cœur de Garonne",
+      "feed_url": "https://www.petiterepublique.com/actualites/communautes-de-communes/cc-coeur-de-garonne/feed/",
+      "reads": [
+        {
+          "status": 200,
+          "title": "CC Coeur de Garonne - Petite République.com",
+          "count": 10,
+          "valid": 10,
+          "h24": 4,
+          "newest": "2026-09-27T07:09:14.000Z",
+          "sample": [
+            {
+              "title": "Cazères : un giratoire va être créé sur la RD 6, la circulation perturbée jusqu’au 6 novembre",
+              "url": "https://www.petiterepublique.com/2026/09/26/cazeres-un-giratoire-va-etre-cree-sur-la-rd-6-la-circulation-perturbee-jusquau-6-novembre/?utm_source=rss&utm_medium=rss&utm_campaign=cazeres-un-giratoire-va-etre-cree-sur-la-rd-6-la-circulation-perturbee-jusquau-6-novembre",
+              "date": "2026-09-26T07:05:45.000Z"
+            },
+            {
+              "title": "Boussens : YakaDanser invite à découvrir la Bachata",
+              "url": "https://www.petiterepublique.com/2026/09/27/boussens-yakadanser-invite-a-decouvrir-la-bachata/?utm_source=rss&utm_medium=rss&utm_campaign=boussens-yakadanser-invite-a-decouvrir-la-bachata",
+              "date": "2026-09-27T07:09:14.000Z"
+            },
+            {
+              "title": "Saint-Elix-le-Château : Clarijazz accueille le « Thomas Kretzschmar Quartet »",
+              "url": "https://www.petiterepublique.com/2026/09/27/saint-elix-le-chateau-clarijazz-accueille-le-thomas-kretzschmar-quartet/?utm_source=rss&utm_medium=rss&utm_campaign=saint-elix-le-chateau-clarijazz-accueille-le-thomas-kretzschmar-quartet",
+              "date": "2026-09-27T06:48:13.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "CC Coeur de Garonne - Petite République.com",
+          "count": 10,
+          "valid": 10,
+          "h24": 4,
+          "newest": "2026-09-27T07:09:14.000Z",
+          "sample": [
+            {
+              "title": "Cazères : un giratoire va être créé sur la RD 6, la circulation perturbée jusqu’au 6 novembre",
+              "url": "https://www.petiterepublique.com/2026/09/26/cazeres-un-giratoire-va-etre-cree-sur-la-rd-6-la-circulation-perturbee-jusquau-6-novembre/?utm_source=rss&utm_medium=rss&utm_campaign=cazeres-un-giratoire-va-etre-cree-sur-la-rd-6-la-circulation-perturbee-jusquau-6-novembre",
+              "date": "2026-09-26T07:05:45.000Z"
+            },
+            {
+              "title": "Boussens : YakaDanser invite à découvrir la Bachata",
+              "url": "https://www.petiterepublique.com/2026/09/27/boussens-yakadanser-invite-a-decouvrir-la-bachata/?utm_source=rss&utm_medium=rss&utm_campaign=boussens-yakadanser-invite-a-decouvrir-la-bachata",
+              "date": "2026-09-27T07:09:14.000Z"
+            },
+            {
+              "title": "Saint-Elix-le-Château : Clarijazz accueille le « Thomas Kretzschmar Quartet »",
+              "url": "https://www.petiterepublique.com/2026/09/27/saint-elix-le-chateau-clarijazz-accueille-le-thomas-kretzschmar-quartet/?utm_source=rss&utm_medium=rss&utm_campaign=saint-elix-le-chateau-clarijazz-accueille-le-thomas-kretzschmar-quartet",
+              "date": "2026-09-27T06:48:13.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "petite-republique-comminges",
+      "media": "Petite République",
+      "name": "Petite République — Cœur et Coteaux Comminges",
+      "page": "https://www.petiterepublique.com/actualites/communautes-de-communes/cc-coeur-et-coteaux-du-comminges/",
+      "zone": "comminges",
+      "locality": "Cœur et Coteaux Comminges",
+      "feed_url": "https://www.petiterepublique.com/actualites/communautes-de-communes/cc-coeur-et-coteaux-du-comminges/feed/",
+      "reads": [
+        {
+          "status": 200,
+          "title": "CC Coeur et Coteaux du Comminges - Petite République.com",
+          "count": 10,
+          "valid": 10,
+          "h24": 3,
+          "newest": "2026-09-27T08:05:08.000Z",
+          "sample": [
+            {
+              "title": "Pénurie d’AESH : le cri d’alarme du collège Charles Suran à Boulogne sur Gesse",
+              "url": "https://www.petiterepublique.com/2026/09/24/penurie-daesh-le-cri-dalarme-du-college-charles-suran-a-boulogne-sur-gesse/?utm_source=rss&utm_medium=rss&utm_campaign=penurie-daesh-le-cri-dalarme-du-college-charles-suran-a-boulogne-sur-gesse",
+              "date": "2026-09-24T16:41:20.000Z"
+            },
+            {
+              "title": "Saint-Gaudens: cérémonie d’hommage aux harkis et aux formations supplétives de l’armée française",
+              "url": "https://www.petiterepublique.com/2026/09/27/saint-gaudens-ceremonie-dhommage-aux-harkis-et-aux-formations-suppletives-de-larmee-francaise/?utm_source=rss&utm_medium=rss&utm_campaign=saint-gaudens-ceremonie-dhommage-aux-harkis-et-aux-formations-suppletives-de-larmee-francaise",
+              "date": "2026-09-27T08:05:08.000Z"
+            },
+            {
+              "title": "Saint-Laurent sur Save : Le crucifix du cimetière sera restauré",
+              "url": "https://www.petiterepublique.com/2026/09/26/saint-laurent-sur-save-le-crucifix-du-cimetiere-sera-restaure/?utm_source=rss&utm_medium=rss&utm_campaign=saint-laurent-sur-save-le-crucifix-du-cimetiere-sera-restaure",
+              "date": "2026-09-26T12:20:47.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "CC Coeur et Coteaux du Comminges - Petite République.com",
+          "count": 10,
+          "valid": 10,
+          "h24": 3,
+          "newest": "2026-09-27T08:05:08.000Z",
+          "sample": [
+            {
+              "title": "Pénurie d’AESH : le cri d’alarme du collège Charles Suran à Boulogne sur Gesse",
+              "url": "https://www.petiterepublique.com/2026/09/24/penurie-daesh-le-cri-dalarme-du-college-charles-suran-a-boulogne-sur-gesse/?utm_source=rss&utm_medium=rss&utm_campaign=penurie-daesh-le-cri-dalarme-du-college-charles-suran-a-boulogne-sur-gesse",
+              "date": "2026-09-24T16:41:20.000Z"
+            },
+            {
+              "title": "Saint-Gaudens: cérémonie d’hommage aux harkis et aux formations supplétives de l’armée française",
+              "url": "https://www.petiterepublique.com/2026/09/27/saint-gaudens-ceremonie-dhommage-aux-harkis-et-aux-formations-suppletives-de-larmee-francaise/?utm_source=rss&utm_medium=rss&utm_campaign=saint-gaudens-ceremonie-dhommage-aux-harkis-et-aux-formations-suppletives-de-larmee-francaise",
+              "date": "2026-09-27T08:05:08.000Z"
+            },
+            {
+              "title": "Saint-Laurent sur Save : Le crucifix du cimetière sera restauré",
+              "url": "https://www.petiterepublique.com/2026/09/26/saint-laurent-sur-save-le-crucifix-du-cimetiere-sera-restaure/?utm_source=rss&utm_medium=rss&utm_campaign=saint-laurent-sur-save-le-crucifix-du-cimetiere-sera-restaure",
+              "date": "2026-09-26T12:20:47.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "petite-republique-pyrenees",
+      "media": "Petite République",
+      "name": "Petite République — Pyrénées Haut Garonnaises",
+      "page": "https://www.petiterepublique.com/actualites/communautes-de-communes/cc-pyrenees-haut-garonnaises/",
+      "zone": "luchonnais",
+      "locality": "Pyrénées Haut Garonnaises",
+      "feed_url": "https://www.petiterepublique.com/actualites/communautes-de-communes/cc-pyrenees-haut-garonnaises/feed/",
+      "reads": [
+        {
+          "status": 200,
+          "title": "CC Pyrénées Haut Garonnaises - Petite République.com",
+          "count": 10,
+          "valid": 10,
+          "h24": 0,
+          "newest": "2026-09-25T09:16:36.000Z",
+          "sample": [
+            {
+              "title": "Luchon : Festival Audiovisuel au théatre du Casino",
+              "url": "https://www.petiterepublique.com/2026/09/21/luchon-festival-audiovisuel-au-theatre-du-casino/?utm_source=rss&utm_medium=rss&utm_campaign=luchon-festival-audiovisuel-au-theatre-du-casino",
+              "date": "2026-09-21T06:13:28.000Z"
+            },
+            {
+              "title": "Barbazan : Les virades de l’espoir avec le  casino",
+              "url": "https://www.petiterepublique.com/2026/09/25/barbazan-les-virades-de-lespoir-avec-le-casino/?utm_source=rss&utm_medium=rss&utm_campaign=barbazan-les-virades-de-lespoir-avec-le-casino",
+              "date": "2026-09-25T09:16:36.000Z"
+            },
+            {
+              "title": "Saint Gaudens : Le groupe pop-rock « Crippled Chicks » assurera l’animation musicale de la Sein Go Rose",
+              "url": "https://www.petiterepublique.com/2026/09/23/saint-gaudens-le-groupe-pop-rock-crippled-chicks-assurera-lanimation-musicale-de-la-sein-go-rose/?utm_source=rss&utm_medium=rss&utm_campaign=saint-gaudens-le-groupe-pop-rock-crippled-chicks-assurera-lanimation-musicale-de-la-sein-go-rose",
+              "date": "2026-09-23T16:36:01.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "CC Pyrénées Haut Garonnaises - Petite République.com",
+          "count": 10,
+          "valid": 10,
+          "h24": 0,
+          "newest": "2026-09-25T09:16:36.000Z",
+          "sample": [
+            {
+              "title": "Luchon : Festival Audiovisuel au théatre du Casino",
+              "url": "https://www.petiterepublique.com/2026/09/21/luchon-festival-audiovisuel-au-theatre-du-casino/?utm_source=rss&utm_medium=rss&utm_campaign=luchon-festival-audiovisuel-au-theatre-du-casino",
+              "date": "2026-09-21T06:13:28.000Z"
+            },
+            {
+              "title": "Barbazan : Les virades de l’espoir avec le  casino",
+              "url": "https://www.petiterepublique.com/2026/09/25/barbazan-les-virades-de-lespoir-avec-le-casino/?utm_source=rss&utm_medium=rss&utm_campaign=barbazan-les-virades-de-lespoir-avec-le-casino",
+              "date": "2026-09-25T09:16:36.000Z"
+            },
+            {
+              "title": "Saint Gaudens : Le groupe pop-rock « Crippled Chicks » assurera l’animation musicale de la Sein Go Rose",
+              "url": "https://www.petiterepublique.com/2026/09/23/saint-gaudens-le-groupe-pop-rock-crippled-chicks-assurera-lanimation-musicale-de-la-sein-go-rose/?utm_source=rss&utm_medium=rss&utm_campaign=saint-gaudens-le-groupe-pop-rock-crippled-chicks-assurera-lanimation-musicale-de-la-sein-go-rose",
+              "date": "2026-09-23T16:36:01.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "semaine-hautes-pyrenees",
+      "media": "La Semaine des Pyrénées",
+      "name": "La Semaine des Pyrénées — Hautes-Pyrénées",
+      "page": "https://www.lasemainedespyrenees.fr/category/hautes-pyrenees/",
+      "zone": "hautes_pyrenees",
+      "locality": "Hautes-Pyrénées",
+      "feed_url": "https://www.lasemainedespyrenees.fr/category/hautes-pyrenees/feed/",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Hautes-Pyrénées – La Semaine des Pyrénées : toute l’actu locale",
+          "count": 10,
+          "valid": 10,
+          "h24": 10,
+          "newest": "2026-09-27T04:45:00.000Z",
+          "sample": [
+            {
+              "title": "Hautes-Pyrénées – La visite du Pape Léon XIV à Lourdes",
+              "url": "https://www.lasemainedespyrenees.fr/direct/hautes-pyrenees-la-visite-du-pape-leon-xiv-a-lourdes/",
+              "date": "2026-09-27T04:45:00.000Z"
+            },
+            {
+              "title": "Hautes-Pyrénées – Les aides votées par le Conseil départemental le 25 septembre ",
+              "url": "https://www.lasemainedespyrenees.fr/hautes-pyrenees-les-aides-votees-par-le-conseil-departemental-le-25-septembre/",
+              "date": "2026-09-27T04:32:00.000Z"
+            },
+            {
+              "title": "Hautes-Pyrénées / Pyrénées-Atlantiques – Carburant, matériaux, activité : les artisans du bâtiment au bord de l’asphyxie",
+              "url": "https://www.lasemainedespyrenees.fr/hautes-pyrenees-pyrenees-atlantiques-carburant-materiaux-activite-les-artisans-du-batiment-au-bord-de-lasphyxie/",
+              "date": "2026-09-27T04:15:00.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Hautes-Pyrénées – La Semaine des Pyrénées : toute l’actu locale",
+          "count": 10,
+          "valid": 10,
+          "h24": 10,
+          "newest": "2026-09-27T04:45:00.000Z",
+          "sample": [
+            {
+              "title": "Hautes-Pyrénées – La visite du Pape Léon XIV à Lourdes",
+              "url": "https://www.lasemainedespyrenees.fr/direct/hautes-pyrenees-la-visite-du-pape-leon-xiv-a-lourdes/",
+              "date": "2026-09-27T04:45:00.000Z"
+            },
+            {
+              "title": "Hautes-Pyrénées – Les aides votées par le Conseil départemental le 25 septembre ",
+              "url": "https://www.lasemainedespyrenees.fr/hautes-pyrenees-les-aides-votees-par-le-conseil-departemental-le-25-septembre/",
+              "date": "2026-09-27T04:32:00.000Z"
+            },
+            {
+              "title": "Hautes-Pyrénées / Pyrénées-Atlantiques – Carburant, matériaux, activité : les artisans du bâtiment au bord de l’asphyxie",
+              "url": "https://www.lasemainedespyrenees.fr/hautes-pyrenees-pyrenees-atlantiques-carburant-materiaux-activite-les-artisans-du-batiment-au-bord-de-lasphyxie/",
+              "date": "2026-09-27T04:15:00.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "semaine-lannemezan",
+      "media": "La Semaine des Pyrénées",
+      "name": "La Semaine des Pyrénées — Lannemezan pays",
+      "page": "https://www.lasemainedespyrenees.fr/category/communes/lannemezan-pays/",
+      "zone": "nestes_lannemezan",
+      "locality": "Lannemezan pays",
+      "feed_url": "https://www.lasemainedespyrenees.fr/category/communes/lannemezan-pays/feed/",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Lannemezan pays – La Semaine des Pyrénées : toute l’actu locale",
+          "count": 10,
+          "valid": 10,
+          "h24": 0,
+          "newest": "2026-09-25T10:00:00.000Z",
+          "sample": [
+            {
+              "title": "Lannemezan – Les Nageurs du Plateau reprennent les entraînements : Inscrivez-vous !",
+              "url": "https://www.lasemainedespyrenees.fr/lannemezan-les-nageurs-du-plateau-reprennent-les-entrainements/",
+              "date": "2026-09-25T10:00:00.000Z"
+            },
+            {
+              "title": "Deux congrégations religieuses autorisées à vendre des biens dans les Hautes-Pyrénées",
+              "url": "https://www.lasemainedespyrenees.fr/deux-congregations-religieuses-autorisees-a-vendre-des-biens-dans-les-hautes-pyrenees/",
+              "date": "2026-09-25T04:33:00.000Z"
+            },
+            {
+              "title": "Nestier – Le Festival de la forêt veut ouvrir le débat au public : Rendez-vous ces 26 et 27 septembre",
+              "url": "https://www.lasemainedespyrenees.fr/le-festival-de-la-foret-veut-ouvrir-le-debat-au-public/",
+              "date": "2026-09-25T04:30:00.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Lannemezan pays – La Semaine des Pyrénées : toute l’actu locale",
+          "count": 10,
+          "valid": 10,
+          "h24": 0,
+          "newest": "2026-09-25T10:00:00.000Z",
+          "sample": [
+            {
+              "title": "Lannemezan – Les Nageurs du Plateau reprennent les entraînements : Inscrivez-vous !",
+              "url": "https://www.lasemainedespyrenees.fr/lannemezan-les-nageurs-du-plateau-reprennent-les-entrainements/",
+              "date": "2026-09-25T10:00:00.000Z"
+            },
+            {
+              "title": "Deux congrégations religieuses autorisées à vendre des biens dans les Hautes-Pyrénées",
+              "url": "https://www.lasemainedespyrenees.fr/deux-congregations-religieuses-autorisees-a-vendre-des-biens-dans-les-hautes-pyrenees/",
+              "date": "2026-09-25T04:33:00.000Z"
+            },
+            {
+              "title": "Nestier – Le Festival de la forêt veut ouvrir le débat au public : Rendez-vous ces 26 et 27 septembre",
+              "url": "https://www.lasemainedespyrenees.fr/le-festival-de-la-foret-veut-ouvrir-le-debat-au-public/",
+              "date": "2026-09-25T04:30:00.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "semaine-lourdes",
+      "media": "La Semaine des Pyrénées",
+      "name": "La Semaine des Pyrénées — Lourdes et Gaves",
+      "page": "https://www.lasemainedespyrenees.fr/category/communes/lourdes-et-gaves/",
+      "zone": "hautes_pyrenees",
+      "locality": "Lourdes et Gaves",
+      "feed_url": "https://www.lasemainedespyrenees.fr/category/communes/lourdes-et-gaves/feed/",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Lourdes et Gaves – La Semaine des Pyrénées : toute l’actu locale",
+          "count": 10,
+          "valid": 10,
+          "h24": 9,
+          "newest": "2026-09-27T04:45:00.000Z",
+          "sample": [
+            {
+              "title": "Hautes-Pyrénées – La visite du Pape Léon XIV à Lourdes",
+              "url": "https://www.lasemainedespyrenees.fr/direct/hautes-pyrenees-la-visite-du-pape-leon-xiv-a-lourdes/",
+              "date": "2026-09-27T04:45:00.000Z"
+            },
+            {
+              "title": "Lourdes – Le pape Léon XIV se recueille à la Grotte de Massabielle : les photos de cette première journée",
+              "url": "https://www.lasemainedespyrenees.fr/lourdes-le-pape-leon-xiv-se-recueille-a-la-grotte-de-massabielle-les-photos-de-cette-premiere-journee/",
+              "date": "2026-09-26T21:46:55.000Z"
+            },
+            {
+              "title": "Lourdes accueille le pape Léon XIV sur le pont qui porte désormais son nom",
+              "url": "https://www.lasemainedespyrenees.fr/lourdes-accueille-le-pape-leon-xiv-sur-le-pont-qui-porte-desormais-son-nom/",
+              "date": "2026-09-26T21:02:42.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Lourdes et Gaves – La Semaine des Pyrénées : toute l’actu locale",
+          "count": 10,
+          "valid": 10,
+          "h24": 9,
+          "newest": "2026-09-27T04:45:00.000Z",
+          "sample": [
+            {
+              "title": "Hautes-Pyrénées – La visite du Pape Léon XIV à Lourdes",
+              "url": "https://www.lasemainedespyrenees.fr/direct/hautes-pyrenees-la-visite-du-pape-leon-xiv-a-lourdes/",
+              "date": "2026-09-27T04:45:00.000Z"
+            },
+            {
+              "title": "Lourdes – Le pape Léon XIV se recueille à la Grotte de Massabielle : les photos de cette première journée",
+              "url": "https://www.lasemainedespyrenees.fr/lourdes-le-pape-leon-xiv-se-recueille-a-la-grotte-de-massabielle-les-photos-de-cette-premiere-journee/",
+              "date": "2026-09-26T21:46:55.000Z"
+            },
+            {
+              "title": "Lourdes accueille le pape Léon XIV sur le pont qui porte désormais son nom",
+              "url": "https://www.lasemainedespyrenees.fr/lourdes-accueille-le-pape-leon-xiv-sur-le-pont-qui-porte-desormais-son-nom/",
+              "date": "2026-09-26T21:02:42.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "slug": "semaine-tarbes",
+      "media": "La Semaine des Pyrénées",
+      "name": "La Semaine des Pyrénées — Tarbes agglo",
+      "page": "https://www.lasemainedespyrenees.fr/category/communes/tarbes-agglo/",
+      "zone": "hautes_pyrenees",
+      "locality": "Tarbes agglo",
+      "feed_url": "https://www.lasemainedespyrenees.fr/category/communes/tarbes-agglo/feed/",
+      "reads": [
+        {
+          "status": 200,
+          "title": "Tarbes agglo – La Semaine des Pyrénées : toute l’actu locale",
+          "count": 10,
+          "valid": 10,
+          "h24": 5,
+          "newest": "2026-09-27T04:32:00.000Z",
+          "sample": [
+            {
+              "title": "Hautes-Pyrénées – Les aides votées par le Conseil départemental le 25 septembre ",
+              "url": "https://www.lasemainedespyrenees.fr/hautes-pyrenees-les-aides-votees-par-le-conseil-departemental-le-25-septembre/",
+              "date": "2026-09-27T04:32:00.000Z"
+            },
+            {
+              "title": "Hautes-Pyrénées / Pyrénées-Atlantiques – Carburant, matériaux, activité : les artisans du bâtiment au bord de l’asphyxie",
+              "url": "https://www.lasemainedespyrenees.fr/hautes-pyrenees-pyrenees-atlantiques-carburant-materiaux-activite-les-artisans-du-batiment-au-bord-de-lasphyxie/",
+              "date": "2026-09-27T04:15:00.000Z"
+            },
+            {
+              "title": "Tarbes – Agression sexuelle sur mineure : En récidive, il prend huit ans de prison",
+              "url": "https://www.lasemainedespyrenees.fr/tarbes-agression-sexuelle-sur-mineure-en-recidive-il-prend-huit-ans-de-prison/",
+              "date": "2026-09-27T03:56:00.000Z"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "title": "Tarbes agglo – La Semaine des Pyrénées : toute l’actu locale",
+          "count": 10,
+          "valid": 10,
+          "h24": 5,
+          "newest": "2026-09-27T04:32:00.000Z",
+          "sample": [
+            {
+              "title": "Hautes-Pyrénées – Les aides votées par le Conseil départemental le 25 septembre ",
+              "url": "https://www.lasemainedespyrenees.fr/hautes-pyrenees-les-aides-votees-par-le-conseil-departemental-le-25-septembre/",
+              "date": "2026-09-27T04:32:00.000Z"
+            },
+            {
+              "title": "Hautes-Pyrénées / Pyrénées-Atlantiques – Carburant, matériaux, activité : les artisans du bâtiment au bord de l’asphyxie",
+              "url": "https://www.lasemainedespyrenees.fr/hautes-pyrenees-pyrenees-atlantiques-carburant-materiaux-activite-les-artisans-du-batiment-au-bord-de-lasphyxie/",
+              "date": "2026-09-27T04:15:00.000Z"
+            },
+            {
+              "title": "Tarbes – Agression sexuelle sur mineure : En récidive, il prend huit ans de prison",
+              "url": "https://www.lasemainedespyrenees.fr/tarbes-agression-sexuelle-sur-mineure-en-recidive-il-prend-huit-ans-de-prison/",
+              "date": "2026-09-27T03:56:00.000Z"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    }
+  ]
+}

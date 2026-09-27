@@ -3,6 +3,7 @@
 
 import Parser from 'rss-parser';
 import { createClient } from '@supabase/supabase-js';
+import { resolveParisienDate } from '../lib/parisien-date.js';
 
 const supabase = createClient(
     process.env.SUPABASE_URL,
@@ -285,6 +286,33 @@ export default async function handler(req, res) {
     const now = new Date();
     const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
+    // Enrichissement réservé aux nouveaux liens du Parisien, au plus 20 pages par passage.
+    const parisienItems = results.flatMap(result => result.status === 'fulfilled'
+        && result.value?.feed?.name === 'Le Parisien' ? result.value.feedData?.items || [] : [])
+        .filter(item => item.link && !parseItemPublicationDate(item) && !shouldFilterArticle(item.title, 'Le Parisien'));
+    const parisienDates = new Map();
+    let parisienPagesChecked = 0;
+    if (parisienItems.length) {
+        const urls = [...new Set(parisienItems.map(item => item.link))];
+        const lookups = [];
+        for (let offset = 0; offset < urls.length; offset += 25) {
+            lookups.push(await supabase.from('actu').select('url').in('url', urls.slice(offset, offset + 25)));
+        }
+        const lookupError = lookups.find(result => result.error)?.error;
+        const known = lookups.flatMap(result => result.data || []);
+        if (!lookupError) {
+            const knownUrls = new Set((known || []).map(row => row.url));
+            const pending = [...new Set(parisienItems.map(item => item.link))].filter(url => !knownUrls.has(url)).slice(0, 20);
+            for (let offset = 0; offset < pending.length; offset += 5) {
+                await Promise.all(pending.slice(offset, offset + 5).map(async url => {
+                    parisienPagesChecked++;
+                    const date = await resolveParisienDate(url);
+                    if (date && date <= now && date >= twentyFourHoursAgo) parisienDates.set(url, date);
+                }));
+            }
+        } else console.warn('[RSS] Le Parisien : enrichissement suspendu, lecture des URL existantes impossible.');
+    }
+
     for (const result of results) {
         if (result.status !== "fulfilled" || !result.value) {
             fluxError++;
@@ -306,7 +334,8 @@ export default async function handler(req, res) {
                 continue;
             }
 
-            const pubDate = parseItemPublicationDate(item);
+            const pubDate = parseItemPublicationDate(item)
+                || (feed.name === 'Le Parisien' ? parisienDates.get(item.link) : null);
             if (!pubDate || pubDate > now) {
                 invalidDateCount++;
                 invalidDatesBySource.set(
@@ -378,6 +407,8 @@ export default async function handler(req, res) {
         articles_inserted: insertedCount,
         articles_filtered: filteredCount,
         articles_rejected_invalid_date: invalidDateCount,
+        parisien_pages_checked: parisienPagesChecked,
+        parisien_dates_recovered: parisienDates.size,
         duration_seconds: duration
     });
 }

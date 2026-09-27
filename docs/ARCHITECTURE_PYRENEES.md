@@ -17,7 +17,7 @@ La modale « Sources actives » ne dépend plus des 50 cartes chargées. Elle ut
 | `hautes_pyrenees` | Hautes-Pyrénées | département 65 |
 | `haute_garonne_sud` | Haute-Garonne sud | sud du département 31 et Pyrénées haut-garonnaises |
 | `val_aran` | Val d’Aran | continuité transfrontalière utile |
-| `occitanie` | Occitanie | seulement lorsqu’un impact territorial est explicite |
+| `occitanie` | Occitanie | compatibilité des anciennes données ; aucun flux généraliste actif |
 
 Les anciens codes `core`, `functional_ring` et `cross_border` restent acceptés en base pour préserver les lignes historiques, mais les nouvelles collectes utilisent la taxonomie ci-dessus.
 
@@ -30,8 +30,8 @@ Registre public vérifié
         │                            │
         │                            ├── date réelle obligatoire
         │                            ├── fenêtre glissante de 24 h
-        │                            ├── filtrage selon la portée de la source
-        │                            ├── catégorie, zone et paywall
+        │                            ├── aucun filtrage géographique du contenu
+        │                            ├── catégorie, zone fixe du flux et paywall
         │                            ├── déduplication URL / titre proche
         │                            └── écriture et diagnostic par source
         │                                      │
@@ -41,6 +41,10 @@ Registre public vérifié
 ```
 
 Le registre JSON est la source versionnée. `regional_sources` en est le miroir opérationnel et conserve aussi les sources inactives. `regional_source_checks` contient les compteurs de diagnostic de chaque passage.
+
+Le périmètre est décidé lors de la sélection de la rubrique RSS. Tous ses items datés et H24 sont admissibles. La zone et la localité proviennent uniquement du registre, jamais du titre, résumé ou nom du média. Les anciennes colonnes de rejet territorial restent en base pour l'historique et ne sont plus alimentées.
+
+« Toutes les sources » présente le registre complet et les derniers contrôles publics, avec une lecture séparée du dernier passage ayant écrit un article. Une source sans item H24 peut être saine. Un contrôle datant de plus d'une heure est signalé comme ancien. La diversification Pyrénées conserve le premier article et ne réordonne que des cartes distantes de quinze minutes au maximum, dans un voisinage de huit cartes ; elle ne supprime aucun article.
 
 ## Statistiques publiques H24
 

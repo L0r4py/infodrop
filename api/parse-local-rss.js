@@ -5,7 +5,6 @@ import registry from '../public/config/sources-pyrenees.json' with { type: 'json
 import {
   canonicalizeUrl,
   categorizeArticle,
-  classifyTerritory,
   deduplicateArticles,
   isWithinRollingWindow,
 } from '../lib/local/territory.js';
@@ -93,7 +92,7 @@ function looksPaywalled(item = {}) {
     .some((term) => value.includes(term));
 }
 
-async function collectSource(source) {
+export async function collectSource(source) {
   const startedAt = Date.now();
   try {
     const feed = await fetchFeed(source);
@@ -102,7 +101,6 @@ async function collectSource(source) {
     const metrics = {
       items_fetched: items.length,
       items_in_24h: 0,
-      items_rejected_territory: 0,
       items_rejected_invalid_date: 0,
       items_duplicate: 0,
       items_written: 0,
@@ -131,12 +129,6 @@ async function collectSource(source) {
         source: source.name,
         tags: normalizeCategories(item.categories),
       };
-      const territory = classifyTerritory(candidate, source);
-      if (!territory.included) {
-        metrics.items_rejected_territory += 1;
-        continue;
-      }
-
       const canonicalUrl = canonicalizeUrl(item.link);
       const paywalled = looksPaywalled(item);
       const category = categorizeArticle(candidate);
@@ -149,8 +141,8 @@ async function collectSource(source) {
         heure: publishedAt.toISOString(),
         tags,
         edition_slug: 'pyrenees',
-        territory_zone: territory.zone,
-        locality: territory.locality,
+        territory_zone: source.default_zone,
+        locality: source.default_locality || null,
         category,
         source_kind: source.source_type,
         source_slug: source.slug,
@@ -184,7 +176,6 @@ async function collectSource(source) {
       metrics: {
         items_fetched: 0,
         items_in_24h: 0,
-        items_rejected_territory: 0,
         items_rejected_invalid_date: 0,
         items_duplicate: 0,
         items_written: 0,
@@ -206,7 +197,6 @@ function sourceRow(source) {
     scope: source.scope,
     default_zone: source.default_zone,
     default_locality: source.default_locality,
-    requires_keyword: source.requires_keyword,
     language: source.language,
     automation: source.automation,
     verification: source.verification,
@@ -221,16 +211,20 @@ async function persistArticles(supabase, articles) {
 
   const persistableArticles = articles.map(({ source_priority: _priority, ...article }) => article);
   const canonicalUrls = [...new Set(persistableArticles.map((article) => article.canonical_url))];
-  const [canonicalLookup, urlLookup] = await Promise.all([
-    supabase.from('actu').select('id,url,canonical_url,edition_slug').in('canonical_url', canonicalUrls),
-    supabase.from('actu').select('id,url,canonical_url,edition_slug').in('url', canonicalUrls),
-  ]);
-  if (canonicalLookup.error || urlLookup.error) {
-    return { error: canonicalLookup.error || urlLookup.error };
+  // Plusieurs rubriques peuvent fournir assez d'URL pour dépasser la taille d'une requête HTTP.
+  const lookups = [];
+  for (let offset = 0; offset < canonicalUrls.length; offset += 25) {
+    const urls = canonicalUrls.slice(offset, offset + 25);
+    lookups.push(...await Promise.all([
+      supabase.from('actu').select('id,url,canonical_url,edition_slug').in('canonical_url', urls),
+      supabase.from('actu').select('id,url,canonical_url,edition_slug').in('url', urls),
+    ]));
   }
+  const lookupError = lookups.find(result => result.error)?.error;
+  if (lookupError) return { error: lookupError };
 
   const existing = [...new Map(
-    [...(canonicalLookup.data || []), ...(urlLookup.data || [])].map((row) => [row.id, row]),
+    lookups.flatMap(result => result.data || []).map((row) => [row.id, row]),
   ).values()];
   const updates = [];
   const inserts = [];
@@ -279,17 +273,17 @@ export default async function handler(req, res) {
   if (!authorized(req)) {
     return res.status(401).json({ error: 'Non autorisé' });
   }
-  const selectedSlug = typeof req.query?.source === 'string' ? req.query.source : null;
+  const selectedSlugs = typeof req.query?.source === 'string' ? req.query.source.split(',').filter(Boolean) : [];
   const probeMode = req.query?.probe === '1' || req.query?.probe === 'true';
-  if (probeMode && !selectedSlug) {
+  if (probeMode && !selectedSlugs.length) {
     return res.status(400).json({ error: 'Le mode probe exige un paramètre source' });
   }
   const sources = registry.sources.filter((source) => (
     source.automation === 'rss'
     && (probeMode || source.active)
-    && (!selectedSlug || source.slug === selectedSlug)
+    && (!selectedSlugs.length || selectedSlugs.includes(source.slug))
   ));
-  if (selectedSlug && sources.length === 0) {
+  if (selectedSlugs.length && sources.length !== new Set(selectedSlugs).size) {
     return res.status(404).json({ error: 'Source RSS introuvable' });
   }
 
@@ -347,6 +341,9 @@ export default async function handler(req, res) {
   }
   results.forEach((result) => {
     result.metrics.items_written = articleWrite.written_by_source[result.source.slug] || 0;
+    result.metrics.last_qualified_item_at = articles
+      .filter(article => article.source_slug === result.source.slug)
+      .map(article => article.heure).sort().at(-1) || null;
   });
 
   const checkedAt = new Date().toISOString();
@@ -358,7 +355,6 @@ export default async function handler(req, res) {
     articles_seen: result.metrics.items_fetched,
     items_fetched: result.metrics.items_fetched,
     items_in_24h: result.metrics.items_in_24h,
-    items_rejected_territory: result.metrics.items_rejected_territory,
     items_rejected_invalid_date: result.metrics.items_rejected_invalid_date,
     items_duplicate: result.metrics.items_duplicate,
     items_written: result.metrics.items_written,

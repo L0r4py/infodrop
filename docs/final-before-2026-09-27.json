@@ -1,0 +1,1543 @@
+{
+  "checked_at": "2026-09-27T08:28:04.666Z",
+  "editions": {
+    "national": {
+      "stats": {
+        "active_tags": [
+          "alternatif",
+          "belgique",
+          "canada",
+          "Corse",
+          "crypto",
+          "culture",
+          "écologie",
+          "économie",
+          "europe",
+          "independant",
+          "international",
+          "militaire",
+          "national",
+          "opinion",
+          "outre-mer",
+          "people",
+          "politique",
+          "radio",
+          "regional",
+          "sciences",
+          "société",
+          "sport",
+          "tech",
+          "traduction",
+          "tv"
+        ],
+        "active_zones": [],
+        "total_sources": 54,
+        "total_articles": 1168,
+        "active_orientations": [
+          "centre",
+          "centre-droit",
+          "centre-gauche",
+          "droite",
+          "extrême-droite",
+          "extrême-gauche",
+          "gauche",
+          "neutre"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.leparisien.fr/international/israel/legislatives-en-israel-le-hamas-considere-quil-ny-aura-pas-de-changement-pour-les-palestiniens-quel-que-soit-le-gagnant-26-09-2026-DEXQ7OSGY5GP3EFKIQGZML4QOM.php",
+          "count": 107,
+          "source": "Le Parisien"
+        },
+        {
+          "url": "https://www.lequipe.fr/Tennis/Actualites/Kyrian-jacquet-poursuit-sa-route-a-l-atp-250-de-hangzhou-ou-il-disputera-une-premiere-demi-finale-sur-le-circuit/1721613#at_medium=RSS_feeds",
+          "count": 97,
+          "source": "L'Équipe"
+        },
+        {
+          "url": "https://www.ladepeche.fr/2026/09/27/a-seulement-20-ans-la-copilote-soraya-barreiro-decede-dans-lincendie-de-sa-voiture-apres-un-terrible-accident-lors-du-rallye-de-villa-de-llanes-13571150.php",
+          "count": 91,
+          "source": "La Depeche"
+        },
+        {
+          "url": "https://www.bfmtv.com/environnement/climat/un-signal-du-changement-climatique-comment-expliquer-la-longueur-de-cette-saison-des-feux-de-foret-en-france_AN-202609270114.html",
+          "count": 77,
+          "source": "BFMTV"
+        },
+        {
+          "url": "https://www.ouest-france.fr/sport/dopage/dopage-un-combattant-de-mma-ouzbek-positif-au-meldonium-troisieme-cas-revele-aux-jeux-asiatiques-8d7ff45a-ba41-11f1-bf2b-20ac402d7e60?utm_source=fluxpublicactu&utm_medium=fluxrss&utm_campaign=banquedecontenu",
+          "count": 62,
+          "source": "Ouest France"
+        },
+        {
+          "url": "https://www.cnews.fr/people/2026-09-27/johnny-depp-mange-des-plantes-decoratives-lors-dun-photocall-video-1925118",
+          "count": 49,
+          "source": "Cnews"
+        },
+        {
+          "url": "https://www.lefigaro.fr/international/madrid-des-manifestants-campent-sur-une-place-du-centre-ville-pour-soutenir-une-octogenaire-expulsee-de-chez-elle-20260927",
+          "count": 44,
+          "source": "Le Figaro"
+        },
+        {
+          "url": "https://www.liberation.fr/societe/religions/visite-du-pape-en-france-bain-de-foule-pelerins-malades-et-victimes-de-violences-sexuelles-au-programme-de-leon-xiv-20260927_JWITXWYHQ5BBRNCCJXWXT3XAXI/",
+          "count": 42,
+          "source": "Libération"
+        },
+        {
+          "url": "https://www.franceinfo.fr/monde/afrique/afrique-du-sud/deux-fusillades-dans-des-bars-du-cap-et-de-johannesburg-en-afrique-du-sud-font-27-morts-au-total_8211866.html#xtor=RSS-3-[lestitres]",
+          "count": 41,
+          "source": "France Info"
+        },
+        {
+          "url": "https://www.radiofrance.fr/franceinter/podcasts/recto-verso/verso-invite-3-du-dimanche-27-septembre-2026-7424767",
+          "count": 41,
+          "source": "France Inter"
+        },
+        {
+          "url": "https://www.lemonde.fr/international/article/2026/09/27/fusillades-en-afrique-du-sud-au-moins-27-morts-dans-deux-bars-au-cap-et-a-johannesburg_6783964_3210.html",
+          "count": 35,
+          "source": "Le Monde"
+        },
+        {
+          "url": "https://www.sudouest.fr/international/afrique/afrique-du-sud-deux-fusillades-distinctes-font-au-moins-27-morts-au-cap-et-a-johannesburg-dans-la-nuit-de-samedi-a-dimanche-30801449.php",
+          "count": 33,
+          "source": "Sud Ouest"
+        },
+        {
+          "url": "https://www.larepubliquedespyrenees.fr/faits-divers/incendie/face-aux-megafeux-les-pompiers-au-defi-de-garder-un-coup-d-avance-30801536.php",
+          "count": 27,
+          "source": "La Republique des Pyrenees"
+        },
+        {
+          "url": "https://reseauinternational.net/pourquoi-la-silicon-valley-chinoise-naura-pas-besoin-de-diplomes-americains/",
+          "count": 27,
+          "source": "Réseau International"
+        },
+        {
+          "url": "https://www.radiofrance.fr/franceculture/podcasts/divers-aspects-de-la-pensee-contemporaine/union-rationaliste-a-quoi-bon-des-poetes-en-temps-de-detresse-hoelderlin-4011215",
+          "count": 25,
+          "source": "France Culture"
+        },
+        {
+          "url": "https://www.nouvelobs.com/monde/20260927.OBS118640/nous-n-avons-jamais-renonce-a-nos-droits-l-iran-maintient-ses-conditions-pour-rouvrir-le-detroit-d-ormuz.html",
+          "count": 25,
+          "source": "L'Obs"
+        },
+        {
+          "url": "https://www.ledevoir.com/politique/canada/1012304/ministre-affaires-etrangere-plaide-autonomie-strategique-devant-onu",
+          "count": 22,
+          "source": "Le Devoir"
+        },
+        {
+          "url": "https://www.rtbf.be/article/primes-a-la-renovation-en-wallonie-contrats-d-energie-dentiste-tout-ce-qui-change-le-1er-octobre-11791175",
+          "count": 22,
+          "source": "RTBF"
+        },
+        {
+          "url": "https://ici.radio-canada.ca/sports/2287706/samuel-montembeault-repartir-zero-canadien-montreal-senateurs",
+          "count": 20,
+          "source": "Radio-Canada"
+        },
+        {
+          "url": "https://www.courrierinternational.com/article/sacres-francais-la-bataille-contre-les-barbares-du-mont-blanc_274256",
+          "count": 19,
+          "source": "Courrier International"
+        },
+        {
+          "url": "https://rmc.bfmtv.com/actualites/police-justice/violences-sexuelles-et-sexistes_DN-202212220404.html",
+          "count": 19,
+          "source": "RMC"
+        },
+        {
+          "url": "https://www.journaldugeek.com/dossier/thanos-killmonger-loki-hela-avant-avengers-doomsday-on-a-classe-les-meilleurs-mechants-du-mcu/",
+          "count": 16,
+          "source": "Journal du Geek"
+        },
+        {
+          "url": "https://www.lasemainedespyrenees.fr/payolle-de-campan-a-versailles-le-marbre-une-ressource-patrimoniale-precieuse/",
+          "count": 16,
+          "source": "La Semaine des Pyrénées"
+        },
+        {
+          "url": "https://www.legossip.net/prince-harry-promesse-faite-premier-geste-meghan-retour-sol,626237.html",
+          "count": 16,
+          "source": "Le Gossip"
+        },
+        {
+          "url": "https://www.corsenetinfos.corsica/Ajaccio-Diana-De-Mari-regarder-le-paysage-autrement_a92269.html",
+          "count": 14,
+          "source": "Corse Net Infos"
+        },
+        {
+          "url": "https://www.capital.fr/votre-argent/paiement-par-cheque-cest-bientot-fini-la-chronique-de-jean-jacques-manceau-1530414",
+          "count": 13,
+          "source": "Capital.fr"
+        },
+        {
+          "url": "https://www.lexpress.fr/secret-defense/apres-les-ingerences-russes-la-menace-maga-le-quai-dorsay-sur-le-qui-vive-avant-2027-YNCBFVTSQFAQHJLMKSLH3D3YTM/",
+          "count": 12,
+          "source": "L’Express"
+        },
+        {
+          "url": "https://lemediaen442.fr/menace-russe-penuries-retraite-a-64-ans-macron-passe-lepreuve-de-kaamelott/",
+          "count": 12,
+          "source": "Le Média en 4-4-2"
+        },
+        {
+          "url": "https://www.journaldemontreal.com/2026/12/31/une-table-froide-a-21-c-chez-joes-panini",
+          "count": 11,
+          "source": "Journal de Montréal"
+        },
+        {
+          "url": "https://www.lapresse.ca/actualites/education/2026-09-27/college-des-hauts-sommets/cocon-pour-eleves-en-difficulte-cherche-stabilite.php?utm_source=rss&utm_medium=fil&utm_campaign=actualites",
+          "count": 11,
+          "source": "La Presse"
+        },
+        {
+          "url": "https://www.numerama.com/pop-culture/2340925-the-witcher-3-perd-son-charme-les-avengers-perdent-leur-interet-et-george-lucas-perd-patience-cest-le-recap-pop-culture-de-la-semaine.html",
+          "count": 11,
+          "source": "Numerama"
+        },
+        {
+          "url": "https://www.futura-sciences.com/planete/actualites/escales-amours-rivalites-ruses-vie-secrete-oiseaux-nos-jardins-digne-grand-spectacle-134147/#xtor%3DRSS-8",
+          "count": 10,
+          "source": "Futura Sciences"
+        },
+        {
+          "url": "https://www.public.fr/helene-segara-bohemienne-pas-du-tout-boheme-a-paris-son-250m2-en-plein-montmartre",
+          "count": 9,
+          "source": "Public"
+        },
+        {
+          "url": "https://www.valeursactuelles.com/culture/une-veillee-papale-bas-de-gamme-un-peu-puy-du-fou-un-magnifique-compliment-selon-le-createur-de-la-dame-de-pierre",
+          "count": 9,
+          "source": "Valeurs Actuelles"
+        },
+        {
+          "url": "https://fr.euronews.com/video/2026/09/27/linfo-du-jour-27-septembre-2026-matin",
+          "count": 8,
+          "source": "Euronews"
+        },
+        {
+          "url": "https://www.la-croix.com/culture/au-theatre-de-l-athenee-les-bonnes-de-jean-genet-entre-desir-et-detestation-20260926",
+          "count": 8,
+          "source": "La Croix"
+        },
+        {
+          "url": "https://rci.fm/martinique/infos/Risques-naturels/Montagne-Pelee-198-seismes-enregistres-cette-semaine-la-vitesse-dinflation",
+          "count": 8,
+          "source": "RCI.fm"
+        },
+        {
+          "url": "https://journalducoin.com/actualites/tether-etats-unis-saisissent-millions-intermediaire/",
+          "count": 7,
+          "source": "Journal du coin"
+        },
+        {
+          "url": "https://www.humanite.fr/en-debat/pape-leon-xiv/messe-du-pape-chez-les-fideles-une-meme-ferveur-pour-des-interpretations-differentes",
+          "count": 7,
+          "source": "L'Humanité"
+        },
+        {
+          "url": "https://outremers360.com/bassin-pacifique-appli/senatoriales-2026-lafaele-tukumuli-elu-senateur-de-wallis-et-futuna-au-premier-tour",
+          "count": 7,
+          "source": "Outremers360"
+        },
+        {
+          "url": "https://www.france24.com/fr/france/20260927-en-direct-l%C3%A9on-xiv-se-recueille-devant-l-enfant-qui-pleure-dans-le-sanctuaire-de-lourdes",
+          "count": 5,
+          "source": "France24"
+        },
+        {
+          "url": "https://geopolitique-profonde.com/actualite/israel-214-entreprises-dans-le-viseur-de-lonu-pour-leurs-liens-avec-les-colonies/",
+          "count": 5,
+          "source": "Géopolitique Profonde"
+        },
+        {
+          "url": "https://www.presse-citron.net/a-la-tv-ce-soir-3-films-a-regarder-ce-dimanche-138/",
+          "count": 5,
+          "source": "Presse-citron"
+        },
+        {
+          "url": "https://www.causeur.fr/ce-que-la-visite-de-leon-xiv-dit-du-catholicisme-francais-334373",
+          "count": 4,
+          "source": "Causeur"
+        },
+        {
+          "url": "https://legrandcontinent.eu/fr/2026/09/27/economie-russe-la-production-de-petrole-va-tomber-en-2026-a-son-niveau-le-plus-bas-depuis-2009/",
+          "count": 4,
+          "source": "Le Grand Continent"
+        },
+        {
+          "url": "https://www.opex360.com/2026/09/26/la-marine-indienne-envisage-de-se-doter-dune-flotte-davions-ravitailleurs/",
+          "count": 3,
+          "source": "OPEX360"
+        },
+        {
+          "url": "https://www.revolutionpermanente.fr/Armes-de-la-critique",
+          "count": 3,
+          "source": "Révolution Permanente"
+        },
+        {
+          "url": "https://cryptoast.fr/euroclear-banque-de-france-projet-pythagore-tokenisation-33-entreprises/",
+          "count": 2,
+          "source": "Cryptoast"
+        },
+        {
+          "url": "https://lesakerfrancophone.fr/alfred-de-vigny-et-le-declin-du-soldat",
+          "count": 2,
+          "source": "Le Saker Francophone"
+        },
+        {
+          "url": "https://www.blast-info.fr/articles/2026/cher-patrick-pouyanne-boxing-day-95-kDcvuJpVTJuSrfeDI1UFYg",
+          "count": 1,
+          "source": "Blast"
+        },
+        {
+          "url": "https://www.linfokwezi.fr/de-nouveaux-barrages-sur-la-route-a-vahibe-video/",
+          "count": 1,
+          "source": "L'Info Kwezi"
+        },
+        {
+          "url": "https://reporterre.net/Cabanes-yourtes-La-traque-aux-habitats-legers-s-intensifie-depuis-les-incendies",
+          "count": 1,
+          "source": "Reporterre"
+        },
+        {
+          "url": "https://www.sciencesetavenir.fr/nature-environnement/la-siberie-degage-de-plus-en-plus-de-methane_194953?xtor=RSS-15",
+          "count": 1,
+          "source": "Sciences et Avenir"
+        },
+        {
+          "url": "https://www.tahiti-infos.com/L-ancien-bagagiste-condamne-a-sept-ans-de-reclusion-pour-viol_a239538.html",
+          "count": 1,
+          "source": "Tahiti Infos"
+        }
+      ]
+    },
+    "pyrenees": {
+      "stats": {
+        "active_tags": [
+          "Environnement",
+          "local",
+          "Mobilité",
+          "Montagne",
+          "pyrenees",
+          "Sport",
+          "Vie locale"
+        ],
+        "active_zones": [
+          "comminges",
+          "hautes_pyrenees"
+        ],
+        "total_sources": 9,
+        "total_articles": 69,
+        "active_orientations": []
+      },
+      "sources": [
+        {
+          "url": "https://www.nrpyrenees.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-guilenne-a-fait-des-milliers-de-kilometres-pour-venir-voir-le-souverain-pontife-13570181.php",
+          "count": 18,
+          "source": "La Nouvelle République des Pyrénées"
+        },
+        {
+          "url": "https://www.ladepeche.fr/2026/09/27/direct-le-pape-leon-xiv-a-lourdes-une-rencontre-avec-des-victimes-dabus-sexuels-commis-au-sein-de-leglise-catholique-prevue-ce-dimanche-13571132.php#infodrop-pyrenees",
+          "count": 16,
+          "source": "La Dépêche"
+        },
+        {
+          "url": "https://www.lasemainedespyrenees.fr/hautes-pyrenees-les-aides-votees-par-le-conseil-departemental-le-25-septembre",
+          "count": 14,
+          "source": "La Semaine des Pyrénées"
+        },
+        {
+          "url": "https://france3-regions.franceinfo.fr/occitanie/hautes-pyrenees/tarbes/direct-visite-du-pape-a-lourdes-vivez-la-priere-a-la-grotte-des-apparitions-de-massabielle-a-partir-de-19h40-3420776.html",
+          "count": 7,
+          "source": "France 3 Hautes-Pyrénées"
+        },
+        {
+          "url": "https://www.ici.fr/ile-de-france/paris-75/paris/visite-du-pape-en-france-leon-xiv-poursuit-sa-visite-a-paris-ce-samedi-avec-une-messe-place-de-la-concorde-6340683?at_locale=15",
+          "count": 5,
+          "source": "ICI Béarn Bigorre"
+        },
+        {
+          "url": "https://www.petiterepublique.com/2026/09/26/saint-laurent-sur-save-le-crucifix-du-cimetiere-sera-restaure",
+          "count": 3,
+          "source": "Petite République"
+        },
+        {
+          "url": "https://www.sudline-media.fr/post/comminges-projet-chateau-carrieres-patrimoine",
+          "count": 3,
+          "source": "Sudline"
+        },
+        {
+          "url": "https://www.ici.fr/emissions/l-info-d-ici-ici-occitanie/pape-a-lourdes-150-000-catholiques-attendus-sur-la-prairie-du-sanctuaire-pour-la-messe-de-leon-xiv-1991383?at_locale=92",
+          "count": 2,
+          "source": "ICI Occitanie"
+        },
+        {
+          "url": "https://www.bigorre.org/meteo/2973385/fr",
+          "count": 1,
+          "source": "Bigorre.org"
+        }
+      ],
+      "zones": {
+        "hautes_pyrenees": 64,
+        "comminges": 5
+      },
+      "articles": [
+        {
+          "id": "3e67e431-1774-47d7-9e83-67bb01a2818f",
+          "source": "Bigorre.org",
+          "source_slug": "bigorre-org",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T06:29:45+00:00",
+          "url": "https://www.bigorre.org/meteo/2973385/fr"
+        },
+        {
+          "id": "a9605707-e5bf-474a-a1a5-3a4facbea231",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T06:19:34+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-guilenne-a-fait-des-milliers-de-kilometres-pour-venir-voir-le-souverain-pontife-13570181.php"
+        },
+        {
+          "id": "05fe4264-42d9-49a3-8aaa-d8fcb33cdb0c",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T06:08:09+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/27/visite-du-pape-leon-xiv-a-lourdes-je-ne-pensais-jamais-voir-un-pape-americain-ici-ces-trois-fideles-ont-traverse-latlantique-jusquau-sanctuaire-13571125.php"
+        },
+        {
+          "id": "71258d2f-4404-4780-85c7-4b5972b3c89b",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T05:56:57+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/27/direct-le-pape-leon-xiv-a-lourdes-une-rencontre-avec-des-victimes-dabus-sexuels-commis-au-sein-de-leglise-catholique-prevue-ce-dimanche-13571132.php#infodrop-pyrenees"
+        },
+        {
+          "id": "f2695c75-d6b7-4e15-bdbc-e3ace573ef16",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T05:34:04+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/reportage-visite-du-pape-leon-xiv-a-lourdes-cest-important-daider-devenu-tetraplegique-a-lage-de-17-ans-mathias-dantin-accompagne-les-pelerins-pendant-13570365.php"
+        },
+        {
+          "id": "07b6f3c5-417b-4899-842c-1daf54ac5e84",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T05:34:04+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/reportage-visite-du-pape-leon-xiv-a-lourdes-cest-important-daider-devenu-tetraplegique-a-lage-de-17-ans-mathias-dantin-accompagne-les-pelerins-pendant-13570365.php#infodrop-pyrenees"
+        },
+        {
+          "id": "b9e4e6f5-a66c-43fb-874c-d412b8f25866",
+          "source": "ICI Occitanie",
+          "source_slug": "ici-occitanie",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T05:32:30+00:00",
+          "url": "https://www.ici.fr/emissions/l-info-d-ici-ici-occitanie/pape-a-lourdes-150-000-catholiques-attendus-sur-la-prairie-du-sanctuaire-pour-la-messe-de-leon-xiv-1991383?at_locale=92"
+        },
+        {
+          "id": "fd97eaf0-ce0e-404f-887d-ea753bccc189",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T05:19:25+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-un-moment-de-recueillement-tres-fort-a-la-grotte-des-apparitions-pour-le-saint-pere-au-soutien-des-personnes-malades-et-13570442.php"
+        },
+        {
+          "id": "19cd83ec-9fe3-4ea7-90cc-db15b0e91aa5",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T04:47:02+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/27/visite-de-leon-xiv-a-lourdes-vehicule-blinde-plaque-unique-voici-tout-ce-quil-faut-savoir-sur-la-papamobile-13565457.php#infodrop-pyrenees"
+        },
+        {
+          "id": "8fbc4b03-77ba-4c13-ba04-0e03ea6ce2a8",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T04:40:02+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/27/leon-xiv-a-lourdes-a-la-grotte-de-massabielle-le-moment-le-plus-intime-de-son-voyage-en-france-13570607.php#infodrop-pyrenees"
+        },
+        {
+          "id": "12c8346f-751d-48d7-99b0-130c35393d40",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T04:32:00+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/hautes-pyrenees-les-aides-votees-par-le-conseil-departemental-le-25-septembre"
+        },
+        {
+          "id": "62286a25-160c-46a9-8046-825576069058",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T04:15:00+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/hautes-pyrenees-pyrenees-atlantiques-carburant-materiaux-activite-les-artisans-du-batiment-au-bord-de-lasphyxie"
+        },
+        {
+          "id": "7d823f11-749d-428f-8298-28fce2d2dc6b",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T03:56:00+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/tarbes-agression-sexuelle-sur-mineure-en-recidive-il-prend-huit-ans-de-prison"
+        },
+        {
+          "id": "9c80fbfa-fd9d-4789-86b2-836649c171bc",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T03:54:00+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/bagneres-de-bigorre-les-mains-dans-la-terre-omao-un-nouvel-atelier-de-ceramiste-en-ville"
+        },
+        {
+          "id": "c6be1fc1-c89b-47f4-ab0f-2849d2d3a142",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-27T03:00:00+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/au-cafe-ce-matin-les-infos-a-retenir-ce-dimanche-27-septembre"
+        },
+        {
+          "id": "765d152d-4f64-4bd1-bdd8-9e015d008929",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T21:46:55+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/lourdes-le-pape-leon-xiv-se-recueille-a-la-grotte-de-massabielle-les-photos-de-cette-premiere-journee"
+        },
+        {
+          "id": "ea123960-6527-41c8-a398-c3ff33b050ad",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T21:16:50+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/reportage-je-nai-pas-les-mots-cetait-si-emouvant-avec-les-dizaines-de-milliers-de-pelerins-qui-ont-prie-avec-le-pape-leon-xiv-a-lourdes-13570482.php"
+        },
+        {
+          "id": "60b7ee63-378d-4fee-ad89-5428ca4e01da",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T21:16:50+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/reportage-je-nai-pas-les-mots-cetait-si-emouvant-avec-les-dizaines-de-milliers-de-pelerins-qui-ont-prie-avec-le-pape-leon-xiv-a-lourdes-13570482.php#infodrop-pyrenees"
+        },
+        {
+          "id": "38799055-d5f7-4d8c-b709-a2d437bdf10f",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T21:14:41+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/visite-du-pape-leon-xiv-a-lourdes-le-saint-pere-a-atterri-sur-la-terre-de-ses-ancetres-attendu-par-des-enfants-et-des-personnes-agees-a-laeroport-de-13570596.php"
+        },
+        {
+          "id": "6d2d6394-d1e7-4a96-adce-e3566865152a",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T21:08:35+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/le-pape-leon-xiv-est-arrive-a-lourdes-sous-la-clameur-des-fideles-et-des-habitants-et-a-inaugure-le-pont-qui-porte-desormais-son-nom-13570600.php"
+        },
+        {
+          "id": "b99934f5-33cd-43d8-9860-047cb2a3f4f0",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T21:02:42+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/lourdes-accueille-le-pape-leon-xiv-sur-le-pont-qui-porte-desormais-son-nom"
+        },
+        {
+          "id": "3fbdacfa-e878-443a-b4ea-714f7b5faf0c",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T20:51:45+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/direct-le-pape-leon-xiv-a-lourdes-200-000-fideles-attendus-ce-samedi-le-souverain-pontife-arrive-en-fin-de-journee-13568962.php#infodrop-pyrenees"
+        },
+        {
+          "id": "2f736e13-3128-418c-8a37-63e0a55a089d",
+          "source": "France 3 Hautes-Pyrénées",
+          "source_slug": "france3-hautes-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T19:44:25+00:00",
+          "url": "https://france3-regions.franceinfo.fr/occitanie/hautes-pyrenees/tarbes/direct-visite-du-pape-a-lourdes-vivez-la-priere-a-la-grotte-des-apparitions-de-massabielle-a-partir-de-19h40-3420776.html"
+        },
+        {
+          "id": "38f3223d-8f27-4bef-baad-0023788905cb",
+          "source": "France 3 Hautes-Pyrénées",
+          "source_slug": "france3-hautes-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T19:25:41+00:00",
+          "url": "https://france3-regions.franceinfo.fr/occitanie/hautes-pyrenees/lourdes/pape-leon-xiv-a-lourdes-moment-de-silence-et-de-priere-a-la-grotte-au-soir-de-son-arrivee-3423818.html"
+        },
+        {
+          "id": "e4a9689b-ed94-4df1-809e-028f5960f837",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T19:14:32+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/visite-du-pape-leon-xiv-a-lourdes-comment-les-gendarmes-specialises-dans-les-transports-aeriens-ont-demine-le-convoi-du-saint-pere-a-laeroport-13570617.php"
+        },
+        {
+          "id": "e617f621-3533-49aa-90e6-760dc3d02dfd",
+          "source": "ICI Béarn Bigorre",
+          "source_slug": "ici-bearn-bigorre",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T19:05:17+00:00",
+          "url": "https://www.ici.fr/ile-de-france/paris-75/paris/visite-du-pape-en-france-leon-xiv-poursuit-sa-visite-a-paris-ce-samedi-avec-une-messe-place-de-la-concorde-6340683?at_locale=15"
+        },
+        {
+          "id": "ae420b8d-4b61-4ad8-85a7-1c95571cb132",
+          "source": "France 3 Hautes-Pyrénées",
+          "source_slug": "france3-hautes-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T17:28:55+00:00",
+          "url": "https://france3-regions.franceinfo.fr/occitanie/hautes-pyrenees/lourdes/ni-hotel-ni-palais-a-lourdes-leon-xiv-loge-chez-l-eveque-et-c-est-un-peu-serre-3423848.html"
+        },
+        {
+          "id": "ef3665ba-c1b0-4062-a42c-e846270022dd",
+          "source": "France 3 Hautes-Pyrénées",
+          "source_slug": "france3-hautes-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T17:21:05+00:00",
+          "url": "https://france3-regions.franceinfo.fr/occitanie/hautes-pyrenees/lourdes/le-pape-leon-xiv-est-arrive-a-lourdes-il-a-atterri-a-l-aeroport-de-tarbes-decouvrez-son-programme-3423596.html"
+        },
+        {
+          "id": "693f89fc-7704-4df3-a902-2eb3c8229c0f",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T16:54:41+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/incendie-spectaculaire-en-plein-centre-ville-de-tarbes-lindividu-interpelle-mis-en-examen-et-placement-en-detention-demande-13570414.php#infodrop-pyrenees"
+        },
+        {
+          "id": "8dd0551e-23ec-4934-ae99-ece1bef9a5ae",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T16:54:41+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/incendie-spectaculaire-en-plein-centre-ville-de-tarbes-lindividu-interpelle-mis-en-examen-et-placement-en-detention-demande-13570414.php"
+        },
+        {
+          "id": "3fab6f22-d31e-46e5-a79e-c22219d0206b",
+          "source": "ICI Béarn Bigorre",
+          "source_slug": "ici-bearn-bigorre",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T16:30:09+00:00",
+          "url": "https://www.ici.fr/infos/societe/pape-leon-xiv-en-france-paris-lourdes-metz-le-programme-complet-de-sa-visite-du-25-au-28-septembre-1407144?at_locale=15"
+        },
+        {
+          "id": "b40e00f4-7d74-4aca-a633-ab84e9d0e542",
+          "source": "Sudline",
+          "source_slug": "sudline",
+          "territory_zone": "comminges",
+          "heure": "2026-09-26T16:30:02+00:00",
+          "url": "https://www.sudline-media.fr/post/comminges-projet-chateau-carrieres-patrimoine"
+        },
+        {
+          "id": "22a3525b-e6ef-4f03-810d-2db18e989ca0",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T16:14:56+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/temoignage-le-pape-leon-xiv-a-lourdes-une-cinquantaine-de-haut-pyreneens-sera-tout-proche-du-pape-a-la-grotte-le-monde-a-besoin-de-saimer-13570436.php"
+        },
+        {
+          "id": "748bd608-e084-4268-b431-b45eeb815aca",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T16:14:56+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/temoignage-le-pape-leon-xiv-a-lourdes-une-cinquantaine-de-haut-pyreneens-sera-tout-proche-du-pape-a-la-grotte-le-monde-a-besoin-de-saimer-13570436.php#infodrop-pyrenees"
+        },
+        {
+          "id": "ae5c8ab3-5ec4-4094-806f-f7618084d0bb",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T16:01:07+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-les-pelerins-et-une-religieuse-se-rafraichissent-dans-les-eaux-du-gave-de-pau-avant-larrivee-du-pape-leon-xiv-13570347.php"
+        },
+        {
+          "id": "b846bcc2-8983-4021-8141-d6b8a62fd6b8",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T16:01:07+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-les-pelerins-et-une-religieuse-se-rafraichissent-dans-les-eaux-du-gave-de-pau-avant-larrivee-du-pape-leon-xiv-13570347.php#infodrop-pyrenees"
+        },
+        {
+          "id": "71c91ebe-b86a-45c1-a9d2-32375a559014",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T15:43:42+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-le-sanctuaire-se-prepare-a-accueillir-le-pape-ce-soir-a-la-grotte-de-massabielle-13570300.php"
+        },
+        {
+          "id": "753d00ac-754e-4a9e-b5a0-96bddf29a8a7",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T15:43:42+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-le-sanctuaire-se-prepare-a-accueillir-le-pape-ce-soir-a-la-grotte-de-massabielle-13570300.php#infodrop-pyrenees"
+        },
+        {
+          "id": "22f76bdc-4b1b-40cd-b931-738d0985674e",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T15:08:55+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-cest-du-travail-mais-jai-confiance-les-dispositifs-de-securite-sont-prets-a-quelques-heures-daccueillir-le-pape-et-les-13570182.php"
+        },
+        {
+          "id": "2a864970-69b5-488a-b5d5-74d5660bcd61",
+          "source": "ICI Béarn Bigorre",
+          "source_slug": "ici-bearn-bigorre",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T14:56:52+00:00",
+          "url": "https://www.ici.fr/occitanie/hautes-pyrenees-65/lourdes/suivez-la-venue-du-pape-a-lourdes-ce-dimanche-27-septembre-de-11h-a-13h-7215876?at_locale=15"
+        },
+        {
+          "id": "a4e83e20-0ff7-4578-94c1-7999fde90c6c",
+          "source": "ICI Béarn Bigorre",
+          "source_slug": "ici-bearn-bigorre",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T14:55:16+00:00",
+          "url": "https://www.ici.fr/occitanie/hautes-pyrenees-65/lourdes/circulation-zones-reglementees-horaires-ce-qu-il-faut-savoir-sur-la-visite-du-pape-leon-xiv-a-lourdes-2423980?at_locale=15"
+        },
+        {
+          "id": "119e3957-6e8a-4098-9c78-b60053eed95a",
+          "source": "France 3 Hautes-Pyrénées",
+          "source_slug": "france3-hautes-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T14:43:08+00:00",
+          "url": "https://france3-regions.franceinfo.fr/occitanie/hautes-pyrenees/lourdes/le-pape-en-france-comment-les-visites-de-jean-paul-ii-et-benoit-xvi-ont-fait-de-lourdes-un-sanctuaire-mondial-3419462.html"
+        },
+        {
+          "id": "ec8be6ec-f204-474a-a074-c34d12fa3d22",
+          "source": "France 3 Hautes-Pyrénées",
+          "source_slug": "france3-hautes-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T14:38:00+00:00",
+          "url": "https://france3-regions.franceinfo.fr/occitanie/hautes-pyrenees/tarbes/le-pape-leon-xiv-a-lourdes-programme-detaille-de-la-visite-de-la-messe-geante-a-la-procession-aux-flambeaux-3420146.html"
+        },
+        {
+          "id": "161610a8-6fcc-478a-b65f-f7e157621e65",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T14:33:59+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/reportage-cest-le-petit-miracle-de-ce-lieu-a-toulouse-le-petit-lourdes-prevoit-daccueillir-les-fideles-qui-ne-pourront-pas-se-deplacer-dans-les-hautes-13570061.php#infodrop-pyrenees"
+        },
+        {
+          "id": "00b17e45-90c4-4374-8d93-279f4c44c7c5",
+          "source": "Sudline",
+          "source_slug": "sudline",
+          "territory_zone": "comminges",
+          "heure": "2026-09-26T14:30:02+00:00",
+          "url": "https://www.sudline-media.fr/post/manque-eau-niveau-crise-comminges"
+        },
+        {
+          "id": "430301bf-5d8f-405b-a48a-37a7c1cfbf31",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T14:09:23+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-un-tres-beau-moment-qui-met-dans-lambiance-13570239.php"
+        },
+        {
+          "id": "26e6e195-0af5-420b-964c-75c0a1605ab0",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T14:09:23+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-un-tres-beau-moment-qui-met-dans-lambiance-13570239.php#infodrop-pyrenees"
+        },
+        {
+          "id": "671a5373-1e50-4e59-8a0a-31d2d518c60e",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T14:08:32+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-y-aura-t-il-assez-deau-de-lourdes-pour-les-centaines-de-milliers-de-pelerins-le-sanctuaire-rassurant-13570258.php#infodrop-pyrenees"
+        },
+        {
+          "id": "ddd820de-ead0-4c3a-a3ea-246d11d7d1f9",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T14:08:32+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-y-aura-t-il-assez-deau-de-lourdes-pour-les-centaines-de-milliers-de-pelerins-le-sanctuaire-rassurant-13570258.php"
+        },
+        {
+          "id": "dd8f3e6d-4c94-429a-a718-94385b808fd7",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T14:04:38+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-la-grotte-de-massabielle-en-cours-de-preparation-pour-laccueil-du-pape-nest-plus-accessible-aux-pelerins-13570275.php"
+        },
+        {
+          "id": "739e4560-0718-40ae-8a19-d0a1c0601363",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T14:04:38+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/le-pape-leon-xiv-a-lourdes-la-grotte-de-massabielle-en-cours-de-preparation-pour-laccueil-du-pape-nest-plus-accessible-aux-pelerins-13570275.php#infodrop-pyrenees"
+        },
+        {
+          "id": "255e8d43-7d1e-4ebd-966a-6c0c1ab3457e",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T13:38:40+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/lourdes-la-mdm-compagnie-fera-danser-le-parvis-du-rosaire-pour-la-venue-du-pape"
+        },
+        {
+          "id": "e84178f0-a330-47fb-9d98-9539f0c2a2a8",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T13:32:18+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/bernadette-de-lourdes-revient-a-lourdes-sous-le-regard-de-leon-xiv"
+        },
+        {
+          "id": "82d3889f-86f8-444b-96bb-22beee6489b5",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T13:20:00+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/lourdes-pourquoi-le-nouveau-pont-prend-le-nom-de-pont-leon-xiv"
+        },
+        {
+          "id": "03c1b09b-8841-456f-b331-dc99d60ce2f7",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T12:37:43+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/a-lourdes-tout-est-pret-pour-accueillir-leon-xiv"
+        },
+        {
+          "id": "d39fd23e-2a88-4e94-b010-d47422fe019e",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T12:30:00+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/tarbes-incendie-avenue-hoche-les-zones-dombre-au-coeur-de-lenquete"
+        },
+        {
+          "id": "8fc77f65-e412-4b66-9ed4-b084dabcfe3a",
+          "source": "ICI Béarn Bigorre",
+          "source_slug": "ici-bearn-bigorre",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T12:23:10+00:00",
+          "url": "https://www.ici.fr/nouvelle-aquitaine/pyrenees-atlantiques-64/bedous/200-personnes-rassemblees-devant-le-bureau-de-poste-de-bedous-pour-le-maintien-du-service-public-en-vallee-d-aspe-1908889?at_locale=15"
+        },
+        {
+          "id": "9726b540-6ede-4031-b4fd-bbfb57387498",
+          "source": "Petite République",
+          "source_slug": "petite-republique",
+          "territory_zone": "comminges",
+          "heure": "2026-09-26T12:20:47+00:00",
+          "url": "https://www.petiterepublique.com/2026/09/26/saint-laurent-sur-save-le-crucifix-du-cimetiere-sera-restaure"
+        },
+        {
+          "id": "33600dae-e414-4d84-bae7-7442b26adf8d",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T10:29:57+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/des-panneaux-publicitaires-voles-autour-dun-stade-de-rugby-des-hautes-pyrenees-le-club-a-depose-plainte-13570006.php#infodrop-pyrenees"
+        },
+        {
+          "id": "f20d9591-8fef-46f9-acfc-0f08f54e95f9",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T10:29:57+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/des-panneaux-publicitaires-voles-autour-dun-stade-de-rugby-des-hautes-pyrenees-le-club-a-depose-plainte-13570006.php"
+        },
+        {
+          "id": "a934d52f-1300-4d8e-956b-fee8e1698c98",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T10:23:00+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/leon-xiv-a-lourdes-le-programme-de-la-visite-du-pape"
+        },
+        {
+          "id": "76be290c-e571-45b9-977c-ab8886a08b4a",
+          "source": "La Semaine des Pyrénées",
+          "source_slug": "semaine-des-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T10:16:00+00:00",
+          "url": "https://www.lasemainedespyrenees.fr/odos-au-bouscarrou-la-releve-en-selle-ines-et-camille-championnes-de-france-dequitation"
+        },
+        {
+          "id": "6df911d6-6cbe-4df5-85de-0d38688d9beb",
+          "source": "France 3 Hautes-Pyrénées",
+          "source_slug": "france3-hautes-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T10:15:12+00:00",
+          "url": "https://france3-regions.franceinfo.fr/occitanie/hautes-pyrenees/tarbes/apparitions-source-miraculeuse-pelerinages-comment-la-grotte-de-massabielle-est-devenue-le-c-ur-du-sanctuaire-de-lourdes-visite-par-des-millions-de-fideles-3419009.html"
+        },
+        {
+          "id": "af211168-dc66-4497-912f-c773bfaffee7",
+          "source": "Sudline",
+          "source_slug": "sudline",
+          "territory_zone": "comminges",
+          "heure": "2026-09-26T10:00:06+00:00",
+          "url": "https://www.sudline-media.fr/post/comminges-village-retour-ambiance-autrefois"
+        },
+        {
+          "id": "1db77b30-f4e5-4c1c-ba67-c13e83a1a500",
+          "source": "Petite République",
+          "source_slug": "petite-republique",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T09:16:46+00:00",
+          "url": "https://www.petiterepublique.com/2026/09/26/galan-octobre-rose-pour-lutter-ensemble"
+        },
+        {
+          "id": "34d458d2-e6a6-4b9a-81db-93057171005e",
+          "source": "Petite République",
+          "source_slug": "petite-republique",
+          "territory_zone": "comminges",
+          "heure": "2026-09-26T08:41:10+00:00",
+          "url": "https://www.petiterepublique.com/2026/09/26/aulon-un-dimanche-avec-les-vieux-pistons-des-coteaux"
+        },
+        {
+          "id": "832721b7-5e6a-4d85-8b0e-389c082dfdc2",
+          "source": "La Nouvelle République des Pyrénées",
+          "source_slug": "nouvelle-republique-pyrenees",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T08:34:47+00:00",
+          "url": "https://www.nrpyrenees.fr/2026/09/26/basket-ball-n1-pourquoi-le-derby-occitan-de-nationale-1-tarbes-toulouse-a-ete-reporte-13570016.php"
+        },
+        {
+          "id": "0e3324c4-d4a4-4981-bf60-c90b45b97afd",
+          "source": "La Dépêche",
+          "source_slug": "la-depeche",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T08:34:47+00:00",
+          "url": "https://www.ladepeche.fr/2026/09/26/basket-ball-n1-pourquoi-le-derby-occitan-de-nationale-1-tarbes-toulouse-a-ete-reporte-13570016.php#infodrop-pyrenees"
+        },
+        {
+          "id": "ff8a520d-9e18-4c69-9d0c-cc4c6e384185",
+          "source": "ICI Occitanie",
+          "source_slug": "ici-occitanie",
+          "territory_zone": "hautes_pyrenees",
+          "heure": "2026-09-26T08:32:51+00:00",
+          "url": "https://www.ici.fr/occitanie/haute-garonne-31/toulouse/c-est-un-peu-notre-celine-dion-les-scouts-de-toulouse-attendent-le-pape-leon-xiv-a-lourdes-avec-impatience-8272250?at_locale=92"
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "slug": "nouvelle-republique-pyrenees",
+      "active": true,
+      "default_zone": "hautes_pyrenees",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 19,
+          "items_written": 19,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-27T06:19:34+00:00",
+          "last_qualified_item_at": "2026-09-27T06:19:34+00:00",
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "la-depeche",
+      "active": true,
+      "default_zone": "occitanie",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 84,
+          "items_written": 16,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-27T05:56:57+00:00",
+          "last_qualified_item_at": "2026-09-27T05:56:57+00:00",
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "conselh-generau-aran",
+      "active": true,
+      "default_zone": "val_aran",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-24T12:43:00+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "petite-republique",
+      "active": true,
+      "default_zone": "comminges",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 10,
+          "items_written": 5,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-27T06:12:18+00:00",
+          "last_qualified_item_at": "2026-09-26T12:20:47+00:00",
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "atmo-occitanie",
+      "active": false,
+      "default_zone": "occitanie",
+      "latest": [
+        {
+          "status": "error",
+          "checked_at": "2026-09-25T22:11:58.387+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": null,
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "ville-saint-gaudens",
+      "active": true,
+      "default_zone": "comminges",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-07-31T07:10:45+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "cc-cagire-garonne-salat",
+      "active": true,
+      "default_zone": "comminges",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-25T09:59:24+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "lio-occitanie",
+      "active": true,
+      "default_zone": "occitanie",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-22T08:29:21+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "cc-neste-barousse",
+      "active": true,
+      "default_zone": "barousse",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-22T12:22:32+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "departement-hautes-pyrenees",
+      "active": true,
+      "default_zone": "hautes_pyrenees",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-15T14:10:47+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "ville-luchon",
+      "active": true,
+      "default_zone": "luchonnais",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-10T15:14:49+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "cc-plateau-lannemezan",
+      "active": true,
+      "default_zone": "nestes_lannemezan",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-21T09:06:49+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "cc-pyrenees-haut-garonnaises",
+      "active": true,
+      "default_zone": "haute_garonne_sud",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-25T05:00:38+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "sdis31",
+      "active": true,
+      "default_zone": "haute_garonne_sud",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-16T13:50:35+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "parc-national-pyrenees",
+      "active": true,
+      "default_zone": "occitanie",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-17T07:48:09+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "semaine-des-pyrenees",
+      "active": true,
+      "default_zone": "hautes_pyrenees",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 10,
+          "items_written": 10,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-27T04:32:00+00:00",
+          "last_qualified_item_at": "2026-09-27T04:32:00+00:00",
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "dreal-occitanie",
+      "active": true,
+      "default_zone": "occitanie",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-16T11:16:14+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "ars-occitanie",
+      "active": true,
+      "default_zone": "occitanie",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-25T08:20:00+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "ch-comminges-pyrenees",
+      "active": true,
+      "default_zone": "comminges",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-23T14:04:33+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "gazette-comminges",
+      "active": true,
+      "default_zone": "comminges",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-25T15:35:18+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "sudline",
+      "active": true,
+      "default_zone": "comminges",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 4,
+          "items_written": 4,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-26T16:30:02+00:00",
+          "last_qualified_item_at": "2026-09-26T16:30:02+00:00",
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "petr-pays-des-nestes",
+      "active": true,
+      "default_zone": "nestes_lannemezan",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-25T14:02:09+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "petr-comminges-pyrenees",
+      "active": true,
+      "default_zone": "comminges",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-07-30T09:21:43+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "agriculture-pyrenees",
+      "active": true,
+      "default_zone": "occitanie",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-07T12:17:02+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "ici-occitanie",
+      "active": true,
+      "default_zone": "haute_garonne_sud",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 4,
+          "items_written": 2,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-27T05:32:30+00:00",
+          "last_qualified_item_at": "2026-09-27T05:32:30+00:00",
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "ot-neste-barousse",
+      "active": true,
+      "default_zone": "barousse",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-16T12:53:52+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "cen-occitanie",
+      "active": true,
+      "default_zone": "occitanie",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-10T12:12:12+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "radio-presence-comminges",
+      "active": true,
+      "default_zone": "comminges",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-23T22:00:00+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "bigorre-org",
+      "active": true,
+      "default_zone": "hautes_pyrenees",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 1,
+          "items_written": 1,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-27T06:29:45+00:00",
+          "last_qualified_item_at": "2026-09-27T06:29:45+00:00",
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "france3-hautes-pyrenees",
+      "active": true,
+      "default_zone": "hautes_pyrenees",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 7,
+          "items_written": 7,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-26T19:44:25+00:00",
+          "last_qualified_item_at": "2026-09-26T19:44:25+00:00",
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "france3-haute-garonne",
+      "active": true,
+      "default_zone": "haute_garonne_sud",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 4,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-26T16:58:41+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "radio-presence-local",
+      "active": true,
+      "default_zone": "barousse",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-23T22:00:00+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "petit-journal-hautes-pyrenees",
+      "active": true,
+      "default_zone": "hautes_pyrenees",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-21T02:54:40+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "ici-bearn-bigorre",
+      "active": true,
+      "default_zone": "hautes_pyrenees",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 6,
+          "items_written": 6,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-26T19:05:17+00:00",
+          "last_qualified_item_at": "2026-09-26T19:05:17+00:00",
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    },
+    {
+      "slug": "espace-presse-haute-garonne",
+      "active": true,
+      "default_zone": "haute_garonne_sud",
+      "latest": [
+        {
+          "status": "ok",
+          "checked_at": "2026-09-27T06:29:46.313+00:00",
+          "items_in_24h": 0,
+          "items_written": 0,
+          "items_duplicate": 0,
+          "last_feed_item_at": "2026-09-25T15:24:32+00:00",
+          "last_qualified_item_at": null,
+          "items_rejected_invalid_date": 0
+        }
+      ]
+    }
+  ]
+}

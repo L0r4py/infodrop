@@ -865,13 +865,16 @@
                         style="border-bottom:1px solid rgba(255,255,255,0.06)">
                         <div class="flex items-center gap-2">
                             <span style="color:#0A84FF">📰</span>
-                            <span class="text-sm font-bold text-white">Sources actives (<span
-                                    x-text="sourcesDetail.length"></span>)</span>
+                            <span class="text-sm font-bold text-white" x-text="sourcesView === 'all' && isLocalEdition ? 'Toutes les sources (' + sourceRegistry.length + ')' : 'Sources actives H24 (' + sourcesDetail.length + ')'"></span>
                         </div>
                         <button @click="showSourcesModal = false" class="p-1.5 rounded-lg transition hover:bg-white/5"
                             style="color:#555">✕</button>
                     </div>
-                    <div class="p-5 overflow-y-auto overflow-x-hidden flex-grow">
+                    <div x-show="isLocalEdition" class="flex gap-2 px-5 pt-3 text-xs">
+                        <button @click="sourcesView = 'active'" :class="sourcesView === 'active' ? 'text-white bg-white/10' : 'text-gray-400'" class="px-3 py-2 rounded-lg">Sources actives H24</button>
+                        <button @click="sourcesView = 'all'; loadSourceDiagnostics()" :class="sourcesView === 'all' ? 'text-white bg-white/10' : 'text-gray-400'" class="px-3 py-2 rounded-lg">Toutes les sources</button>
+                    </div>
+                    <div x-show="sourcesView === 'active' || !isLocalEdition" class="p-5 overflow-y-auto overflow-x-hidden flex-grow">
                         <div class="space-y-2">
                             <template x-for="([source, data], i) in sourcesDetail" :key="source">
                                 <div class="flex items-center gap-3 py-2 cursor-pointer transition hover:bg-white/5 px-2 -mx-2 rounded-lg"
@@ -904,6 +907,29 @@
                         <div x-show="sourcesDetail.length === 0" class="text-center py-8" style="color:#333">
                             <p class="text-sm">Aucune source pour le moment</p>
                         </div>
+                    </div>
+                    <div x-show="sourcesView === 'all' && isLocalEdition" class="p-5 overflow-y-auto overflow-x-hidden flex-grow space-y-4">
+                        <p class="text-xs text-gray-400">Un flux peut fonctionner sans publication récente. Les compteurs décrivent sa dernière lecture ; les doublons ne sont écrits qu’une fois.</p>
+                        <p x-show="sourcesLoading" class="text-xs text-gray-400">Chargement des contrôles…</p>
+                        <p x-show="sourcesError" class="text-xs text-red-400">Les contrôles sont momentanément indisponibles.</p>
+                        <template x-for="source in allSourcesDetail" :key="source.slug">
+                            <div class="border-t border-white/10 pt-3 text-xs">
+                                <a :href="source.homepage_url" target="_blank" rel="noopener noreferrer" class="font-bold text-[#FF2D55] break-words" x-text="source.name"></a>
+                                <span x-show="source.rubric" class="text-gray-400" x-text="' · ' + (source.rubric || '')"></span>
+                                <div class="mt-1 flex flex-wrap gap-2 text-gray-400"><span x-text="getFilterLabel(source.default_zone)"></span><span x-text="source.statusLabel"></span></div>
+                                <p x-show="!source.active" class="mt-1 text-gray-500" x-text="source.disabled_reason || 'Source conservée pour suivi'"></p>
+                                <dl class="mt-2 grid grid-cols-2 gap-x-2 gap-y-1 text-gray-400">
+                                    <dt>Dernier contrôle</dt><dd x-text="sourceDate(source.checked_at)"></dd>
+                                    <dt>Dernier item RSS</dt><dd x-text="sourceDate(source.last_feed_item_at)"></dd>
+                                    <dt>Dernier article écrit</dt><dd x-text="sourceDate(source.written.last_qualified_item_at)"></dd>
+                                    <dt>Dernière écriture</dt><dd x-text="sourceDate(source.written.checked_at)"></dd>
+                                    <dt>Items H24</dt><dd x-text="source.items_in_24h ?? '—'"></dd>
+                                    <dt>Dates invalides</dt><dd x-text="source.items_rejected_invalid_date ?? '—'"></dd>
+                                    <dt>Doublons</dt><dd x-text="source.items_duplicate ?? '—'"></dd>
+                                    <dt>Lignes écrites</dt><dd x-text="source.items_written ?? '—'"></dd>
+                                </dl>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>
