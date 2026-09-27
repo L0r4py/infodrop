@@ -1,6 +1,7 @@
 import packageMetadata from '../../package.json';
 import { ZONE_PRESENTATION } from '../../lib/local/territory.js';
 import { diversifyLocalArticles } from '../../lib/local/diversify.js';
+import { isAutomaticWeatherBulletin } from '../../lib/local/weather-bulletins.js';
 import { shortSourceName, shortZoneName } from '../../lib/local/labels.js';
 
 const DEBUG = false;
@@ -513,7 +514,8 @@ function infodropApp() {
         },
 
         distributeArticles(articles) {
-            if (this.isLocalEdition) return diversifyLocalArticles(articles);
+            // Masquer aussi les anciens bulletins jusqu'à leur expiration H24, sans suppression en base.
+            if (this.isLocalEdition) return diversifyLocalArticles(articles.filter(article => !isAutomaticWeatherBulletin(article.resume)));
             if (!articles || articles.length <= 1) return articles;
             const result = [...articles];
 

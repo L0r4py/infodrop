@@ -1,5 +1,6 @@
 import { timingSafeEqual } from 'node:crypto';
 import Parser from 'rss-parser';
+import { isAutomaticWeatherBulletin } from '../lib/local/weather-bulletins.js';
 import { createClient } from '@supabase/supabase-js';
 import registry from '../public/config/sources-pyrenees.json' with { type: 'json' };
 import {
@@ -121,6 +122,7 @@ export async function collectSource(source) {
       if (!isWithinRollingWindow(publishedAt, 24, now)) continue;
       metrics.items_in_24h += 1;
       if (!item.link) continue;
+      if (isAutomaticWeatherBulletin(cleanTitle(item.title || item.contentSnippet))) continue;
 
       const candidate = {
         title: cleanTitle(item.title || item.contentSnippet),
