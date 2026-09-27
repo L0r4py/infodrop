@@ -2,7 +2,7 @@ import packageMetadata from '../../package.json';
 import { ZONE_PRESENTATION, deduplicateSyndicatedArticles } from '../../lib/local/territory.js';
 import { diversifyLocalArticles } from '../../lib/local/diversify.js';
 import { isAutomaticWeatherBulletin } from '../../lib/local/weather-bulletins.js';
-import { shortSourceName, shortZoneName } from '../../lib/local/labels.js';
+import { shortSourceName, shortZoneName, displayArticleTitle } from '../../lib/local/labels.js';
 
 const DEBUG = false;
 const dlog = (...args) => DEBUG && console.log('[DEBUG]', ...args);
@@ -116,6 +116,9 @@ function infodropApp() {
         activeZones: [],
         releaseVersion: packageMetadata.version,
         shortSourceName,
+        displayTitle(title) {
+            return displayArticleTitle(title, this.isLocalEdition ? 'pyrenees' : 'national');
+        },
         shortZoneName,
 
         activeFilter: 'all',

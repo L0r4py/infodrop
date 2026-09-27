@@ -455,7 +455,7 @@
                                             <span class="text-[10px]" style="color:#444"
                                                 x-text="formatTime(news.heure)"></span>
                                         </div>
-                                        <p class="text-sm leading-relaxed" style="color:#999" x-text="news.resume"></p>
+                                        <p class="text-sm leading-relaxed" style="color:#999" x-text="displayTitle(news.resume)"></p>
                                     </a>
                                 </div>
                             </template>
@@ -503,7 +503,7 @@
                                             <span class="text-[10px]" style="color:#444"
                                                 x-text="formatTime(bm.heure)"></span>
                                         </div>
-                                        <p class="text-sm leading-relaxed" style="color:#999" x-text="bm.resume"></p>
+                                        <p class="text-sm leading-relaxed" style="color:#999" x-text="displayTitle(bm.resume)"></p>
                                     </a>
                                     <button @click="toggleBookmark(bm)" class="shrink-0 p-1 transition"
                                         style="color:#FF9F0A" title="Retirer des favoris">
@@ -575,7 +575,7 @@
                                     <span class="text-[11px]" style="color:#444" x-text="formatTime(news.heure)"></span>
                                 </div>
                                 <p class="text-sm font-medium leading-relaxed" style="color:#e0e0e0"
-                                    x-text="news.resume"></p>
+                                    x-text="displayTitle(news.resume)"></p>
                                 <template x-if="visibleTags(news).length">
                                     <div class="flex gap-1.5 mt-2">
                                         <template x-for="tag in visibleTags(news)" :key="tag">
