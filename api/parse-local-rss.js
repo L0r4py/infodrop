@@ -19,6 +19,29 @@ const FEED_HEADERS = {
   'User-Agent': 'Mozilla/5.0 (compatible; Infodrop/1.0; +https://infodrop.live/)',
 };
 
+const ITEM_DATE_FIELDS = ['isoDate', 'pubDate', 'date', 'published', 'updated', 'created', 'dc:date'];
+
+export function parseItemPublicationDate(item = {}) {
+  for (const field of ITEM_DATE_FIELDS) {
+    const value = item[field];
+    if (!value) continue;
+    const parsed = new Date(value);
+    if (Number.isFinite(parsed.getTime())) return parsed;
+  }
+  return null;
+}
+
+function normalizeCategories(categories = []) {
+  return (Array.isArray(categories) ? categories : [categories])
+    .map((category) => (
+      typeof category === 'string'
+        ? category
+        : category?._ || category?.name || category?.label || ''
+    ))
+    .map((category) => String(category).trim())
+    .filter(Boolean);
+}
+
 async function fetchFeed(source) {
   let lastError;
   for (let attempt = 0; attempt < 2; attempt += 1) {
@@ -74,31 +97,56 @@ async function collectSource(source) {
   const startedAt = Date.now();
   try {
     const feed = await fetchFeed(source);
-    const articles = [];
-    for (const item of (feed.items || []).slice(0, 40)) {
-      const publishedAt = item.isoDate || item.pubDate || new Date().toISOString();
-      if (!item.link || !isWithinRollingWindow(publishedAt)) continue;
+    const items = feed.items || [];
+    const qualifiedArticles = [];
+    const metrics = {
+      items_fetched: items.length,
+      items_in_24h: 0,
+      items_rejected_territory: 0,
+      items_rejected_invalid_date: 0,
+      items_duplicate: 0,
+      items_written: 0,
+      last_feed_item_at: null,
+      last_qualified_item_at: null,
+    };
+    const now = new Date();
+
+    for (const item of items) {
+      const publishedAt = parseItemPublicationDate(item);
+      if (!publishedAt || publishedAt.getTime() > now.getTime() + 5 * 60 * 1000) {
+        metrics.items_rejected_invalid_date += 1;
+        continue;
+      }
+      if (!metrics.last_feed_item_at || publishedAt > new Date(metrics.last_feed_item_at)) {
+        metrics.last_feed_item_at = publishedAt.toISOString();
+      }
+      if (!isWithinRollingWindow(publishedAt, 24, now)) continue;
+      metrics.items_in_24h += 1;
+      if (!item.link) continue;
 
       const candidate = {
         title: cleanTitle(item.title || item.contentSnippet),
         resume: cleanTitle(item.title || item.contentSnippet),
         url: item.link,
         source: source.name,
-        tags: item.categories || [],
+        tags: normalizeCategories(item.categories),
       };
       const territory = classifyTerritory(candidate, source);
-      if (!territory.included) continue;
+      if (!territory.included) {
+        metrics.items_rejected_territory += 1;
+        continue;
+      }
 
       const canonicalUrl = canonicalizeUrl(item.link);
       const paywalled = looksPaywalled(item);
       const category = categorizeArticle(candidate);
       const tags = [...new Set(['pyrenees', 'local', category, ...(paywalled ? ['Abonné'] : [])])];
-      articles.push({
+      qualifiedArticles.push({
         resume: candidate.resume,
         source: source.name,
         url: canonicalUrl,
         canonical_url: canonicalUrl,
-        heure: new Date(publishedAt).toISOString(),
+        heure: publishedAt.toISOString(),
         tags,
         edition_slug: 'pyrenees',
         territory_zone: territory.zone,
@@ -106,10 +154,17 @@ async function collectSource(source) {
         category,
         source_kind: source.source_type,
         source_slug: source.slug,
+        source_priority: Number(source.priority || 0),
         is_paywalled: paywalled,
         ingested_at: new Date().toISOString(),
       });
+      if (!metrics.last_qualified_item_at || publishedAt > new Date(metrics.last_qualified_item_at)) {
+        metrics.last_qualified_item_at = publishedAt.toISOString();
+      }
     }
+
+    const articles = deduplicateArticles(qualifiedArticles);
+    metrics.items_duplicate = qualifiedArticles.length - articles.length;
 
     return {
       source,
@@ -117,6 +172,7 @@ async function collectSource(source) {
       articles,
       duration_ms: Date.now() - startedAt,
       error_message: null,
+      metrics,
     };
   } catch (error) {
     return {
@@ -125,6 +181,16 @@ async function collectSource(source) {
       articles: [],
       duration_ms: Date.now() - startedAt,
       error_message: String(error.message || 'Erreur de lecture').slice(0, 500),
+      metrics: {
+        items_fetched: 0,
+        items_in_24h: 0,
+        items_rejected_territory: 0,
+        items_rejected_invalid_date: 0,
+        items_duplicate: 0,
+        items_written: 0,
+        last_feed_item_at: null,
+        last_qualified_item_at: null,
+      },
     };
   }
 }
@@ -151,9 +217,10 @@ function sourceRow(source) {
 }
 
 async function persistArticles(supabase, articles) {
-  if (articles.length === 0) return { inserted: 0, updated: 0, written: 0, error: null };
+  if (articles.length === 0) return { inserted: 0, updated: 0, written: 0, written_by_source: {}, error: null };
 
-  const canonicalUrls = [...new Set(articles.map((article) => article.canonical_url))];
+  const persistableArticles = articles.map(({ source_priority: _priority, ...article }) => article);
+  const canonicalUrls = [...new Set(persistableArticles.map((article) => article.canonical_url))];
   const [canonicalLookup, urlLookup] = await Promise.all([
     supabase.from('actu').select('id,url,canonical_url,edition_slug').in('canonical_url', canonicalUrls),
     supabase.from('actu').select('id,url,canonical_url,edition_slug').in('url', canonicalUrls),
@@ -168,7 +235,7 @@ async function persistArticles(supabase, articles) {
   const updates = [];
   const inserts = [];
 
-  for (const article of articles) {
+  for (const article of persistableArticles) {
     const matches = existing.filter((row) => (
       row.canonical_url === article.canonical_url || row.url === article.canonical_url
     ));
@@ -197,7 +264,11 @@ async function persistArticles(supabase, articles) {
     inserted = insertResult.data?.length || 0;
   }
   const updated = updateResults.reduce((count, result) => count + (result.data?.length || 0), 0);
-  return { inserted, updated, written: inserted + updated, error: null };
+  const writtenBySource = {};
+  [...updates.map(({ article }) => article), ...inserts].forEach((article) => {
+    writtenBySource[article.source_slug] = (writtenBySource[article.source_slug] || 0) + 1;
+  });
+  return { inserted, updated, written: inserted + updated, written_by_source: writtenBySource, error: null };
 }
 
 export default async function handler(req, res) {
@@ -208,6 +279,50 @@ export default async function handler(req, res) {
   if (!authorized(req)) {
     return res.status(401).json({ error: 'Non autorisé' });
   }
+  const selectedSlug = typeof req.query?.source === 'string' ? req.query.source : null;
+  const probeMode = req.query?.probe === '1' || req.query?.probe === 'true';
+  if (probeMode && !selectedSlug) {
+    return res.status(400).json({ error: 'Le mode probe exige un paramètre source' });
+  }
+  const sources = registry.sources.filter((source) => (
+    source.automation === 'rss'
+    && (probeMode || source.active)
+    && (!selectedSlug || source.slug === selectedSlug)
+  ));
+  if (selectedSlug && sources.length === 0) {
+    return res.status(404).json({ error: 'Source RSS introuvable' });
+  }
+
+  const startedAt = Date.now();
+  const results = await Promise.all(sources.map(collectSource));
+  const collectedArticles = results.flatMap((result) => result.articles);
+  const articles = deduplicateArticles(collectedArticles);
+  const keptArticles = new Set(articles);
+  results.forEach((result) => {
+    result.metrics.items_duplicate += result.articles.filter((article) => !keptArticles.has(article)).length;
+  });
+
+  if (probeMode) {
+    return res.status(200).json({
+      success: results.every((result) => result.status === 'ok'),
+      probe: true,
+      edition: 'pyrenees',
+      sources_checked: results.length,
+      sources_ok: results.filter((result) => result.status === 'ok').length,
+      sources_failed: results.filter((result) => result.status !== 'ok').length,
+      articles_qualified: articles.length,
+      duration_ms: Date.now() - startedAt,
+      results: results.map((result) => ({
+        source: result.source.name,
+        slug: result.source.slug,
+        status: result.status,
+        duration_ms: result.duration_ms,
+        ...result.metrics,
+        error_message: result.error_message,
+      })),
+    });
+  }
+
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
     return res.status(503).json({ error: 'Configuration Supabase manquante' });
   }
@@ -215,11 +330,6 @@ export default async function handler(req, res) {
   const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
-  const selectedSlug = typeof req.query?.source === 'string' ? req.query.source : null;
-  const sources = registry.sources.filter((source) => source.active && source.automation === 'rss' && (!selectedSlug || source.slug === selectedSlug));
-  if (selectedSlug && sources.length === 0) {
-    return res.status(404).json({ error: 'Source active introuvable' });
-  }
 
   // Synchroniser aussi les sources retirées du flux actif conserve leur historique
   // tout en empêchant qu'un ancien état `active = true` persiste en base.
@@ -231,13 +341,13 @@ export default async function handler(req, res) {
     });
   }
 
-  const startedAt = Date.now();
-  const results = await Promise.all(sources.map(collectSource));
-  const articles = deduplicateArticles(results.flatMap((result) => result.articles));
   const articleWrite = await persistArticles(supabase, articles);
   if (articleWrite.error) {
     return res.status(500).json({ error: 'Échec d’écriture des articles régionaux', details: articleWrite.error.message });
   }
+  results.forEach((result) => {
+    result.metrics.items_written = articleWrite.written_by_source[result.source.slug] || 0;
+  });
 
   const checkedAt = new Date().toISOString();
   const checks = results.map((result) => ({
@@ -245,7 +355,15 @@ export default async function handler(req, res) {
     checked_at: checkedAt,
     status: result.status,
     response_ms: result.duration_ms,
-    articles_seen: result.articles.length,
+    articles_seen: result.metrics.items_fetched,
+    items_fetched: result.metrics.items_fetched,
+    items_in_24h: result.metrics.items_in_24h,
+    items_rejected_territory: result.metrics.items_rejected_territory,
+    items_rejected_invalid_date: result.metrics.items_rejected_invalid_date,
+    items_duplicate: result.metrics.items_duplicate,
+    items_written: result.metrics.items_written,
+    last_feed_item_at: result.metrics.last_feed_item_at,
+    last_qualified_item_at: result.metrics.last_qualified_item_at,
     error_message: result.error_message,
   }));
   await supabase.from('regional_source_checks').insert(checks);
@@ -276,9 +394,11 @@ export default async function handler(req, res) {
     duration_ms: Date.now() - startedAt,
     results: results.map((result) => ({
       source: result.source.name,
+      slug: result.source.slug,
       status: result.status,
       articles: result.articles.length,
       duration_ms: result.duration_ms,
+      ...result.metrics,
     })),
   });
 }

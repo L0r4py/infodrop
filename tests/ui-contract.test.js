@@ -34,6 +34,19 @@ test('les filtres propres à Pyrénées ne polluent pas le flux national', () =>
   assert.match(app, /!LOCAL_ONLY_TAGS\.has\(tag\)/);
 });
 
+test('les sources actives proviennent des statistiques H24 et les zones ont une couleur stable', () => {
+  assert.match(app, /get_edition_source_stats/);
+  assert.match(app, /sourceStats/);
+  assert.match(app, /ZONE_PRESENTATION/);
+  assert.match(app, /this\.activeZones\.includes\(t\)/);
+  assert.match(index, /getZoneStyle\(news\)/);
+});
+
+test('la version publique utilise la version du package', () => {
+  assert.match(app, /packageMetadata\.version/);
+  assert.doesNotMatch(index, />v\d+\.\d+</);
+});
+
 test('les données personnelles anonymes restent séparées par édition sur l’appareil', () => {
   assert.match(app, /infodrop_\$\{kind\}_\$\{this\.edition\}_v1/);
   assert.match(app, /if \(this\.user\) await this\.saveReadArticleToDB/);

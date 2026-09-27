@@ -29,3 +29,25 @@ test('le collecteur local ne publie pas les catégories RSS brutes comme filtres
   assert.match(localCollector, /new Set\(\['pyrenees', 'local', category,/);
   assert.doesNotMatch(localCollector, /category, \.\.\.\(item\.categories/);
 });
+
+test('le collecteur local rejette les dates absentes et expose le diagnostic par source', () => {
+  assert.match(localCollector, /parseItemPublicationDate/);
+  assert.doesNotMatch(localCollector, /item\.isoDate\s*\|\|\s*item\.pubDate\s*\|\|\s*new Date/);
+  for (const metric of [
+    'items_fetched',
+    'items_in_24h',
+    'items_rejected_territory',
+    'items_rejected_invalid_date',
+    'items_duplicate',
+    'items_written',
+    'last_feed_item_at',
+    'last_qualified_item_at',
+  ]) {
+    assert.match(localCollector, new RegExp(metric), metric);
+  }
+});
+
+test('le mode probe vérifie une source inactive sans écrire en base', () => {
+  assert.match(localCollector, /probeMode/);
+  assert.match(localCollector, /probe:\s*true/);
+});

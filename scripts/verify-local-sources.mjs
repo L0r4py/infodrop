@@ -1,4 +1,6 @@
 import Parser from 'rss-parser';
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import registry from '../public/config/sources-pyrenees.json' with { type: 'json' };
 import { classifyTerritory, isWithinRollingWindow } from '../lib/local/territory.js';
 
@@ -180,11 +182,27 @@ const standardProbeCandidates = [
   slug, name, feed_url, default_zone, default_locality, requires_keyword,
 }));
 
-const sources = process.argv.includes('--discovered')
+const candidateFileIndex = process.argv.indexOf('--candidate-file');
+let fileCandidates = null;
+if (candidateFileIndex >= 0) {
+  const candidateFile = process.argv[candidateFileIndex + 1];
+  if (!candidateFile) throw new Error('Le chemin du registre candidat est requis après --candidate-file');
+  const parsed = JSON.parse(await readFile(resolve(candidateFile), 'utf8'));
+  fileCandidates = Array.isArray(parsed) ? parsed : parsed.sources;
+  if (!Array.isArray(fileCandidates)) throw new Error('Le registre candidat doit contenir un tableau sources');
+}
+
+let sources = fileCandidates || (process.argv.includes('--discovered')
   ? discoveredCandidates
   : process.argv.includes('--probes')
     ? standardProbeCandidates
-    : registry.sources.filter((source) => source.active && source.automation === 'rss');
+    : registry.sources.filter((source) => source.active && source.automation === 'rss'));
+const requestedSlugs = process.argv
+  .filter((argument) => argument.startsWith('--source='))
+  .map((argument) => argument.slice('--source='.length));
+if (requestedSlugs.length > 0) {
+  sources = sources.filter((source) => requestedSlugs.includes(source.slug));
+}
 const results = await Promise.all(sources.map(verifySource));
 const summary = {
   checked_at: new Date().toISOString(),

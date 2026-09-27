@@ -8,7 +8,7 @@ test('le registre public ne contient qu’un socle significatif de flux contrôl
   assert.ok(registry.sources.length >= 15, `seulement ${registry.sources.length} sources vérifiées`);
   const slugs = registry.sources.map((source) => source.slug);
   assert.equal(new Set(slugs).size, slugs.length);
-  assert.equal(registry.sources.filter((source) => source.active).length, 19);
+  assert.equal(registry.sources.filter((source) => source.active).length, 34);
 });
 
 test('les URL déclarées sont syntaxiquement valides', () => {
@@ -21,7 +21,11 @@ test('les URL déclarées sont syntaxiquement valides', () => {
 test('une source active correspond toujours à un flux vérifié', () => {
   for (const source of registry.sources.filter((candidate) => candidate.active)) {
     assert.equal(source.automation, 'rss', source.slug);
-    assert.match(source.verification, /^(two|three)-pass-content-verified$/, source.slug);
+    assert.match(
+      source.verification,
+      /^(?:(two|three)-pass-content-verified|two-pass-vercel-verified-\d{4}-\d{2}-\d{2})$/,
+      source.slug,
+    );
     assert.ok(source.feed_url, source.slug);
   }
 });
@@ -40,11 +44,20 @@ test('le registre n’introduit aucun classement politique', () => {
   }
 });
 
-test('les trois zones éditoriales sont couvertes', () => {
+test('les zones éditoriales du périmètre élargi sont couvertes', () => {
   const zones = new Set(registry.sources.map((source) => source.default_zone));
-  assert.ok(zones.has('core'));
-  assert.ok(zones.has('functional_ring'));
-  assert.ok(zones.has('cross_border'));
+  for (const required of [
+    'barousse',
+    'comminges',
+    'luchonnais',
+    'nestes_lannemezan',
+    'hautes_pyrenees',
+    'haute_garonne_sud',
+    'val_aran',
+    'occitanie',
+  ]) {
+    assert.ok(zones.has(required), required);
+  }
 });
 
 test('les sources structurantes demandées sont présentes', () => {

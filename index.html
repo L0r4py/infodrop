@@ -4,14 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="infodrop.live" />
-    <meta property="og:description" content="Agrégation multi-sources en temps réel." />
+    <meta name="description" content="Flux public H24 d’actualités nationales, internationales et pyrénéennes." />
+    <meta property="og:title" content="Infodrop · Actualités des dernières 24 heures" />
+    <meta property="og:description" content="Flux public H24 d’actualités nationales, internationales et pyrénéennes." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://infodrop.live/" />
     <meta property="og:image" content="https://infodrop.live/images/infodrop-share.png?v=2" />
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="infodrop.live">
-    <meta name="twitter:description" content="Agrégation multi-sources en temps réel.">
+    <meta name="twitter:title" content="Infodrop · Actualités des dernières 24 heures">
+    <meta name="twitter:description" content="Flux public H24 d’actualités nationales, internationales et pyrénéennes.">
     <meta name="twitter:image" content="https://infodrop.live/images/infodrop-share.png?v=2">
     <title>infodrop.live</title>
     <link rel="icon" type="image/png" href="images/infodrop-favicon.png">
@@ -364,7 +365,7 @@
 
                         <template x-for="tag in allOtherTags" :key="tag">
                             <button @click="toggleFilter(tag)" :disabled="!hasArticlesForTag(tag)" class="pill-filter"
-                                :class="activeFilter === tag ? 'active' : ''" x-text="tag">
+                                :class="activeFilter === tag ? 'active' : ''" x-text="getFilterLabel(tag)">
                             </button>
                         </template>
                     </div>
@@ -543,8 +544,8 @@
                                     </span>
                                     <span x-show="isLocalEdition && (news.locality || news.category)"
                                         class="orientation-tag"
-                                        style="color:#0A84FF; background:rgba(10,132,255,0.12); border:1px solid rgba(10,132,255,0.18)"
-                                        x-text="news.locality || news.category"></span>
+                                        :style="getZoneStyle(news)"
+                                        x-text="getZoneLabel(news)"></span>
                                     <span x-show="news.added_by" class="text-[10px] font-bold"
                                         style="color:#FF2D55">infodrop.live</span>
                                     <span x-show="!news.added_by"
@@ -729,7 +730,8 @@
                             <span class="text-base font-extrabold text-white">infodrop<span
                                     style="color:#FF2D55">.live</span></span>
                             <span class="text-[10px] px-2 py-0.5 rounded-full"
-                                style="background:rgba(255,45,85,0.15); color:#FF2D55">v5.0</span>
+                                style="background:rgba(255,45,85,0.15); color:#FF2D55"
+                                x-text="'v' + releaseVersion"></span>
                         </div>
                         <button @click="showAboutModal = false" class="p-1.5 rounded-lg transition hover:bg-white/5"
                             style="color:#555">✕</button>
@@ -745,11 +747,10 @@
                                 </svg>
                                 Le Projet
                             </h3>
-                            <p class="text-xs leading-relaxed" style="color:#888">
-                                infodrop.live est un lecteur d'actualités minimaliste qui regroupe les flux en temps
-                                réel.
-                                Notre objectif : vous aider à sortir de votre bulle de filtre et développer une vision
-                                équilibrée de l'actualité.
+                            <p class="text-xs leading-relaxed" style="color:#888"
+                                x-text="isLocalEdition
+                                    ? 'Infodrop Pyrénées est un flux public d’informations locales sur les dernières 24 heures. Il agrège des médias, collectivités et organismes du territoire, conserve la source d’origine et couvre la Barousse, le Comminges, le Luchonnais, les Nestes, les Hautes-Pyrénées, le sud de la Haute-Garonne, le Val d’Aran et l’Occitanie lorsqu’elle concerne directement cette zone.'
+                                    : 'Infodrop National rassemble en continu des actualités nationales et internationales issues de dizaines de médias. Les orientations éditoriales et les sources restent visibles pour faciliter une lecture diversifiée.'">
                             </p>
                         </div>
                         <div class="rounded-xl p-4"
@@ -768,10 +769,10 @@
                                 <div class="flex items-start gap-2">
                                     <span class="text-[10px] font-bold rounded px-1.5 py-0.5 shrink-0"
                                         style="background:rgba(255,45,85,0.15); color:#FF2D55">1</span>
-                                    <p class="text-xs leading-relaxed" style="color:#888"><b style="color:#ccc">Flux 24h
-                                            glissantes</b> — Les articles sont collectés automatiquement depuis des
-                                        dizaines de sources de presse française, toutes orientations confondues. Ils
-                                        sont supprimés après 24h.</p>
+                                    <p class="text-xs leading-relaxed" style="color:#888"><b style="color:#ccc">Deux flux
+                                            publics sur 24 h</b> — National/International et Pyrénées sont collectés
+                                        automatiquement. Aucun compte n’est nécessaire pour les consulter et les
+                                        articles expirés sont purgés après 24 heures.</p>
                                 </div>
                                 <div class="flex items-start gap-2">
                                     <span class="text-[10px] font-bold rounded px-1.5 py-0.5 shrink-0"

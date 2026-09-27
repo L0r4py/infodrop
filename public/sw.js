@@ -2,7 +2,7 @@
 // infodrop.live Service Worker — Offline-first strategy
 // ═══════════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'infodrop-v11-editions';
+const CACHE_NAME = 'infodrop-editions-20260927';
 const STATIC_ASSETS = [
     '/',
     '/index.html',

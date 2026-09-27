@@ -7,13 +7,14 @@ Infodrop conserve son édition nationale/internationale à la racine et ajoute u
 - le flux est public et ne dépend pas d’une session ;
 - les lectures, favoris et préférences sont conservés sur l’appareil avec `localStorage` ;
 - l’identification par email/magic link reste facultative et sert uniquement à synchroniser ces données entre appareils ;
-- l’édition Pyrénées est classée par thème et n’affiche pas d’étiquette politique ;
-- 19 flux locaux actifs ont réussi les contrôles locaux et deux collectes complètes depuis Vercel les 25 et 26 septembre 2026 ;
+- l’édition Pyrénées est classée par territoire et par thème, sans étiquette politique ;
+- le périmètre couvre la Barousse, le Comminges, le Luchonnais, les Nestes/Lannemezan, les Hautes-Pyrénées, le sud de la Haute-Garonne, le Val d’Aran et l’Occitanie lorsqu’une information concerne directement cette zone ;
+- chaque collecte locale distingue les items bruts, récents, rejetés par le territoire, invalides, dédupliqués et finalement écrits ;
 - déduplication des URL et suppression des paramètres de suivi ;
 - signalement des accès abonnés lorsqu’ils sont détectés ;
 - même fond, couleurs, typographie, cartes, header, proportions et comportement mobile que l’édition existante.
 
-La migration régionale additive est appliquée. `REGIONAL_SCHEMA_ENABLED=true` active les champs régionaux, les statistiques séparées par édition et la synchronisation multi-appareils sans modifier les tables historiques.
+`REGIONAL_SCHEMA_ENABLED=true` active les champs régionaux, les statistiques H24 séparées par édition et par source, ainsi que la synchronisation multi-appareils sans modifier les tables historiques.
 
 ## Histoire du projet préservée
 
@@ -73,4 +74,4 @@ Cette commande exécute les tests et la construction Vite. Le contrôle réel de
 
 ## Statut
 
-La version National + Pyrénées est en production sur `infodrop.live` depuis le 26 septembre 2026. La migration Supabase et sa fonction additive `get_edition_stats` sont appliquées, les 19 sources locales actives répondent, et le déploiement historique reste disponible pour un retour arrière. Les preuves de validation et les identifiants de restauration sont consignés dans [docs/RELEASE_2026-09-26.md](docs/RELEASE_2026-09-26.md).
+La version National + Pyrénées est en production sur `infodrop.live`. National et la purge sont planifiés par Cron-Job.org ; Pyrénées est planifié séparément par GitHub Actions. Le registre local est limité aux flux validés deux fois localement puis depuis Vercel, et le déploiement historique reste disponible pour un retour arrière. Les preuves de validation sont consignées dans les documents de release.

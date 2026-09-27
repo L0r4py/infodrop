@@ -7,6 +7,7 @@ import {
   classifyTerritory,
   deduplicateArticles,
   isWithinRollingWindow,
+  titleSimilarity,
 } from '../lib/local/territory.js';
 
 test('canonicalizeUrl retire les paramètres de suivi sans détruire les paramètres utiles', () => {
@@ -16,38 +17,73 @@ test('canonicalizeUrl retire les paramètres de suivi sans détruire les paramè
   );
 });
 
-test('le cœur du Parc est inclus sur mention territoriale explicite', () => {
+test('le Luchonnais est inclus sur mention territoriale explicite', () => {
   const result = classifyTerritory({ title: 'Réouverture de la route à Bagnères-de-Luchon' });
   assert.equal(result.included, true);
-  assert.equal(result.zone, 'core');
+  assert.equal(result.zone, 'luchonnais');
   assert.equal(result.locality, 'Luchonnais');
 });
 
-test('les pôles fonctionnels sont qualifiés séparément', () => {
+test('le Comminges est qualifié séparément', () => {
   const result = classifyTerritory({ title: 'Fibre Excellence : mobilisation à Saint-Gaudens' });
   assert.equal(result.included, true);
-  assert.equal(result.zone, 'functional_ring');
-  assert.equal(result.locality, 'Saint-Gaudens');
+  assert.equal(result.zone, 'comminges');
+  assert.equal(result.locality, 'Comminges');
 });
 
 test('le Val d’Aran est conservé comme continuité transfrontalière', () => {
   const result = classifyTerritory({ title: 'Travaux sur la route de Bossòst vers Vielha' });
   assert.equal(result.included, true);
-  assert.equal(result.zone, 'cross_border');
+  assert.equal(result.zone, 'val_aran');
 });
 
-test('une actualité tarbaise sans effet territorial est exclue', () => {
+test('une actualité tarbaise appartient aux Hautes-Pyrénées', () => {
   const result = classifyTerritory({ title: 'Nouvelle exposition au centre-ville de Tarbes' });
+  assert.equal(result.included, true);
+  assert.equal(result.zone, 'hautes_pyrenees');
+});
+
+test('une actualité régionale sans lien avec le périmètre reste exclue', () => {
+  const result = classifyTerritory(
+    { title: 'Nouvelle exposition au centre-ville de Montpellier' },
+    { scope: 'regional_strict', default_zone: 'occitanie', requires_keyword: true },
+  );
+  assert.equal(result.included, false);
+});
+
+test('un identifiant numérique 65 dans une URL ne suffit pas à qualifier un article', () => {
+  const result = classifyTerritory(
+    { title: 'Nouvelle exposition à Montpellier', url: 'https://example.test/actualites/65-exposition' },
+    { scope: 'regional_strict', default_zone: 'occitanie', requires_keyword: true },
+  );
   assert.equal(result.included, false);
 });
 
 test('une source strictement locale peut qualifier ses publications sans mot-clé', () => {
   const result = classifyTerritory(
     { title: 'Le prochain conseil communautaire se réunira jeudi' },
-    { name: 'Cagire Garonne Salat', default_zone: 'core', default_locality: 'Cagire Garonne Salat', requires_keyword: false },
+    { name: 'Cagire Garonne Salat', scope: 'hyperlocal', default_zone: 'comminges', default_locality: 'Cagire Garonne Salat', requires_keyword: false },
   );
   assert.equal(result.included, true);
   assert.equal(result.reason, 'trusted-local-source-scope');
+});
+
+test('une source départementale 65 accepte un sujet sans commune explicite', () => {
+  const result = classifyTerritory(
+    { title: 'Le Département adopte son budget consacré aux collèges' },
+    { scope: 'department_65', default_zone: 'hautes_pyrenees', default_locality: 'Hautes-Pyrénées', requires_keyword: false },
+  );
+  assert.equal(result.included, true);
+  assert.equal(result.zone, 'hautes_pyrenees');
+});
+
+test('les catégories RSS structurées ne cassent pas la qualification', () => {
+  const result = classifyTerritory({
+    title: 'Une mesure annoncée pour le territoire',
+    tags: [{ _: 'Hautes-Pyrénées', $: { domain: 'https://example.test' } }],
+  });
+  assert.equal(result.included, true);
+  assert.equal(result.zone, 'hautes_pyrenees');
 });
 
 test('la fenêtre de 24 heures refuse les contenus trop anciens', () => {
@@ -77,4 +113,14 @@ test('la déduplication neutralise les paramètres de campagne', () => {
   assert.equal(result.length, 1);
   assert.equal(result[0].heure, '2026-09-25T10:00:00Z');
   assert.equal(buildDedupeKey(result[0]), 'url:https://exemple.fr/a');
+});
+
+test('la déduplication rapproche les titres quasi identiques sur un même domaine seulement', () => {
+  const articles = [
+    { title: 'Travaux importants sur la RN 125 entre Saint-Gaudens et Luchon', url: 'https://media.fr/a', heure: '2026-09-27T01:00:00Z' },
+    { title: 'Travaux sur la RN 125 entre Saint-Gaudens et Luchon', url: 'https://media.fr/b', heure: '2026-09-27T02:00:00Z' },
+    { title: 'Travaux sur la RN 125 entre Saint-Gaudens et Luchon', url: 'https://autre.fr/c', heure: '2026-09-27T02:00:00Z' },
+  ];
+  assert.ok(titleSimilarity(articles[0].title, articles[1].title) >= 0.9);
+  assert.equal(deduplicateArticles(articles).length, 2);
 });

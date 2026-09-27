@@ -1,7 +1,7 @@
 {
     "name": "infodrop.live",
     "short_name": "infodrop.live",
-    "description": "Agrégation multi-sources en temps réel.",
+    "description": "Flux public H24 d’actualités nationales, internationales et pyrénéennes.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#0a0a0a",

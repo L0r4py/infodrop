@@ -1,3 +1,6 @@
+import packageMetadata from '../../package.json';
+import { ZONE_PRESENTATION } from '../../lib/local/territory.js';
+
 const DEBUG = false;
 const dlog = (...args) => DEBUG && console.log('[DEBUG]', ...args);
 
@@ -18,6 +21,16 @@ const LOCAL_CATEGORIES = [
     'Sport'
 ];
 const LOCAL_ONLY_TAGS = new Set(['pyrenees', 'local', ...LOCAL_CATEGORIES]);
+const LOCAL_ZONES = [
+    'barousse',
+    'comminges',
+    'luchonnais',
+    'nestes_lannemezan',
+    'hautes_pyrenees',
+    'haute_garonne_sud',
+    'val_aran',
+    'occitanie'
+];
 
 function currentEdition() {
     return /^\/pyr(?:e|é)nees(?:\/|$)/i.test(window.location.pathname) ? 'pyrenees' : 'national';
@@ -91,6 +104,9 @@ function infodropApp() {
 
         stats: { total_articles: 0, total_sources: 0 },
         sourceRegistry: [],
+        sourceStats: [],
+        activeZones: [],
+        releaseVersion: packageMetadata.version,
 
         activeFilter: 'all',
         searchQuery: '',
@@ -135,7 +151,7 @@ function infodropApp() {
             if (window.infodropAppInitialized) return;
             window.infodropAppInitialized = true;
 
-            document.title = this.isLocalEdition ? 'infodrop.live · Pyrénées' : 'infodrop.live';
+            this.updateEditionMetadata();
             this.deviceId = this.getOrCreateDeviceId();
             this.loadLocalPersonalState();
 
@@ -505,9 +521,9 @@ function infodropApp() {
 
                 if (filter && filter !== 'all') {
                     if (this.isLocalEdition) {
-                        query = enhanced && LOCAL_CATEGORIES.includes(filter)
-                            ? query.eq('category', filter)
-                            : query.contains('tags', [filter]);
+                        if (enhanced && LOCAL_ZONES.includes(filter)) query = query.eq('territory_zone', filter);
+                        else if (enhanced && LOCAL_CATEGORIES.includes(filter)) query = query.eq('category', filter);
+                        else query = query.contains('tags', [filter]);
                     } else if (this.allOrientations.includes(filter)) {
                         query = query.eq('orientation', filter);
                     } else {
@@ -589,7 +605,12 @@ function infodropApp() {
         updateTagsList() {
             if (this.isLocalEdition) {
                 this.allOrientations = [];
-                this.allOtherTags = [...LOCAL_CATEGORIES];
+                const activeZoneSet = new Set(this.activeZones);
+                const activeCategorySet = new Set(this.activeTags);
+                this.allOtherTags = [
+                    ...LOCAL_ZONES.filter(zone => activeZoneSet.has(zone)),
+                    ...LOCAL_CATEGORIES.filter(category => activeCategorySet.has(category))
+                ];
                 return;
             }
             const pol = ['extrême-gauche', 'gauche', 'centre-gauche', 'centre', 'centre-droit', 'droite', 'extrême-droite', 'gouvernement', 'neutre'];
@@ -598,35 +619,36 @@ function infodropApp() {
         },
 
         hasArticlesForOrientation(o) { return this.activeOrientations.includes(o); },
-        hasArticlesForTag(t) { return this.activeTags.includes(t); },
+        hasArticlesForTag(t) {
+            return this.activeTags.includes(t) || (this.isLocalEdition && this.activeZones.includes(t));
+        },
 
         getEmptyFilterMessage() {
-            if (this.isLocalEdition) return `Aucune actualité locale dans la catégorie « ${this.activeFilter} » ces dernières 24 heures.`;
+            if (this.isLocalEdition) return `Aucune actualité locale pour « ${this.getFilterLabel(this.activeFilter)} » ces dernières 24 heures.`;
             if (this.allOrientations.includes(this.activeFilter)) return `Aucun média d'orientation "${this.activeFilter.replace('-', ' ')}" n'a publié ces dernières 24h.`;
             return `Aucun article avec le tag "${this.activeFilter}" ces dernières 24h.`;
         },
 
         async loadStats() {
-            if (this.isLocalEdition) {
-                this.updateTagsList();
-                this.stats = {
-                    total_articles: this.newsList.length,
-                    total_sources: this.sourceRegistry.length
-                };
-                return;
-            }
             try {
                 let { data, error } = REGIONAL_SCHEMA_ENABLED
-                    ? await supabaseClient.rpc('get_edition_stats', { p_edition_slug: 'national' })
+                    ? await supabaseClient.rpc('get_edition_stats', { p_edition_slug: this.edition })
                     : await supabaseClient.rpc('get_live_stats');
                 // Repli temporaire pendant une propagation de schéma ou un retour arrière.
-                if (error && REGIONAL_SCHEMA_ENABLED) {
+                if (error && REGIONAL_SCHEMA_ENABLED && !this.isLocalEdition) {
                     ({ data, error } = await supabaseClient.rpc('get_live_stats'));
                 }
                 if (error) throw error;
                 this.stats = { total_articles: data.total_articles || 0, total_sources: data.total_sources || 0 };
                 this.activeOrientations = data.active_orientations || [];
                 this.activeTags = data.active_tags || [];
+                this.activeZones = data.active_zones || [];
+
+                if (REGIONAL_SCHEMA_ENABLED) {
+                    const sourceResult = await supabaseClient.rpc('get_edition_source_stats', { p_edition_slug: this.edition });
+                    if (sourceResult.error) throw sourceResult.error;
+                    this.sourceStats = Array.isArray(sourceResult.data) ? sourceResult.data : [];
+                }
                 this.updateTagsList();
             } catch (e) {
                 console.error('[ERREUR] Le chargement des statistiques et filtres a échoué :', e);
@@ -634,13 +656,14 @@ function infodropApp() {
         },
 
         updateLocalStats() {
-            const activeCategories = new Set(this.newsList.map(article => article.category).filter(Boolean));
-            this.activeTags = LOCAL_CATEGORIES.filter(category => activeCategories.has(category));
+            if (!this.activeTags.length) {
+                const activeCategories = new Set(this.newsList.map(article => article.category).filter(Boolean));
+                this.activeTags = LOCAL_CATEGORIES.filter(category => activeCategories.has(category));
+            }
+            if (!this.activeZones.length) {
+                this.activeZones = [...new Set(this.newsList.map(article => article.territory_zone).filter(Boolean))];
+            }
             this.updateTagsList();
-            this.stats = {
-                total_articles: this.newsList.length,
-                total_sources: this.sourceRegistry.length
-            };
         },
 
         async saveReadArticleToDB(articleId) {
@@ -993,6 +1016,9 @@ function infodropApp() {
         },
 
         get sourcesDetail() {
+            if (this.sourceStats.length > 0) {
+                return this.sourceStats.map(item => [item.source, { count: item.count, url: item.url }]);
+            }
             const counts = {};
             this.newsList.forEach(n => {
                 const src = n.source || 'Inconnu';
@@ -1001,14 +1027,36 @@ function infodropApp() {
                 }
                 counts[src].count++;
             });
-            if (this.isLocalEdition) {
-                this.sourceRegistry.forEach(source => {
-                    if (!counts[source.name]) {
-                        counts[source.name] = { count: 0, url: source.homepage_url };
-                    }
-                });
-            }
             return Object.entries(counts).sort((a, b) => b[1].count - a[1].count);
+        },
+
+        getZoneLabel(news = {}) {
+            return ZONE_PRESENTATION[news.territory_zone]?.label || news.locality || news.category || 'Pyrénées';
+        },
+
+        getZoneStyle(news = {}) {
+            const color = ZONE_PRESENTATION[news.territory_zone]?.color || '#0A84FF';
+            return `color:${color}; background:${color}1F; border:1px solid ${color}33`;
+        },
+
+        getFilterLabel(filter) {
+            return ZONE_PRESENTATION[filter]?.label || filter;
+        },
+
+        updateEditionMetadata() {
+            const title = this.isLocalEdition
+                ? 'Infodrop Pyrénées · Actualités locales des dernières 24 heures'
+                : 'Infodrop · Actualités nationales et internationales des dernières 24 heures';
+            const description = this.isLocalEdition
+                ? 'Flux public H24 des Pyrénées, des Hautes-Pyrénées, du sud de la Haute-Garonne et du Val d’Aran.'
+                : 'Flux public H24 d’actualités nationales et internationales issues de dizaines de sources.';
+            document.title = title;
+            document.querySelector('meta[name="description"]')?.setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]')?.setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]')?.setAttribute('content', description);
+            document.querySelector('meta[property="og:url"]')?.setAttribute('content', window.location.href);
+            document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', title);
+            document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', description);
         },
 
         async logout() {

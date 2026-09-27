@@ -2,95 +2,62 @@
 
 ## Interface partagée
 
-`/` et `/pyrenees/` servent le même `index.html`, les mêmes styles et les mêmes composants. L’édition est déterminée par l’URL et le sélecteur National/Pyrénées ne change que le flux consulté. Il n’existe ni landing page locale, ni palette secondaire, ni copie publique du cahier des charges.
+`/` et `/pyrenees/` servent le même `index.html`, les mêmes styles et les mêmes composants. L’édition est déterminée par l’URL. La référence visuelle reste la production Infodrop : Inter, fond `#0a0a0a`, accent `#FF2D55`, largeur `max-w-3xl`, header et cartes historiques.
 
-La référence visuelle reste la production `infodrop.live` : Inter, fond `#0a0a0a`, accent `#FF2D55`, largeur `max-w-3xl`, header et cartes historiques. Les ajouts visuels se limitent au sélecteur d’édition et aux informations directement utiles dans les cartes locales.
+La modale « Sources actives » ne dépend plus des 50 cartes chargées. Elle utilise les articles réellement présents dans la fenêtre glissante de 24 heures via `get_edition_source_stats(text)`, pour National comme pour Pyrénées.
 
 ## Périmètre éditorial
 
-La V1 utilise trois zones explicites :
-
-| Code | Libellé public | Fonction |
+| Code | Libellé public | Couverture |
 | --- | --- | --- |
-| `core` | Cœur du Parc | communes et vallées du PNR Comminges Barousse Pyrénées |
-| `functional_ring` | Bassins de vie | Saint-Gaudens, Montréjeau, Lannemezan et impacts structurants |
-| `cross_border` | Val d’Aran | continuité frontalière immédiatement utile |
+| `barousse` | Barousse | Barousse et Neste-Barousse |
+| `comminges` | Comminges | Saint-Gaudens, Montréjeau, Cagire, Salat et Comminges |
+| `luchonnais` | Luchonnais | Bagnères-de-Luchon et vallées proches |
+| `nestes_lannemezan` | Nestes / Lannemezan | Pays des Nestes, Aure, Louron et plateau de Lannemezan |
+| `hautes_pyrenees` | Hautes-Pyrénées | département 65 |
+| `haute_garonne_sud` | Haute-Garonne sud | sud du département 31 et Pyrénées haut-garonnaises |
+| `val_aran` | Val d’Aran | continuité transfrontalière utile |
+| `occitanie` | Occitanie | seulement lorsqu’un impact territorial est explicite |
 
-Une information extérieure n’est retenue que si son titre ou ses métadonnées mentionnent explicitement un lieu, un axe ou un impact territorial. Tarbes, Toulouse, Pau ou Foix ne suffisent pas à eux seuls.
+Les anciens codes `core`, `functional_ring` et `cross_border` restent acceptés en base pour préserver les lignes historiques, mais les nouvelles collectes utilisent la taxonomie ci-dessus.
 
-## Flux de données
+## Chaîne de collecte
 
 ```text
 Registre public vérifié
         │
         ├── flux RSS actifs ──> api/parse-local-rss.js
         │                            │
-        │                            ├── fenêtre 24 h
-        │                            ├── qualification territoriale
-        │                            ├── catégorie et paywall
-        │                            └── URL canonique + écritures contrôlées
+        │                            ├── date réelle obligatoire
+        │                            ├── fenêtre glissante de 24 h
+        │                            ├── filtrage selon la portée de la source
+        │                            ├── catégorie, zone et paywall
+        │                            ├── déduplication URL / titre proche
+        │                            └── écriture et diagnostic par source
         │                                      │
-        └── pages en veille              Supabase actu
+        └── sources en veille            Supabase `actu`
                                                 │
-                                    interface Infodrop partagée
+                                   interface Infodrop partagée
 ```
 
-Le registre JSON est la source lisible et versionnée. La table `regional_sources` en devient le miroir opérationnel lors de la collecte, y compris pour conserver une source retirée avec `active = false`. Les règles territoriales restent dans le collecteur et la documentation ; elles ne sont pas affichées dans le flux public.
+Le registre JSON est la source versionnée. `regional_sources` en est le miroir opérationnel et conserve aussi les sources inactives. `regional_source_checks` contient les compteurs de diagnostic de chaque passage.
 
-## Accès et données personnelles
+## Statistiques publiques H24
 
-Le flux est chargé dès l’ouverture, avec ou sans session. Un identifiant aléatoire local distingue l’appareil sans être envoyé au serveur. Lectures, favoris et préférence de masquage sont stockés par édition dans `localStorage`, avec une limite de 500 éléments par collection.
-
-L’email/magic link est une option de synchronisation. Lorsqu’une session existe, l’état local est fusionné avec les tables Supabase historiques. La migration ajoute `edition_slug` aux lectures et favoris afin d’isoler National et Pyrénées. Avant migration, l’édition Pyrénées reste strictement locale pour éviter de mélanger les deux historiques.
-
-## Compatibilité progressive
-
-L’option publique `REGIONAL_SCHEMA_ENABLED` vaut `false` par défaut. Elle doit passer à `true` seulement après application et validation de la migration. Ce garde-fou évite des requêtes en erreur sur une base encore historique.
-
-## Données ajoutées
-
-La migration ajoute :
-
-- `edition_slug`, `territory_zone`, `locality`, `category` ;
-- `source_kind`, `source_slug`, `canonical_url`, `is_paywalled`, `ingested_at` ;
-- `regional_sources` et `regional_source_checks` ;
-- les index adaptés à la lecture par édition et par zone.
-- `get_edition_stats(text)`, fonction publique limitée à l’édition demandée, sans remplacer `get_live_stats`.
-
-Les tables historiques ne sont ni supprimées ni renommées.
+- `get_edition_stats(text)` retourne les volumes, orientations, thèmes et zones actifs pour l’édition demandée ;
+- `get_edition_source_stats(text)` retourne chaque source réellement active dans les dernières 24 heures, son volume et l’URL de son article le plus récent ;
+- `get_live_stats` reste inchangée pour la compatibilité historique.
 
 ## Déduplication
 
-La clé principale reste l’URL, après :
+La clé principale reste l’URL canonique après retrait des fragments et paramètres de suivi. Le collecteur rapproche aussi les titres très proches uniquement lorsqu’ils viennent du même domaine, puis conserve la source prioritaire ou la publication la plus récente. Le déclencheur historique `prevent_duplicate_urls` reste en place.
 
-- suppression du fragment ;
-- retrait des paramètres `utm_*`, `fbclid`, `gclid` et assimilés ;
-- normalisation du domaine et du slash final ;
-- repli sur le titre normalisé si aucune URL n’est disponible.
+## Accès et données personnelles
 
-Le déclencheur historique `prevent_duplicate_urls` reste en place. Le collecteur recherche donc d’abord les URL canoniques existantes, met explicitement à jour les lignes locales déjà présentes, puis insère seulement les nouvelles lignes. Si la même URL existe déjà dans l’édition nationale, la ligne locale conserve l’URL canonique et reçoit un fragment technique distinct sur la colonne historique `url`.
+Le flux est public et chargé sans session. Lectures, favoris et préférence de masquage restent stockés par édition sur l’appareil. L’email/magic link demeure facultatif pour la synchronisation. La clé de service Supabase et `CRON_SECRET` restent exclusivement côté serveur.
 
 ## Planification
 
-Le workflow `.github/workflows/collect-pyrenees.yml` appelle la fonction serveur toutes les quinze minutes. Il exige une réponse à 19 sources contrôlées sans échec ; le secret d’autorisation n’est jamais envoyé au navigateur.
+Cron-Job.org appelle le National et la purge toutes les 30 minutes. GitHub Actions appelle uniquement Pyrénées aux minutes 7, 22, 37 et 52 UTC. Sa validation repose sur le résultat dynamique de la collecte et ne contient aucun `sources_checked == 19`.
 
-## Sécurité
-
-- la clé anonyme Supabase reste la seule clé reçue par le navigateur ;
-- la clé de service n’est utilisée que par les fonctions serveur ;
-- la collecte exige `Authorization: Bearer <CRON_SECRET>` ;
-- aucune adresse d’administrateur n’est nécessaire pour lire l’un des flux ;
-- aucune donnée personnelle n’est créée pour un visiteur anonyme ;
-- la synchronisation distante n’est déclenchée qu’après identification volontaire.
-
-## Nommage
-
-Nom retenu pour la V1 : **Infodrop Pyrénées**.
-
-Alternatives conservées pour une évolution éditoriale :
-
-- **Infodrop Comminges–Barousse** : précis mais moins lisible hors du cœur du Parc ;
-- **Le Fil des Vallées** : chaleureux mais moins clairement rattaché à Infodrop ;
-- **Infodrop Territoires** : extensible à d’autres éditions, moins distinctif pour ce lancement.
-
-La structure `edition_slug` permet d’ajouter plus tard d’autres routes sans dupliquer la base applicative.
+Les tables historiques ne sont ni supprimées ni renommées. Les migrations restent additives et les anciens codes territoriaux sont conservés pour compatibilité.
