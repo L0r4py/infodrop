@@ -4,12 +4,12 @@
 | --- | --- | --- | --- | --- | --- |
 | National | Cron-Job.org, job `6274142` | `GET /api/parse-rss` | Toutes les 30 min (`*/30 * * * *`, Europe/Paris) | `Authorization: Bearer CRON_SECRET` | 2026-09-27 15:30 CEST, automatique, HTTP 200 |
 | Purge 24 h | Cron-Job.org, job `6274097` | `GET /api/daily-purge` | Toutes les 30 min (`*/30 * * * *`, Europe/Paris) | `Authorization: Bearer CRON_SECRET` | 2026-09-27 15:00 CEST, automatique, HTTP 200 |
-| Pyrénées | GitHub Actions, `collect-pyrenees.yml` | `POST /api/parse-local-rss` | Minutes 7, 22, 37 et 52 de chaque heure (UTC), cadence nominale | `Authorization: Bearer CRON_SECRET` via GitHub Actions | 2026-09-27 14:22 CEST, [exécution 36318760363](https://github.com/L0r4py/infodrop/actions/runs/36318760363), 78/78 sources réussies |
+| Pyrénées | Cron-Job.org, job `8523882` | `POST /api/parse-local-rss` | Toutes les 15 min (`*/15 * * * *`, Europe/Paris) | `Authorization: Bearer CRON_SECRET` | Test manuel utilisateur le 2026-09-27 à 15:48 CEST : HTTP 200, `success: true`, 78/78 sources, zéro échec, 11,2 s. Passages automatiques à confirmer. |
 
-Cette séparation est volontaire : Cron-Job.org gère le National et la purge, GitHub Actions gère uniquement Pyrénées. Aucun cron Vercel n’est configuré et aucun endpoint n’est appelé par deux schedulers.
+Cron-Job.org gère désormais toutes les collectes automatiques et la purge. Aucun cron Vercel n'est configuré. La planification GitHub Actions Pyrénées est retirée à la demande de l'utilisateur dès la réussite du test manuel Cron-Job.org, sans attendre les deux passages automatiques de validation, afin d'éviter les doublons.
 
-Le workflow Pyrénées valide `success == true`, au moins une source contrôlée, `sources_ok == sources_checked` et `sources_failed == 0`. Il ne suppose aucun nombre fixe de sources.
+Le workflow Pyrénées est conservé uniquement pour un déclenchement manuel (`workflow_dispatch`), sans événement `schedule`, `push` ni `pull_request`. Il valide `success == true`, au moins une source contrôlée, `sources_ok == sources_checked` et `sources_failed == 0`. Il ne suppose aucun nombre fixe de sources.
 
 Le job historique `INFODROP 2 - Parse RSS` reste inactif. Il ne doit pas être réactivé tant que le job National `6274142` assure la collecte.
 
-Attention au délai GitHub Actions : les derniers passages automatiques observés le 27 septembre sont 08:29 puis 14:22 CEST, malgré la cadence configurée de quinze minutes. Le déclenchement régulier à cette cadence n'est donc pas validé. Aucun scheduler de remplacement n'a été ajouté.
+La migration remplace une cadence GitHub Actions nominale de quinze minutes dont les derniers passages observés étaient espacés de plusieurs heures. Le contrôle des premiers passages automatiques Cron-Job.org est maintenu ; aucun nouveau test manuel n'est nécessaire.

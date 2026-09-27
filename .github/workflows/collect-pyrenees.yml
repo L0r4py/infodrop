@@ -1,8 +1,7 @@
 name: Collecte Pyrénées
 
 on:
-  schedule:
-    - cron: '7,22,37,52 * * * *'
+  # Collecte automatique assurée par Cron-Job.org (job 8523882).
   workflow_dispatch:
 
 concurrency:
