@@ -1,6 +1,7 @@
 import packageMetadata from '../../package.json';
 import { ZONE_PRESENTATION } from '../../lib/local/territory.js';
 import { diversifyLocalArticles } from '../../lib/local/diversify.js';
+import { shortSourceName, shortZoneName } from '../../lib/local/labels.js';
 
 const DEBUG = false;
 const dlog = (...args) => DEBUG && console.log('[DEBUG]', ...args);
@@ -113,6 +114,8 @@ function infodropApp() {
         sourcesError: false,
         activeZones: [],
         releaseVersion: packageMetadata.version,
+        shortSourceName,
+        shortZoneName,
 
         activeFilter: 'all',
         searchQuery: '',

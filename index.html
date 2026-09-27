@@ -530,7 +530,7 @@
                             :class="{ 'read-article': readArticles[news.id] && !hideReadFromMain }"
                             :style="'animation-delay:' + (index * 0.03) + 's; border-bottom:1px solid rgba(255,255,255,0.05);'">
                             <a href="#" @click.prevent="openReader(news)" class="block">
-                                <div class="flex items-center gap-2 mb-2">
+                                <div class="flex items-center gap-2 mb-2" :class="isLocalEdition ? 'local-card-meta' : ''">
                                     <template x-if="news.added_by">
                                         <div class="flex items-center gap-1">
                                             <div class="breaking-dot"></div>
@@ -543,19 +543,26 @@
                                         <span x-text="getOrientationDisplayName(news.orientation)"></span>
                                     </span>
                                     <span x-show="isLocalEdition && (news.locality || news.category)"
-                                        class="orientation-tag"
+                                        class="orientation-tag local-zone-label"
                                         :style="getZoneStyle(news)"
-                                        x-text="getZoneLabel(news)"></span>
+                                        :title="getZoneLabel(news)" :aria-label="getZoneLabel(news)">
+                                        <span class="local-label-full" aria-hidden="true" x-text="getZoneLabel(news)"></span>
+                                        <span class="local-label-short" aria-hidden="true" x-text="shortZoneName(getZoneLabel(news))"></span>
+                                    </span>
                                     <span x-show="news.added_by" class="text-[10px] font-bold"
                                         style="color:#FF2D55">infodrop.live</span>
                                     <span x-show="!news.added_by"
                                         class="flex items-center gap-1.5 transition hover:opacity-70 cursor-pointer"
+                                        :class="isLocalEdition ? 'local-source-label' : ''"
                                         @click.prevent.stop="setSourceFilter(news.source)">
                                         <img :src="getFavicon(news.url)" alt=""
                                             class="w-3.5 h-3.5 rounded-[3px] grayscale opacity-80" loading="lazy"
                                             @error="$el.style.display='none'" />
                                         <span class="text-[11px] font-bold" style="color:#FF2D55"
-                                            x-text="news.source"></span>
+                                            :title="news.source" :aria-label="news.source">
+                                            <span :class="isLocalEdition ? 'local-label-full' : ''" aria-hidden="true" x-text="news.source"></span>
+                                            <span x-show="isLocalEdition" class="local-label-short" aria-hidden="true" x-text="shortSourceName(news.source)"></span>
+                                        </span>
                                         <svg x-show="isPaywalled(news)" title="Abonné / Paywall"
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                             class="w-3.5 h-3.5 text-[#FF2D55] opacity-80 mt-[1px] ml-1">

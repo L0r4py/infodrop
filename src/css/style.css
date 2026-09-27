@@ -345,6 +345,23 @@ body {
     animation: badgePulse 2s ease-in-out infinite;
 }
 
+.local-label-short { display: none; }
+.local-card-meta { flex-wrap: nowrap; padding-right: 3.5rem; }
+.local-card-meta > span { white-space: nowrap; }
+.local-card-meta .local-source-label { min-width: 0; }
+.local-source-label > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.local-source-label img, .local-source-label svg { flex-shrink: 0; }
+.local-card-meta > span:not(.local-source-label) { flex-shrink: 0; }
+
+@media (max-width: 639px) {
+    .local-label-full { display: none; }
+    .local-label-short { display: inline; }
+    .local-card-meta { gap: 0.3rem; }
+    .local-card-meta .local-zone-label { font-size: 9px; padding: 2px 5px; }
+    .local-card-meta .local-source-label { gap: 0.2rem; }
+    .local-card-meta .local-source-label > span { font-size: 10px; }
+}
+
 @keyframes badgePulse {
 
     0%,
