@@ -5,9 +5,23 @@ import {
   canonicalizeUrl,
   categorizeArticle,
   deduplicateArticles,
+  deduplicateSyndicatedArticles,
   isWithinRollingWindow,
   titleSimilarity,
 } from '../lib/local/territory.js';
+
+test('les reprises Dépêche/NRP partagent uniquement leur identifiant article', () => {
+  const article = (domain, id, title = 'Le pape à Lourdes') => ({
+    resume: title, url: `https://${domain}/2026/09/26/article-${id}.php`, heure: '2026-09-27T18:15:54Z',
+  });
+  const pair = [article('www.ladepeche.fr', 13570596), article('www.nrpyrenees.fr', 13570596, 'Un titre corrigé')];
+  assert.equal(deduplicateArticles(pair).length, 1);
+  assert.equal(deduplicateSyndicatedArticles(pair).length, 1);
+  const distinct = [pair[0], article('www.nrpyrenees.fr', 13570597), article('autre.fr', 13570596)];
+  assert.equal(deduplicateArticles(distinct).length, 3);
+  assert.equal(deduplicateSyndicatedArticles(distinct).length, 3);
+  assert.equal(deduplicateSyndicatedArticles([{url:'invalide'}, {url:'invalide'}]).length, 2);
+});
 
 test('canonicalizeUrl retire les paramètres de suivi sans détruire les paramètres utiles', () => {
   assert.equal(
