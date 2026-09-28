@@ -1,0 +1,360 @@
+{
+  "checked_at": "2026-09-27T19:15:32.558Z",
+  "runs_per_source": 2,
+  "timeout_ms": 12000,
+  "sources_checked": 7,
+  "sources_passed": 7,
+  "sources_failed": 0,
+  "results": [
+    {
+      "slug": "frequence-luz-actualites",
+      "name": "Fréquence Luz",
+      "feed_url": "https://frequenceluz.fr/podcasts/actu_locale/feed",
+      "passed": true,
+      "attempts": [
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://frequenceluz.fr/podcasts/actu_locale/feed",
+          "content_type": "application/rss+xml; charset=UTF-8",
+          "duration_ms": 476,
+          "items_checked": 20,
+          "titles_valid": 20,
+          "links_valid": 20,
+          "dates_valid": 20,
+          "newest_at": "2026-09-25T06:50:00.000Z",
+          "freshness_days": 2,
+          "future_minutes": -3625,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Vendredi 25 septembre 2026",
+            "link": "https://frequenceluz.fr/podcasts/actu_locale/vendredi-25-septembre-2026",
+            "date": "2026-09-25T06:50:00.000Z"
+          },
+          "error": null
+        },
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://frequenceluz.fr/podcasts/actu_locale/feed",
+          "content_type": "application/rss+xml; charset=UTF-8",
+          "duration_ms": 459,
+          "items_checked": 20,
+          "titles_valid": 20,
+          "links_valid": 20,
+          "dates_valid": 20,
+          "newest_at": "2026-09-25T06:50:00.000Z",
+          "freshness_days": 2,
+          "future_minutes": -3625,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Vendredi 25 septembre 2026",
+            "link": "https://frequenceluz.fr/podcasts/actu_locale/vendredi-25-septembre-2026",
+            "date": "2026-09-25T06:50:00.000Z"
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "slug": "frequence-luz-sortir",
+      "name": "Fréquence Luz",
+      "feed_url": "https://frequenceluz.fr/podcasts/sortir/feed",
+      "passed": true,
+      "attempts": [
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://frequenceluz.fr/podcasts/sortir/feed",
+          "content_type": "application/rss+xml; charset=UTF-8",
+          "duration_ms": 482,
+          "items_checked": 20,
+          "titles_valid": 20,
+          "links_valid": 20,
+          "dates_valid": 20,
+          "newest_at": "2026-09-24T10:15:00.000Z",
+          "freshness_days": 3,
+          "future_minutes": -4860,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Douze ans de photographie et de biodiversité à Cauterets : le Festival Pyrénéen de l'Image Nature",
+            "link": "https://frequenceluz.fr/podcasts/sortir/douze-ans-de-photographie-et-de-biodiversite-a-cauterets-le-festival-pyreneen-de-limage-nature",
+            "date": "2026-09-24T10:15:00.000Z"
+          },
+          "error": null
+        },
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://frequenceluz.fr/podcasts/sortir/feed",
+          "content_type": "application/rss+xml; charset=UTF-8",
+          "duration_ms": 355,
+          "items_checked": 20,
+          "titles_valid": 20,
+          "links_valid": 20,
+          "dates_valid": 20,
+          "newest_at": "2026-09-24T10:15:00.000Z",
+          "freshness_days": 3,
+          "future_minutes": -4860,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Douze ans de photographie et de biodiversité à Cauterets : le Festival Pyrénéen de l'Image Nature",
+            "link": "https://frequenceluz.fr/podcasts/sortir/douze-ans-de-photographie-et-de-biodiversite-a-cauterets-le-festival-pyreneen-de-limage-nature",
+            "date": "2026-09-24T10:15:00.000Z"
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "slug": "frequence-luz-reportages",
+      "name": "Fréquence Luz",
+      "feed_url": "https://frequenceluz.fr/podcasts/reportage/feed",
+      "passed": true,
+      "attempts": [
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://frequenceluz.fr/podcasts/reportage/feed",
+          "content_type": "application/rss+xml; charset=UTF-8",
+          "duration_ms": 826,
+          "items_checked": 20,
+          "titles_valid": 20,
+          "links_valid": 20,
+          "dates_valid": 20,
+          "newest_at": "2026-09-10T10:20:00.000Z",
+          "freshness_days": 17,
+          "future_minutes": -25015,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Le café solidaire d'Anères accueille vos soutiens pour racheter ses murs et poursuivre l'aventure.",
+            "link": "https://frequenceluz.fr/podcasts/reportage/le-cafe-solidaire-daneres-un-lieu-dexception-accueille-des-soutiens-pour-racheter-solidairement-ses-murs",
+            "date": "2026-09-10T10:20:00.000Z"
+          },
+          "error": null
+        },
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://frequenceluz.fr/podcasts/reportage/feed",
+          "content_type": "application/rss+xml; charset=UTF-8",
+          "duration_ms": 402,
+          "items_checked": 20,
+          "titles_valid": 20,
+          "links_valid": 20,
+          "dates_valid": 20,
+          "newest_at": "2026-09-10T10:20:00.000Z",
+          "freshness_days": 17,
+          "future_minutes": -25015,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Le café solidaire d'Anères accueille vos soutiens pour racheter ses murs et poursuivre l'aventure.",
+            "link": "https://frequenceluz.fr/podcasts/reportage/le-cafe-solidaire-daneres-un-lieu-dexception-accueille-des-soutiens-pour-racheter-solidairement-ses-murs",
+            "date": "2026-09-10T10:20:00.000Z"
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "slug": "radio-presence-sports-comminges",
+      "name": "Radio Présence - Comminges",
+      "feed_url": "https://www.radiopresence.com/spip.php?id_rubrique=267&page=backend",
+      "passed": true,
+      "attempts": [
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://www.radiopresence.com/spip.php?id_rubrique=267&page=backend",
+          "content_type": "text/xml; charset=utf-8",
+          "duration_ms": 146,
+          "items_checked": 10,
+          "titles_valid": 10,
+          "links_valid": 10,
+          "dates_valid": 10,
+          "newest_at": "2026-09-20T22:00:00.000Z",
+          "freshness_days": 6,
+          "future_minutes": -9915,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Sports en Comminges du 21 sept.",
+            "link": "https://www.radiopresence.com/emissions/culture/actualites/sports-en-comminges/article/sports-en-comminges-du-21-sept-127929",
+            "date": "2026-09-20T22:00:00.000Z"
+          },
+          "error": null
+        },
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://www.radiopresence.com/spip.php?id_rubrique=267&page=backend",
+          "content_type": "text/xml; charset=utf-8",
+          "duration_ms": 23,
+          "items_checked": 10,
+          "titles_valid": 10,
+          "links_valid": 10,
+          "dates_valid": 10,
+          "newest_at": "2026-09-20T22:00:00.000Z",
+          "freshness_days": 6,
+          "future_minutes": -9915,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Sports en Comminges du 21 sept.",
+            "link": "https://www.radiopresence.com/emissions/culture/actualites/sports-en-comminges/article/sports-en-comminges-du-21-sept-127929",
+            "date": "2026-09-20T22:00:00.000Z"
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "slug": "sm-garonne-amont",
+      "name": "Syndicat mixte Garonne Amont",
+      "feed_url": "https://sm-garonne-amont.fr/feed/",
+      "passed": true,
+      "attempts": [
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://sm-garonne-amont.fr/feed/",
+          "content_type": "text/xml;charset=UTF-8",
+          "duration_ms": 645,
+          "items_checked": 10,
+          "titles_valid": 10,
+          "links_valid": 10,
+          "dates_valid": 10,
+          "newest_at": "2026-09-03T15:11:39.000Z",
+          "freshness_days": 24,
+          "future_minutes": -34803,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Article La Dépêche du Midi : Sécheresse à répétition",
+            "link": "https://sm-garonne-amont.fr/2026/09/03/article-la-depeche-du-midi-secheresse-a-repetition/",
+            "date": "2026-09-03T15:11:39.000Z"
+          },
+          "error": null
+        },
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://sm-garonne-amont.fr/feed/",
+          "content_type": "text/xml;charset=UTF-8",
+          "duration_ms": 270,
+          "items_checked": 10,
+          "titles_valid": 10,
+          "links_valid": 10,
+          "dates_valid": 10,
+          "newest_at": "2026-09-03T15:11:39.000Z",
+          "freshness_days": 24,
+          "future_minutes": -34803,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Article La Dépêche du Midi : Sécheresse à répétition",
+            "link": "https://sm-garonne-amont.fr/2026/09/03/article-la-depeche-du-midi-secheresse-a-repetition/",
+            "date": "2026-09-03T15:11:39.000Z"
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "slug": "ville-tarbes",
+      "name": "Ville de Tarbes",
+      "feed_url": "https://www.tarbes.fr/feed/",
+      "passed": true,
+      "attempts": [
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://www.tarbes.fr/feed/",
+          "content_type": "application/rss+xml; charset=UTF-8",
+          "duration_ms": 654,
+          "items_checked": 10,
+          "titles_valid": 10,
+          "links_valid": 10,
+          "dates_valid": 10,
+          "newest_at": "2026-09-25T12:48:47.000Z",
+          "freshness_days": 2,
+          "future_minutes": -3266,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Seniors : des actions pour la Semaine Bleue",
+            "link": "https://www.tarbes.fr/actualite/seniors-des-actions-pour-la-semaine-bleue/",
+            "date": "2026-09-25T12:48:47.000Z"
+          },
+          "error": null
+        },
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://www.tarbes.fr/feed/",
+          "content_type": "application/rss+xml; charset=UTF-8",
+          "duration_ms": 580,
+          "items_checked": 10,
+          "titles_valid": 10,
+          "links_valid": 10,
+          "dates_valid": 10,
+          "newest_at": "2026-09-25T12:48:47.000Z",
+          "freshness_days": 2,
+          "future_minutes": -3266,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Seniors : des actions pour la Semaine Bleue",
+            "link": "https://www.tarbes.fr/actualite/seniors-des-actions-pour-la-semaine-bleue/",
+            "date": "2026-09-25T12:48:47.000Z"
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "slug": "depeche-esbareich",
+      "name": "La Dépêche",
+      "feed_url": "https://www.ladepeche.fr/communes/esbareich,65158/rss.xml",
+      "passed": true,
+      "attempts": [
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://www.ladepeche.fr/communes/esbareich,65158/rss.xml",
+          "content_type": "text/xml; charset=UTF-8",
+          "duration_ms": 123,
+          "items_checked": 20,
+          "titles_valid": 20,
+          "links_valid": 20,
+          "dates_valid": 20,
+          "newest_at": "2026-08-18T03:26:35.000Z",
+          "freshness_days": 40,
+          "future_minutes": -58548,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Esbareich. L’art de la convivialité",
+            "link": "https://www.ladepeche.fr/2026/08/18/lart-de-la-convivialite-13512759.php",
+            "date": "2026-08-18T03:26:35.000Z"
+          },
+          "error": null
+        },
+        {
+          "ok": true,
+          "http_status": 200,
+          "final_url": "https://www.ladepeche.fr/communes/esbareich,65158/rss.xml",
+          "content_type": "text/xml; charset=UTF-8",
+          "duration_ms": 25,
+          "items_checked": 20,
+          "titles_valid": 20,
+          "links_valid": 20,
+          "dates_valid": 20,
+          "newest_at": "2026-08-18T03:26:35.000Z",
+          "freshness_days": 40,
+          "future_minutes": -58548,
+          "qualified_last_24h": 0,
+          "sample": {
+            "title": "Esbareich. L’art de la convivialité",
+            "link": "https://www.ladepeche.fr/2026/08/18/lart-de-la-convivialite-13512759.php",
+            "date": "2026-08-18T03:26:35.000Z"
+          },
+          "error": null
+        }
+      ]
+    }
+  ]
+}

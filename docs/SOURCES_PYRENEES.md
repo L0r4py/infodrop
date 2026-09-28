@@ -4,7 +4,9 @@ Mise à jour du 27 septembre 2026 : le périmètre est choisi par rubrique RSS/X
 
 ## Registre
 
-78 flux actifs sur 92 entrées conservées : 57 ajouts, remplacement du flux général de La Semaine par sa rubrique Hautes-Pyrénées, 13 désactivations et Atmo toujours inactive. Plusieurs rubriques appartiennent au même média : le nombre de flux n’est pas le nombre de médias H24.
+85 flux actifs sur 99 entrées conservées après l'ajout de sept rubriques radio, institutionnelles et hyperlocales validées le 27 septembre et activées le 28 septembre 2026. Le lot précédent comprenait 78 flux actifs : 57 ajouts, remplacement du flux général de La Semaine par sa rubrique Hautes-Pyrénées, 13 désactivations et Atmo toujours inactive. Plusieurs rubriques appartiennent au même média : le nombre de flux n’est pas le nombre de médias H24.
+
+Le détail des sept nouveaux flux, de leurs contrôles et des pistes non retenues figure dans [SOURCES_COMPLEMENTAIRES_2026-09-28.md](SOURCES_COMPLEMENTAIRES_2026-09-28.md).
 
 Les 58 rubriques ajoutées ou remplacées ont réussi deux lectures locales ; résultats détaillés dans [l’audit JSON](local-rubrics-audit-2026-09-27.json). Une sonde Vercel sans écriture précède la mise en production. Les nombres H24 ci-dessous sont ceux du second relevé, avant déduplication entre rubriques.
 
