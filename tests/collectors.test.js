@@ -51,8 +51,8 @@ test('le mode probe vérifie une source inactive sans écrire en base', () => {
   assert.match(localCollector, /probe:\s*true/);
 });
 
-test('le collecteur accepte le périmètre du flux et ne déduit jamais la zone du texte', async () => {
-  assert.doesNotMatch(localCollector, /classifyTerritory|requires_keyword|items_rejected_territory/);
+test('les rubriques locales gardent leur périmètre et leur zone fixe, sans filtrage de veille', async () => {
+  assert.doesNotMatch(localCollector, /classifyTerritory|requires_keyword/);
   const { collectSource } = await import('../api/parse-local-rss.js');
   const originalFetch = globalThis.fetch;
   const published = new Date(Date.now() - 3600000).toUTCString();

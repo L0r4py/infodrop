@@ -1,6 +1,7 @@
 import { timingSafeEqual } from 'node:crypto';
 import Parser from 'rss-parser';
 import { isAutomaticWeatherBulletin } from '../lib/local/weather-bulletins.js';
+import { watchRelevance } from '../lib/local/watch-relevance.js';
 import { createClient } from '@supabase/supabase-js';
 import registry from '../public/config/sources-pyrenees.json' with { type: 'json' };
 import {
@@ -103,6 +104,7 @@ export async function collectSource(source) {
       items_fetched: items.length,
       items_in_24h: 0,
       items_rejected_invalid_date: 0,
+      items_rejected_territory: 0,
       items_duplicate: 0,
       items_written: 0,
       last_feed_item_at: null,
@@ -123,6 +125,11 @@ export async function collectSource(source) {
       metrics.items_in_24h += 1;
       if (!item.link) continue;
       if (isAutomaticWeatherBulletin(cleanTitle(item.title || item.contentSnippet))) continue;
+      const relevance = watchRelevance(item, source);
+      if (!relevance.accepted) {
+        metrics.items_rejected_territory += 1;
+        continue;
+      }
 
       const candidate = {
         title: cleanTitle(item.title || item.contentSnippet),
@@ -143,8 +150,8 @@ export async function collectSource(source) {
         heure: publishedAt.toISOString(),
         tags,
         edition_slug: 'pyrenees',
-        territory_zone: source.default_zone,
-        locality: source.default_locality || null,
+        territory_zone: relevance.zone,
+        locality: relevance.locality,
         category,
         source_kind: source.source_type,
         source_slug: source.slug,
@@ -179,6 +186,7 @@ export async function collectSource(source) {
         items_fetched: 0,
         items_in_24h: 0,
         items_rejected_invalid_date: 0,
+        items_rejected_territory: 0,
         items_duplicate: 0,
         items_written: 0,
         last_feed_item_at: null,
@@ -358,6 +366,7 @@ export default async function handler(req, res) {
     items_fetched: result.metrics.items_fetched,
     items_in_24h: result.metrics.items_in_24h,
     items_rejected_invalid_date: result.metrics.items_rejected_invalid_date,
+    items_rejected_territory: result.metrics.items_rejected_territory,
     items_duplicate: result.metrics.items_duplicate,
     items_written: result.metrics.items_written,
     last_feed_item_at: result.metrics.last_feed_item_at,

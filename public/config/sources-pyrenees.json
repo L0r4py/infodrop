@@ -1,10 +1,27 @@
 {
   "edition": "pyrenees",
-  "version": 6,
-  "verified_at": "2026-09-27",
+  "version": 7,
+  "verified_at": "2026-10-10",
   "verification_runs": 2,
-  "policy": "Le registre public ne contient que les flux ayant réussi deux lectures locales consécutives avec des titres, liens et dates valides, puis une sonde depuis Vercel.",
+  "policy": "Les flux actifs ont réussi deux lectures locales avec des titres, liens et dates valides ; leur collecte depuis Vercel est contrôlée à la publication. Les rubriques locales gardent leur périmètre ; les flux de veille élargie explicitement marqués local-relevance ne publient que les informations liées au cœur territorial ou ayant un impact régional explicite.",
   "sources": [
+    {
+      "slug": "actu-toulouse",
+      "name": "Actu Toulouse",
+      "publisher": "Actu.fr",
+      "homepage_url": "https://actu.fr/toulouse/",
+      "feed_url": "https://actu.fr/toulouse/rss.xml",
+      "source_type": "media",
+      "scope": "regional_watch",
+      "admission": "local-relevance",
+      "watch_areas": ["Toulouse", "Haute-Garonne", "Hautes-Pyrénées", "Ariège", "Occitanie"],
+      "default_zone": "occitanie",
+      "default_locality": "Veille régionale",
+      "language": "fr",
+      "automation": "rss",
+      "verification": "two-pass-content-verified",
+      "active": true
+    },
     {
       "slug": "ville-saint-gaudens",
       "name": "Ville de Saint-Gaudens",

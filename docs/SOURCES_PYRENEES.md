@@ -1,10 +1,20 @@
 # Sources de l’édition Pyrénées
 
-Mise à jour du 27 septembre 2026 : le périmètre est choisi par rubrique RSS/XML. Un flux accepté fournit tous ses articles avec une vraie date dans la fenêtre H24, sous réserve de déduplication. Chaque rubrique a une zone fixe. Aucun mot-clé territorial n’intervient.
+Mise à jour du 10 octobre 2026 : les rubriques RSS/XML locales gardent leur périmètre et leur zone fixe, sans nouveau filtrage géographique. Exception explicite : la nouvelle veille élargie Actu Toulouse ne remonte que les sujets pertinents pour Comminges, Barousse et Pyrénées, ou ayant un impact régional concret. Dates réelles, fenêtre H24, exclusion des bulletins météo automatiques et déduplication restent applicables.
 
 ## Registre
 
-85 flux actifs sur 99 entrées conservées après l'ajout de sept rubriques radio, institutionnelles et hyperlocales validées le 27 septembre et activées le 28 septembre 2026. Le lot précédent comprenait 78 flux actifs : 57 ajouts, remplacement du flux général de La Semaine par sa rubrique Hautes-Pyrénées, 13 désactivations et Atmo toujours inactive. Plusieurs rubriques appartiennent au même média : le nombre de flux n’est pas le nombre de médias H24.
+86 flux actifs sur 100 entrées conservées après l'ajout d'Actu Toulouse le 10 octobre 2026. Les sept rubriques radio, institutionnelles et hyperlocales précédentes ont été validées le 27 septembre et activées le 28 septembre 2026. Le lot antérieur comprenait 78 flux actifs : 57 ajouts, remplacement du flux général de La Semaine par sa rubrique Hautes-Pyrénées, 13 désactivations et Atmo toujours inactive. Plusieurs rubriques appartiennent au même média : le nombre de flux n’est pas le nombre de médias H24.
+
+## Veille élargie : Actu Toulouse
+
+- Page : [Actu Toulouse](https://actu.fr/toulouse/) ; flux : [RSS](https://actu.fr/toulouse/rss.xml).
+- Deux lectures ciblées le 10 octobre 2026 à 11:06 UTC : HTTP 200, 20/20 titres, liens et dates valides à chaque lecture, 19 items H24 avant filtrage. Ces chiffres sont un relevé, pas une cadence garantie du média.
+- Admission opt-in `local-relevance` : communes du Comminges/Barousse, secteurs pyrénéens, axes A64/A645/RN125 et effets régionaux explicites sur les alertes, transports, services publics ou aides.
+- Exclus sans lien local ou portée régionale explicite : faits divers purement toulousains, commerces de quartier, métro/Téléo, sorties locales à Toulouse. Un simple tag départemental/régional ne suffit pas.
+- Exemple réel du RSS : incendie à Castelbiague (`31114`), admis en Comminges malgré un titre mentionnant seulement Haute-Garonne. Les bulletins météo automatiques restent exclus ; une vigilance orange départementale reste admissible.
+- Référentiel communal figé depuis l'[API officielle](https://geo.api.gouv.fr/decoupage-administratif/epcis) : 278 communes de quatre intercommunalités, aucune requête géographique à l'exécution.
+- Collecte automatique par le job Pyrénées Cron-Job.org existant, sans scheduler supplémentaire. Aucun autre flux n'a été activé, désactivé ou filtré davantage.
 
 Le détail des sept nouveaux flux, de leurs contrôles et des pistes non retenues figure dans [SOURCES_COMPLEMENTAIRES_2026-09-28.md](SOURCES_COMPLEMENTAIRES_2026-09-28.md).
 
@@ -106,4 +116,4 @@ Atmo reste inactive (délai serveur observé lors de l’audit précédent). Les
 
 ## Diagnostic
 
-« Sources actives H24 » utilise les volumes réels en base. « Toutes les sources » montre zone, statut, dernier contrôle, dernier item RSS, date du dernier article écrit, dernière écriture, items H24, dates invalides, doublons et lignes écrites. Un flux sain sans article H24 n’est pas une panne. Les compteurs territoriaux ne sont plus calculés ; leurs colonnes historiques restent compatibles.
+« Sources actives H24 » utilise les volumes réels en base. « Toutes les sources » montre zone, statut, dernier contrôle, dernier item RSS, date du dernier article écrit, dernière écriture, items H24, dates invalides, doublons et lignes écrites. Un flux sain sans article H24 n’est pas une panne. Le compteur territorial historique est désormais alimenté uniquement pour les flux de veille élargie, et reste nul pour les rubriques locales.
