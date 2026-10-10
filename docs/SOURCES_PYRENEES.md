@@ -117,3 +117,13 @@ Atmo reste inactive (délai serveur observé lors de l’audit précédent). Les
 ## Diagnostic
 
 « Sources actives H24 » utilise les volumes réels en base. « Toutes les sources » montre zone, statut, dernier contrôle, dernier item RSS, date du dernier article écrit, dernière écriture, items H24, dates invalides, doublons et lignes écrites. Un flux sain sans article H24 n’est pas une panne. Le compteur territorial historique est désormais alimenté uniquement pour les flux de veille élargie, et reste nul pour les rubriques locales.
+
+### Vérification ciblée du 10 octobre 2026
+
+Le passage Cron-Job.org de 13:30:53 CEST a contrôlé 86 flux : 83 réussites et trois erreurs isolées, sans blocage des autres sources. Le dernier article en base était publié à 12:18 CEST ; le RSS de La Semaine des Pyrénées ne proposait rien de plus récent au contrôle. Les dates affichées restent les dates de publication, pas celles de la collecte.
+
+- Bigorre.org : le RSS `/rss.xml`, toujours déclaré sur sa page d'accueil, retourne HTTP 404 aussi dans Chrome. Dernière lecture réussie : 8 octobre, 20:01 CEST. Aucun flux de remplacement vérifié ; source conservée active.
+- Le Petit Journal Hautes-Pyrénées : HTTP 403 avec page de protection Cloudflare. Dernière lecture réussie : 29 septembre, 09:01 CEST. Une autorisation du RSS côté éditeur est nécessaire ; aucune tentative de contournement.
+- Ville de Tarbes : HTTP 503 depuis Vercel, alors que le même RSS répond HTTP 200 depuis le poste local. Dernière réussite en production : 10 octobre, 11:15 CEST. Incident intermittent ou restriction d'hébergement à confirmer ; le dernier article RSS date du 9 octobre, 14:57 CEST.
+
+Correctif côté affichage : les rafraîchissements Pyrénées relisent les 50 derniers articles H24 et les fusionnent par identifiant avec les cartes déjà chargées. Un article reçu tard n'est plus ignoré parce que sa publication précède le premier article affiché. Ni les dates stockées, ni les sources, ni la collecte, ni le rafraîchissement National ne sont modifiés.

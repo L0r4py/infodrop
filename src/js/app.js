@@ -599,7 +599,8 @@ function infodropApp() {
                     filter: filter || 'all',
                     offset: 0,
                     limit: this.newsPageSize,
-                    newerThan: !isNewFilter ? this.latestNewsTimestamp : null
+                    // Un RSS local peut livrer tard un article publié avant le premier affiché.
+                    newerThan: !isNewFilter && !this.isLocalEdition ? this.latestNewsTimestamp : null
                 });
                 if (error) throw error;
 
@@ -608,7 +609,11 @@ function infodropApp() {
                         this.newsList = this.distributeArticles(newArticles);
                         this.newsOffset = newArticles.length;
                     } else {
-                        this.newsList = this.distributeArticles([...newArticles, ...this.newsList]);
+                        const refreshedIds = new Set(newArticles.map(article => article.id));
+                        const retainedArticles = this.isLocalEdition
+                            ? this.newsList.filter(article => !refreshedIds.has(article.id))
+                            : this.newsList;
+                        this.newsList = this.distributeArticles([...newArticles, ...retainedArticles]);
                     }
                     this.latestNewsTimestamp = this.newsList[0].heure;
                     if (isNewFilter && newArticles.length < this.newsPageSize) this.hasMoreNews = false;
