@@ -2,6 +2,7 @@ import { timingSafeEqual } from 'node:crypto';
 import Parser from 'rss-parser';
 import { isAutomaticWeatherBulletin } from '../lib/local/weather-bulletins.js';
 import { watchRelevance } from '../lib/local/watch-relevance.js';
+import { fetchTarbesPublicFeed } from '../lib/local/tarbes-feed.js';
 import { createClient } from '@supabase/supabase-js';
 import registry from '../public/config/sources-pyrenees.json' with { type: 'json' };
 import {
@@ -45,6 +46,7 @@ function normalizeCategories(categories = []) {
 
 async function fetchFeed(source) {
   let lastError;
+  let canUseTarbesFallback = source.slug === 'ville-tarbes';
   for (let attempt = 0; attempt < 2; attempt += 1) {
     try {
       const response = await fetch(source.feed_url, {
@@ -53,12 +55,29 @@ async function fetchFeed(source) {
         signal: AbortSignal.timeout(12_000),
       });
       if (!response.ok) {
-        await response.body?.cancel();
-        throw new Error(`HTTP ${response.status}`);
+        const error = new Error(`HTTP ${response.status}`);
+        error.status = response.status;
+        if (source.slug === 'ville-tarbes' && response.status === 503) {
+          const body = await response.text();
+          error.accessChallenge = /captcha|cf-chl|challenge-platform|just a moment|access denied|accès refusé|enable javascript|javascript (?:is )?required/i.test(body);
+        } else {
+          await response.body?.cancel();
+        }
+        throw error;
       }
       return parser.parseString(await response.text());
     } catch (error) {
       lastError = error;
+      canUseTarbesFallback &&= error.status === 503 && !error.accessChallenge;
+    }
+  }
+  // Repli public limité à Tarbes et au 503 ; jamais sur un refus 403 ou une protection anti-robot.
+  if (canUseTarbesFallback) {
+    console.info('[collecte] ville-tarbes : API publique officielle après HTTP 503 du RSS');
+    try {
+      return await fetchTarbesPublicFeed(FEED_HEADERS);
+    } catch (error) {
+      throw new Error(`${lastError.message} ; ${error.message}`);
     }
   }
   throw lastError;

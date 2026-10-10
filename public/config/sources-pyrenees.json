@@ -1,6 +1,6 @@
 {
   "edition": "pyrenees",
-  "version": 7,
+  "version": 8,
   "verified_at": "2026-10-10",
   "verification_runs": 2,
   "policy": "Les flux actifs ont réussi deux lectures locales avec des titres, liens et dates valides ; leur collecte depuis Vercel est contrôlée à la publication. Les rubriques locales gardent leur périmètre ; les flux de veille élargie explicitement marqués local-relevance ne publient que les informations liées au cœur territorial ou ayant un impact régional explicite.",
@@ -431,14 +431,14 @@
       "name": "Bigorre.org",
       "publisher": "Bigorre.org",
       "homepage_url": "https://www.bigorre.org/",
-      "feed_url": "https://www.bigorre.org/rss.xml",
+      "feed_url": "https://www.bigorre.org/rss.php",
       "source_type": "media",
       "scope": "department_65",
       "default_zone": "hautes_pyrenees",
       "default_locality": "Hautes-Pyrénées",
       "language": "fr",
       "automation": "rss",
-      "verification": "two-pass-vercel-verified-2026-09-27",
+      "verification": "two-pass-content-verified",
       "active": true
     },
     {

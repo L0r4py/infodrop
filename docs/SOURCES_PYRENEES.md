@@ -127,3 +127,11 @@ Le passage Cron-Job.org de 13:30:53 CEST a contrôlé 86 flux : 83 réussites et
 - Ville de Tarbes : HTTP 503 depuis Vercel, alors que le même RSS répond HTTP 200 depuis le poste local. Dernière réussite en production : 10 octobre, 11:15 CEST. Incident intermittent ou restriction d'hébergement à confirmer ; le dernier article RSS date du 9 octobre, 14:57 CEST.
 
 Correctif côté affichage : les rafraîchissements Pyrénées relisent les 50 derniers articles H24 et les fusionnent par identifiant avec les cartes déjà chargées. Un article reçu tard n'est plus ignoré parce que sa publication précède le premier article affiché. Ni les dates stockées, ni les sources, ni la collecte, ni le rafraîchissement National ne sont modifiés.
+
+### Réparation ciblée des accès RSS du 10 octobre 2026
+
+- Bigorre.org : remplacement de l'adresse cassée `/rss.xml` par l'export RSS natif `/rss.php`, HTTP 200 et XML exploitable. La source reste active ; le filtre des bulletins météo automatiques reste inchangé.
+- Ville de Tarbes : RSS conservé en priorité. Après deux réponses 503 sans page de protection anti-robot, repli uniquement sur les deux collections publiques officielles déclarées par `/wp-json/` : `/wp-json/wp/v2/actualite` et `/wp-json/wp/v2/evenement`. Les deux lectures doivent réussir. Les titres, liens et dates de publication UTC `date_gmt` restent ceux de la ville ; ni date de modification, ni date d'événement, ni heure de collecte ne remplacent une publication absente. Aucun repli sur 403 ou CAPTCHA.
+- Le Petit Journal Hautes-Pyrénées : sa protection Cloudflare nécessite une autorisation RSS côté éditeur. La source reste active et son éventuel échec reste visible ; aucune tentative de contournement ni désactivation pour masquer le problème.
+
+Aucun changement du National, de la planification, des autres sources ou du filtrage éditorial.
